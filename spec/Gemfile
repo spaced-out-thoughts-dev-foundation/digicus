@@ -5,3 +5,5 @@ source 'https://rubygems.org'
 group :test do
   gem 'rspec'
 end
+
+ruby '3.2'
