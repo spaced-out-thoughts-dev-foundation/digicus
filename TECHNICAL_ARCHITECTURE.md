@@ -21,10 +21,11 @@ While the Soroban developer experience is an improvement over most smart contrac
 
 Generally described as “scratch for smart contracts”, Digicus (hybrid Soroban) is a compiler which functions as an abstraction layer on top of existing Soroban tooling. Digicus allows users to create smart contracts by piecing together blocks (much like Legos) as well as visualize existing smart contracts.
 
+***
 
 ## Digicus Programming Language
 
-Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a net new, block-based, visual programming language consisting of a predefined set *blocks* which users piece together to define Soroban smart contracts. 
+Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a net new, block-based, visual programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
 
 ### Compiler
 
@@ -39,7 +40,11 @@ This repository provides the tooling for:
 (1) `.bbtr` <--> `.wat`
 (2) Visual block contract <--> `.bbtr`
 
-(1) will be aided by careful translation of the [`.wat` spec](https://webassembly.github.io/spec/core/text/index.html) into the [`.bbtr spec`]()`./BBTR_SPEC.md`). 
+(1) will be aided by careful translation of the [`.wat` spec](https://webassembly.github.io/spec/core/text/index.html) into the [`.bbtr spec`](./BBTR_SPEC.md). Furthermore, we will supply some basic [standard library functions](./STANDARD_LIBRARY.md). Much of this will be determined from looking at:
+* [contract examples](https://github.com/stellar/soroban-examples)
+* [How to Build an SDK Docs](https://developers.stellar.org/docs/tools/sdks/build-your-own)
+* [Rust SDK](https://github.com/stellar/rs-soroban-sdk/tree/main)
+* [AssemblyScript SDK](https://github.com/Soneso/as-soroban-sdk)
 
 (2) is just a visualization of `.bbtr` files which structurally represent a block contract.
 
