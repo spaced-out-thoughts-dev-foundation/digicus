@@ -40,7 +40,9 @@ This repository provides the tooling for:
 (1) `.bbtr` <--> `.wat`
 (2) Visual block contract <--> `.bbtr`
 
-(1) will be aided by careful translation of the [`.wat` spec](https://webassembly.github.io/spec/core/text/index.html) into the [`.bbtr spec`](./BBTR_SPEC.md). Furthermore, we will supply some basic [standard library functions](./STANDARD_LIBRARY.md). Much of this will be determined from looking at:
+(1) is possible via a rough WAT decompiler. This will allow translation of the [`.wat` spec](https://webassembly.github.io/spec/core/text/index.html) into the [`.bbtr spec`](./BBTR_SPEC.md). Unfortunately, this does not yet exist, so we will build it out. The developers on this project are Ruby-ists, thus we will build the first ever WASM to Ruby decompiler. 
+
+ Furthermore, we will supply some basic [standard library functions](./STANDARD_LIBRARY.md). Much of this will be determined from looking at:
 * [contract examples](https://github.com/stellar/soroban-examples)
 * [How to Build an SDK Docs](https://developers.stellar.org/docs/tools/sdks/build-your-own)
 * [Rust SDK](https://github.com/stellar/rs-soroban-sdk/tree/main)
