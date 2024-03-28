@@ -58,8 +58,6 @@ describe WasmToRuby::Decorator do
          [{type:"param", value:"param i64 i64"}]],
         [{type:"comment", value:";0;"}]]]
 
-
-
       expect(actual).to eq(expected)
     end
   end

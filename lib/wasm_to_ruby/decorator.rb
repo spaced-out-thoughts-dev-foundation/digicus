@@ -13,14 +13,14 @@ module WasmToRuby
     end
 
     def decorate
-      foobar
+      decorate_each_s_exp
     end
 
     private
 
     attr_reader :wat
 
-    def foobar
+    def decorate_each_s_exp
       body = []
 
       SExpressionHelper.make_levels(wat).each do |thing|
