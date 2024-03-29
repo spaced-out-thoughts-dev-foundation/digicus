@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 require './lib/constants'
 
 module Digit
+  # Generates a Digit Textual Representation file
   class Generator
-    def initialize(contract_name, state, functions)
-      @contract_name = contract_name
-      @state = state
-      @functions = functions
+    def initialize(contract)
+      @contract_name = contract.name
+      @state = contract.state
+      @functions = contract.functions
 
-      @content = ""
+      @content = ''
       @file_name = "#{contract_name}.dtr"
     end
 
@@ -17,7 +20,7 @@ module Digit
       generate_state_section
       generate_functions_section
 
-      File.open(file_name, "w") { |file| file.write(content) }
+      File.open(file_name, 'w') { |file| file.write(content) }
     end
 
     def self.generate(contract_name, state, functions)
