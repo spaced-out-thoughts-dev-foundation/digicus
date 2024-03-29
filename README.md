@@ -1,4 +1,4 @@
-# digicus
+# Digicus
 
 [Digicus](https://retrocalculators.com/digicus.htm): the evolution of a soroban to a primitive digital calculator.
 
