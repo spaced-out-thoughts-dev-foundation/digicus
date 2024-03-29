@@ -57,7 +57,7 @@ If the `State` or `Function` section is omitted, it will be assumed to be non-ex
     * Initial Value: VALUE
 ```
 
-Where `TYPE_NAME`` can be any valid Rust (Soroban subset) type. (TBD) do we want a 1-to-1 mapping of Rust types to .dtr types? Yes for MVP, but maybe as we implement this it will be (a) easier to generalize and/or (b) clear that new users need not care about this and so we can make *smart* decisions for them.
+Where `TYPE_NAME` can be any valid Rust (Soroban subset) type. (TBD) do we want a 1-to-1 mapping of Rust types to .dtr types? Yes for MVP, but maybe as we implement this it will be (a) easier to generalize and/or (b) clear that new users need not care about this and so we can make *smart* decisions for them.
 
 **FUNCTION_DEFINITION**:
 ```
