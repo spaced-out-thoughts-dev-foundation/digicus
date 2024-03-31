@@ -12,7 +12,9 @@ Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a net new,
 
 ### Digit
 
-The Digicus compiler (*digit*) is a Ruby gem which provides transcompilation from block-based contracts to and from the SDF maintained Soroban Rust SDK. It does so via the following pipelines (where `.dtr` stands for `digicus textural representation`):
+The Digicus compiler (*digit*) is a Ruby gem which provides transcompilation from block-based contracts to and from the Soroban SDKs. For starters, we'll be supporting the SDF maintained Rust SDK. 
+
+Digit accomplishes this via the following pipelines (where `.dtr` stands for `digicus textural representation`):
 
 1. **[To Contract]**: block-based contract --> `.dtr` file --> `.rs`
 2. **[From Contract]**: `.rs` --> `.dtr` --> block-based contract

@@ -3,12 +3,13 @@
 module Digit
   # Represents a contract in the Digit language
   class Contract
-    attr_reader :name, :state, :functions
+    def initialize()
+    end
+    
+    def self.from_rust
+    end
 
-    def initialize(name, state, functions)
-      @name = name
-      @state = state
-      @functions = functions
+    def self.from_dtr
     end
   end
 end
