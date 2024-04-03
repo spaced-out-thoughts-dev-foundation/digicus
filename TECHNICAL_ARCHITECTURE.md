@@ -1,15 +1,14 @@
 # Technical Architecture
 
-#### Table of Contents  
+**Table of Contents**
 - [Technical Architecture](#technical-architecture)
-        - [Table of Contents](#table-of-contents)
   - [Digicus Programming Language](#digicus-programming-language)
     - [Overall Architecture](#overall-architecture)
     - [Digit](#digit)
       - [Digicus Textual Representation Format Specification](#digicus-textual-representation-format-specification)
       - [The Instruction List](#the-instruction-list)
-      - [Compilation Examples](#a-compilation-example)
-        -  [Hello World](#hello-world)
+      - [Compilation Examples](#compilation-examples)
+        - [Hello World](#hello-world)
   - [Digicus IDE](#digicus-ide)
     - [How to Use It?](#how-to-use-it)
 
@@ -124,7 +123,7 @@ We will provide a standard library of instructions. Much of this will be determi
 
 #### [Compilation Examples](#a-compilation-example)
 
-#### [Hello World](#hello-world)
+##### [Hello World](#hello-world)
 
 Taken from the [SDF Soroban example repository here](https://github.com/stellar/soroban-examples/tree/main/hello_world).
 
