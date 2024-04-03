@@ -2,13 +2,13 @@
 
 ## Digicus Programming Language
 
-Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a net new, block-based, visual programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
+Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a novel, block-based, visual smart contract programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
 
 ### Overall Architecture
 
 ![overall architecture](./technical_architecture_artifacts/overall_architecture.png)
 
-Digicus is a block-based programming language accessible via a browser based IDE that serves smart contracts as defined in the DTR (Digicus Textual Representation) format. It comes with a DTR to Rust code generator such that it can then leverage the Rust toolchain to compile to WASM and submit the contract to the Stellar network. 
+Digicus is accessible via a browser based IDE (React frontend with Rails backend) that serves smart contracts as defined in the DTR (Digicus Textual Representation) format. It comes with a Rust to DTR (Rust crate) and DTR to Rust compiler (Ruby gem) such that it can then leverage the Rust toolchain to compile to WASM and submit the contract to the Stellar network. Over time we plan to not only support other programming language SDKs but also eventually WASM directly.
 
 In compiler terms, think of Digicus like the frontend language, DTR and Rust as the intermediate representations, and then WASM as the backend language (interpreted and executed by Stellar core nodes running the Soroban VM).
 
@@ -105,6 +105,7 @@ We will provide a standard library of instructions. Much of this will be determi
 * FetchFromStorage
 * SaveToStorage
 * Log
+* ... etc.
 
 ***
 
@@ -118,6 +119,6 @@ The Digicus IDE is the recommended text editor for creating and visualizing Soro
 4. testing
 5. auto-complete
 
-The Digicus IDE is powered by the **DTR render engine**. The DTR Render Engine consumes DTR formatted files and interprets them to display the block-based contract representation that users can CRUD in the Digicus IDE. Since Digicus consumes DTR files, it can provide compilation to and from *any* Soroban SDK which has a DTR compilation support.
+The Digicus IDE is powered by the **DTR Render Engine**. The DTR Render Engine consumes DTR formatted files and interprets them to display the block-based contract representation that users can CRUD in the Digicus IDE. Since Digicus consumes DTR files, it can provide compilation to and from *any* Soroban SDK which has DTR compilation support.
 
 ***
