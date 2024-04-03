@@ -8,6 +8,10 @@ Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a net new,
 
 ![overall architecture](./technical_architecture_artifacts/overall_architecture.png)
 
+Digicus is a block-based programming language accessible via a browser based IDE that serves smart contracts as defined in the DTR (Digicus Textual Representation) format. It comes with a DTR to Rust code generator such that it can then leverage the Rust toolchain to compile to WASM and submit the contract to the Stellar network. 
+
+In compiler terms, think of Digicus like the frontend language, DTR and Rust as the intermediate representations, and then WASM as the backend language (interpreted and executed by Stellar core nodes running the Soroban VM).
+
 ***
 
 ### Digit
@@ -113,5 +117,7 @@ The Digicus IDE is the recommended text editor for creating and visualizing Soro
 3. simulation
 4. testing
 5. auto-complete
+
+The Digicus IDE is powered by the **DTR render engine**. The DTR Render Engine consumes DTR formatted files and interprets them to display the block-based contract representation that users can CRUD in the Digicus IDE. Since Digicus consumes DTR files, it can provide compilation to and from *any* Soroban SDK which has a DTR compilation support.
 
 ***
