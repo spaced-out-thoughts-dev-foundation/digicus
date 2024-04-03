@@ -1,6 +1,11 @@
 # Technical Architecture
 
-## Digicus Programming Language
+##### Table of Contents  
+[Digicus Programming Language](#Digicus-Programming-Language)  
+[Digicus Textual Representation Format Specification](#Digicus-Textual-Representation-Format-Specification)
+
+
+## [Digicus Programming Language](#Digicus-Programming-Language)
 
 Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a novel, block-based, visual smart contract programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
 
@@ -23,7 +28,7 @@ Digit accomplishes this via the following pipelines (where `.dtr` stands for `di
 1. **[To Contract]**: block-based contract --> `.dtr` file --> `.rs`
 2. **[From Contract]**: `.rs` --> `.dtr` --> block-based contract
 
-#### Digicus Textual Representation (.dtr) Format Specification
+#### [Digicus Textual Representation Format Specification](#Digicus-Textual-Representation-Format-Specification)
 
 Each `.dtr` file contains the definition for a single contract. Each contract consists of:
 
@@ -106,6 +111,12 @@ We will provide a standard library of instructions. Much of this will be determi
 * SaveToStorage
 * Log
 * ... etc.
+
+
+#### An Example
+
+
+
 
 ***
 
