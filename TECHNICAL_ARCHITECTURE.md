@@ -1,6 +1,6 @@
 # Technical Architecture
 
-##### Table of Contents  
+#### Table of Contents  
 - [Technical Architecture](#technical-architecture)
         - [Table of Contents](#table-of-contents)
   - [Digicus Programming Language](#digicus-programming-language)
@@ -8,10 +8,12 @@
     - [Digit](#digit)
       - [Digicus Textual Representation Format Specification](#digicus-textual-representation-format-specification)
       - [The Instruction List](#the-instruction-list)
-      - [A Compilation Example](#a-compilation-example)
+      - [Compilation Examples](#a-compilation-example)
         -  [Hello World](#hello-world)
   - [Digicus IDE](#digicus-ide)
+    - [How to Use It?](#how-to-use-it)
 
+***
 
 ## [Digicus Programming Language](#Digicus-Programming-Language)
 
@@ -76,7 +78,7 @@ If the `State` or `Function` section is omitted, it will be assumed to be non-ex
     * Initial Value: VALUE
 ```
 
-Where `TYPE_NAME` can be any valid Rust (Soroban subset) type. (TBD) do we want a 1-to-1 mapping of Rust types to .dtr types? Yes for MVP, but maybe as we implement this it will be (a) easier to generalize and/or (b) clear that new users need not care about this and so we can make *smart* decisions for them.
+Where `TYPE_NAME` can be any valid Rust (Soroban subset) type. (TBD) do we want a 1-to-1 mapping of Rust types to .dtr types? Yes for MVP, but maybe as we implement this it will be (a) easier to generalize and/or (b) clear that new users need not care about this and so we can make *smart* decisions for them. Eventually we may rethink this when we expand to other frontend targets.
 
 **FUNCTION_DEFINITION**:
 ```
@@ -87,7 +89,7 @@ Where `TYPE_NAME` can be any valid Rust (Soroban subset) type. (TBD) do we want 
         ...
         INPUT_NAME: TYPE_NAME
       }
-    * Output:
+    * Output: TYPE_NAME
     * Instructions:
       {
         { instruction: INSTRUCTION_NAME, input: (VALUE_NAME: VALUE,..., VALUE_NAME: VALUE), assign: ASSIGN_NAME },
@@ -120,14 +122,11 @@ We will provide a standard library of instructions. Much of this will be determi
 * Log
 * ... etc.
 
-
-#### [A Compilation Example](#a-compilation-example)
-
+#### [Compilation Examples](#a-compilation-example)
 
 #### [Hello World](#hello-world)
 
 Taken from the [SDF Soroban example repository here](https://github.com/stellar/soroban-examples/tree/main/hello_world).
-
 
 **hello_world.rs**
 
@@ -165,6 +164,8 @@ impl HelloContract {
         }
 ```
 
+***
+
 **Digicus IDE**
 
 ![digicus ide hello world](./technical_architecture_artifacts/digicus-ide-mockup.png)
@@ -182,5 +183,12 @@ The Digicus IDE is the recommended text editor for creating and visualizing Soro
 5. auto-complete
 
 The Digicus IDE is powered by the **DTR Render Engine**. The DTR Render Engine consumes DTR formatted files and interprets them to display the block-based contract representation that users can CRUD in the Digicus IDE. Since Digicus consumes DTR files, it can provide compilation to and from *any* Soroban SDK which has DTR compilation support.
+
+### [How to Use It?](#how-to-use-it)
+
+For the initial 1.0 release of Digicus, we will host the IDE on our website (*link TBD*). By hosting the IDE, we lower the barriers to entry and make Digicus as easy to use as possible. However, once folks evolve beyond the learning phase and begin to write more business critical smart contracts, we imagine they will wish to devlop these contracts locally, *owning* the entire development pipeline. Thus, after version 1.0, we will also work to release and support:
+
+1. self-hosting the IDE
+2. a desktop version
 
 ***
