@@ -1,15 +1,23 @@
 # Technical Architecture
 
 ##### Table of Contents  
-[Digicus Programming Language](#Digicus-Programming-Language)  
-[Digicus Textual Representation Format Specification](#Digicus-Textual-Representation-Format-Specification)
+- [Technical Architecture](#technical-architecture)
+        - [Table of Contents](#table-of-contents)
+  - [Digicus Programming Language](#digicus-programming-language)
+    - [Overall Architecture](#overall-architecture)
+    - [Digit](#digit)
+      - [Digicus Textual Representation Format Specification](#digicus-textual-representation-format-specification)
+      - [The Instruction List](#the-instruction-list)
+      - [A Compilation Example](#a-compilation-example)
+        -  [Hello World](#hello-world)
+  - [Digicus IDE](#digicus-ide)
 
 
 ## [Digicus Programming Language](#Digicus-Programming-Language)
 
 Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a novel, block-based, visual smart contract programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
 
-### Overall Architecture
+### [Overall Architecture](#Overall-Architecture)
 
 ![overall architecture](./technical_architecture_artifacts/overall_architecture.png)
 
@@ -19,7 +27,7 @@ In compiler terms, think of Digicus like the frontend language, DTR and Rust as 
 
 ***
 
-### Digit
+### [Digit](#Digit)
 
 The Digicus compiler (*digit*) is a Ruby gem which provides transcompilation from block-based contracts to and from the Soroban SDKs. For starters, we'll be supporting the SDF maintained Rust SDK. 
 
@@ -96,7 +104,7 @@ Note:
 * an `ASSIGN_NAME` is a local variable which may be referenced by following instructions
 * `INSTRUCTION_NAME` is the name of a subset (TBD) of supported rust expressions
 
-#### The Instruction List
+#### [The Instruction List](#the-instruction-list)
 
 We will provide a standard library of instructions. Much of this will be determined from looking at:
 * [contract examples](https://github.com/stellar/soroban-examples)
@@ -113,14 +121,57 @@ We will provide a standard library of instructions. Much of this will be determi
 * ... etc.
 
 
-#### An Example
+#### [A Compilation Example](#a-compilation-example)
 
 
+#### [Hello World](#hello-world)
 
+Taken from the [SDF Soroban example repository here](https://github.com/stellar/soroban-examples/tree/main/hello_world).
+
+
+**hello_world.rs**
+
+```rust
+#![no_std]
+use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
+
+#[contract]
+pub struct HelloContract;
+
+#[contractimpl]
+impl HelloContract {
+    pub fn hello(env: Env, to: Symbol) -> Vec<Symbol> {
+        vec![&env, symbol_short!("Hello"), to]
+    }
+}
+```
+
+**hello_world.dtr**
+
+```dtr
+[Contract]: HelloContract
+
+[Functions]:
+  * [hello]
+      * Input:
+        { 
+          to: Symbol 
+        }
+      * Output: Symbol
+      * Instructions:
+        {
+          { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
+          { instruction: Return, input: HelloToResult }
+        }
+```
+
+**Digicus IDE**
+
+![digicus ide hello world](./technical_architecture_artifacts/digicus-ide-mockup.png)
 
 ***
 
-## Digicus IDE
+## [Digicus IDE](#digicus-ide)
 
 The Digicus IDE is the recommended text editor for creating and visualizing Soroban Visual block contracts. It is a React frontend with a Ruby on Rails backend. Visualization is achieved by transforming `.dtr` files into colorful, draggable, editable "Lego-like" blocks. Once contracts are loaded (or in the case of creation, initialized), the IDE presents a host of tools to aid in development:
 
