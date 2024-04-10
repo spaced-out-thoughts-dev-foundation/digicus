@@ -77,14 +77,12 @@ RSpec.describe DTRCore::Parser do
 
     context 'when contract name and state sections are present' do
       it 'parses the contract name and state sections' do
-        contract = DTRCore::Parser.parse('./spec/test_dtr_files/state_section_simple_no_functions.dtr')
+        contract = DTRCore::Parser.parse('./spec/test_dtr_files/contract_and_state_only_swapped_order.dtr')
 
         expect(contract.name).to eq('CONTRACT_NAME')
 
         expect(contract.state).to match_array([
                                                 DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
-                                                DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
-                                                DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
                                               ])
 
         # empty contract so these optional sections are nil

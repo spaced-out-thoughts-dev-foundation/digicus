@@ -1,0 +1,6 @@
+[State]:
+  * [STATE_DEFINITION_1]
+    * Type: I32
+    * Initial Value: 22
+
+[Contract]: CONTRACT_NAME
