@@ -1,0 +1,10 @@
+[Contract]: CONTRACT_NAME
+
+[State]:
+  * [STATE_DEFINITION_1]
+    * Initial Value: 22
+  * [STATE_DEFINITION_2]
+    * Type: Symbol
+    * Initial Value: "Hello World"
+  * [STATE_DEFINITION_3]
+    * Initial Value: -1234

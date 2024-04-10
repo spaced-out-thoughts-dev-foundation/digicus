@@ -1,0 +1,14 @@
+[Contract]: HelloContract
+
+[Functions]:
+  * [hello]
+      * Input:
+        { 
+          to: Symbol 
+        }
+      * Output: Symbol
+      * Instructions:
+        {
+          { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
+          { instruction: Return, input: HelloToResult }
+        }

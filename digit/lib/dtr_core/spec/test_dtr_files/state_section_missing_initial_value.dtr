@@ -1,0 +1,11 @@
+[Contract]: CONTRACT_NAME
+
+[State]:
+  * [STATE_DEFINITION_1]
+    * Type: I32
+    * Initial Value: 22
+  * [STATE_DEFINITION_2]
+    * Type: Symbol
+  * [STATE_DEFINITION_3]
+    * Type: I256
+    * Initial Value: -1234
