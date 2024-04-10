@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
+# Errors
 require './lib/error/file_not_found'
 require './lib/error/missing_contract_name_section'
 require './lib/error/empty_state_section'
 require './lib/error/invalid_type_name'
 require './lib/error/missing_type_name'
 require './lib/error/missing_initial_value'
+
+# Objects
+require './lib/contract'
+require './lib/state'
 
 module DTRCore
   class Parser
@@ -34,7 +39,7 @@ module DTRCore
       parse_state_section
       parse_function_section
 
-      sections
+      DTRCore::Contract.new(sections[:contract_name], sections[:state], sections[:functions])
     end
 
     private
@@ -73,11 +78,7 @@ module DTRCore
         type = definition[/Type:\s*(\w+)/, 1]
         initial_value = validate_type_and_coerce_initial_value(type, definition[/Initial Value:\s*(.+)/, 1])
 
-        {
-          name:,
-          type:,
-          initial_value:
-        }
+        DTRCore::State.new(name, type, initial_value)
       end
 
       raise DTRCore::Error::EmptyStateSection if state_definitions.empty?

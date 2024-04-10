@@ -55,41 +55,40 @@ RSpec.describe DTRCore::Parser do
   context 'when valid DTR' do
     context 'when only contract name section is present' do
       it 'parses the contract name section' do
-        parser = DTRCore::Parser.parse('./spec/test_dtr_files/contract_name_section_only.dtr')
+        contract = DTRCore::Parser.parse('./spec/test_dtr_files/contract_name_section_only.dtr')
 
-        expect(parser[:contract_name]).to eq('CONTRACT_NAME')
+        expect(contract.name).to eq('CONTRACT_NAME')
 
         # empty contract so these optional sections are nil
-        expect(parser[:state]).to be_nil
-        expect(parser[:functions]).to be_nil
+        expect(contract.state).to be_nil
+        expect(contract.functions).to be_nil
       end
 
       it 'parses the name of the contract even when it is weird' do
-        parser = DTRCore::Parser.parse('./spec/test_dtr_files/contract_name_section_only_weird_name.dtr')
+        contract = DTRCore::Parser.parse('./spec/test_dtr_files/contract_name_section_only_weird_name.dtr')
 
-        expect(parser[:contract_name]).to eq('CONTRACT_NAME is foo 123')
+        expect(contract.name).to eq('CONTRACT_NAME is foo 123')
 
         # empty contract so these optional sections are nil
-        expect(parser[:state]).to be_nil
-        expect(parser[:functions]).to be_nil
+        expect(contract.state).to be_nil
+        expect(contract.functions).to be_nil
       end
     end
 
     context 'when contract name and state sections are present' do
       it 'parses the contract name and state sections' do
-        parser = DTRCore::Parser.parse('./spec/test_dtr_files/state_section_simple_no_functions.dtr')
+        contract = DTRCore::Parser.parse('./spec/test_dtr_files/state_section_simple_no_functions.dtr')
 
-        expect(parser[:contract_name]).to eq('CONTRACT_NAME')
+        expect(contract.name).to eq('CONTRACT_NAME')
 
-        expect(parser[:state]).to match_array([
-                                                { name: 'STATE_DEFINITION_1', type: 'I32', initial_value: 22 },
-                                                { name: 'STATE_DEFINITION_2', type: 'Symbol',
-                                                  initial_value: 'Hello World' },
-                                                { name: 'STATE_DEFINITION_3', type: 'I256', initial_value: -1234 }
+        expect(contract.state).to match_array([
+                                                DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
+                                                DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
+                                                DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
                                               ])
 
         # empty contract so these optional sections are nil
-        expect(parser[:functions]).to be_nil
+        expect(contract.functions).to be_nil
       end
     end
   end
