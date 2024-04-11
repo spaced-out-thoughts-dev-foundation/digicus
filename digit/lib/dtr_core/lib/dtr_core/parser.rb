@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
-# Errors
-require './lib/error/file_not_found'
-require './lib/error/missing_contract_name_section'
-require './lib/error/empty_state_section'
-require './lib/error/invalid_type_name'
-require './lib/error/missing_type_name'
-require './lib/error/missing_initial_value'
+# # Errors
+# require 'dtr_core/error/file_not_found'
+# require_relative 'error/empty_state_section'
+# require_relative 'error/invalid_type_name'
+# require_relative 'error/missing_type_name'
+# require_relative 'error/missing_initial_value'
 
-# Objects
-require './lib/contract'
-require './lib/state'
+# # Objects
+# require_relative 'contract'
+# require_relative 'state'
 
 module DTRCore
   class Parser
     def initialize(file_path)
-      raise DTRCore::Error::FileNotFound unless File.exist?(file_path)
+      raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
 
       @content = File.read(file_path)
 
@@ -53,7 +52,7 @@ module DTRCore
 
       contract_name_section = content.match(contract_name_pattern)&.captures&.first
 
-      raise DTRCore::Error::MissingContractNameSection if contract_name_section.nil?
+      raise 'Missing contract name.' if contract_name_section.nil?
 
       sections[:contract_name] = contract_name_section
     end
@@ -81,7 +80,7 @@ module DTRCore
         DTRCore::State.new(name, type, initial_value)
       end
 
-      raise DTRCore::Error::EmptyStateSection if state_definitions.empty?
+      raise 'Empty state section.' if state_definitions.empty?
 
       sections[:state] = state_definitions
     end
@@ -89,8 +88,8 @@ module DTRCore
     def parse_function_section; end
 
     def validate_type_and_coerce_initial_value(type_name, initial_value)
-      raise DTRCore::Error::MissingTypeName if type_name.nil?
-      raise DTRCore::Error::MissingInitialValue if initial_value.nil?
+      raise 'Missing Type Name.' if type_name.nil?
+      raise 'Missing Initial Value.' if initial_value.nil?
 
       case type_name
       # TODO: ensure size is correct
@@ -110,7 +109,7 @@ module DTRCore
           &.gsub('"', '')
           &.gsub("'", '')
       else
-        raise DTRCore::Error::InvalidTypeName
+        raise 'Missing Invalid Type Name.'
       end
     end
   end

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 require './spec/spec_helper'
-require './lib/parser'
 
 RSpec.describe DTRCore::Parser do
   context 'when file does not exist' do
     it 'raises an error' do
-      expect { DTRCore::Parser.parse('DTR') }.to raise_error(DTRCore::Error::FileNotFound)
+      expect { DTRCore::Parser.parse('DTR') }.to raise_error(/Unable to find file: DTR./)
     end
   end
 
@@ -15,7 +14,7 @@ RSpec.describe DTRCore::Parser do
       it 'raises an error' do
         expect do
           DTRCore::Parser.parse('./spec/test_dtr_files/missing_contract_name_section.dtr')
-        end.to raise_error(DTRCore::Error::MissingContractNameSection)
+        end.to raise_error(/Missing contract name./)
       end
     end
 
@@ -23,7 +22,7 @@ RSpec.describe DTRCore::Parser do
       it 'raises an error' do
         expect do
           DTRCore::Parser.parse('./spec/test_dtr_files/state_section_no_definitions_empty_error.dtr')
-        end.to raise_error(DTRCore::Error::EmptyStateSection)
+        end.to raise_error(/Empty state section./)
       end
     end
 
@@ -31,7 +30,7 @@ RSpec.describe DTRCore::Parser do
       it 'raises an error' do
         expect do
           DTRCore::Parser.parse('./spec/test_dtr_files/state_section_missing_type_name.dtr')
-        end.to raise_error(DTRCore::Error::MissingTypeName)
+        end.to raise_error(/Missing Type Name./)
       end
     end
 
@@ -39,7 +38,7 @@ RSpec.describe DTRCore::Parser do
       it 'raises an error' do
         expect do
           DTRCore::Parser.parse('./spec/test_dtr_files/state_section_missing_initial_value.dtr')
-        end.to raise_error(DTRCore::Error::MissingInitialValue)
+        end.to raise_error(/Missing Initial Value./)
       end
     end
 
@@ -47,7 +46,7 @@ RSpec.describe DTRCore::Parser do
       it 'parses the contract name section but the state section is nil' do
         expect do
           DTRCore::Parser.parse('./spec/test_dtr_files/state_section_invalid_type_name.dtr')
-        end.to raise_error(DTRCore::Error::InvalidTypeName)
+        end.to raise_error(/Missing Invalid Type Name./)
       end
     end
   end
@@ -82,7 +81,7 @@ RSpec.describe DTRCore::Parser do
         expect(contract.name).to eq('CONTRACT_NAME')
 
         expect(contract.state).to match_array([
-                                                DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
+                                                DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22)
                                               ])
 
         # empty contract so these optional sections are nil
