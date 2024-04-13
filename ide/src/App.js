@@ -1,6 +1,34 @@
-import BarChart from './BarChart'
+// import BarChart from './BarChart'
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
 
 const App = () => {
-    return ( <div><h1>Digicus IDE</h1><BarChart /></div> )
+    return ( 
+      <div>
+        <AppBar position="static">
+          <Toolbar style={{ 
+              display: 'flex', 
+              backgroundColor: 'black',
+            }}>
+            <div style={{flex: 1}}>
+              <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
+            </div>
+            <div style={{
+                flex: 1, 
+                display: 'flex', 
+                justifyContent: 'center',
+                color: 'rgb(39 207 230)'
+              }}>
+              <Typography style={{fontSize: '1.5em'}}>
+                Digicus IDE
+              </Typography>
+            </div>
+            <div style={{flex: 1}}></div>
+          </Toolbar>
+        </AppBar>
+      </div>
+    )
 }
 export default App;
