@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 const App = () => {
     return ( 
@@ -27,6 +28,7 @@ const App = () => {
             </div>
             <div style={{flex: 1}}></div>
           </Toolbar>
+          <SpeedInsights />
         </AppBar>
       </div>
     )
