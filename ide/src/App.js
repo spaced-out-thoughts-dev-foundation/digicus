@@ -5,14 +5,25 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
+import ContractContainer from './components/ContractContainer'
 
 const App = () => {
     return ( 
-      <div>
-        <AppBar position="static">
+      <div style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+      }}>
+        <AppBar position="static" style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        backgroundColor: 'black',
+      }}>
           <Toolbar style={{ 
               display: 'flex', 
               backgroundColor: 'black',
+              // flex: 1,
             }}>
             <div style={{flex: 1}}>
               <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
@@ -28,10 +39,17 @@ const App = () => {
               </Typography>
             </div>
             <div style={{flex: 1}}></div>
-          </Toolbar>
-          <SpeedInsights />
-          <Analytics />
+          
+            </Toolbar>
+
+          <div style={{ flex: 1, width: '100%', height: '100%'}}>
+            <ContractContainer />
+          </div>
+          
         </AppBar>
+
+        <SpeedInsights />
+        <Analytics />
       </div>
     )
 }
