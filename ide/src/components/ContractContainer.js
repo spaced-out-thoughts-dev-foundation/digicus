@@ -10,18 +10,16 @@ class ContractContainer extends Component {
               justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'column',
-              flex: '1',
+              flex: '10',
               backgroundColor: 'rgb(39 207 230)',
-              width: '100%',
-              height: '100%'
           }}>
             <Box
                 style={{
                   backgroundColor: 'white',
                   color: 'black',
                 }}
-                height={200}
-                width={200}
+                height={'100%'}
+                width={'80%'}
                 my={4}
                 display="flex"
                 alignItems="center"
