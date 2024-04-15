@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module DTRCore
+  # Represents a contract in a DTR file.
   class Contract
     attr_reader :functions, :name, :state
 

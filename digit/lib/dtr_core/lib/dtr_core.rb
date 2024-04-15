@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Core logic for consuming Digicus Textual Representation (DTR) files.
 module DTRCore
   autoload :FileNotFoundError, 'dtr_core/file_not_found_error'
 

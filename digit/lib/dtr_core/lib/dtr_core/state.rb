@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module DTRCore
+  # Represents a state in a DTR file.
   class State
     attr_reader :name, :type, :initial_value
 

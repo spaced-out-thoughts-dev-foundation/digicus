@@ -24,10 +24,11 @@ Gem::Specification.new do |spec|
   # spec.executables   = ["my_gem_executable"]
 
   # Optionally specify runtime and development dependencies
-  # spec.required_ruby_version = ">= 2.5.0"
+  spec.required_ruby_version = '>= 3.2.0'
   # spec.required_rubygems_version = ">= 3.0.0"
 
   # Optionally specify additional metadata, such as platform compatibility
-  spec.platform      = Gem::Platform::RUBY
+  spec.platform = Gem::Platform::RUBY
   # spec.metadata      = { "foo" => "bar" }
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

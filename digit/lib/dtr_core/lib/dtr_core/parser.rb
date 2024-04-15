@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
-# # Errors
-# require 'dtr_core/error/file_not_found'
-# require_relative 'error/empty_state_section'
-# require_relative 'error/invalid_type_name'
-# require_relative 'error/missing_type_name'
-# require_relative 'error/missing_initial_value'
-
-# # Objects
-# require_relative 'contract'
-# require_relative 'state'
-
 module DTRCore
+  # Parses a DTR file and returns a Contract object.
   class Parser
     def initialize(file_path)
       raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
@@ -68,39 +58,41 @@ module DTRCore
 
       state_definitions = state_section
                           .split(/\n\s*\*\s*\[/).map { |x| "[#{x.strip}" }
-                          .map do |definition|
-        name = definition[/^\[([^\]]+)\]/, 1]
-               &.gsub('*', '')
-               &.gsub("\n", '')
-               &.gsub('[', '')
-               &.strip
-        type = definition[/Type:\s*(\w+)/, 1]
-        initial_value = validate_type_and_coerce_initial_value(type, definition[/Initial Value:\s*(.+)/, 1])
-
-        DTRCore::State.new(name, type, initial_value)
-      end
+                          .map { |definition| state_definition_to_state_object(definition) }
 
       raise 'Empty state section.' if state_definitions.empty?
 
       sections[:state] = state_definitions
     end
 
+    def clean_state_definition_name(definition)
+      definition
+        &.gsub('*', '')
+        &.gsub("\n", '')
+        &.gsub('[', '')
+        &.strip
+    end
+
+    def state_definition_to_state_object(definition)
+      name = clean_state_definition_name definition[/^\[([^\]]+)\]/, 1]
+
+      type = definition[/Type:\s*(\w+)/, 1]
+
+      initial_value_raw = definition[/Initial Value:\s*(.+)/, 1]
+
+      validate_type_name_and_initial_value!(type, initial_value_raw)
+
+      DTRCore::State.new(name, type, coerce_initial_value(type, initial_value_raw))
+    end
+
     def parse_function_section; end
 
-    def validate_type_and_coerce_initial_value(type_name, initial_value)
-      raise 'Missing Type Name.' if type_name.nil?
-      raise 'Missing Initial Value.' if initial_value.nil?
-
+    def coerce_initial_value(type_name, initial_value)
       case type_name
       # TODO: ensure size is correct
       # TODO: check type
-      when 'I32', 'I64', 'I256'
-        initial_value.to_i
-
-      # TODO: ensure size is correct
-      # TODO: ensure unsigned
-      # TODO: check type
-      when 'U32', 'U64', 'U256'
+      # TODO: ensure unsigned vs signed
+      when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
         initial_value.to_i
 
       # TODO: check type
@@ -111,6 +103,11 @@ module DTRCore
       else
         raise 'Missing Invalid Type Name.'
       end
+    end
+
+    def validate_type_name_and_initial_value!(type_name, initial_value)
+      raise 'Missing Type Name.' if type_name.nil?
+      raise 'Missing Initial Value.' if initial_value.nil?
     end
   end
 end
