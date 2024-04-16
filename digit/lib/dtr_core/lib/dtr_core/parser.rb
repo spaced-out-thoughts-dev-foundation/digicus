@@ -89,9 +89,6 @@ module DTRCore
 
     def coerce_initial_value(type_name, initial_value)
       case type_name
-      # TODO: ensure size is correct
-      # TODO: check type
-      # TODO: ensure unsigned vs signed
       when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
         initial_value.to_i
 
@@ -108,6 +105,23 @@ module DTRCore
     def validate_type_name_and_initial_value!(type_name, initial_value)
       raise 'Missing Type Name.' if type_name.nil?
       raise 'Missing Initial Value.' if initial_value.nil?
+
+      case type_name
+      when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
+        validate_numeric!(type_name, initial_value)
+      when 'Symbol'
+        # no validation needed
+      else
+        raise 'Missing Invalid Type Name.'
+      end
+    end
+
+    def validate_numeric!(type_name, initial_value)
+      raise 'Invalid initial value for type. Wrong type.' unless initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/)
+
+      raise "Invalid initial value for type #{type_name}. Out of range." unless initial_value.to_i.between?(
+        DTRCore::Number.const_get(:"MIN_#{type_name}"), DTRCore::Number.const_get(:"MAX_#{type_name}")
+      )
     end
   end
 end
