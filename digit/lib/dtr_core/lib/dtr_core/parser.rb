@@ -37,7 +37,6 @@ module DTRCore
     attr_accessor :sections
 
     def parse_contract_name_section
-      # [Contract]: CONTRACT_NAME
       contract_name_pattern = /\[Contract\]:\s*(.+)/
 
       contract_name_section = content.match(contract_name_pattern)&.captures&.first
@@ -48,10 +47,8 @@ module DTRCore
     end
 
     def parse_state_section
-      # Regular expression pattern to match state definitions
       state_pattern = /\[State\]:\s*((?:\s*\*\s*\[.+?\]\n(?:\s*  \* .+\n?)*)*)/
 
-      # Extract the state section using the pattern
       state_section = content.match(state_pattern)&.captures&.first
 
       return if state_section.nil?
@@ -86,49 +83,69 @@ module DTRCore
     end
 
     def parse_function_section
-      # Regular expression pattern to match function definitions
       function_pattern = /\[Functions\]:(?<all>.*):\[Functions\]/m
-
-      # Extract the function section using the pattern
       function_section = content.match(function_pattern)&.captures&.first
 
       return if function_section.nil?
 
-      function_definitions = function_section
-                             .split('-()')
-                             .map { |x| x.strip.to_s }
-                             .map { |definition| function_definition_to_function_object(definition) }
-                             .reject { |x| x.name.nil? }
+      function_definitions = parse_parse_function_section(function_section)
 
       raise 'Empty function section.' if function_definitions.empty?
 
       sections[:functions] = function_definitions
     end
 
+    def parse_parse_function_section(function_section)
+      function_section
+        .split('-()')
+        .map { |x| x.strip.to_s }
+        .map { |definition| function_definition_to_function_object(definition) }
+        .reject { |x| x.name.nil? }
+    end
+
     def function_definition_to_function_object(definition)
       name = definition[/\s*\[(?<all>[^\]]+)]/, 1]
-      inputs = definition[/Inputs\s*:\s*{\s*(?<inputs>[^}]+)\s*}/, 1]
-               &.split("\n")
-               &.map { |x| x&.strip&.split(':') }
-               &.select { |x| x&.length == 2 }
-               &.map { |x| { name: x[0]&.strip, type_name: x[1]&.strip } }
+      inputs = format_function_inputs(definition[/Inputs\s*:\s*{\s*(?<inputs>[^}]+)\s*}/, 1])
       output = definition[/Output:\s*(.+)/, 1]
-      instructions = definition[/Instructions:\s*\$(?<inputs>[^\$]+)\$/, 1]
-                     &.split("\n")
-                     &.map { |x| x&.strip }
-                     &.select { |x| x&.length&.> 0 }
-                     &.map do |x|
-        x = x[1..-2]
-        instruction = x[/instruction:\s*(?<all>[^\s,]+)/, 1]
-        input = x[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
-                &.split(',')
-                &.map { |x| x&.strip&.gsub('"', '')&.gsub("'", '') }
-        assign = x[/\s*assign:\s*(?<all>[^\s\,]+)/, 1]
-
-        { instruction:, inputs: input, assign: }
-      end
+      instructions = format_function_instruction(definition[/Instructions:\s*\$(?<inputs>[^\$]+)\$/, 1])
 
       DTRCore::Function.new(name, inputs, output, instructions)
+    end
+
+    def format_function_inputs(inputs)
+      return [] if inputs.nil?
+
+      split_strip_select(inputs)
+        .map { |x| x.split(':') }
+        .map { |x| { name: x[0]&.strip, type_name: x[1]&.strip } }
+    end
+
+    def format_function_instruction(instructions)
+      return [] if instructions.nil?
+
+      split_strip_select(instructions)
+        .map { |instruction| parse_function_instruction(instruction) }
+    end
+
+    def split_strip_select(some_list)
+      some_list
+        .split("\n")
+        .map(&:strip)
+        .select { |x| x.length&.> 0 }
+    end
+
+    def parse_function_instruction(instruction)
+      {
+        instruction: instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
+        inputs: parse_function_instruction_input(instruction),
+        assign: instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1]
+      }
+    end
+
+    def parse_function_instruction_input(definition)
+      definition[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
+        &.split(',')
+        &.map { |x| x&.strip&.gsub('"', '')&.gsub("'", '') }
     end
 
     def coerce_initial_value(type_name, initial_value)

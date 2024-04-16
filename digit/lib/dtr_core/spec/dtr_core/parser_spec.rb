@@ -254,6 +254,17 @@ RSpec.describe DTRCore::Parser do
     end
 
     context 'when contract name and function sections are present' do
+      let(:hello_function) do
+        DTRCore::Function.new('hello', [
+                                { name: 'to', type_name: 'Symbol' }
+                              ], 'Symbol', [
+                                { instruction: 'AddSymbols',
+                                  inputs: %w[Hello to], assign: 'HelloToResult' },
+                                { instruction: 'Return',
+                                  inputs: ['HelloToResult'], assign: nil }
+                              ])
+      end
+
       it 'parses the contract name and function sections' do
         contract = described_class.parse('./spec/test_dtr_files/hello_world_simple.dtr')
 
@@ -262,37 +273,43 @@ RSpec.describe DTRCore::Parser do
         # empty contract so these optional sections are nil
         expect(contract.state).to be_nil
 
-        expect(contract.functions).to match_array(DTRCore::Function.new('hello', [{
-                                                                          name: 'to', type_name: 'Symbol'
-                                                                        }], 'Symbol', [
-                                                                          { instruction: 'AddSymbols',
-                                                                            inputs: %w[Hello to], assign: 'HelloToResult' },
-                                                                          { instruction: 'Return',
-                                                                            inputs: ['HelloToResult'], assign: nil }
-                                                                        ]))
+        expect(contract.functions).to contain_exactly(hello_function)
       end
     end
 
     context 'when contract name, state, and function sections are present' do
+      let(:hello_function) do
+        DTRCore::Function.new('hello', [
+                                { name: 'to', type_name: 'Symbol' },
+                                { name: 'from', type_name: 'I32' }
+                              ], 'Symbol', [
+                                { instruction: 'AddSymbols',
+                                  inputs: %w[Hello to], assign: 'HelloToResult' },
+                                { instruction: 'Return',
+                                  inputs: ['HelloToResult'], assign: nil }
+                              ])
+      end
+
+      let(:world_function) do
+        DTRCore::Function.new('world', [], 'Symbol', [
+                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                              ])
+      end
+
+      let(:state_definitions) do
+        [
+          DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
+          DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
+          DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
+        ]
+      end
+
       it 'parses the contract name, state, and function sections' do
         contract = described_class.parse('./spec/test_dtr_files/multi_function_with_state_and_name_contract.dtr')
 
         expect(contract.name).to eq('MultiFunctionContract')
-
-        expect(contract.state).to contain_exactly(DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
-                                                  DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'), DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234))
-
-        expect(contract.functions).to contain_exactly(DTRCore::Function.new('hello', [
-                                                                              { name: 'to', type_name: 'Symbol' },
-                                                                              { name: 'from', type_name: 'I32' }
-                                                                            ], 'Symbol', [
-                                                                              { instruction: 'AddSymbols',
-                                                                                inputs: %w[Hello to], assign: 'HelloToResult' },
-                                                                              { instruction: 'Return',
-                                                                                inputs: ['HelloToResult'], assign: nil }
-                                                                            ]), DTRCore::Function.new('world', nil, 'Symbol', [
-                                                                                                        { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
-                                                                                                      ]))
+        expect(contract.state).to match_array(state_definitions)
+        expect(contract.functions).to contain_exactly(hello_function, world_function)
       end
     end
   end
