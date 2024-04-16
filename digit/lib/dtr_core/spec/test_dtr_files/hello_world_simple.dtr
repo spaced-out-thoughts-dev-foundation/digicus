@@ -1,14 +1,15 @@
 [Contract]: HelloContract
 
 [Functions]:
-  * [hello]
-      * Input:
+  -() [hello]
+      * Inputs:
         { 
-          to: Symbol 
+          to: Symbol
         }
       * Output: Symbol
       * Instructions:
-        {
+        $
           { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
-          { instruction: Return, input: HelloToResult }
-        }
+          { instruction: Return, input: (HelloToResult) }
+        $
+:[Functions]

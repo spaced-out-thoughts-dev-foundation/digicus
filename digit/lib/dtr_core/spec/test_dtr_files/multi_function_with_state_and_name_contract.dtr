@@ -1,0 +1,33 @@
+[Contract]: MultiFunctionContract
+
+[State]:
+  * [STATE_DEFINITION_1]
+    * Type: I32
+    * Initial Value: 22
+  * [STATE_DEFINITION_2]
+    * Type: Symbol
+    * Initial Value: "Hello World"
+  * [STATE_DEFINITION_3]
+    * Type: I256
+    * Initial Value: -1234
+
+[Functions]:
+  -() [hello]
+      * Inputs:
+        { 
+          to: Symbol
+          from: I32
+        }
+      * Output: Symbol
+      * Instructions:
+        $
+          { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
+          { instruction: Return, input: (HelloToResult) }
+        $
+-() [world]
+      * Output: Symbol
+      * Instructions:
+        $
+          { instruction: Return, assign: ReturnValue }
+        $
+:[Functions]

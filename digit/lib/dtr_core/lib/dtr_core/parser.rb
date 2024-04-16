@@ -85,7 +85,51 @@ module DTRCore
       DTRCore::State.new(name, type, coerce_initial_value(type, initial_value_raw))
     end
 
-    def parse_function_section; end
+    def parse_function_section
+      # Regular expression pattern to match function definitions
+      function_pattern = /\[Functions\]:(?<all>.*):\[Functions\]/m
+
+      # Extract the function section using the pattern
+      function_section = content.match(function_pattern)&.captures&.first
+
+      return if function_section.nil?
+
+      function_definitions = function_section
+                             .split('-()')
+                             .map { |x| x.strip.to_s }
+                             .map { |definition| function_definition_to_function_object(definition) }
+                             .reject { |x| x.name.nil? }
+
+      raise 'Empty function section.' if function_definitions.empty?
+
+      sections[:functions] = function_definitions
+    end
+
+    def function_definition_to_function_object(definition)
+      name = definition[/\s*\[(?<all>[^\]]+)]/, 1]
+      inputs = definition[/Inputs\s*:\s*{\s*(?<inputs>[^}]+)\s*}/, 1]
+               &.split("\n")
+               &.map { |x| x&.strip&.split(':') }
+               &.select { |x| x&.length == 2 }
+               &.map { |x| { name: x[0]&.strip, type_name: x[1]&.strip } }
+      output = definition[/Output:\s*(.+)/, 1]
+      instructions = definition[/Instructions:\s*\$(?<inputs>[^\$]+)\$/, 1]
+                     &.split("\n")
+                     &.map { |x| x&.strip }
+                     &.select { |x| x&.length&.> 0 }
+                     &.map do |x|
+        x = x[1..-2]
+        instruction = x[/instruction:\s*(?<all>[^\s,]+)/, 1]
+        input = x[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
+                &.split(',')
+                &.map { |x| x&.strip&.gsub('"', '')&.gsub("'", '') }
+        assign = x[/\s*assign:\s*(?<all>[^\s\,]+)/, 1]
+
+        { instruction:, inputs: input, assign: }
+      end
+
+      DTRCore::Function.new(name, inputs, output, instructions)
+    end
 
     def coerce_initial_value(type_name, initial_value)
       case type_name
