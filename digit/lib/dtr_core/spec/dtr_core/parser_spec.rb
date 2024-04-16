@@ -56,7 +56,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I32 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I32',
                                                            (DTRCore::Number::MAX_I32 + 1).to_s)
           end.to raise_error(/Invalid initial value for type I32. Out of range./)
         end
@@ -65,7 +65,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I32 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I32',
                                                            (DTRCore::Number::MIN_I32 - 1).to_s)
           end.to raise_error(/Invalid initial value for type I32. Out of range./)
         end
@@ -74,7 +74,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I32 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I32',
                                                            'Apple')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end
@@ -83,7 +83,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I64 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I64',
                                                            (DTRCore::Number::MAX_I64 + 1).to_s)
           end.to raise_error(/Invalid initial value for type I64. Out of range./)
         end
@@ -92,7 +92,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I64 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I64',
                                                            (DTRCore::Number::MIN_I64 - 1).to_s)
           end.to raise_error(/Invalid initial value for type I64. Out of range./)
         end
@@ -101,7 +101,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I64 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I64',
                                                            'Apple')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end
@@ -110,7 +110,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I256 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I256',
                                                            (DTRCore::Number::MAX_I256 + 1).to_s)
           end.to raise_error(/Invalid initial value for type I256. Out of range./)
         end
@@ -119,7 +119,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I256 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I256',
                                                            (DTRCore::Number::MIN_I256 - 1).to_s)
           end.to raise_error(/Invalid initial value for type I256. Out of range./)
         end
@@ -128,7 +128,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is I256 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'I256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'I256',
                                                            'A 9223372036854775807')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end
@@ -137,7 +137,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U32 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U32',
                                                            (DTRCore::Number::MAX_U32 + 1).to_s)
           end.to raise_error(/Invalid initial value for type U32. Out of range./)
         end
@@ -146,7 +146,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U32 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U32',
                                                            (DTRCore::Number::MIN_U32 - 1).to_s)
           end.to raise_error(/Invalid initial value for type U32. Out of range./)
         end
@@ -155,7 +155,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U32 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U32',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U32',
                                                            'Apple')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end
@@ -164,7 +164,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U64 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U64',
                                                            (DTRCore::Number::MAX_U64 + 1).to_s)
           end.to raise_error(/Invalid initial value for type U64. Out of range./)
         end
@@ -173,7 +173,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U64 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U64',
                                                            (DTRCore::Number::MIN_U64 - 1).to_s)
           end.to raise_error(/Invalid initial value for type U64. Out of range./)
         end
@@ -182,7 +182,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U64 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U64',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U64',
                                                            'Apple')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end
@@ -191,7 +191,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U256 and type too big' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U256',
                                                            (DTRCore::Number::MAX_U256 + 1).to_s)
           end.to raise_error(/Invalid initial value for type U256. Out of range./)
         end
@@ -200,7 +200,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U256 and type too small' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U256',
                                                            (DTRCore::Number::MIN_U256 - 1).to_s)
           end.to raise_error(/Invalid initial value for type U256. Out of range./)
         end
@@ -209,7 +209,7 @@ RSpec.describe DTRCore::Parser do
       context 'when the type is U256 and type is not a number' do
         it 'raises an error' do
           expect do
-            described_class.new(irrelevant_file_path).send(:validate_type_name_and_initial_value!, 'U256',
+            described_class.new(irrelevant_file_path).send(:validate_then_coerce_initial_value!, 'U256',
                                                            'Apple')
           end.to raise_error(/Invalid initial value for type. Wrong type./)
         end

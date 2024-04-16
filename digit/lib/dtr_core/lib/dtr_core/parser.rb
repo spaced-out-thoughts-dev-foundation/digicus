@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require 'dtr_core/common'
+
 module DTRCore
   # Parses a DTR file and returns a Contract object.
   class Parser
+    include ::DTRCore::Common
+
     def initialize(file_path)
       raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
 
@@ -12,11 +16,7 @@ module DTRCore
       # thus, the actual values are not known yet
       # and so if we see nil we know that section
       # was not included in the dtr file
-      @sections = {
-        contract_name: nil,
-        state: nil,
-        functions: nil
-      }
+      @sections = { contract_name: nil, state: nil, functions: nil }
     end
 
     def self.parse(file_path)
@@ -63,11 +63,7 @@ module DTRCore
     end
 
     def clean_state_definition_name(definition)
-      definition
-        &.gsub('*', '')
-        &.gsub("\n", '')
-        &.gsub('[', '')
-        &.strip
+      definition.gsub(/[\*\n\[]/, '').strip
     end
 
     def state_definition_to_state_object(definition)
@@ -75,11 +71,9 @@ module DTRCore
 
       type = definition[/Type:\s*(\w+)/, 1]
 
-      initial_value_raw = definition[/Initial Value:\s*(.+)/, 1]
+      initial_value = validate_then_coerce_initial_value!(type, definition[/Initial Value:\s*(.+)/, 1])
 
-      validate_type_name_and_initial_value!(type, initial_value_raw)
-
-      DTRCore::State.new(name, type, coerce_initial_value(type, initial_value_raw))
+      DTRCore::State.new(name, type, initial_value)
     end
 
     def parse_function_section
@@ -96,11 +90,9 @@ module DTRCore
     end
 
     def parse_parse_function_section(function_section)
-      function_section
-        .split('-()')
-        .map { |x| x.strip.to_s }
-        .map { |definition| function_definition_to_function_object(definition) }
-        .reject { |x| x.name.nil? }
+      function_section.split('-()')
+                      .map { |x| function_definition_to_function_object(x.strip.to_s) }
+                      .reject { |x| x.name.nil? }
     end
 
     def function_definition_to_function_object(definition)
@@ -115,23 +107,11 @@ module DTRCore
     def format_function_inputs(inputs)
       return [] if inputs.nil?
 
-      split_strip_select(inputs)
-        .map { |x| x.split(':') }
-        .map { |x| { name: x[0]&.strip, type_name: x[1]&.strip } }
+      split_strip_select(inputs).map { |x| { name: x.split(':')[0].strip, type_name: x.split(':')[1].strip } }
     end
 
     def format_function_instruction(instructions)
-      return [] if instructions.nil?
-
-      split_strip_select(instructions)
-        .map { |instruction| parse_function_instruction(instruction) }
-    end
-
-    def split_strip_select(some_list)
-      some_list
-        .split("\n")
-        .map(&:strip)
-        .select { |x| x.length&.> 0 }
+      split_strip_select(instructions)&.map { |instruction| parse_function_instruction(instruction) }
     end
 
     def parse_function_instruction(instruction)
@@ -144,34 +124,20 @@ module DTRCore
 
     def parse_function_instruction_input(definition)
       definition[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
-        &.split(',')
-        &.map { |x| x&.strip&.gsub('"', '')&.gsub("'", '') }
+        &.split(',')&.map { |x| strip_and_remove_quotes(x) }
     end
 
-    def coerce_initial_value(type_name, initial_value)
-      case type_name
-      when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
-        initial_value.to_i
-
-      # TODO: check type
-      when 'Symbol'
-        initial_value
-          &.gsub('"', '')
-          &.gsub("'", '')
-      else
-        raise 'Missing Invalid Type Name.'
-      end
-    end
-
-    def validate_type_name_and_initial_value!(type_name, initial_value)
+    def validate_then_coerce_initial_value!(type_name, initial_value)
       raise 'Missing Type Name.' if type_name.nil?
       raise 'Missing Initial Value.' if initial_value.nil?
 
       case type_name
       when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
         validate_numeric!(type_name, initial_value)
+
+      # TODO: check type
       when 'Symbol'
-        # no validation needed
+        strip_and_remove_quotes(initial_value)
       else
         raise 'Missing Invalid Type Name.'
       end
@@ -183,6 +149,8 @@ module DTRCore
       raise "Invalid initial value for type #{type_name}. Out of range." unless initial_value.to_i.between?(
         DTRCore::Number.const_get(:"MIN_#{type_name}"), DTRCore::Number.const_get(:"MAX_#{type_name}")
       )
+
+      initial_value.to_i
     end
   end
 end
