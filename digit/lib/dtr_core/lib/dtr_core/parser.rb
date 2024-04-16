@@ -11,12 +11,6 @@ module DTRCore
       raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
 
       @content = File.read(file_path)
-
-      # nil is a placeholder for the actual values
-      # thus, the actual values are not known yet
-      # and so if we see nil we know that section
-      # was not included in the dtr file
-      @sections = { contract_name: nil, state: nil, functions: nil }
     end
 
     def self.parse(file_path)
@@ -24,11 +18,7 @@ module DTRCore
     end
 
     def parse
-      parse_contract_name_section
-      parse_state_section
-      parse_function_section
-
-      DTRCore::Contract.new(sections[:contract_name], sections[:state], sections[:functions])
+      DTRCore::Contract.new(parse_contract_name_section, parse_state_section, parse_function_section)
     end
 
     private
@@ -37,21 +27,17 @@ module DTRCore
     attr_accessor :sections
 
     def parse_contract_name_section
-      contract_name_pattern = /\[Contract\]:\s*(.+)/
-
-      contract_name_section = content.match(contract_name_pattern)&.captures&.first
+      contract_name_section = first_match_for_content(/\[Contract\]:\s*(.+)/)
 
       raise 'Missing contract name.' if contract_name_section.nil?
 
-      sections[:contract_name] = contract_name_section
+      contract_name_section
     end
 
     def parse_state_section
-      state_pattern = /\[State\]:\s*((?:\s*\*\s*\[.+?\]\n(?:\s*  \* .+\n?)*)*)/
+      state_section = first_match_for_content(/\[State\]:\s*((?:\s*\*\s*\[.+?\]\n(?:\s*  \* .+\n?)*)*)/)
 
-      state_section = content.match(state_pattern)&.captures&.first
-
-      return if state_section.nil?
+      return nil if state_section.nil?
 
       state_definitions = state_section
                           .split(/\n\s*\*\s*\[/).map { |x| "[#{x.strip}" }
@@ -59,7 +45,7 @@ module DTRCore
 
       raise 'Empty state section.' if state_definitions.empty?
 
-      sections[:state] = state_definitions
+      state_definitions
     end
 
     def clean_state_definition_name(definition)
@@ -71,22 +57,22 @@ module DTRCore
 
       type = definition[/Type:\s*(\w+)/, 1]
 
-      initial_value = validate_then_coerce_initial_value!(type, definition[/Initial Value:\s*(.+)/, 1])
+      initial_value = DTRCore::TypeValidator.new(type, definition[/Initial Value:\s*(.+)/, 1])
+                                            .validate_then_coerce_initial_value!
 
       DTRCore::State.new(name, type, initial_value)
     end
 
     def parse_function_section
-      function_pattern = /\[Functions\]:(?<all>.*):\[Functions\]/m
-      function_section = content.match(function_pattern)&.captures&.first
+      function_section = first_match_for_content(/\[Functions\]:(?<all>.*):\[Functions\]/m)
 
-      return if function_section.nil?
+      return nil if function_section.nil?
 
       function_definitions = parse_parse_function_section(function_section)
 
       raise 'Empty function section.' if function_definitions.empty?
 
-      sections[:functions] = function_definitions
+      function_definitions
     end
 
     def parse_parse_function_section(function_section)
@@ -125,32 +111,6 @@ module DTRCore
     def parse_function_instruction_input(definition)
       definition[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
         &.split(',')&.map { |x| strip_and_remove_quotes(x) }
-    end
-
-    def validate_then_coerce_initial_value!(type_name, initial_value)
-      raise 'Missing Type Name.' if type_name.nil?
-      raise 'Missing Initial Value.' if initial_value.nil?
-
-      case type_name
-      when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
-        validate_numeric!(type_name, initial_value)
-
-      # TODO: check type
-      when 'Symbol'
-        strip_and_remove_quotes(initial_value)
-      else
-        raise 'Missing Invalid Type Name.'
-      end
-    end
-
-    def validate_numeric!(type_name, initial_value)
-      raise 'Invalid initial value for type. Wrong type.' unless initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/)
-
-      raise "Invalid initial value for type #{type_name}. Out of range." unless initial_value.to_i.between?(
-        DTRCore::Number.const_get(:"MIN_#{type_name}"), DTRCore::Number.const_get(:"MAX_#{type_name}")
-      )
-
-      initial_value.to_i
     end
   end
 end

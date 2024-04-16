@@ -7,4 +7,5 @@ module DTRCore
   autoload :Number, 'dtr_core/number'
   autoload :Parser, 'dtr_core/parser'
   autoload :State, 'dtr_core/state'
+  autoload :TypeValidator, 'dtr_core/type_validator'
 end
