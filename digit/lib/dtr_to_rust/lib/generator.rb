@@ -50,7 +50,7 @@ module DTRToRust
 
     def generate_functions_each(functions)
       functions.map do |function|
-        "\n    pub fn #{function.name}(#{generate_function_args(function)}) -> #{function.output} {\n    }"
+        "\n    pub fn #{function.name}(#{generate_function_args(function)}) -> #{function.output} {\n#{generate_instructions_each(function.instructions)}\n    }\n"
       end.join("\n")
     end
 
@@ -58,6 +58,17 @@ module DTRToRust
       all_inputs = [{ name: 'env', type_name: 'Env' }] + function.inputs
 
       all_inputs.map { |x| "#{x[:name]}: #{x[:type_name]}" }.join(', ')
+    end
+
+    def generate_instructions_each(instructions)
+      instructions.map do |instruction|
+        generate_instruction(instruction)
+      end.join("\n")
+    end
+
+    def generate_instruction(instruction)
+      handler = InstructionHandler.new(instruction)
+      handler.generate_rust
     end
   end
 end
