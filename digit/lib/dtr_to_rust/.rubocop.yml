@@ -1,0 +1,7 @@
+require: rubocop-rspec
+AllCops:
+  NewCops: enable
+RSpec/MultipleExpectations:
+  Max: 3
+RSpec/NestedGroups:
+  Max: 4
