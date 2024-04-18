@@ -18,53 +18,54 @@ RSpec.describe DTRToRust::Generator do
         #[contractimpl]
         impl HelloContract {
             pub fn hello(env: Env, to: Symbol) -> Vec<Symbol> {
-                vec![&env, symbol_short!("Hello"), to]
+              let HelloToResult = vec![&env, symbol_short!("Hello"), to];
+              HelloToResult
             }
         }
       RUST
     end
 
     it 'generates valid Rust' do
-      clean_up_files
-
-      Dir.mkdir('src') unless File.exist?('src')
-      File.write('src/lib.rs', generator.generate)
-      write_cargo_toml
-
-      stdout, stderr, status = compile_and_run_rust_code
-
-      clean_up_files
+      _, stderr, status = compile_and_run_rust_code(generator.generate)
 
       expect(status.success?).to be(true), "Rust code failed to compile: #{stderr}"
       expect(generator.generate).to eq(expected_content)
     end
 
     def clean_up_files
-      File.delete('src/lib.rs') if File.exist?('src/lib.rs')
-      File.delete('Cargo.toml') if File.exist?('Cargo.toml')
-      File.delete('Cargo.lock') if File.exist?('Cargo.lock')
+      FileUtils.rm_f('src/lib.rs')
+      FileUtils.rm_f('Cargo.toml')
+      FileUtils.rm_f('Cargo.lock')
     end
 
     def write_cargo_toml
       File.write('Cargo.toml', <<~TOML
-      [package]
-      name = "soroban-hello-world-contract"
-      version = "0.0.0"
-      edition = "2021"
+        [package]
+        name = "soroban-hello-world-contract"
+        version = "0.0.0"
+        edition = "2021"
 
-      [lib]
-      crate-type = ["cdylib"]
-      doctest = false
+        [lib]
+        crate-type = ["cdylib"]
 
-      [dependencies]
-      soroban-sdk = { version = "20.3.1" }
+        [dependencies]
+        soroban-sdk = { version = "20.3.1" }
       TOML
       )
     end
 
     # Helper method to run rustc compiler
-    def compile_and_run_rust_code
-      stdout, stderr, status = Open3.capture3("cargo check")
+    def compile_and_run_rust_code(_rust_code)
+      clean_up_files
+
+      FileUtils.mkdir_p('src')
+      File.write('src/lib.rs', generator.generate)
+      write_cargo_toml
+
+      stdout, stderr, status = Open3.capture3('cargo check')
+
+      clean_up_files
+
       [stdout, stderr, status]
     end
   end

@@ -84,6 +84,7 @@ module DTRCore
     def function_definition_to_function_object(definition)
       name = definition[/\s*\[(?<all>[^\]]+)]/, 1]
       inputs = format_function_inputs(definition[/Inputs\s*:\s*{\s*(?<inputs>[^}]+)\s*}/, 1])
+      # TODO: check output type
       output = definition[/Output:\s*(.+)/, 1]
       instructions = format_function_instruction(definition[/Instructions:\s*\$(?<inputs>[^\$]+)\$/, 1])
 
@@ -110,7 +111,7 @@ module DTRCore
 
     def parse_function_instruction_input(definition)
       definition[/\s*input:\s*\((?<all>[^\)]+)\)/, 1]
-        &.split(',')&.map { |x| strip_and_remove_quotes(x) }
+        &.split(',')&.map(&:strip)
     end
   end
 end

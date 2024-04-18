@@ -8,11 +8,11 @@ module DTRToRust
     def initialize(file_path)
       @file_path = file_path
       @dtr_contract = ::DTRCore::Parser.parse(file_path)
-
-      @content = ''
     end
 
     def generate
+      @content = ''
+
       generate_contract_header
       generate_contract_name
       generate_state
@@ -45,12 +45,13 @@ module DTRToRust
     end
 
     def generate_functions
-      @content += "#[contractimpl]\nimpl #{dtr_contract.name} {#{generate_functions_each(dtr_contract.functions)}\n}\n"
+      @content += "#[contractimpl]\nimpl #{dtr_contract.name} {#{generate_functions_each(dtr_contract.functions)}}\n"
     end
 
     def generate_functions_each(functions)
       functions.map do |function|
-        "\n    pub fn #{function.name}(#{generate_function_args(function)}) -> #{function.output} {\n#{generate_instructions_each(function.instructions)}\n    }\n"
+        "\n    pub fn #{function.name}(#{generate_function_args(function)}) " \
+          "-> #{function.output} {\n#{generate_instructions_each(function.instructions)}\n    }\n"
       end.join("\n")
     end
 

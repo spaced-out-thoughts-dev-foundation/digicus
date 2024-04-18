@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module DTRToRust
+  # This class is responsible for generating Rust code for a single instruction.
   class InstructionHandler
     def initialize(instruction)
       @instruction = instruction
@@ -20,11 +23,13 @@ module DTRToRust
     attr_reader :instruction
 
     def handle_add_symbols
-      "        let #{instruction[:assign]} = symbol_short!(\"Hello\");"
+      "      let #{instruction[:assign]} " \
+        '= vec![&env, ' \
+        "symbol_short!(#{instruction[:inputs][0]}), #{instruction[:inputs][1]}];"
     end
 
     def handle_return
-      "        #{instruction[:inputs][0]}"
+      "      #{instruction[:inputs][0]}"
     end
   end
 end
