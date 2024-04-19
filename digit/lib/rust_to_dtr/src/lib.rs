@@ -73,7 +73,7 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
 mod tests {
     use super::*;
 
-    const hello_world_contract_code: &str = r#"
+    const HELLO_WORLD_CONTRACT_CODE: &str = r#"
         #![no_std]
         use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
 
@@ -108,7 +108,7 @@ mod tests {
             :[Functions]
         "#;
 
-        let actual_dtr_code = parse_to_dtr(hello_world_contract_code);
+        let actual_dtr_code = parse_to_dtr(HELLO_WORLD_CONTRACT_CODE);
 
         println!("Expected DTR code:\n\n{}", expected_dtr_code);
 

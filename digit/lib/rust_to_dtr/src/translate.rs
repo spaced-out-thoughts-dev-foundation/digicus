@@ -17,6 +17,22 @@ fn parse_path(path: &syn::Path) -> String {
     let segments = &path.segments;
     let segment = &segments[0];
 
+    match &segment.arguments {
+        syn::PathArguments::None => {
+            return format!("{}", segment.ident);
+        }
+        syn::PathArguments::AngleBracketed(args) => {
+            let mut path_str = String::new();
+            path_str.push_str(&format!("{}", segment.ident));
+            path_str.push_str("<");
+            // for arg in args.args {
+                // path_str.push_str(&format!("{}", parse_path_arguments(arg)));
+            // }
+            path_str.push_str(">");
+            return path_str;
+        }
+        _ => {}
+    }
     if segments.len() > 1 {
         let mut path_str = String::new();
         for segment in segments {
@@ -24,26 +40,24 @@ fn parse_path(path: &syn::Path) -> String {
         }
         return path_str;
     }
+    
 
     format!("{}", segment.ident)
 }
 
 pub fn parse_block_stmt(stmt: &syn::Stmt) -> String {
     match stmt {
-        syn::Stmt::Local(local) => {
+        syn::Stmt::Local(_local) => {
             format!("Local")
         }
-        syn::Stmt::Item(item) => {
+        syn::Stmt::Item(_item) => {
             format!("Item")
         }
         syn::Stmt::Expr(exp, _r) => {
             format!("{}", parse_expression(exp))
         }
-        syn::Stmt::Macro(mac) => {
+        syn::Stmt::Macro(_mac) => {
             format!("Macro")
-        }
-        _ => {
-            format!("idk")
         }
     }
 }
@@ -171,7 +185,7 @@ fn parse_expression(exp: &syn::Expr) -> String {
     }
 }
 
-fn parse_macros(mac: &syn::ExprMacro) -> String {
+fn parse_macros(_mac: &syn::ExprMacro) -> String {
     format!("Macro")
 }
 
