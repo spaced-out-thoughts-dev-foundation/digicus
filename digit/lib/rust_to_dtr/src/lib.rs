@@ -1,5 +1,7 @@
+// syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
 use std::string::String;
+pub mod translate;
 
 pub fn parse_to_dtr(rust_code: &str) -> String {
     // Parse the Rust code into a syn data structure
@@ -15,7 +17,7 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
             syn::Item::Impl(item_impl) => {
                 dtr_code.push_str("[Functions]:\n");
 
-                item_impl.items.iter().for_each(|item_impl_item|{
+                item_impl.items.iter().for_each(|item_impl_item| {
                     if let syn::ImplItem::Fn(method) = item_impl_item {
                         let method_name = method.sig.ident.to_string();
 
@@ -24,11 +26,15 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
                         dtr_code.push_str("\t* Inputs:\n");
                         dtr_code.push_str("\t{ \n");
 
-                        method.sig.inputs.iter().for_each(|input|{
+                        method.sig.inputs.iter().for_each(|input| {
                             if let syn::FnArg::Typed(pat_type) = input {
                                 if let syn::Pat::Ident(pat_ident) = &*pat_type.pat {
                                     if pat_ident.ident != "env" {
-                                        dtr_code.push_str(&format!("\t\t{}\n", pat_ident.ident));
+                                        dtr_code.push_str(&format!(
+                                            "\t\t{}: {}\n",
+                                            pat_ident.ident,
+                                            translate::figure_out_type(&pat_type.ty)
+                                        ));
                                     }
                                 }
                             }
@@ -37,8 +43,7 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
                         dtr_code.push_str("\t}\n");
 
                         if let syn::ReturnType::Type(_, ty) = &method.sig.output {
-                            dtr_code.push_str(&format!("\t* Output: {}", figure_out_type(ty)));
-                            dtr_code.push_str("\n");
+                            dtr_code.push_str(translate::parse_return_type(ty).as_str());
                         }
 
                         dtr_code.push_str("\t* Instructions:\n");
@@ -46,7 +51,9 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
 
                         let block = &method.block;
 
-                        block.stmts.iter().for_each(|stmt|{
+                        block.stmts.iter().for_each(|stmt| {
+                            dtr_code
+                                .push_str(&format!("\t\t{}", translate::parse_block_stmt(stmt)));
                             dtr_code.push_str("\t\t{ }\n");
                         });
 
@@ -60,15 +67,6 @@ pub fn parse_to_dtr(rust_code: &str) -> String {
         }
     }
     dtr_code
-}
-
-fn figure_out_type(ty: &syn::Type) -> String {
-    match ty {
-        syn::Type::Path(type_path) => {;
-            format!("path")
-        }
-        _ => format!("idk")
-    }
 }
 
 #[cfg(test)]
@@ -92,8 +90,6 @@ mod tests {
 
     #[test]
     fn test_parse_to_dtr() {
-        parse_to_dtr(hello_world_contract_code);
-
         let expected_dtr_code = r#"
             [Contract]: HelloContract
 
