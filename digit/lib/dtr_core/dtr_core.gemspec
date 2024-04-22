@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'dtr_core'
-  spec.version       = '0.0.2'
+  spec.version       = '0.1.0'
   spec.authors = ['Rob Durst']
   spec.email         = ['me@robdurst.com']
   spec.summary       = 'A short summary of my_gem'
