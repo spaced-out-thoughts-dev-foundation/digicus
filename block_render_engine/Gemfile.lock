@@ -1,7 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    cowsay (0.3.0)
     webrick (1.8.1)
 
 PLATFORMS
@@ -9,7 +8,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cowsay (~> 0.3.0)
   webrick (~> 1.8)
 
 RUBY VERSION
