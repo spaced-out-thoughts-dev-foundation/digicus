@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dtr_core (0.1.0)
     webrick (1.8.1)
 
 PLATFORMS
@@ -8,6 +9,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dtr_core (~> 0.1.0)
   webrick (~> 1.8)
 
 RUBY VERSION
