@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    cowsay (0.3.0)
+
+PLATFORMS
+  arm64-darwin-22
+  ruby
+
+DEPENDENCIES
+  cowsay (~> 0.3.0)
+
+BUNDLED WITH
+   2.5.7
