@@ -7,6 +7,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import ContractContainer from './components/ContractContainer'
 import ContractHeader from './components/ContractHeader'
+import InfoHeader from './components/InfoHeader'
 
 const App = () => {
     return ( 
@@ -15,6 +16,7 @@ const App = () => {
         width: '100%',
         display: 'flex',
       }}>
+       
         <AppBar position="static" style={{
         height: '100%',
         width: '100%',
@@ -24,7 +26,6 @@ const App = () => {
           <Toolbar style={{ 
               display: 'flex', 
               backgroundColor: 'black',
-              // flex: 1,
             }}>
             <div style={{flex: 1}}>
               <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
@@ -39,7 +40,9 @@ const App = () => {
                 Digicus IDE
               </Typography>
             </div>
-            <div style={{flex: 1}}></div>
+            <div style={{flex: 1, justifyContent: 'right', display: 'flex'}}>
+              <InfoHeader />
+            </div>
           
             </Toolbar>
 
