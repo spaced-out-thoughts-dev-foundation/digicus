@@ -9,6 +9,16 @@ pub fn figure_out_type(ty: &syn::Type) -> String {
         syn::Type::Path(type_path) => {
             format!("{}", parse_path(&type_path.path))
         }
+        syn::Type::Never(_) => {
+            format!("!")
+        }
+        syn::Type::Ptr(ptr) => {
+            if ptr.const_token.is_some() {
+                return format!("*const {}", figure_out_type(&ptr.elem));
+            } else {
+                format!("*{}", figure_out_type(&ptr.elem))
+            }
+        }
         _ => format!("idk"),
     }
 }
