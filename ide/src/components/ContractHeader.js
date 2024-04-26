@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 
 class ContractHeader extends Component {
     render() {
+        console.log(this.props)
         return (
           <div style={{
               display: 'flex',
@@ -12,7 +13,7 @@ class ContractHeader extends Component {
               justifyContent: 'center',
               alignContent: 'center',
           }}>
-            <h1>Contract Header</h1>
+            <h1>{this.props?.name ? this.props?.name : "Hello?"}</h1>
           </div>
         )
     }

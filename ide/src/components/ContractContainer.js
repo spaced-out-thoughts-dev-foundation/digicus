@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Box from '@mui/material/Box';
-
+import Block from './Block';
 
 class ContractContainer extends Component {
     render() {
@@ -27,10 +27,9 @@ class ContractContainer extends Component {
                 p={2}
                 sx={{ border: '2px solid grey' }}
             >
-              The contract
+              {/* <Block /> */}
             </Box>
           </div>
-        
         )
     }
 }

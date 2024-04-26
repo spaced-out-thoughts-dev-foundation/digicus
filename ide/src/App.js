@@ -10,6 +10,10 @@ import ContractHeader from './components/ContractHeader'
 import InfoHeader from './components/InfoHeader'
 
 const App = () => {
+    let contract = {
+      name: 'Hello World Contract'
+    }
+
     return ( 
       <div style={{
         height: '100%',
@@ -78,7 +82,9 @@ const App = () => {
             height: '100%',
             flexDirection: 'column',
           }}>
-              <ContractHeader />
+              <ContractHeader
+                name={contract.name}
+              />
               <ContractContainer />
             </div>
           </div>
