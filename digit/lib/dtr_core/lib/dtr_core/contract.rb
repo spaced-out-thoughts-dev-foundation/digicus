@@ -11,6 +11,12 @@ module DTRCore
       @functions = functions
     end
 
+    def self.from_dtr(filepath)
+      parser = DTRCore::Parser.new(filepath)
+
+      new(parser.name_section, parser.state_section, parser.function_section)
+    end
+
     def ==(other)
       name == other.name &&
         state == other.state &&
