@@ -239,8 +239,17 @@ fn parse_expression(exp: &syn::Expr) -> String {
     }
 }
 
-fn parse_macros(_mac: &syn::ExprMacro) -> String {
-    format!("Macro")
+fn parse_macros(mac: &syn::ExprMacro) -> String {
+    let macro_itself: &syn::Macro = &mac.mac;
+
+    let mut macro_str = String::new();
+
+    // TODO: do all macros have a bang?
+    macro_str.push_str(&format!("{}!", parse_path(&macro_itself.path)));
+
+    macro_str.push_str(format!("{:?}", macro_itself.tokens).as_str());
+
+    macro_str
 }
 
 #[cfg(test)]
