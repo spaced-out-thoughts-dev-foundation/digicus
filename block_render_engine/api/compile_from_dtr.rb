@@ -39,7 +39,12 @@ class RequestHandler
 
       @contract_name = contract.name
       @contract_state = contract.state
-      @contract_functions = contract.functions
+      @contract_functions = contract.functions.map do |f|
+        { 
+          name: f.name,
+          instructions: f.instructions.map { |x| x.instruction }
+        }
+      end
 
       @compilation_success = true
       @compilation_error = ''
