@@ -13,7 +13,7 @@ class ContractHeader extends Component {
               justifyContent: 'center',
               alignContent: 'center',
           }}>
-            <h1>{this.props?.name ? "[Name]: " + this.props?.name : ""}</h1>
+            <h1>{this.props?.name ? "[Name]: " + this.props?.name : "Upload a Contract -->"}</h1>
           </div>
         )
     }
