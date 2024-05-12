@@ -47,7 +47,7 @@ Handler = Proc.new do |request, response|
     received: {
       dtr_version: dtr_version(request),
       content: content(request),
-      format: content_format
+      format: content_format(request)
     },
     status: success_status_code
   }.to_json
