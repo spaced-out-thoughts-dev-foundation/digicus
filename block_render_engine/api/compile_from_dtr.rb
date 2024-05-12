@@ -42,7 +42,7 @@ class RequestHandler
       @contract_functions = contract.functions.map do |f|
         { 
           name: f.name,
-          instructions: f.instructions.map { |x| x.instruction }.join(' ')
+          instructions: f.instructions.map { |x| x[:instruction] }.join(' ')
         }.to_json
       end
 
