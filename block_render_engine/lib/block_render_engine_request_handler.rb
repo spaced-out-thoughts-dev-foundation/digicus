@@ -12,7 +12,7 @@ class BlockRenderEngineRequestHandler
   end
 
   def response_body
-    return default_response unless @request.body
+    return default_response unless @request.body && dtr?
 
     compile
 
@@ -30,6 +30,10 @@ class BlockRenderEngineRequestHandler
   end
 
   private
+
+  def dtr?
+    format == 'dtr'
+  end
 
   def compile
      begin
