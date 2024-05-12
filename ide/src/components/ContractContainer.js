@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box';
-import ReactFlow from 'reactflow';
+import ReactFlow, { Controls, MarkerType } from 'reactflow';
 
 // TODO: this only works for one function right now
 function ContractContainer({functions}) {
@@ -31,8 +31,18 @@ function ContractContainer({functions}) {
             functions ?
               <ReactFlow nodes={JSON.parse(functions[0]).instructions.split(' ').map((instructionName, index) => {
                 return { id: `${index}`, data: { label: instructionName }, position: { x: 100, y: 100 * index } }
-                  })} edges={[]}>
-              {/* <Controls /> */}
+                  })} edges={JSON.parse(functions[0]).instructions.split(' ').slice(1).map((instructionName, index) => {
+                    return { 
+                      id: `e-${index}`, 
+                      source: `${index}`, 
+                      target: `${index + 1}`, 
+                      markerEnd: {
+                        type: MarkerType.ArrowClosed,
+                        width: 20,
+                        height: 20
+                      }}
+                })}>
+              <Controls />
             </ReactFlow> : ''
           } 
         </Box>
