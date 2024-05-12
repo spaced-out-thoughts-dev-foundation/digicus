@@ -7,6 +7,10 @@ class RequestHandler
 
   def initialize(request)
     @request = request
+
+    @contract_name = "Unknown"
+
+    @compilation_error = ''
   end
 
   def self.response_body(request)
@@ -20,7 +24,9 @@ class RequestHandler
       received: {
         dtr_version: dtr_version,
         content: content,
-        format: content_format
+        format: content_format,
+        contract_name: @contract_name,
+        compilation_error: @compilation_error
       },
       status: status
     }.to_json
@@ -30,9 +36,14 @@ class RequestHandler
 
   def status
     begin
-      DTRCore::Contract.from_filepath('./hello_world.dtr')
+      contract = DTRCore::Contract.from_filepath('../hello_world.dtr')
+
+      @contract_name = contract.name
+
       SUCCESS_STATUS_CODE
-    rescue
+    rescue _ => e
+      @compilation_error = e
+
       FAILED_TO_COMPILE_STATUS_CODE
     end
   end
