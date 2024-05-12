@@ -36,7 +36,13 @@ class BlockRenderEngineRequestHandler
       contract = DTRCore::Contract.from_dtr_raw(content)
 
       @contract_name = contract.name
-      @contract_state = contract.state
+      @contract_state = contract.state&.map do |s|
+        { 
+          name: s.name,
+          type: s.type,
+          initial_value: s.initial_value
+        }.to_json
+      end
       @contract_functions = contract.functions&.map do |f|
         { 
           name: f.name,
