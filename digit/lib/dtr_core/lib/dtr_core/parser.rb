@@ -7,10 +7,14 @@ module DTRCore
   class Parser
     include ::DTRCore::Common
 
-    def initialize(file_path)
-      raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
+    def initialize(file_path, content: nil)
+      if content
+        @content = content
+      else
+        raise "Unable to find file: #{file_path}." unless File.exist?(file_path)
 
-      @content = File.read(file_path)
+        @content = File.read(file_path)
+      end
     end
 
     attr_reader :content

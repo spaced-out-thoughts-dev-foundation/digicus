@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'dtr_core'
-  spec.version       = '0.1.1'
+  spec.version       = '0.1.2'
   spec.authors = ['Rob Durst']
   spec.email         = ['me@robdurst.com']
   spec.summary       = 'Core smart contract intermediate language (Digicus Textual Representation) parser.'
   spec.description   = 'Core smart contract intermediate language (Digicus Textual Representation) parser.'
-  spec.homepage      = "https://spaced-out-thoughts-dev-foundation.github.io/digicus/"
+  spec.homepage      = 'https://spaced-out-thoughts-dev-foundation.github.io/digicus/'
   spec.license       = 'MIT'
 
   # Add dependencies

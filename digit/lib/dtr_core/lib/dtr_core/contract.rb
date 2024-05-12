@@ -17,6 +17,12 @@ module DTRCore
       new(parser.name_section, parser.state_section, parser.function_section)
     end
 
+    def self.from_dtr_raw(content)
+      parser = DTRCore::Parser.new('', content:)
+
+      new(parser.name_section, parser.state_section, parser.function_section)
+    end
+
     def ==(other)
       name == other.name &&
         state == other.state &&
