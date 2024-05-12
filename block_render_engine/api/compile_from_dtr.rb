@@ -31,16 +31,16 @@ class RequestHandler
     Gem.loaded_specs['dtr_core'].version
   end
 
-  def dtr_version(request)
-    JSON.parse(request.body)['dtr_version'] || dtr_core_gem_version
+  def dtr_version
+    JSON.parse(@request.body)['dtr_version'] || dtr_core_gem_version
   end
   
-  def content(request)
-    JSON.parse(request.body)['content'] || ''
+  def content
+    JSON.parse(@request.body)['content'] || ''
   end
   
-  def content_format(request)
-    JSON.parse(request.body)['format'] || 'unknown'
+  def content_format
+    JSON.parse(@request.body)['format'] || 'unknown'
   end
 
   def default_response
