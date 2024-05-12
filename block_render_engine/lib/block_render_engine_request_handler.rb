@@ -32,7 +32,7 @@ class BlockRenderEngineRequestHandler
   private
 
   def dtr?
-    format == 'dtr'
+    content_format == 'dtr'
   end
 
   def compile
