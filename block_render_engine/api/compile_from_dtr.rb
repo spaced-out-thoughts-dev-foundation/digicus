@@ -25,6 +25,7 @@ class RequestHandler
       },
       contract_name: @contract_name,
       contract_state: @contract_state,
+      contract_functions: @contract_functions,
       compilation_error: @compilation_error,
       status: status
     }.to_json
@@ -38,12 +39,14 @@ class RequestHandler
 
       @contract_name = contract.name
       @contract_state = contract.state
+      @contract_functions = contract.functions
 
       @compilation_success = true
       @compilation_error = ''
     rescue StandardError => e
       @contract_name = "Unknown"
-      @contract_name = contract.name
+      @contract_state = []
+      @contract_functions = []
 
       @compilation_error = e
     end
