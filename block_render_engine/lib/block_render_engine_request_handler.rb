@@ -37,10 +37,10 @@ class BlockRenderEngineRequestHandler
 
       @contract_name = contract.name
       @contract_state = contract.state
-      @contract_functions = contract.functions.map do |f|
+      @contract_functions = contract.functions&.map do |f|
         { 
           name: f.name,
-          instructions: f.instructions.map { |x| x[:instruction] }.join(' ')
+          instructions: f.instructions&.map { |x| x[:instruction] }.join(' ')
         }.to_json
       end
 
