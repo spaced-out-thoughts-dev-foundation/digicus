@@ -3,6 +3,7 @@ require 'dtr_core'
 class RequestHandler
   SUCCESS_STATUS_CODE = 200
   NO_BODY_STATUS_CODE = 401
+  FAILED_TO_COMPILE_STATUS_CODE = 402
 
   def initialize(request)
     @request = request
@@ -21,11 +22,20 @@ class RequestHandler
         content: content,
         format: content_format
       },
-      status: SUCCESS_STATUS_CODE
+      status: status
     }.to_json
   end
 
   private
+
+  def status
+    begin
+      DTRCore::Contract.from_filepath('./hello_world.dtr')
+      SUCCESS_STATUS_CODE
+    rescue
+      FAILED_TO_COMPILE_STATUS_CODE
+    end
+  end
 
   def dtr_core_gem_version
     Gem.loaded_specs['dtr_core'].version
