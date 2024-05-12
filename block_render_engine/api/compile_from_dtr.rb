@@ -1,54 +1,62 @@
 require 'dtr_core'
 
+class RequestHandler
+  SUCCESS_STATUS_CODE = 200
+  NO_BODY_STATUS_CODE = 401
 
-def no_body_status_code
-  401
-end
+  def initialize(request)
+    @request = request
+  end
 
-def success_status_code
-  200
-end
+  def self.response_body(request)
+    new(request).response_body
+  end
 
-def dtr_core_gem_version
-  Gem.loaded_specs['dtr_core'].version
-end
+  def response_body
+    return default_response unless @request.body
 
-def default_response
-  {
-    received: {
-      dtr_version: dtr_core_gem_version,
-      content: '',
-      format: 'unknown'
-    },
-    status: no_body_status_code
-  }.to_json
-end
+    {
+      received: {
+        dtr_version: dtr_version,
+        content: content,
+        format: content_format
+      },
+      status: success_status_code
+    }.to_json
+  end
 
-def dtr_version(request)
-  JSON.parse(request.body)['dtr_version'] || dtr_core_gem_version
-end
+  private
 
-def content(request)
-  JSON.parse(request.body)['content'] || ''
-end
+  def dtr_core_gem_version
+    Gem.loaded_specs['dtr_core'].version
+  end
 
-def content_format(request)
-  JSON.parse(request.body)['format'] || 'unknown'
+  def dtr_version(request)
+    JSON.parse(request.body)['dtr_version'] || dtr_core_gem_version
+  end
+  
+  def content(request)
+    JSON.parse(request.body)['content'] || ''
+  end
+  
+  def content_format(request)
+    JSON.parse(request.body)['format'] || 'unknown'
+  end
+
+  def default_response
+    {
+      received: {
+        dtr_version: dtr_core_gem_version,
+        content: '',
+        format: 'unknown'
+      },
+      status: no_body_status_code
+    }.to_json
+  end
 end
 
 Handler = Proc.new do |request, response|
   response.status = 200
   response['Content-Type'] = 'text/text; charset=utf-8'
-  response.body = default_response
-
-  next unless request.body 
-
-  response.body = {
-    received: {
-      dtr_version: dtr_version(request),
-      content: content(request),
-      format: content_format(request)
-    },
-    status: success_status_code
-  }.to_json
+  response.body = RequestHandler.response_body(request)
 end
