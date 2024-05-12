@@ -20,7 +20,6 @@ class RequestHandler
 
     {
       received: {
-        dtr_version: dtr_version,
         content: content,
         format: content_format,
         contract_name: @contract_name,
@@ -53,10 +52,6 @@ class RequestHandler
   def dtr_core_gem_version
     Gem.loaded_specs['dtr_core'].version
   end
-
-  def dtr_version
-    JSON.parse(@request.body)['dtr_version'] || dtr_core_gem_version
-  end
   
   def content
     JSON.parse(@request.body)['content'] || ''
@@ -67,14 +62,7 @@ class RequestHandler
   end
 
   def default_response
-    {
-      received: {
-        dtr_version: dtr_core_gem_version,
-        content: '',
-        format: 'unknown'
-      },
-      status: NO_BODY_STATUS_CODE
-    }.to_json
+    { status: NO_BODY_STATUS_CODE }.to_json
   end
 end
 
