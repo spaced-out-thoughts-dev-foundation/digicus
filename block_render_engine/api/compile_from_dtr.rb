@@ -36,7 +36,7 @@ class RequestHandler
 
   def status
     begin
-      contract = DTRCore::Contract.from_filepath('../hello_world.dtr')
+      contract = DTRCore::Contract.from_dtr_raw(content)
 
       @contract_name = contract.name
 
