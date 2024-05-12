@@ -66,6 +66,13 @@ RSpec.describe DTRCore::Contract do
       ]
     end
 
+    let(:simplified_state_definitions) do
+      [
+        DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22)
+
+      ]
+    end
+
     it 'parses the contract name, state, and function sections' do
       content = File.read('./spec/test_dtr_files/multi_function_with_state_and_name_contract.dtr')
 
@@ -74,6 +81,15 @@ RSpec.describe DTRCore::Contract do
       expect(contract.name).to eq('MultiFunctionContract')
       expect(contract.state).to match_array(state_definitions)
       expect(contract.functions).to contain_exactly(hello_function, world_function)
+    end
+
+    it 'parses the contract name and state when passed with explicit newline and tab characters' do
+      content = "[Contract]: Foo \n[State]:\n\t* [STATE_DEFINITION_1]\n\t\t* Type: I32\n\t\t* Initial Value: 22\n"
+
+      contract = described_class.from_dtr_raw(content)
+
+      expect(contract.name).to eq('Foo')
+      expect(contract.state).to match_array(simplified_state_definitions)
     end
   end
 end

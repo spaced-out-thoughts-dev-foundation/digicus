@@ -27,13 +27,13 @@ module DTRCore
 
       raise 'Missing contract name.' if name_section.nil?
 
-      @name_section ||= name_section
+      @name_section ||= name_section.strip
     end
 
     def state_section
       return @state_definitions if @state_definitions
 
-      state_section = first_match_for_content(/\[State\]:\s*((?:\s*\*\s*\[.+?\]\n(?:\s*  \* .+\n?)*)*)/)
+      state_section = first_match_for_content(/\[State\]:\s*((?:\s*\*\s*\[.+?\]\n(?:\s*\*.+\n?)*)*)/)
 
       return nil if state_section.nil?
 
