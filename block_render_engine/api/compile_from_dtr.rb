@@ -22,9 +22,10 @@ class RequestHandler
       received: {
         content: content,
         format: content_format,
-        contract_name: @contract_name,
-        compilation_error: @compilation_error
       },
+      contract_name: @contract_name,
+      contract_state: @contract_state,
+      compilation_error: @compilation_error,
       status: status
     }.to_json
   end
@@ -36,12 +37,15 @@ class RequestHandler
       contract = DTRCore::Contract.from_dtr_raw(content)
 
       @contract_name = contract.name
+      @contract_state = contract.state
 
       @compilation_success = true
       @compilation_error = ''
     rescue StandardError => e
-      @compilation_error = e
       @contract_name = "Unknown"
+      @contract_name = contract.name
+
+      @compilation_error = e
     end
   end
 
