@@ -41,7 +41,7 @@ class RequestHandler
       @contract_name = contract.name
 
       SUCCESS_STATUS_CODE
-    rescue _ => e
+    rescue StandardError => e
       @compilation_error = e
 
       FAILED_TO_COMPILE_STATUS_CODE
