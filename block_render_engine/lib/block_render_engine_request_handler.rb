@@ -64,7 +64,7 @@ class BlockRenderEngineRequestHandler
   end
   
   def content
-    JSON.parse(@request.body)['content'] || ''
+    JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
   end
   
   def content_format
