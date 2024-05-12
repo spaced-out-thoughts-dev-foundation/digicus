@@ -21,7 +21,7 @@ class RequestHandler
         content: content,
         format: content_format
       },
-      status: success_status_code
+      status: SUCCESS_STATUS_CODE
     }.to_json
   end
 
@@ -50,7 +50,7 @@ class RequestHandler
         content: '',
         format: 'unknown'
       },
-      status: no_body_status_code
+      status: NO_BODY_STATUS_CODE
     }.to_json
   end
 end
