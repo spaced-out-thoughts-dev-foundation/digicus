@@ -9,11 +9,11 @@ class ContractHeader extends Component {
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'row',
-              flex: '1',
+              flex: '5',
               justifyContent: 'center',
               alignContent: 'center',
           }}>
-            <h1>{this.props?.name ? this.props?.name : "Hello?"}</h1>
+            <h1>{this.props?.name ? "[Name]: " + this.props?.name : ""}</h1>
           </div>
         )
     }

@@ -8,11 +8,51 @@ import { Analytics } from "@vercel/analytics/react"
 import ContractContainer from './components/ContractContainer'
 import ContractHeader from './components/ContractHeader'
 import InfoHeader from './components/InfoHeader'
+import React, { useState } from 'react';
 
 const App = () => {
-    let contract = {
-      name: 'Hello World Contract'
-    }
+    const [file, setFile] = useState(null);
+
+    const handleUpload = () => {
+      const reader = new FileReader();
+
+      reader.addEventListener(
+        "load",
+        () => {
+          // this will then display a text file
+          console.log(reader.result);
+          fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
+          {
+            headers: {
+              'Accept': 'text/text',
+              'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({format: "dtr", content: reader.result})
+          })
+          .then(response => {
+            return response.json()
+          })
+          .then(json => setContract(json))
+          .catch(error => console.error(error));
+        },
+        false,
+      );
+    
+      if (file) {
+        reader.readAsText(file);
+      };
+    };
+
+    const handleFileChange = (event) => {
+      const selectedFile = event.target.files[0];
+      setFile(selectedFile);
+    };
+
+    const [contract, setContract] = useState(null);
+
+    // useEffect(() => {
+    //   []);
 
     return ( 
       <div style={{
@@ -78,14 +118,43 @@ const App = () => {
             <div style={{ 
             display: 'flex', 
             flex: 5, 
-            width: '100%', 
-            height: '100%',
             flexDirection: 'column',
           }}>
+            
+            <div style={{ 
+            display: 'flex', 
+            flex: 2, 
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}>
               <ContractHeader
-                name={contract.name}
+                name={contract?.contract_name}
               />
-              <ContractContainer />
+              <div style={{ 
+                backgroundColor: 'gray',
+                display: 'flex', 
+                flex: 1, 
+                justifyContent: 'center',
+                alignContent: 'center',
+                alignItems: 'center',
+                // width: '100%', 
+                height: '50%',
+                margin: '10px',
+                padding: '10px',
+                boxShadow: '5px 5px 5px black',
+                // flexDirection: 'row',
+              }}>
+                <input type="file" onChange={handleFileChange} />
+                <button style={{flex: 1}}onClick={handleUpload}>Upload</button>
+              </div>
+            </div>
+             
+              
+              <ContractContainer 
+                functions={contract?.contract_functions}
+              />
             </div>
           </div>
           

@@ -10,7 +10,7 @@ class ContractContainer extends Component {
               justifyContent: 'center',
               alignItems: 'center',
               flexDirection: 'column',
-              flex: '10',
+              flex: '15',
               backgroundColor: 'rgb(39 207 230)',
           }}>
             <Box
@@ -28,6 +28,21 @@ class ContractContainer extends Component {
                 sx={{ border: '2px solid grey' }}
             >
               {/* <Block /> */}
+              {
+                this.props.functions ?
+                  <div>
+                    <h2>Instructions</h2>
+                    <ol>
+                    {
+                      JSON.parse(this.props.functions)['instructions'].split(' ').map((instructionName) => {
+                        return <li>{instructionName}</li>                    
+                      })
+                    }
+                    </ol>
+                  </div>
+
+                : ''
+              } 
             </Box>
           </div>
         )
