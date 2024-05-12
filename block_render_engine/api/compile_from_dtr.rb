@@ -7,10 +7,6 @@ class RequestHandler
 
   def initialize(request)
     @request = request
-
-    @contract_name = "Unknown"
-
-    @compilation_error = ''
   end
 
   def self.response_body(request)
@@ -19,6 +15,8 @@ class RequestHandler
 
   def response_body
     return default_response unless @request.body
+
+    compile
 
     {
       received: {
@@ -34,18 +32,22 @@ class RequestHandler
 
   private
 
-  def status
-    begin
+  def compile
+     begin
       contract = DTRCore::Contract.from_dtr_raw(content)
 
       @contract_name = contract.name
 
-      SUCCESS_STATUS_CODE
+      @compilation_success = true
+      @compilation_error = ''
     rescue StandardError => e
       @compilation_error = e
-
-      FAILED_TO_COMPILE_STATUS_CODE
+      @contract_name = "Unknown"
     end
+  end
+
+  def status
+   @compilation_success ? SUCCESS_STATUS_CODE : FAILED_TO_COMPILE_STATUS_CODE
   end
 
   def dtr_core_gem_version
