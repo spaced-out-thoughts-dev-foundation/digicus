@@ -14,12 +14,12 @@ function InfoHeader() {
 
   return (
     <div style={{ 
-      flex: 1,
+      flex:1,
       textAlign: 'right',
     }}>
-      Relevant Software Dependencies:
-        {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>}
-        {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>}
+      {/* Relevant Software Dependencies: */}
+        {/* {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>} */}
+        {/* {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>} */}
     </div>
   );
 }

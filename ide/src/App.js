@@ -9,9 +9,48 @@ import ContractContainer from './components/ContractContainer'
 import ContractHeader from './components/ContractHeader'
 import InfoHeader from './components/InfoHeader'
 import React, { useState } from 'react';
+import { Box, Button, List, ListItem } from '@mui/material';
+import { index } from 'd3';
+
 
 const App = () => {
     const [file, setFile] = useState(null);
+
+    const handleDeploy = () => {};
+
+    const options = [
+      'Instruction Operation 1',
+      'Instruction Operation 2',
+      'Instruction Operation 3',
+      'Instruction Operation 4',
+      'Instruction Operation 5',
+      'Instruction Operation 6',
+      'Instruction Operation 7',
+      'Instruction Operation 8',
+      'Instruction Operation 9',
+      'Instruction Operation 10',
+      'Instruction Operation 11',
+      'Instruction Operation 12',
+      'Instruction Operation 13',
+      'Instruction Operation 14',
+      'Instruction Operation 15',
+      'Instruction Operation 16',
+      'Instruction Operation 17',
+      'Instruction Operation 18',
+      'Instruction Operation 19',
+      'Instruction Operation 20',
+      'Instruction Operation 21',
+      'Instruction Operation 22',
+      'Instruction Operation 23',
+      'Instruction Operation 24',
+      'Instruction Operation 25',
+      'Instruction Operation 26',
+      'Instruction Operation 27',
+      'Instruction Operation 28',
+      'Instruction Operation 29',
+      'Instruction Operation 30',
+    ];
+    
 
     const handleUpload = () => {
       const reader = new FileReader();
@@ -94,26 +133,69 @@ const App = () => {
             display: 'flex', 
             flex: 1, 
             width: '100%', 
-            height: '100%',
+            height: '90%',
             flexDirection: 'row',
             backgroundColor: 'rgb(39 207 230)',
 
           }}>
-            <div style={{ 
-            display: 'flex', 
-            flex: 1, 
-            width: '80%', 
-            height: '90%',
+          <div style={{
+            display: 'flex',
+            flex: 1,
             flexDirection: 'column',
-            backgroundColor: 'rgb(39 207 230)',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-            border: '5px solid black',
-            padding: '1%',
-            margin: '1%',
+            height: '100%',
           }}>
-              <h1>Menu</h1>
+            <div style={{ 
+              flex: 2, 
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+              border: '1px solid white',
+              padding: '1%',
+              margin: '1%',
+              overflowY: 'auto',
+              height: '100%',
+              align: 'center',
+              textAlign: 'center',
+            }}>
+              <h2>Instructions Menu</h2>
+            </div>
+              <div style={{ 
+              flex: 19, 
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+              border: '5px solid black',
+              padding: '1%',
+              margin: '1%',
+              overflowY: 'auto',
+              height: '100%',
+            }}>
+              <List>
+                {options.map((option, index) => (
+                  <ListItem key={index} button style={{
+                    backgroundColor: index  % 2 === 0 ? 'white' : 'gray',
+                    border: '1px solid black',
+                    margin: '1px',
+                  }}>
+                    <Button
+                      style={{
+                        color: 'black',
+                      }}
+                     >{option}</Button>
+                  </ListItem>
+                ))}
+              </List>
+
+              </div>
+            <div style={{
+              flex: 1,
+              display: 'flex', 
+              padding: '1%',
+              margin: '5%',
+              }}>
+              <button style={{width: '100%'}} onClick={handleDeploy}>Deploy</button>
+            </div>
+
             </div>
             <div style={{ 
             display: 'flex', 
