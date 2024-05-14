@@ -228,8 +228,8 @@ const App = () => {
                 boxShadow: '5px 5px 5px black',
                 // flexDirection: 'row',
               }}>
-                <input type="file" onChange={handleFileChange} />
-                <button style={{flex: 1}}onClick={handleUpload}>Upload</button>
+                <input style={{fontSize: '1.25em', backgroundColor: 'white', margin: '2%', color: 'black'}} type="file" onChange={handleFileChange} />
+                <button style={{flex: 1, fontSize: '1.25em'}}onClick={handleUpload}>Upload</button>
               </div>
             </div>
              

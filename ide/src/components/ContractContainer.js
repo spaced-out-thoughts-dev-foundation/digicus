@@ -41,8 +41,13 @@ function ContractContainer({functions}) {
                         width: 20,
                         height: 20
                       }}
-                })}>
-              <Controls />
+                })}
+                fitView={true}
+                panOnDrag={false}
+                zoomOnScroll={false}
+                zoomOnPinch={false}
+                zoomOnDoubleClick={false}
+                >
             </ReactFlow> : ''
           } 
         </Box>
