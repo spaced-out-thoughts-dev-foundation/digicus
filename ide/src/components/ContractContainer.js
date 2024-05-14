@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ReactFlow, { Controls, MarkerType } from 'reactflow';
 
 // TODO: this only works for one function right now
-function ContractContainer({functions}) {
+function ContractContainer({functions, supportedInstructions, supportedInstructionToColor}) {
     return (
       <div style={{
           display: 'flex',
@@ -29,8 +29,15 @@ function ContractContainer({functions}) {
         >
           {
             functions ?
-              <ReactFlow nodes={JSON.parse(functions[0]).instructions.split(' ').map((instructionName, index) => {
-                return { id: `${index}`, data: { label: instructionName }, position: { x: 100, y: 100 * index } }
+              <ReactFlow nodes={JSON.parse(functions[0]).instructions.split(' ')
+              .filter((instructionName) => !!supportedInstructions.filter(x => x.name.toUpperCase() === instructionName.toUpperCase()))
+              .map((instructionName, index) => {
+                const instructionData = supportedInstructions.filter(x => x.name.toUpperCase() === instructionName.toUpperCase())[0];
+
+                return { id: `${index}`, style: { 
+                  backgroundColor:  supportedInstructionToColor(instructionData),
+                  textShadow: '1px 1px 1px gray',
+                }, data: { label: instructionData.name.toUpperCase() }, position: { x: 100, y: 100 * index } }
                   })} edges={JSON.parse(functions[0]).instructions.split(' ').slice(1).map((instructionName, index) => {
                     return { 
                       id: `e-${index}`, 

@@ -17,6 +17,26 @@ const App = () => {
     const [file, setFile] = useState(null);
     const [supportedInstructions, setSupportedInstructions] = useState([]);
 
+    const supportedInstructionToColor = (supported_instruction) => {
+      console.log(supported_instruction)
+      if (supported_instruction == null || supported_instruction.category == null) {
+        return 'white';
+      }
+      if (supported_instruction.category === "basic") {
+        return 'orange';
+      } else if (supported_instruction.category === "state") {
+        return 'red';
+      } else if (supported_instruction.category === "numeric") {
+        return 'maroon';
+      } else if (supported_instruction.category === "string") {
+        return 'yellow';
+      } else if (supported_instruction.category === "environment") {
+        return 'turquoise';
+      } else {
+        return 'white';
+      }
+    };
+
     useEffect(() => {
       fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
         .then(response => {
@@ -147,17 +167,19 @@ const App = () => {
               height: '100%',
             }}>
               <List>
-                {supportedInstructions.map((option, index) => (
+                {supportedInstructions.map((supported_instruction_data, index) => (
                   <ListItem key={index} button style={{
-                    backgroundColor: index  % 2 === 0 ? 'white' : 'gray',
+                    backgroundColor: supportedInstructionToColor(supported_instruction_data),
                     border: '1px solid black',
                     margin: '1px',
                   }}>
                     <Button
                       style={{
-                        color: 'black',
+                        color: 'white',
+                        fontSize: '0.75em',
+                        textShadow: '1px 1px 1px gray'
                       }}
-                     >{option}</Button>
+                    >{<strong style={{color: 'black', fontSize: '1.25em', marginRight: '0.5em',  textShadow: '1px 1px 1px gray'}}>{supported_instruction_data.name}</strong>}{'(' + supported_instruction_data.category + ')'}</Button>
                   </ListItem>
                 ))}
               </List>
@@ -212,6 +234,8 @@ const App = () => {
               
               <ContractContainer 
                 functions={contract?.contract_functions}
+                supportedInstructions={supportedInstructions}
+                supportedInstructionToColor={supportedInstructionToColor}
               />
             </div>
           </div>
