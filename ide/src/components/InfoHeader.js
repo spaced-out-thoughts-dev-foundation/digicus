@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function InfoHeader() {
   const [data, setData] = useState(null);
@@ -17,9 +17,9 @@ function InfoHeader() {
       flex:1,
       textAlign: 'right',
     }}>
-      {/* Relevant Software Dependencies: */}
-        {/* {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>} */}
-        {/* {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>} */}
+      Relevant Software Dependencies:
+        {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>}
+        {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>}
     </div>
   );
 }

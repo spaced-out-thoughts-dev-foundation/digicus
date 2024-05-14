@@ -8,49 +8,25 @@ import { Analytics } from "@vercel/analytics/react"
 import ContractContainer from './components/ContractContainer'
 import ContractHeader from './components/ContractHeader'
 import InfoHeader from './components/InfoHeader'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, List, ListItem } from '@mui/material';
 import { index } from 'd3';
 
 
 const App = () => {
     const [file, setFile] = useState(null);
+    const [supportedInstructions, setSupportedInstructions] = useState([]);
+
+    useEffect(() => {
+      fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
+        .then(response => {
+          return response.json()
+        })
+        .then(json => setSupportedInstructions(json.supported_instructions))
+        .catch(error => console.error(error));
+    }, []);
 
     const handleDeploy = () => {};
-
-    const options = [
-      'Instruction Operation 1',
-      'Instruction Operation 2',
-      'Instruction Operation 3',
-      'Instruction Operation 4',
-      'Instruction Operation 5',
-      'Instruction Operation 6',
-      'Instruction Operation 7',
-      'Instruction Operation 8',
-      'Instruction Operation 9',
-      'Instruction Operation 10',
-      'Instruction Operation 11',
-      'Instruction Operation 12',
-      'Instruction Operation 13',
-      'Instruction Operation 14',
-      'Instruction Operation 15',
-      'Instruction Operation 16',
-      'Instruction Operation 17',
-      'Instruction Operation 18',
-      'Instruction Operation 19',
-      'Instruction Operation 20',
-      'Instruction Operation 21',
-      'Instruction Operation 22',
-      'Instruction Operation 23',
-      'Instruction Operation 24',
-      'Instruction Operation 25',
-      'Instruction Operation 26',
-      'Instruction Operation 27',
-      'Instruction Operation 28',
-      'Instruction Operation 29',
-      'Instruction Operation 30',
-    ];
-    
 
     const handleUpload = () => {
       const reader = new FileReader();
@@ -171,7 +147,7 @@ const App = () => {
               height: '100%',
             }}>
               <List>
-                {options.map((option, index) => (
+                {supportedInstructions.map((option, index) => (
                   <ListItem key={index} button style={{
                     backgroundColor: index  % 2 === 0 ? 'white' : 'gray',
                     border: '1px solid black',
