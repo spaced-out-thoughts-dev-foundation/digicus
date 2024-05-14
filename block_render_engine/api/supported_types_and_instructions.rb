@@ -29,7 +29,7 @@ Handler = Proc.new do |request, response|
       ## signed
       'i32',
       'i64',
-      'i128'
+      'i128',
       'i256',
       ## unsigned
       'u32',
