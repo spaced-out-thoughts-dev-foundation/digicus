@@ -92,7 +92,7 @@ RSpec.describe DTRCore::Parser do
         DTRCore::Function.new('hello', [
                                 { name: 'to', type_name: 'Symbol' }
                               ], 'Symbol', [
-                                { instruction: 'AddSymbols',
+                                { instruction: 'Add_Strings',
                                   inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
                                 { instruction: 'Return',
                                   inputs: ['HelloToResult'], assign: nil }
@@ -117,7 +117,7 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'to', type_name: 'Symbol' },
                                 { name: 'from', type_name: 'I32' }
                               ], 'Symbol', [
-                                { instruction: 'AddSymbols',
+                                { instruction: 'Add_Strings',
                                   inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
                                 { instruction: 'Return',
                                   inputs: ['HelloToResult'], assign: nil }

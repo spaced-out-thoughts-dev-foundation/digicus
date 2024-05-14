@@ -21,7 +21,7 @@
       * Output: Symbol
       * Instructions:
         $
-          { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
+          { instruction: Add_Strings, input: ("Hello", to), assign: HelloToResult }
           { instruction: Return, input: (HelloToResult) }
         $
 -() [world]

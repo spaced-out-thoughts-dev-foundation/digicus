@@ -31,7 +31,7 @@ module DTRCore
       # string operations
       { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING },
       # environment operations
-      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT}
+      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT }
     ].freeze
 
     # Supported Types for DTR.

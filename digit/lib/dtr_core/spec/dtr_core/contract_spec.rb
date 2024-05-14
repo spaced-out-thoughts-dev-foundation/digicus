@@ -9,7 +9,7 @@ RSpec.describe DTRCore::Contract do
                               { name: 'to', type_name: 'Symbol' },
                               { name: 'from', type_name: 'I32' }
                             ], 'Symbol', [
-                              { instruction: 'AddSymbols',
+                              { instruction: 'Add_Strings',
                                 inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
                               { instruction: 'Return',
                                 inputs: ['HelloToResult'], assign: nil }
@@ -45,7 +45,7 @@ RSpec.describe DTRCore::Contract do
                               { name: 'to', type_name: 'Symbol' },
                               { name: 'from', type_name: 'I32' }
                             ], 'Symbol', [
-                              { instruction: 'AddSymbols',
+                              { instruction: 'Add_Strings',
                                 inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
                               { instruction: 'Return',
                                 inputs: ['HelloToResult'], assign: nil }
