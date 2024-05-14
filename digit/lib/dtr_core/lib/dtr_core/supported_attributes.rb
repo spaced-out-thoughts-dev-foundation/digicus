@@ -29,7 +29,7 @@ module DTRCore
       { name: 'multiply_numbers', description: 'Multiply two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       { name: 'divide_numbers', description: 'Divide two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       # string operations
-      { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING }
+      { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING },
       # environment operations
       { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT}
     ].freeze
