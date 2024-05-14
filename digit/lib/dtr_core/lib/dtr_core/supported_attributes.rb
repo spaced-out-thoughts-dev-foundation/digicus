@@ -8,11 +8,13 @@ module DTRCore
     INSTRUCTION_CATEGORY_STATE = 'state'
     INSTRUCTION_CATEGORY_NUMERIC = 'numeric'
     INSTRUCTION_CATEGORY_STRING = 'string'
+    INSTRUCTION_CATEGORY_ENVIRONMENT = 'environment'
     INSTRUCTION_CATEGORIES = [
       INSTRUCTION_CATEGORY_BASIC,
       INSTRUCTION_CATEGORY_STATE,
       INSTRUCTION_CATEGORY_NUMERIC,
-      INSTRUCTION_CATEGORY_STRING
+      INSTRUCTION_CATEGORY_STRING,
+      INSTRUCTION_CATEGORY_ENVIRONMENT
     ].freeze
     ## Instructions ##
     INSTRUCTIONS = [
@@ -28,6 +30,8 @@ module DTRCore
       { name: 'divide_numbers', description: 'Divide two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       # string operations
       { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING }
+      # environment operations
+      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT}
     ].freeze
 
     # Supported Types for DTR.
