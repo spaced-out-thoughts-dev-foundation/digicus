@@ -8,6 +8,5 @@ module DTRCore
   autoload :Parser, 'dtr_core/parser'
   autoload :State, 'dtr_core/state'
   autoload :TypeValidator, 'dtr_core/type_validator'
-
-  VERSION = '0.1.0'
+  autoload :SupportedAttributes, 'dtr_core/supported_attributes'
 end
