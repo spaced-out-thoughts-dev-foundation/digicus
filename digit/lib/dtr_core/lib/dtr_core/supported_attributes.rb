@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DTRCore
-  module SupportedTypes
+  module SupportedAttributes
     # Supported Instructions for DTR.
     ## Instruction Categories ##
     INSTRUCTION_CATEGORY_BASIC = 'basic'
