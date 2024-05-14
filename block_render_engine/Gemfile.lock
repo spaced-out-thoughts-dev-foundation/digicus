@@ -9,7 +9,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dtr_core (~> 0.1.2)
+  dtr_core
   webrick (~> 1.8)
 
 RUBY VERSION
