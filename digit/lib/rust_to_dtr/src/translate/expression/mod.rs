@@ -65,13 +65,11 @@ fn parse_expression(exp: &syn::Expr) -> Result<String, NotTranslatableError> {
         syn::Expr::Let(let_expr) => let_expression::handle_let_expression(let_expr.clone()),
         syn::Expr::Lit(lit_expr) => lit_expression::handle_lit_expression(&lit_expr.lit),
         syn::Expr::Loop(loop_expr) => loop_expression::handle_loop_expression(loop_expr),
-        syn::Expr::Macro(macro_value) => Ok(format!("Maro")),
+        syn::Expr::Macro(_) => Ok(format!("Maro")),
         syn::Expr::Match(match_expression) => {
             match_expression::handle_match_expression(match_expression)
         }
-        syn::Expr::MethodCall(method_call_expr) => {
-            method_call_expression::handle_method_call_expression(&exp)
-        }
+        syn::Expr::MethodCall(_) => method_call_expression::handle_method_call_expression(&exp),
         syn::Expr::Paren(paren_expr) => paren_expression::handle_paren_expression(paren_expr),
         syn::Expr::Path(path) => path_expression::handle_path_expression(&path.path),
         // syn::Expr::Range(_) => {
@@ -145,7 +143,7 @@ fn byte_vec_to_string(byte_vec: Vec<u8>) -> String {
     characters
 }
 
-fn parse_lit(syn_lit: &syn::Lit) -> Result<String, NotTranslatableError> {
+pub fn parse_lit(syn_lit: &syn::Lit) -> Result<String, NotTranslatableError> {
     match &syn_lit {
         syn::Lit::Bool(bool_lit) => Ok(bool_lit.value.to_string()),
         syn::Lit::Byte(byte_lit) => Ok(byte_lit.value().to_string()),

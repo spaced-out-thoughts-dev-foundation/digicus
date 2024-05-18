@@ -17,7 +17,6 @@ pub fn handle_binary_expression(expr_binary: &ExprBinary) -> Result<String, NotT
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::translate::expression::parse_expression;
     use syn::ExprBinary;
 

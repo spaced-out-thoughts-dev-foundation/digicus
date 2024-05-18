@@ -11,7 +11,7 @@ mod tests {
 
     mod lit_expression {
         use super::*;
-        use syn::{Lit, LitBool, LitByte, LitByteStr, LitChar, LitFloat, LitInt, LitStr};
+        use syn::{Lit, LitBool, LitByte, LitByteStr, LitChar, LitFloat, LitInt};
 
         use crate::translate::expression::parse_expression;
 

@@ -1,6 +1,7 @@
 extern crate syn;
 
 pub mod expression;
+pub mod pattern;
 pub mod rust_to_dtr_term;
 pub mod type_name;
 

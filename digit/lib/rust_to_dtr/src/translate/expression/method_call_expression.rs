@@ -1,7 +1,5 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
-use syn::parse;
 use syn::Expr;
-use syn::ExprMethodCall;
 
 use super::parse_expression;
 
@@ -15,7 +13,7 @@ pub fn handle_method_call_expression(expr: &Expr) -> Result<String, NotTranslata
         expr_method_call.args.iter().for_each(|arg| {
             let arg_name = match parse_expression(&arg) {
                 Ok(arg_name) => arg_name,
-                Err(e) => "ERR".to_string(),
+                Err(_) => "ERR".to_string(),
             };
 
             input_strings.push(arg_name);
@@ -29,13 +27,6 @@ pub fn handle_method_call_expression(expr: &Expr) -> Result<String, NotTranslata
     }
 
     Ok(format!("idk man"))
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::translate::expression::parse_expression;
-    use syn::ExprMethodCall;
 }
 
 fn translate_env_method_call_expressions(method_name: &str) -> String {
