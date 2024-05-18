@@ -141,8 +141,6 @@ pub fn parse_path(path: &syn::Path) -> String {
 
 #[cfg(test)]
 mod tests {
-    use std::f32::consts::E;
-
     use super::*;
 
     #[test]
