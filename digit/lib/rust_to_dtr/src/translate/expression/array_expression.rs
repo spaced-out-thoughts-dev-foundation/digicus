@@ -1,0 +1,28 @@
+use crate::errors::not_translatable_error::NotTranslatableError;
+use syn::ExprArray;
+
+pub fn handle_array_expression(_: &ExprArray) -> Result<String, NotTranslatableError> {
+    Err(NotTranslatableError::Custom(
+        "Array expression not translatable".to_string(),
+    ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::translate::expression::parse_expression;
+    use syn::ExprArray;
+
+    #[test]
+    fn test_array_expression() {
+        let parsed_expr_array: ExprArray = syn::parse_str("[1,2,3]").unwrap();
+        let result = parse_expression(&syn::Expr::Array(parsed_expr_array));
+
+        assert_eq!(
+            result,
+            Err(NotTranslatableError::Custom(
+                "Array expression not translatable".to_string()
+            ))
+        );
+    }
+}

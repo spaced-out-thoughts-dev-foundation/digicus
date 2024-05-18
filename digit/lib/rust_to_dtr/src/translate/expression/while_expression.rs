@@ -1,0 +1,28 @@
+use crate::errors::not_translatable_error::NotTranslatableError;
+use syn::ExprWhile;
+
+pub fn handle_while_expression(_: &ExprWhile) -> Result<String, NotTranslatableError> {
+    Err(NotTranslatableError::Custom(
+        "While expression not translatable".to_string(),
+    ))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::translate::expression::parse_expression;
+    use syn::ExprWhile;
+
+    #[test]
+    fn test_while_expression() {
+        let parsed_expr_while: ExprWhile = syn::parse_str("while true { }").unwrap();
+        let result = parse_expression(&syn::Expr::While(parsed_expr_while));
+
+        assert_eq!(
+            result,
+            Err(NotTranslatableError::Custom(
+                "While expression not translatable".to_string()
+            ))
+        );
+    }
+}
