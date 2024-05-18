@@ -1,8 +1,5 @@
-use std::f32::consts::E;
-
-use syn::Expr;
-
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::translate::type_name;
 
 fn parse_expression(exp: &syn::Expr) -> Result<String, NotTranslatableError> {
     match exp {
@@ -60,41 +57,44 @@ fn parse_expression(exp: &syn::Expr) -> Result<String, NotTranslatableError> {
         // syn::Expr::Infer(_) => {
         //     format!("Infer")
         // }
-        // syn::Expr::Let(_) => {
-        //     format!("Let")
-        // }
-        syn::Expr::Lit(lit_expr) => match &lit_expr.lit {
-            syn::Lit::Bool(bool_lit) => Ok(bool_lit.value.to_string()),
-            syn::Lit::Byte(byte_lit) => Ok(byte_lit.value().to_string()),
-            syn::Lit::ByteStr(byte_str_lit) => {
-                Ok(format!("{:?}", byte_vec_to_string(byte_str_lit.value())))
+        syn::Expr::Let(let_expr) => {
+            let let_expr_str = parse_expression(&let_expr.expr)?;
+
+            let let_expr_pat: syn::Pat = *(let_expr.pat.clone());
+
+            match &let_expr_pat {
+                syn::Pat::Lit(lit_pat) => {
+                    let const_pat_str = format!("{:?}", parse_lit(&lit_pat.lit));
+                    Ok(format!("let {} = {}", const_pat_str, let_expr_str))
+                }
+                syn::Pat::Ident(ident_pat) => Ok(format!(
+                    "let {} = {}",
+                    ident_pat.ident.to_string(),
+                    let_expr_str
+                )),
+                _ => Err(NotTranslatableError::Custom(
+                    "Unknown pattern in let expression".to_string(),
+                )),
             }
-            syn::Lit::Char(char_lit) => Ok(format!("{:?}", char_lit.value())),
-            syn::Lit::Float(float_lit) => Ok(float_lit.base10_digits().to_string()),
-            syn::Lit::Int(int_lit) => Ok(int_lit.base10_digits().to_string()),
-            syn::Lit::Str(str_lit) => Ok(format!("{:?}", str_lit.value())),
-            syn::Lit::Verbatim(verbatim_lit) => Err(NotTranslatableError::Custom(format!(
-                "Verbatim literal expression: {}",
-                verbatim_lit.to_string()
-            ))),
-            _ => Err(NotTranslatableError::Custom(
-                "Unknown literal expression".to_string(),
-            )),
-        },
-        // syn::Expr::Loop(_) => {
-        //     format!("Loop")
+        }
+        syn::Expr::Lit(lit_expr) => parse_lit(&lit_expr.lit),
+        syn::Expr::Loop(_) => Err(NotTranslatableError::Custom(
+            "Loop expression not translatable".to_string(),
+        )),
+        // syn::Expr::Macro(macro_value) => {
+        //     let macro_str = format!("{:?}", macro_value.mac.tokens);
+        //     Ok(macro_str)
         // }
-        // syn::Expr::Macro(macro_value) => parse_macros(macro_value),
-        // syn::Expr::Match(_) => {
-        //     format!("Match")
-        // }
+        syn::Expr::Match(_) => Err(NotTranslatableError::Custom(
+            "Match expression not translatable".to_string(),
+        )),
         // syn::Expr::MethodCall(_) => {
         //     format!("MethodCall")
         // }
         // syn::Expr::Paren(_) => {
         //     format!("Paren")
         // }
-        // syn::Expr::Path(path) => type_name::parse_path(&path.path),
+        // syn::Expr::Path(path) => parse_path(&path.path),
         // syn::Expr::Range(_) => {
         //     format!("Range")
         // }
@@ -126,9 +126,9 @@ fn parse_expression(exp: &syn::Expr) -> Result<String, NotTranslatableError> {
         syn::Expr::TryBlock(_) => Err(NotTranslatableError::Custom(
             "TryBlock expression not translatable".to_string(),
         )),
-        // syn::Expr::Tuple(_) => {
-        //     format!("Tuple")
-        // }
+        syn::Expr::Tuple(_) => Err(NotTranslatableError::Custom(
+            "Tuple expression not translatable".to_string(),
+        )),
         // syn::Expr::Unary(_) => {
         //     format!("Unary")
         // }
@@ -276,7 +276,20 @@ mod tests {
 
     mod index_expression {}
     mod infer_expression {}
-    mod let_expression {}
+
+    mod let_expression {
+        use syn::ExprLet;
+
+        use super::*;
+
+        #[test]
+        fn test_let_expression() {
+            let parsed_expr_let: ExprLet = syn::parse_str("let x = 1").unwrap();
+            let result = parse_expression(&syn::Expr::Let(parsed_expr_let));
+
+            assert_eq!(result, Ok("let x = 1".to_string()));
+        }
+    }
 
     mod lit_expression {
         use syn::{Lit, LitBool, LitByte, LitByteStr, LitChar, LitFloat, LitInt, LitStr};
@@ -350,9 +363,43 @@ mod tests {
         }
     }
 
-    mod loop_expression {}
+    mod loop_expression {
+        use syn::ExprLoop;
+
+        use super::*;
+
+        #[test]
+        fn test_loop_expression() {
+            let parsed_expr_loop: ExprLoop = syn::parse_str("loop { }").unwrap();
+            let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop));
+
+            assert_eq!(
+                result,
+                Err(NotTranslatableError::Custom(
+                    "Loop expression not translatable".to_string()
+                ))
+            );
+        }
+    }
     mod macro_expression {}
-    mod match_expression {}
+    mod match_expression {
+        use syn::ExprMatch;
+
+        use super::*;
+
+        #[test]
+        fn test_match_expression() {
+            let parsed_expr_match: ExprMatch = syn::parse_str("match 1 { _ => 0 }").unwrap();
+            let result = parse_expression(&syn::Expr::Match(parsed_expr_match));
+
+            assert_eq!(
+                result,
+                Err(NotTranslatableError::Custom(
+                    "Match expression not translatable".to_string()
+                ))
+            );
+        }
+    }
     mod method_call_expression {}
     mod paren_expression {}
     mod path_expression {}
@@ -452,7 +499,25 @@ mod tests {
         }
     }
 
-    mod tuple_expression {}
+    mod tuple_expression {
+        use syn::ExprTuple;
+
+        use super::*;
+
+        #[test]
+        fn test_tuple_expression() {
+            let parsed_expr_tuple: ExprTuple = syn::parse_str("(1, 2, 3)").unwrap();
+            let result = parse_expression(&syn::Expr::Tuple(parsed_expr_tuple));
+
+            assert_eq!(
+                result,
+                Err(NotTranslatableError::Custom(
+                    "Tuple expression not translatable".to_string()
+                ))
+            );
+        }
+    }
+
     mod unary_expression {}
 
     mod unsafe_expression {
@@ -517,4 +582,25 @@ fn byte_vec_to_string(byte_vec: Vec<u8>) -> String {
     // Convert each byte into a character and collect into a string
     let characters: String = byte_vec.into_iter().map(|byte| byte as char).collect();
     characters
+}
+
+fn parse_lit(syn_lit: &syn::Lit) -> Result<String, NotTranslatableError> {
+    match &syn_lit {
+        syn::Lit::Bool(bool_lit) => Ok(bool_lit.value.to_string()),
+        syn::Lit::Byte(byte_lit) => Ok(byte_lit.value().to_string()),
+        syn::Lit::ByteStr(byte_str_lit) => {
+            Ok(format!("{:?}", byte_vec_to_string(byte_str_lit.value())))
+        }
+        syn::Lit::Char(char_lit) => Ok(format!("{:?}", char_lit.value())),
+        syn::Lit::Float(float_lit) => Ok(float_lit.base10_digits().to_string()),
+        syn::Lit::Int(int_lit) => Ok(int_lit.base10_digits().to_string()),
+        syn::Lit::Str(str_lit) => Ok(format!("{:?}", str_lit.value())),
+        syn::Lit::Verbatim(verbatim_lit) => Err(NotTranslatableError::Custom(format!(
+            "Verbatim literal expression: {}",
+            verbatim_lit.to_string()
+        ))),
+        _ => Err(NotTranslatableError::Custom(
+            "Unknown literal expression".to_string(),
+        )),
+    }
 }
