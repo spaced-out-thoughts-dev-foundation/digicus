@@ -26,24 +26,28 @@ class BlockRenderEngineRequestHandler
 
     compile
 
-    url = URI.parse('https://temprustfunctions-git-main-robertdursts-projects.vercel.app/api/handler')
-    http = Net::HTTP.new(url.host, url.port)
-    http.use_ssl = true  # Use SSL/TLS for the request
-    request = Net::HTTP::Post.new(url.path, {'Content-Type' => 'application/json'})
-    request_body = {
-      key1: 'value1',
-      key2: 'value2'
-    }
+    if rust?
+      url = URI.parse('https://temprustfunctions-git-main-robertdursts-projects.vercel.app/api/handler')
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true  # Use SSL/TLS for the request
+      request = Net::HTTP::Post.new(url.path, {'Content-Type' => 'application/json'})
+      request_body = {
+        content: content,
+      }
 
-    # Convert the request body to JSON
-    request.body = request_body.to_json
+      # Convert the request body to JSON
+      request.body = request_body.to_json
 
-    # Send the request and get the response
-    response = http.request(request)
+      # Send the request and get the response
+      response = http.request(request)
 
-    # Print the response body
-    puts "Response Code: #{response.code}"
-    puts "Response Body: #{response.body}"
+      # Print the response body
+      puts "Response Code: #{response.code}"
+      puts "Response Body: #{response.body}"
+    # else
+      # @transpiled_code = content
+    end
+
     
     {
       received: {
@@ -66,6 +70,12 @@ class BlockRenderEngineRequestHandler
     @last_method_executed = 'dtr?'
 
     content_format == 'dtr'
+  end
+
+  def rust?
+    @last_method_executed = 'rust?'
+
+    content_format == 'rust'
   end
 
   def compile
