@@ -9,3 +9,7 @@ get '/' do
   puts "pinged the server"
   return 'pong'
 end
+
+get '/home' do
+  erb :home_page
+end
