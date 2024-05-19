@@ -74,9 +74,11 @@ class BlockRenderEngineRequestHandler
     Rutie.new(:rust_to_dtr).init 'Init_rust_to_dtr', __dir__
 
     @last_method_executed = 'transpile_rust_to_dtr:76'
+
+    puts "content: #{content}"
   
     # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.process_string("")
+    @transpiled_content = RustToDtr.process_string(content)
   end
 
   def compile
