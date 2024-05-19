@@ -67,15 +67,21 @@ class BlockRenderEngineRequestHandler
   end
 
   def transpile_rust_to_dtr
-    @last_method_executed = 'transpile_rust_to_dtr'
+    @last_method_executed = 'transpile_rust_to_dtr:70'
     extend Fiddle::Importer
+
+    @last_method_executed = 'transpile_rust_to_dtr:73'
 
     # Adjust the path to your shared library as needed
     dlload 'librust_to_dtr.dylib'
+
+    @last_method_executed = 'transpile_rust_to_dtr:78'
   
     # Initialize the Rust library
     extern 'void Init_my_rust_library()'
     Init_my_rust_library()
+
+    @last_method_executed = 'transpile_rust_to_dtr:84'
 
     # Call the Rust function from Ruby
     @content = MyRustModule.process_string(@content)
