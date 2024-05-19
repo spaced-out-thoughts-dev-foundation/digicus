@@ -6,6 +6,6 @@ WORKDIR /code
 COPY . /code
 RUN bundle install
 
-EXPOSE 8888
+EXPOSE 8080
 
 CMD ["bundle", "exec", "puma", "-C", "puma.rb"]
