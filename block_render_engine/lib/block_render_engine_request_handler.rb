@@ -80,7 +80,7 @@ class BlockRenderEngineRequestHandler
     puts "RustToDtr.foo(): #{RustToDtr.foo()}"
   
     # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.new.foo_bar("#{JSON.parse(@request.body)['content']}")
+    @transpiled_content = RustToDtr.foo_bar("Hello, World!")
   end
 
   def compile
