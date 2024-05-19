@@ -135,8 +135,8 @@ mod tests {
 
     #[contractimpl]
     impl AnswerToLifeContract {
-        pub fn fourty_two(env: Env) -> String {
-            "42"
+        pub fn fourty_two(env: Env) -> u32 {
+            42
         }
     }
     "#;
@@ -146,7 +146,7 @@ mod tests {
         let expected_dtr_code = r#"[Contract]: AnswerToLifeContract
 
 [Functions]:
--() [fourty_two]* Inputs:{ }* Output: String* Instructions:${ instruction: Return, input: ("42") }$:[Functions]"#;
+-() [fourty_two]* Inputs:{ }* Output: u32* Instructions:${ instruction: Return, input: (42) }$:[Functions]"#;
 
         let actual_dtr_code = parse_to_dtr(ANSWER_TO_LIFE_CONTRACT);
 
