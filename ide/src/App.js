@@ -63,7 +63,7 @@ const App = () => {
               'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify({format: "dtr", content: reader.result})
+            body: JSON.stringify({format: file.name.endsWith(".rs") ? "rust" : "dtr", content: reader.result})
           })
           .then(response => {
             return response.json()
