@@ -1,3 +1,5 @@
+extern crate rust_to_dtr;
+
 use serde_json::json;
 use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
 use rust_to_dtr;
