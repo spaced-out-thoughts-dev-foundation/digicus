@@ -1,102 +1,99 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
+pub mod supported;
+pub mod unsupported;
 
-pub mod array_expression;
-pub mod async_expression;
-pub mod await_expression;
-pub mod binary_expression;
-pub mod block_expression;
-pub mod for_loop_expression;
-pub mod if_expression;
-pub mod let_expression;
-pub mod lit_expression;
-pub mod loop_expression;
-pub mod match_expression;
-pub mod method_call_expression;
-pub mod paren_expression;
-pub mod path_expression;
-pub mod reference_expression;
-pub mod repeat_expression;
-pub mod return_expression;
-pub mod try_block_expression;
-pub mod try_expression;
-pub mod tuple_expression;
-pub mod unsafe_expression;
-pub mod while_expression;
-pub mod yield_expression;
-
-fn parse_expression(exp: &syn::Expr) -> Result<String, NotTranslatableError> {
+fn parse_expression(
+    exp: &syn::Expr,
+    assignment: Option<String>,
+) -> Result<Vec<Instruction>, NotTranslatableError> {
     match exp {
-        syn::Expr::Array(array_expr) => array_expression::handle_array_expression(&array_expr),
-        // syn::Expr::Assign(_) => {
-        //     format!("Assign")
-        // }
-        syn::Expr::Async(async_expr) => async_expression::handle_async_expression(async_expr),
-        syn::Expr::Await(await_expr) => await_expression::handle_await_expression(await_expr),
-        syn::Expr::Binary(binary_expr) => binary_expression::handle_binary_expression(binary_expr),
-        syn::Expr::Block(block_expr) => block_expression::handle_block_expression(block_expr),
-        // syn::Expr::Break(_) => {
-        //     format!("Break")
-        // }
-        syn::Expr::Call(_) => Ok(format!("Call")),
-        // syn::Expr::Cast(_) => {
-        //     format!("Cast")
-        // }
-        // syn::Expr::Closure(_) => {
-        //     format!("Closure")
-        // }
-        // syn::Expr::Const(_) => {
-        //     format!("Const")
-        // }
-        // syn::Expr::Continue(_) => {
-        //     format!("Continue")
-        // }
-        syn::Expr::Field(_) => Ok(format!("Field")),
-        syn::Expr::ForLoop(for_loop_expr) => {
-            for_loop_expression::handle_for_loop_expression(for_loop_expr)
+        // NOT SUPPORTED
+        syn::Expr::Array(array_expr) => {
+            unsupported::array_expression::handle_array_expression(&array_expr)
         }
-        syn::Expr::Group(_) => Ok(format!("Group")),
-        syn::Expr::If(if_expr) => if_expression::handle_if_expression(if_expr),
-        // syn::Expr::Index(_) => {
-        //     format!("Index")
-        // }
-        // syn::Expr::Infer(_) => {
-        //     format!("Infer")
-        // }
-        syn::Expr::Let(let_expr) => let_expression::handle_let_expression(let_expr.clone()),
-        syn::Expr::Lit(lit_expr) => lit_expression::handle_lit_expression(&lit_expr.lit),
-        syn::Expr::Loop(loop_expr) => loop_expression::handle_loop_expression(loop_expr),
-        syn::Expr::Macro(_) => Ok(format!("Maro")),
-        syn::Expr::Match(match_expression) => {
-            match_expression::handle_match_expression(match_expression)
+        syn::Expr::Async(async_expr) => {
+            unsupported::async_expression::handle_async_expression(async_expr)
         }
-        syn::Expr::MethodCall(_) => method_call_expression::handle_method_call_expression(&exp),
-        syn::Expr::Paren(paren_expr) => paren_expression::handle_paren_expression(paren_expr),
-        syn::Expr::Path(path) => path_expression::handle_path_expression(&path.path),
-        // syn::Expr::Range(_) => {
-        //     format!("Range")
-        // }
-        syn::Expr::Reference(reference_expr) => {
-            reference_expression::handle_reference_expression(reference_expr)
-        }
-        syn::Expr::Repeat(repeat_expr) => repeat_expression::handle_repeat_expression(repeat_expr),
-        syn::Expr::Return(return_expr_expr) => {
-            return_expression::handle_return_expression(return_expr_expr)
+        syn::Expr::Await(await_expr) => {
+            unsupported::await_expression::handle_await_expression(await_expr)
         }
 
-        // syn::Expr::Struct(_) => {
-        //     format!("Struct")
-        // }
-        syn::Expr::Try(try_expr) => try_expression::handle_try_expression(try_expr),
-        syn::Expr::TryBlock(try_block_expr) => {
-            try_block_expression::handle_try_block_expression(try_block_expr)
+        syn::Expr::ForLoop(for_loop_expr) => {
+            unsupported::for_loop_expression::handle_for_loop_expression(for_loop_expr)
         }
-        syn::Expr::Tuple(tuple_expr) => tuple_expression::handle_tuple_expression(tuple_expr),
+        syn::Expr::If(if_expr) => unsupported::if_expression::handle_if_expression(if_expr),
+        syn::Expr::Loop(loop_expr) => {
+            unsupported::loop_expression::handle_loop_expression(loop_expr)
+        }
+        syn::Expr::Match(match_expression) => {
+            unsupported::match_expression::handle_match_expression(match_expression)
+        }
+        syn::Expr::Repeat(repeat_expr) => {
+            unsupported::repeat_expression::handle_repeat_expression(repeat_expr)
+        }
+        syn::Expr::Try(try_expr) => unsupported::try_expression::handle_try_expression(try_expr),
+        syn::Expr::TryBlock(try_block_expr) => {
+            unsupported::try_block_expression::handle_try_block_expression(try_block_expr)
+        }
+        syn::Expr::Tuple(tuple_expr) => {
+            unsupported::tuple_expression::handle_tuple_expression(tuple_expr)
+        }
+        syn::Expr::Unsafe(unsafe_expr) => {
+            unsupported::unsafe_expression::handle_unsafe_expression(unsafe_expr)
+        }
+        syn::Expr::While(while_expr) => {
+            unsupported::while_expression::handle_while_expression(while_expr)
+        }
+        syn::Expr::Yield(yield_expr) => {
+            unsupported::yield_expression::handle_yield_expression(yield_expr)
+        }
+
+        // SUPPORTED
+        syn::Expr::Binary(binary_expr) => {
+            supported::binary_expression::handle_binary_expression(binary_expr, assignment)
+        }
+        syn::Expr::Block(block_expr) => {
+            supported::block_expression::handle_block_expression(block_expr, assignment)
+        }
+        syn::Expr::Let(let_expr) => {
+            supported::let_expression::handle_let_expression(let_expr.clone(), assignment)
+        }
+        syn::Expr::Lit(lit_expr) => {
+            supported::lit_expression::handle_lit_expression(&lit_expr.lit, assignment)
+        }
+        syn::Expr::MethodCall(_) => {
+            supported::method_call_expression::handle_method_call_expression(&exp, assignment)
+        }
+        syn::Expr::Paren(paren_expr) => {
+            supported::paren_expression::handle_paren_expression(paren_expr, assignment)
+        }
+        syn::Expr::Path(path) => {
+            supported::path_expression::handle_path_expression(&path.path, assignment)
+        }
+        syn::Expr::Reference(reference_expr) => {
+            supported::reference_expression::handle_reference_expression(reference_expr, assignment)
+        }
+        syn::Expr::Return(return_expr_expr) => {
+            supported::return_expression::handle_return_expression(return_expr_expr, assignment)
+        }
+
+        // NOT IMPLEMENTED //
+        // syn::Expr::Assign(_) => {
+        // syn::Expr::Break(_) => {
+        // syn::Expr::Call(_) => Ok(format!("Call")),
+        // syn::Expr::Cast(_) => {
+        // syn::Expr::Closure(_) => {
+        // syn::Expr::Const(_) => {
+        // syn::Expr::Continue(_) => {
+        // syn::Expr::Field(_) => Ok(format!("Field")),
+        // syn::Expr::Group(_) => Ok(format!("Group")),
+        // syn::Expr::Index(_) => {
+        // syn::Expr::Infer(_) => {
+        // syn::Expr::Macro(_) => Ok(format!("Macro")),
+        // syn::Expr::Range(_) => {
+        // syn::Expr::Struct(_) => {
         // syn::Expr::Unary(_) => {
-        //     format!("Unary")
-        // }
-        syn::Expr::Unsafe(unsafe_expr) => unsafe_expression::handle_unsafe_expression(unsafe_expr),
-        syn::Expr::While(while_expr) => while_expression::handle_while_expression(while_expr),
-        syn::Expr::Yield(yield_expr) => yield_expression::handle_yield_expression(yield_expr),
         _ => Err(NotTranslatableError::Custom(
             "Unknown expression".to_string(),
         )),

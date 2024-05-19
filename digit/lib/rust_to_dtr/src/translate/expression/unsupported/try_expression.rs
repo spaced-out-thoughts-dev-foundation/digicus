@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprTry;
 
-pub fn handle_try_expression(_: &ExprTry) -> Result<String, NotTranslatableError> {
+pub fn handle_try_expression(_: &ExprTry) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Try expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_try_expression() {
         let parsed_expr_try: ExprTry = syn::parse_str("expr?").unwrap();
-        let result = parse_expression(&syn::Expr::Try(parsed_expr_try));
+        let result = parse_expression(&syn::Expr::Try(parsed_expr_try), None);
 
         assert_eq!(
             result,

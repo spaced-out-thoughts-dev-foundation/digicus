@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprWhile;
 
-pub fn handle_while_expression(_: &ExprWhile) -> Result<String, NotTranslatableError> {
+pub fn handle_while_expression(_: &ExprWhile) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "While expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_while_expression() {
         let parsed_expr_while: ExprWhile = syn::parse_str("while true { }").unwrap();
-        let result = parse_expression(&syn::Expr::While(parsed_expr_while));
+        let result = parse_expression(&syn::Expr::While(parsed_expr_while), None);
 
         assert_eq!(
             result,

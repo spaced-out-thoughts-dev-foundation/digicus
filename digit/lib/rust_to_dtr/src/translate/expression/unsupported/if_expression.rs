@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprIf;
 
-pub fn handle_if_expression(_: &ExprIf) -> Result<String, NotTranslatableError> {
+pub fn handle_if_expression(_: &ExprIf) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "If expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_if_expression() {
         let parsed_expr_if: ExprIf = syn::parse_str("if true { }").unwrap();
-        let result = parse_expression(&syn::Expr::If(parsed_expr_if));
+        let result = parse_expression(&syn::Expr::If(parsed_expr_if), None);
 
         assert_eq!(
             result,

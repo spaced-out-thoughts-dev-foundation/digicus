@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprRepeat;
 
-pub fn handle_repeat_expression(_: &ExprRepeat) -> Result<String, NotTranslatableError> {
+pub fn handle_repeat_expression(_: &ExprRepeat) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Repeat expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_repeat_expression() {
         let parsed_expr_repeat: ExprRepeat = syn::parse_str("[1; 3]").unwrap();
-        let result = parse_expression(&syn::Expr::Repeat(parsed_expr_repeat));
+        let result = parse_expression(&syn::Expr::Repeat(parsed_expr_repeat), None);
 
         assert_eq!(
             result,

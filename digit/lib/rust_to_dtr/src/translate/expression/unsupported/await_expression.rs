@@ -1,8 +1,8 @@
+use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprAwait;
 
-use crate::errors::not_translatable_error::NotTranslatableError;
-
-pub fn handle_await_expression(_: &ExprAwait) -> Result<String, NotTranslatableError> {
+pub fn handle_await_expression(_: &ExprAwait) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Await expression not translatable".to_string(),
     ))

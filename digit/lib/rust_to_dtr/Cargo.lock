@@ -716,6 +716,7 @@ name = "rust_to_dtr"
 version = "0.1.0"
 dependencies = [
  "proc-macro2",
+ "rand",
  "soroban-sdk",
  "syn",
 ]

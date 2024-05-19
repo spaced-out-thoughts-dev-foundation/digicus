@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprYield;
 
-pub fn handle_yield_expression(_: &ExprYield) -> Result<String, NotTranslatableError> {
+pub fn handle_yield_expression(_: &ExprYield) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Yield expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_yield_expression() {
         let parsed_expr_yield: ExprYield = syn::parse_str("yield 1").unwrap();
-        let result = parse_expression(&syn::Expr::Yield(parsed_expr_yield));
+        let result = parse_expression(&syn::Expr::Yield(parsed_expr_yield), None);
 
         assert_eq!(
             result,

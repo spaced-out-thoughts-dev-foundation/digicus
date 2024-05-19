@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprUnsafe;
 
-pub fn handle_unsafe_expression(_: &ExprUnsafe) -> Result<String, NotTranslatableError> {
+pub fn handle_unsafe_expression(_: &ExprUnsafe) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Unsafe expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_unsafe_expression() {
         let parsed_expr_unsafe: ExprUnsafe = syn::parse_str("unsafe { }").unwrap();
-        let result = parse_expression(&syn::Expr::Unsafe(parsed_expr_unsafe));
+        let result = parse_expression(&syn::Expr::Unsafe(parsed_expr_unsafe), None);
 
         assert_eq!(
             result,

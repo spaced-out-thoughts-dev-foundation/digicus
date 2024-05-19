@@ -1,8 +1,8 @@
+use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprAsync;
 
-use crate::errors::not_translatable_error::NotTranslatableError;
-
-pub fn handle_async_expression(_: &ExprAsync) -> Result<String, NotTranslatableError> {
+pub fn handle_async_expression(_: &ExprAsync) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Async expression not translatable".to_string(),
     ))
@@ -18,7 +18,7 @@ mod tests {
     #[test]
     fn test_async_expression() {
         let parsed_expr_async: ExprAsync = syn::parse_str("async { }").unwrap();
-        let result = parse_expression(&syn::Expr::Async(parsed_expr_async));
+        let result = parse_expression(&syn::Expr::Async(parsed_expr_async), None);
 
         assert_eq!(
             result,

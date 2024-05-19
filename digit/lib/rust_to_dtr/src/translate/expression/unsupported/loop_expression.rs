@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprLoop;
 
-pub fn handle_loop_expression(_: &ExprLoop) -> Result<String, NotTranslatableError> {
+pub fn handle_loop_expression(_: &ExprLoop) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Loop expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_loop_expression() {
         let parsed_expr_loop: ExprLoop = syn::parse_str("loop { }").unwrap();
-        let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop));
+        let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop), None);
 
         assert_eq!(
             result,

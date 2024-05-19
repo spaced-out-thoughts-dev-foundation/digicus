@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprArray;
 
-pub fn handle_array_expression(_: &ExprArray) -> Result<String, NotTranslatableError> {
+pub fn handle_array_expression(_: &ExprArray) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Array expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_array_expression() {
         let parsed_expr_array: ExprArray = syn::parse_str("[1,2,3]").unwrap();
-        let result = parse_expression(&syn::Expr::Array(parsed_expr_array));
+        let result = parse_expression(&syn::Expr::Array(parsed_expr_array), None);
 
         assert_eq!(
             result,

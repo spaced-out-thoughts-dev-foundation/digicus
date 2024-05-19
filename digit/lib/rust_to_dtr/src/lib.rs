@@ -1,6 +1,9 @@
 // syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
+
+pub mod common;
 pub mod errors;
+pub mod instruction;
 pub mod translate;
 
 // pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {

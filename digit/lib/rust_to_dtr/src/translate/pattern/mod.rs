@@ -1,8 +1,7 @@
+use super::type_name::{figure_out_type, parse_path};
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::translate::expression::parse_lit;
 use syn;
-
-use super::type_name::{figure_out_type, parse_path};
 
 pub fn handle_pattern(pat: syn::Pat) -> Result<String, NotTranslatableError> {
     match pat {

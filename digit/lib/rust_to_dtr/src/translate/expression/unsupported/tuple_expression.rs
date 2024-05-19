@@ -1,7 +1,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::instruction::Instruction;
 use syn::ExprTuple;
 
-pub fn handle_tuple_expression(_: &ExprTuple) -> Result<String, NotTranslatableError> {
+pub fn handle_tuple_expression(_: &ExprTuple) -> Result<Vec<Instruction>, NotTranslatableError> {
     Err(NotTranslatableError::Custom(
         "Tuple expression not translatable".to_string(),
     ))
@@ -16,7 +17,7 @@ mod tests {
     #[test]
     fn test_tuple_expression() {
         let parsed_expr_tuple: ExprTuple = syn::parse_str("(1, 2, 3)").unwrap();
-        let result = parse_expression(&syn::Expr::Tuple(parsed_expr_tuple));
+        let result = parse_expression(&syn::Expr::Tuple(parsed_expr_tuple), None);
 
         assert_eq!(
             result,
