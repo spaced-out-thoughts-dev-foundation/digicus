@@ -1,3 +1,6 @@
+use rand::seq::index;
+use regex::Regex;
+
 // syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
 
@@ -6,207 +9,167 @@ pub mod errors;
 pub mod instruction;
 pub mod translate;
 
-// pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
-//     // Parse the Rust code into a syn data structure
-//     let parsed_ast = syn::parse_file(rust_code).unwrap();
+pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
+    // Parse the Rust code into a syn data structure
+    let parsed_ast = syn::parse_file(rust_code).unwrap();
 
-//     // Extract information from the parsed AST
-//     let mut dtr_code = String::new();
-//     for item in parsed_ast.items {
-//         match item {
-//             syn::Item::Struct(item_struct) => {
-//                 dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
-//             }
-//             syn::Item::Impl(item_impl) => {
-//                 dtr_code.push_str("[Functions]:\n");
+    // Extract information from the parsed AST
+    let mut dtr_code = String::new();
+    for item in parsed_ast.items {
+        match item {
+            syn::Item::Struct(item_struct) => {
+                dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
+            }
+            syn::Item::Impl(item_impl) => {
+                dtr_code.push_str("[Functions]:\n");
 
-//                 item_impl.items.iter().for_each(|item_impl_item| {
-//                     if let syn::ImplItem::Fn(method) = item_impl_item {
-//                         let method_name = method.sig.ident.to_string();
+                item_impl.items.iter().for_each(|item_impl_item| {
+                    if let syn::ImplItem::Fn(method) = item_impl_item {
+                        let method_name = method.sig.ident.to_string();
 
-//                         dtr_code.push_str(&format!("-() [{}]\n", method_name));
+                        dtr_code.push_str(&format!("-() [{}]\n", method_name));
 
-//                         dtr_code.push_str("\t* Inputs:\n");
-//                         dtr_code.push_str("\t{ \n");
+                        dtr_code.push_str("\t* Inputs:\n");
+                        dtr_code.push_str("\t{ \n");
 
-//                         method.sig.inputs.iter().for_each(|input| {
-//                             if let syn::FnArg::Typed(pat_type) = input {
-//                                 if let syn::Pat::Ident(pat_ident) = &*pat_type.pat {
-//                                     dtr_code
-//                                         .push_str(pattern::handle_pattern(pat_ident.ident.clone()));
-//                                     if pat_ident.ident != "env" {
-//                                         match translate::type_name::figure_out_type(&pat_type.ty) {
-//                                             Ok(type_name) => {
-//                                                 dtr_code.push_str(&format!(
-//                                                     "\t\t{}: {}\n",
-//                                                     pat_ident.ident, type_name
-//                                                 ));
-//                                             }
-//                                             Err(e) => {
-//                                                 // return Err(e);
-//                                                 dtr_code.push_str(&format!("Error: {:?}", e));
-//                                             }
-//                                         }
-//                                     }
-//                                 }
-//                             }
-//                         });
+                        method.sig.inputs.iter().for_each(|input| {
+                            if let syn::FnArg::Typed(pat_type) = input {
+                                if let syn::Pat::Ident(pat_ident) = &*pat_type.pat {
+                                    // dtr_code
+                                    //     .push_str(&translate::pattern::handle_pattern(pat_ident).unwrap());
+                                    if pat_ident.ident != "env" {
+                                        match translate::type_name::figure_out_type(&pat_type.ty) {
+                                            Ok(type_name) => {
+                                                dtr_code.push_str(&format!(
+                                                    "\t\t{}: {}\n",
+                                                    pat_ident.ident, type_name
+                                                ));
+                                            }
+                                            Err(e) => {
+                                                // return Err(e);
+                                                dtr_code.push_str(&format!("Error: {:?}", e));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
 
-//                         dtr_code.push_str("\t}\n");
+                        dtr_code.push_str("\t}\n");
 
-//                         if let syn::ReturnType::Type(_, ty) = &method.sig.output {
-//                             dtr_code.push_str(translate::parse_return_type(ty).as_str());
-//                         }
+                        if let syn::ReturnType::Type(_, ty) = &method.sig.output {
+                            dtr_code.push_str(translate::parse_return_type(ty).as_str());
+                        }
 
-//                         dtr_code.push_str("\t* Instructions:\n");
-//                         dtr_code.push_str("\t\t$\n");
+                        dtr_code.push_str("\t* Instructions:\n");
+                        dtr_code.push_str("\t\t$\n");
 
-//                         let block = &method.block;
+                        let block = &method.block;
 
-//                         block.stmts.iter().for_each(|stmt| {
-//                             dtr_code.push_str("\n\t\t");
-//                             match translate::expression::block_expression::parse_block_stmt(&stmt) {
-//                                 Ok(block_str) => {
-//                                     dtr_code.push_str(block_str.as_str());
-//                                 }
-//                                 Err(e) => {
-//                                     // return Err(e);
-//                                     dtr_code.push_str(&format!("Error: {:?}", e));
-//                                 }
-//                             }
-//                         });
+                        let mut index = 1;
+                        let total_block_stmts = block.stmts.len();
+                        block.stmts.iter().for_each(|stmt| {
+                            println!("[DEBUG] {} - {}", index, total_block_stmts);
+                            if index != 1 {
+                              dtr_code.push_str("\n\t\t\t");
+                            } else {
+                              dtr_code.push_str("\t\t\t");
+                            }
+                            match translate::expression::supported::block_expression::parse_block_stmt(&stmt) {
+                                Ok(block_str) => {
+                                    let mut instructions_as_strings: Vec<String> = Vec::new();
 
-//                         dtr_code.push_str("\t\t$\n");
+                                    block_str.iter().for_each(|instr|instructions_as_strings.push(instr.as_str()));
 
-//                         dtr_code.push_str(":[Functions]\n");
-//                     }
-//                 });
-//             }
-//             _ => {} // We're ignoring other types of items for simplicity
-//         }
-//     }
-//     Ok(dtr_code)
-// }
+                                    if index == total_block_stmts {
+                                        println!("[DEBUG] - HERE");
+                                        let last_instruction = instructions_as_strings.pop().unwrap();
+                                        let return_instruction = mutate_to_be_return_instruction(&last_instruction);
+                                        instructions_as_strings.push(return_instruction);
+                                    }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+                                    dtr_code.push_str(&instructions_as_strings.join("\n\t\t\t"));
+                                }
+                                Err(e) => {
+                                    // return Err(e);
+                                    dtr_code.push_str(&format!("Error: {:?}", e));
+                                }
+                            }
 
-//     const HELLO_WORLD_CONTRACT_CODE: &str = r#"
-//         #![no_std]
-//         use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
+                            index += 1;
+                        });
 
-//         #[contract]
-//         pub struct HelloContract;
+                        dtr_code.push_str("\n\t\t$\n");
 
-//         #[contractimpl]
-//         impl HelloContract {
-//             pub fn hello(env: Env, to: Symbol) -> Vec<Symbol> {
-//                 vec![&env, symbol_short!("Hello"), to]
-//             }
-//         }
-//     "#;
+                        dtr_code.push_str(":[Functions]\n");
+                    }
+                });
+            }
+            _ => {} // We're ignoring other types of items for simplicity
+        }
+    }
+    Ok(dtr_code)
+}
 
-//     const INCREMENT_CONTRACT_CODE: &str = r#"
-//     #![no_std]
-//     use soroban_sdk::{contract, contractimpl, log, symbol_short, Env, Symbol};
+fn mutate_to_be_return_instruction(instruction: &str) -> String {
+    let mut return_instruction = instruction.to_string();
+    let re = Regex::new(r"\bassign\b").unwrap();
 
-//     const COUNTER: Symbol = symbol_short!("COUNTER");
+    let output = re.replacen(&return_instruction, 1, "Return").into_owned();
 
-//     #[contract]
-//     pub struct IncrementContract;
+    println!("{}", output.to_string());
 
-//     #[contractimpl]
-//     impl IncrementContract {
-//         /// Increment increments an internal counter, and returns the value.
-//         pub fn increment(env: Env) -> u32 {
-//             // Get the current count.
-//             let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0); // If no value set, assume 0.
-//             log!(&env, "count: {}", count);
+    output
+}
 
-//             // Increment the count.
-//             count += 1;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//             // Save the count.
-//             env.storage().instance().set(&COUNTER, &count);
+    const ANSWER_TO_LIFE_CONTRACT: &str = r#"
+    #![no_std]
+    use soroban_sdk::{contract, contractimpl, Env};
 
-//             // The contract instance will be bumped to have a lifetime of at least 100 ledgers if the current expiration lifetime at most 50.
-//             // If the lifetime is already more than 100 ledgers, this is a no-op. Otherwise,
-//             // the lifetime is extended to 100 ledgers. This lifetime bump includes the contract
-//             // instance itself and all entries in storage().instance(), i.e, COUNTER.
-//             env.storage().instance().extend_ttl(50, 100);
+    #[contract]
+    pub struct AnswerToLifeContract;
 
-//             // Return the count to the caller.
-//             count
-//         }
-//     }
-//     "#;
+    #[contractimpl]
+    impl AnswerToLifeContract {
+        pub fn fourty_two(env: Env) -> String {
+            "42"
+        }
+    }
+    "#;
 
-//     // #[test]
-//     // fn test_parse_to_dtr() {
-//     //     let expected_dtr_code = r#"
-//     //         [Contract]: HelloContract
+    #[test]
+    fn test_parse_answer_to_life_contract() {
+        let expected_dtr_code = r#"[Contract]: AnswerToLifeContract
 
-//     //         [Functions]:
-//     //         -() [hello]
-//     //             * Inputs:
-//     //                 {
-//     //                 to: Symbol
-//     //                 }
-//     //             * Output: Symbol
-//     //             * Instructions:
-//     //                 $
-//     //                 { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
-//     //                 { instruction: Return, input: (HelloToResult) }
-//     //                 $
-//     //         :[Functions]
-//     //     "#;
+[Functions]:
+-() [fourty_two]* Inputs:{ }* Output: String* Instructions:${ instruction: Return, input: ("42") }$:[Functions]"#;
 
-//     //     let actual_dtr_code = parse_to_dtr(HELLO_WORLD_CONTRACT_CODE);
+        let actual_dtr_code = parse_to_dtr(ANSWER_TO_LIFE_CONTRACT);
 
-//     //     println!("Expected DTR code:\n\n{}", expected_dtr_code);
+        match actual_dtr_code {
+            Ok(dtr_code) => {
+                println!(
+                    "Expected DTR code:\n\n{}",
+                    expected_dtr_code.replace("\t", "").replace("\n", "")
+                );
 
-//     //     println!("Actual DTR code:\n\n{}", actual_dtr_code);
+                println!(
+                    "Actual DTR code:\n\n{}",
+                    dtr_code.replace("\t", "").replace("\n", "")
+                );
 
-//     //     assert_eq!(actual_dtr_code, expected_dtr_code);
-//     // }
-
-//     #[test]
-//     fn test_parse_increment_contract() {
-//         let expected_dtr_code = r#"
-//             [Contract]: IncrementContract
-
-//             [Functions]:
-//             -() [increment]
-//                 * Inputs:
-//                     {
-//                     }
-//                 * Output: u32
-//                 * Instructions:
-//                     $
-//                     { instruction: GetStorage, input: (COUNTER), assign: Count }
-//                     { instruction: Log, input: (Count) }
-//                     { instruction: Add, input: (Count, 1), assign: Count }
-//                     { instruction: SetStorage, input: (COUNTER, Count) }
-//                     { instruction: ExtendTTL, input: (50, 100) }
-//                     { instruction: Return, input: (Count) }
-//                     $
-//             :[Functions]
-//         "#;
-
-//         let actual_dtr_code = parse_to_dtr(INCREMENT_CONTRACT_CODE);
-
-//         match actual_dtr_code {
-//             Ok(dtr_code) => {
-//                 println!("Expected DTR code:\n\n{}", INCREMENT_CONTRACT_CODE);
-
-//                 println!("Actual DTR code:\n\n{}", dtr_code);
-
-//                 assert_eq!(dtr_code, expected_dtr_code);
-//             }
-//             Err(err) => {
-//                 println!("Error: {:?}", err);
-//             }
-//         }
-//     }
-// }
+                assert_eq!(
+                    dtr_code.replace("\t", "").replace("\n", ""),
+                    expected_dtr_code.replace("\t", "").replace("\n", "")
+                );
+            }
+            Err(err) => {
+                println!("Error: {:?}", err);
+            }
+        }
+    }
+}

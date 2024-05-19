@@ -13,4 +13,21 @@ impl Instruction {
             assign,
         }
     }
+
+    pub fn as_str(&self) -> String {
+        if self.assign == "" {
+            return format!(
+                "{{ instruction: {}, input: ({:?}) }}",
+                self.name,
+                self.input.join(", ")
+            );
+        }
+
+        format!(
+            "{{ instruction: {}, input: ({:?}), assign: {} }}",
+            self.name,
+            self.input.join(", "),
+            self.assign
+        )
+    }
 }

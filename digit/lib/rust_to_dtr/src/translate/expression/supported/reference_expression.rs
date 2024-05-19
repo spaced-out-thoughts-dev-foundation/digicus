@@ -6,7 +6,7 @@ use syn::ExprReference;
 
 pub fn handle_reference_expression(
     expr_reference: &ExprReference,
-    assignment: Option<String>,
+    _assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     parse_expression(&expr_reference.expr, None)
 }

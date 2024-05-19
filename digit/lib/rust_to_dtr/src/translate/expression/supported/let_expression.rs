@@ -5,7 +5,7 @@ use crate::translate::pattern::handle_pattern;
 
 pub fn handle_let_expression(
     let_expr: syn::ExprLet,
-    assignment: Option<String>,
+    _assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let input_value_name_for_let = "INPUT_VALUE_NAME_FOR_LET";
     let mut preceding_instructions =

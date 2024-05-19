@@ -2,16 +2,16 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
-use crate::translate::pattern::handle_pattern;
+// use crate::translate::pattern::handle_pattern;
 use syn::ExprBlock;
 
 // A block is a collection of statements
 pub fn handle_block_expression(
-    expr_block: &ExprBlock,
-    assignment: Option<String>,
+    _expr_block: &ExprBlock,
+    _assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let the_block = expr_block.block.clone();
-    let mut block_str: Vec<String> = Vec::new();
+    // let the_block = expr_block.block.clone();
+    // let mut block_str: Vec<String> = Vec::new();
 
     // for stmt in the_block.stmts.iter() {
     // let stmt_str = parse_block_stmt(stmt)?;
@@ -32,29 +32,32 @@ pub fn handle_block_expression(
     )])
 }
 
-// pub fn parse_block_stmt(stmt: &syn::Stmt) -> Result<Vec<Instruction>, NotTranslatableError> {
-//     match stmt {
-//         syn::Stmt::Local(local) => {
-//             // let let_expr_str = match &local.init {
-//             //     Some((local_init)) => parse_expression(&local_init.expr)?,
-//             //     None => {
-//             //         return Err(NotTranslatableError::Custom(
-//             //             "No expression in let".to_string(),
-//             //         ))
-//             //     }
-//             // };
+pub fn parse_block_stmt(stmt: &syn::Stmt) -> Result<Vec<Instruction>, NotTranslatableError> {
+    match stmt {
+        syn::Stmt::Local(_local) => {
+            // let let_expr_str = match &local.init {
+            //     Some((local_init)) => parse_expression(&local_init.expr)?,
+            //     None => {
+            //         return Err(NotTranslatableError::Custom(
+            //             "No expression in let".to_string(),
+            //         ))
+            //     }
+            // };
 
-//             handle_pattern(local.pat.clone())
-//         }
-//         syn::Stmt::Item(_item) => Err(NotTranslatableError::Custom(
-//             "Item statement not translatable".to_string(),
-//         )),
-//         syn::Stmt::Expr(exp, _r) => parse_expression(exp, None),
-//         syn::Stmt::Macro(_mac) => Err(NotTranslatableError::Custom(
-//             "Macro statement not translatable".to_string(),
-//         )),
-//     }
-// }
+            // handle_pattern(local.pat.clone())
+            Err(NotTranslatableError::Custom(
+                "Local statement not translatable".to_string(),
+            ))
+        }
+        syn::Stmt::Item(_item) => Err(NotTranslatableError::Custom(
+            "Item statement not translatable".to_string(),
+        )),
+        syn::Stmt::Expr(exp, _r) => parse_expression(exp, None),
+        syn::Stmt::Macro(_mac) => Err(NotTranslatableError::Custom(
+            "Macro statement not translatable".to_string(),
+        )),
+    }
+}
 
 // #[cfg(test)]
 // mod tests {

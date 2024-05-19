@@ -9,6 +9,8 @@ pub fn handle_return_expression(
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let return_expr_box = &expr_return.expr;
 
+    println!("\n[DEBUG]-[Return]: handle_return_expression");
+
     match return_expr_box {
         Some(return_expr) => {
             let return_label: &str = "RETURN_VALUE_LABEL";
