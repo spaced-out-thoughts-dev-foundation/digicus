@@ -1,5 +1,8 @@
 require 'fiddle'
 require 'fiddle/import'
+require 'net/http'
+require 'uri'
+require 'json'
 
 # require 'rust_to_dtr/version'
 
@@ -23,6 +26,27 @@ class BlockRenderEngineRequestHandler
 
     compile
 
+    url = URI.parse('https://temprustfunctions-git-main-robertdursts-projects.vercel.app/api/handler')
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true  # Use SSL/TLS for the request
+    request = Net::HTTP::Post.new(url.path, {'Content-Type' => 'application/json'})
+    request_body = {
+      key1: 'value1',
+      key2: 'value2'
+    }
+
+    # Print the response body
+    puts "Response Code: #{response.code}"
+    puts "Response Body: #{response.body}"
+
+    # Convert the request body to JSON
+    request.body = request_body.to_json
+
+    # Send the request and get the response
+    response = http.request(request)
+
+
+    
     {
       received: {
         content: content,
