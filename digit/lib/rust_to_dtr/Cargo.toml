@@ -1,6 +1,6 @@
 [package]
 name = "rust_to_dtr"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Rob Durst <me@robdurst.com>"]
 edition = "2021"
 description = "Convert Rust Soroban contracts to DTR format."
@@ -16,4 +16,4 @@ regex = "1.10.4"
 
 [lib]
 name = "rust_to_dtr"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "lib"]
