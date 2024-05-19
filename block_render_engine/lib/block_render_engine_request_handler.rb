@@ -2,7 +2,6 @@ require 'fiddle'
 require 'fiddle/import'
 
 # require 'rust_to_dtr/version'
-require 'rutie'
 
 class BlockRenderEngineRequestHandler
   SUCCESS_STATUS_CODE = 200
