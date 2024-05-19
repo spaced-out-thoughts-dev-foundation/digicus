@@ -7,6 +7,10 @@ async fn main() -> Result<(), Error> {
 }
 
 pub async fn handler(_req: Request) -> Result<Response<Body>, Error> {
+    let body = req.body().await?;
+    let body = String::from_utf8(body.to_vec())?;
+    println!("Request body: {}", body);
+
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header("Content-Type", "application/json")

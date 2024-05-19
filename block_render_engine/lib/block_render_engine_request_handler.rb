@@ -63,32 +63,6 @@ class BlockRenderEngineRequestHandler
     content_format == 'dtr'
   end
 
-  def rust?
-    @last_method_executed = 'rust?'
-
-    content_format == 'rust'
-  end
-
-  def transpile_rust_to_dtr
-    @last_method_executed = 'transpile_rust_to_dtr:70'
-    Rutie.new(:rust_to_dtr).init 'Init_rust_to_dtr', __dir__
-
-    @last_method_executed = 'transpile_rust_to_dtr:76'
-
-    puts "content: #{JSON.parse(@request.body)['content']}"
-
-    puts "RustToDtr.foo(): #{RustToDtr.foo(10)}"
-
-    puts "RustToDtr.bar(): #{RustToDtr.bar('10')}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar('')}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar([10])}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar(["a", "b"])}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar(["foo", "bar", "baz"])}"
-
-    # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.foo_bar("Hello, World!")
-  end
-
   def compile
     @last_method_executed = 'compile'
      begin
@@ -132,7 +106,7 @@ class BlockRenderEngineRequestHandler
   
   def content
     @last_method_executed = 'content'
-    @transpiled_content || JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
+    JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
   end
   
   def content_format
