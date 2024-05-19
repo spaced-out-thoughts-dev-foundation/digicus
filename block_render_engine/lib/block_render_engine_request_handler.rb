@@ -24,8 +24,6 @@ class BlockRenderEngineRequestHandler
     @last_method_executed = 'response_body'
     return default_response unless @request.body && (dtr? || rust?)
 
-    compile
-
     if rust?
       url = URI.parse('https://temprustfunctions-git-main-robertdursts-projects.vercel.app/api/handler')
       http = Net::HTTP.new(url.host, url.port)
@@ -53,6 +51,9 @@ class BlockRenderEngineRequestHandler
         # Handle the error or fall back to another encoding
         response_body = response.body.force_encoding('ASCII-8BIT').encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       end
+
+      compile
+  
 
       # Print the response code and body
       puts "Response Code: #{response.code}"
