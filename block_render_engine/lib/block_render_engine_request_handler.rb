@@ -71,7 +71,7 @@ class BlockRenderEngineRequestHandler
 
   def transpile_rust_to_dtr
     @last_method_executed = 'transpile_rust_to_dtr:70'
-    Rutie.new(:rust_to_dtr).init 'Init_rust_to_dtr', '../librust_to_dtr.so'
+    Rutie.new(:rust_to_dtr).init 'Init_rust_to_dtr', __dir__
 
     @last_method_executed = 'transpile_rust_to_dtr:76'
   
