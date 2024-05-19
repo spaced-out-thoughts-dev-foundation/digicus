@@ -81,8 +81,9 @@ class BlockRenderEngineRequestHandler
 
     puts "RustToDtr.bar(): #{RustToDtr.bar('10')}"
     puts "RustToDtr.bar(): #{RustToDtr.bar('')}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar(10)}"
-    puts "RustToDtr.bar(): #{RustToDtr.bar(nil)}"
+    puts "RustToDtr.bar(): #{RustToDtr.bar([10])}"
+    puts "RustToDtr.bar(): #{RustToDtr.bar(["a", "b"])}"
+    puts "RustToDtr.bar(): #{RustToDtr.bar(["foo", "bar", "baz"])}"
 
     # Call the Rust function from Ruby
     @transpiled_content = RustToDtr.foo_bar("Hello, World!")
