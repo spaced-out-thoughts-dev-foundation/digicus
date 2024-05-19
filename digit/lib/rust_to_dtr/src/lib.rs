@@ -8,6 +8,10 @@ pub mod translate;
 
 use regex::Regex;
 
+pub fn version() -> &'static str {
+    env!("CARGO_PKG_VERSION")
+}
+
 pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
     // Parse the Rust code into a syn data structure
     let parsed_ast = syn::parse_file(rust_code).unwrap();
