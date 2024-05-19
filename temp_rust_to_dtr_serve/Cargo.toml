@@ -9,7 +9,7 @@ serde_json = { version = "1", features = ["raw_value"] }
 serde = { version = "1" }
 # Documentation: https://docs.rs/vercel_runtime/latest/vercel_runtime
 vercel_runtime = { version = "1.1.0" }
-rust_to_dtr = "0.1.2"
+rust_to_dtr = "0.1"
 
 # You can specify a library for shared logic here (optional)
 # [lib]
@@ -19,6 +19,9 @@ rust_to_dtr = "0.1.2"
 [[bin]]
 name = "handler"
 path = "api/handler.rs"
+[[bin]]
+name = "versions"
+path = "api/versions.rs"
 
 # Note that you need to provide unique names for each binary:
 # [[bin]]

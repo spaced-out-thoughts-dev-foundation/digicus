@@ -1,15 +1,13 @@
-[Contract]: HelloContract
+[Contract]: AnswerToLife
 
 [Functions]:
   -() [hello]
       * Inputs:
         { 
-          to: Symbol
         }
-      * Output: Vec<Symbol>
+      * Output: u32
       * Instructions:
         $
-          { instruction: AddSymbols, input: ("Hello", to), assign: HelloToResult }
-          { instruction: Return, input: (HelloToResult) }
+          { instruction: Return, input: (42) }
         $
 :[Functions]

@@ -1,7 +1,7 @@
-use serde_json::json;
+use rust_to_dtr;
 use serde::Deserialize;
+use serde_json::json;
 use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
-use rust_to_dtr::version;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -16,7 +16,6 @@ struct RequestBody {
 pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
     let whole_body = req.body();
     let body = String::from_utf8(whole_body.to_vec())?;
-    println!("Request body: {}", body);
 
     let parsed: RequestBody = match serde_json::from_str(&body) {
         Ok(parsed) => parsed,
@@ -44,8 +43,6 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
                 "body_raw_string": body,
                 "content": parsed.content,
                 "dtr": rust_to_dtr::parse_to_dtr(&parsed.content)?,
-                "rust_to_dtr_version": rust_to_dtr::version(),
-                "temp_rust_to_dtr_version": env!("CARGO_PKG_VERSION")
             })
             .to_string()
             .into(),
