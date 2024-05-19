@@ -3,10 +3,10 @@ use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    run(handler).await
+    run(compile_rust_to_dtr).await
 }
 
-pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
+pub async fn compile_rust_to_dtr(req: Request) -> Result<Response<Body>, Error> {
     let body = req.body().await?;
     let body = String::from_utf8(body.to_vec())?;
     println!("Request body: {}", body);
