@@ -1,7 +1,7 @@
 require 'fiddle'
 require 'fiddle/import'
 
-require 'rust_to_dtr/version'
+# require 'rust_to_dtr/version'
 require 'rutie'
 
 class BlockRenderEngineRequestHandler
