@@ -52,7 +52,6 @@ class BlockRenderEngineRequestHandler
         response_body = response.body.force_encoding('ASCII-8BIT').encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       end
 
-      compile
   
 
       # Print the response code and body
@@ -63,6 +62,8 @@ class BlockRenderEngineRequestHandler
     else
       @transpiled_code = content
     end
+
+    compile
 
     
     {
