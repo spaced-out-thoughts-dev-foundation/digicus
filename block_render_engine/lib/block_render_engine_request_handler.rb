@@ -19,23 +19,7 @@ class BlockRenderEngineRequestHandler
 
   def response_body
     @last_method_executed = 'response_body'
-    return default_response unless @request.body && (dtr? || rust?)
-
-    if rust?
-      begin
-        transpile_rust_to_dtr
-      rescue StandardError => e
-        return { 
-          status: FAILED_TO_TRANSPILE_STATUS_CODE, 
-          error: e,
-          last_method_executed: @last_method_executed,
-          received: {
-            content: content,
-            format: content_format,
-          }.to_json
-        }.to_json
-      end
-    end
+    return default_response unless @request.body && dtr?
 
     compile
 
