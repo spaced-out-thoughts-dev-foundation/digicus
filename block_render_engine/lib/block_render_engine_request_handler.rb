@@ -22,7 +22,14 @@ class BlockRenderEngineRequestHandler
       begin
         transpile_rust_to_dtr
       rescue StandardError => e
-        return { status: FAILED_TO_TRANSPILE_STATUS_CODE, error: e }.to_json
+        return { 
+          status: FAILED_TO_TRANSPILE_STATUS_CODE, 
+          error: e,
+          received: {
+            content: content,
+            format: content_format,
+          }.to_json
+        }.to_json
       end
     end
 
