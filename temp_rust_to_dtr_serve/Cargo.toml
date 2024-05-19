@@ -1,14 +1,15 @@
 [package]
 name = "my-vercel-api"
-version = "0.1.0"
+version = "0.1.4"
 edition = "2021"
 
 [dependencies]
 tokio = { version = "1", features = ["macros"] }
 serde_json = { version = "1", features = ["raw_value"] }
+serde = { version = "1" }
 # Documentation: https://docs.rs/vercel_runtime/latest/vercel_runtime
 vercel_runtime = { version = "1.1.0" }
-rust_to_dtr = { version = "0.1.0" }
+rust_to_dtr = "0.1.2"
 
 # You can specify a library for shared logic here (optional)
 # [lib]
@@ -18,9 +19,6 @@ rust_to_dtr = { version = "0.1.0" }
 [[bin]]
 name = "handler"
 path = "api/handler.rs"
-[[bin]]
-name = "compile_rust_to_dtr"
-path = "api/compile_rust_to_dtr.rs"
 
 # Note that you need to provide unique names for each binary:
 # [[bin]]
