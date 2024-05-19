@@ -1,35 +1,12 @@
 // syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
 
-extern crate rutie;
-
 pub mod common;
 pub mod errors;
 pub mod instruction;
 pub mod translate;
 
 use regex::Regex;
-use rutie::{class, methods, Class, Object, RString};
-
-class!(MyRustModule);
-
-methods!(
-    MyRustModule,
-    _itself,
-    fn pub_process_string(input: RString) -> RString {
-        let input_str = &input.unwrap();
-        let result = parse_to_dtr(input_str.to_str());
-        RString::new_utf8(&result.unwrap().to_string())
-    }
-);
-
-#[allow(non_snake_case)]
-#[no_mangle]
-pub extern "C" fn Init_my_rust_library() {
-    Class::new("MyRustModule", None).define(|itself| {
-        itself.def_self("process_string", pub_process_string);
-    });
-}
 
 pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
     // Parse the Rust code into a syn data structure
