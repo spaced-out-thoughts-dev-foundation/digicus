@@ -57,7 +57,7 @@ class BlockRenderEngineRequestHandler
       # Print the response code and body
       puts "Response Code: #{response.code}"
       puts "Response Body: #{response_body}"
-      puts "DTR: #{jJSON.parse(response_body)['dtr']}"
+      puts "DTR: #{JSON.parse(response_body)['dtr']}"
     # else
       # @transpiled_code = content
     end
