@@ -17,6 +17,9 @@ vercel_runtime = { version = "1.1.0" }
 [[bin]]
 name = "handler"
 path = "api/handler.rs"
+[[bin]]
+name = "compile_rust_to_dtr"
+path = "api/compile_rust_to_dtr.rs"
 
 # Note that you need to provide unique names for each binary:
 # [[bin]]
