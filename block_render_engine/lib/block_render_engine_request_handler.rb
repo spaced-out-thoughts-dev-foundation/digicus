@@ -30,7 +30,7 @@ class BlockRenderEngineRequestHandler
       url = URI.parse('https://temprustfunctions-git-main-robertdursts-projects.vercel.app/api/handler')
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true  # Use SSL/TLS for the request
-      request = Net::HTTP::Post.new(url.path, {'Content-Type' => 'application/json'})
+      request = Net::HTTP::Post.new(url.path, {'Content-Type' => 'application/json', 'Accept' => 'application/json'})
       request_body = {
         content: content,
       }
