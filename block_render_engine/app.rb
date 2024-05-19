@@ -3,8 +3,9 @@
 require 'sinatra'
 require 'json'
 
-puts "hello world"
+puts "server started up"
 
 get '/' do
+  puts "pinged the server"
   return 'pong'
 end
