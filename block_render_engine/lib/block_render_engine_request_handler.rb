@@ -16,6 +16,7 @@ class BlockRenderEngineRequestHandler
   end
 
   def response_body
+    @last_method_executed = 'response_body'
     return default_response unless @request.body && (dtr? || rust?)
 
     if rust?
@@ -25,6 +26,7 @@ class BlockRenderEngineRequestHandler
         return { 
           status: FAILED_TO_TRANSPILE_STATUS_CODE, 
           error: e,
+          last_method_executed: @last_method_executed,
           received: {
             content: content,
             format: content_format,
@@ -45,21 +47,27 @@ class BlockRenderEngineRequestHandler
       contract_functions: @contract_functions,
       compilation_error: @compilation_error,
       content_final: @content,
-      status: status
+      status: status,
+      last_method_executed: @last_method_executed,
     }.to_json
   end
 
   private
 
   def dtr?
+    @last_method_executed = 'dtr?'
+
     content_format == 'dtr'
   end
 
   def rust?
+    @last_method_executed = 'rust?'
+
     content_format == 'rust'
   end
 
   def transpile_rust_to_dtr
+    @last_method_executed = 'transpile_rust_to_dtr'
     extend Fiddle::Importer
 
     # Adjust the path to your shared library as needed
@@ -74,6 +82,7 @@ class BlockRenderEngineRequestHandler
   end
 
   def compile
+    @last_method_executed = 'compile'
      begin
       contract = DTRCore::Contract.from_dtr_raw(content)
 
@@ -104,22 +113,27 @@ class BlockRenderEngineRequestHandler
   end
 
   def status
+    @last_method_executed = 'status'
    @compilation_success ? SUCCESS_STATUS_CODE : FAILED_TO_COMPILE_STATUS_CODE
   end
 
   def dtr_core_gem_version
+    @last_method_executed = 'dtr_core_gem_version'
     Gem.loaded_specs['dtr_core'].version
   end
   
   def content
+    @last_method_executed = 'content'
     JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
   end
   
   def content_format
+    @last_method_executed = 'content_format'
     JSON.parse(@request.body)['format'] || 'unknown'
   end
 
   def default_response
+    @last_method_executed = 'default_response'
     { status: NO_BODY_STATUS_CODE }.to_json
   end
 end
