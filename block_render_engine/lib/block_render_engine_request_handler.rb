@@ -73,7 +73,7 @@ class BlockRenderEngineRequestHandler
     @last_method_executed = 'transpile_rust_to_dtr:73'
 
     # Adjust the path to your shared library as needed
-    dlload 'librust_to_dtr.dylib'
+    dlload 'librust_to_dtr.so'
 
     @last_method_executed = 'transpile_rust_to_dtr:78'
   
