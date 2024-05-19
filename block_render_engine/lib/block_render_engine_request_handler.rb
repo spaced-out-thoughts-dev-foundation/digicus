@@ -57,9 +57,10 @@ class BlockRenderEngineRequestHandler
       # Print the response code and body
       puts "Response Code: #{response.code}"
       puts "Response Body: #{response_body}"
-      puts "DTR: #{JSON.parse(response_body)['dtr']}"
-    # else
-      # @transpiled_code = content
+      puts "DTR: #{}"
+      @transpiled_code = JSON.parse(response_body)['dtr']
+    else
+      @transpiled_code = content
     end
 
     
@@ -75,6 +76,7 @@ class BlockRenderEngineRequestHandler
       content_final: content,
       status: status,
       last_method_executed: @last_method_executed,
+      transpiled_code: @transpiled_code,
     }.to_json
   end
 
@@ -95,7 +97,7 @@ class BlockRenderEngineRequestHandler
   def compile
     @last_method_executed = 'compile'
      begin
-      contract = DTRCore::Contract.from_dtr_raw(content)
+      contract = DTRCore::Contract.from_dtr_raw(@transpiled_code)
 
       @contract_name = contract.name
       @contract_state = contract.state&.map do |s|
