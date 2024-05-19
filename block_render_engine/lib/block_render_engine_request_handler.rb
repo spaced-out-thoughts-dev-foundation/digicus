@@ -95,6 +95,9 @@ class BlockRenderEngineRequestHandler
   end
 
   def compile
+    puts "[Debug] Compiling..."
+    puts "[Debug] Content: #{@transpiled_code}"
+
     @last_method_executed = 'compile'
      begin
       contract = DTRCore::Contract.from_dtr_raw(@transpiled_code)
