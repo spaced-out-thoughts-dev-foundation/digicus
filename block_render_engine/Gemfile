@@ -5,3 +5,5 @@ ruby "~> 3.2"
 gem 'dtr_core', '~> 0.2.4'
 gem 'webrick', '~> 1.8'
 gem 'fiddle', '~> 1.0'
+gem 'puma'
+gem 'sinatra'
