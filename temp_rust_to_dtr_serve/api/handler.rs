@@ -1,5 +1,6 @@
 use serde_json::json;
 use vercel_runtime::{run, Body, Error, Request, Response, StatusCode};
+use rust_to_dtr;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -16,7 +17,9 @@ pub async fn handler(_req: Request) -> Result<Response<Body>, Error> {
         .header("Content-Type", "application/json")
         .body(
             json!({
-              "message": "你好，世界"
+              "message": "你好，世界",
+              "body": body
+            //   "rust_to_dtr_version": rust_to_dtr::version(),
             })
             .to_string()
             .into(),
