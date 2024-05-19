@@ -41,9 +41,22 @@ class BlockRenderEngineRequestHandler
       # Send the request and get the response
       response = http.request(request)
 
-      # Print the response body
+      # Force the encoding to binary (ASCII-8BIT) to avoid conversion errors
+      response.body.force_encoding('ASCII-8BIT')
+
+      # Optionally, if you know the response is in a specific encoding (e.g., UTF-8)
+      # you can convert it to that encoding
+      begin
+        response_body = response.body.encode('UTF-8')
+      rescue Encoding::UndefinedConversionError => e
+        puts "Encoding error: #{e.message}"
+        # Handle the error or fall back to another encoding
+        response_body = response.body.force_encoding('ASCII-8BIT').encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
+      end
+
+      # Print the response code and body
       puts "Response Code: #{response.code}"
-      puts "Response Body: #{response&.body}"
+      puts "Response Body: #{response_body}"
     # else
       # @transpiled_code = content
     end
