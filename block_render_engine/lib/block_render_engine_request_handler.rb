@@ -122,12 +122,12 @@ class BlockRenderEngineRequestHandler
   
   def content
     @last_method_executed = 'content'
-    JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
+    @transpiled_content || JSON.parse(@request.body)['content'].gsub('\n', "\n") || ''
   end
   
   def content_format
     @last_method_executed = 'content_format'
-    @transpiled_content || JSON.parse(@request.body)['format'] || 'unknown'
+    JSON.parse(@request.body)['format'] || 'unknown'
   end
 
   def default_response
