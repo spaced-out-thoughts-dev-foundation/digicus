@@ -19,6 +19,7 @@ GEM
       rack (>= 3)
       webrick (~> 1.8)
     ruby2_keywords (0.0.5)
+    rutie (0.0.4)
     sinatra (4.0.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
@@ -37,6 +38,7 @@ DEPENDENCIES
   fiddle (~> 1.0)
   puma
   rackup
+  rutie (~> 0.0.4)
   sinatra
   webrick (~> 1.8)
 
