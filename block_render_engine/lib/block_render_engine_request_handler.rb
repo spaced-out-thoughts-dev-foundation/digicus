@@ -76,7 +76,7 @@ class BlockRenderEngineRequestHandler
     @last_method_executed = 'transpile_rust_to_dtr:76'
   
     # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.process_string(content)
+    @transpiled_content = RustToDtr.process_string("")
   end
 
   def compile
