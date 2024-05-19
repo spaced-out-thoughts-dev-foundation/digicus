@@ -22,7 +22,7 @@ class BlockRenderEngineRequestHandler
 
   def response_body
     @last_method_executed = 'response_body'
-    return default_response unless @request.body && dtr?
+    return default_response unless @request.body && (dtr? || rust?)
 
     compile
 
