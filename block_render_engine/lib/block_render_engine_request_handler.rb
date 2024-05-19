@@ -77,7 +77,7 @@ class BlockRenderEngineRequestHandler
 
     puts "content: #{JSON.parse(@request.body)['content']}"
 
-    puts "RustToDtr.foo(): #{RustToDtr.foo()}"
+    puts "RustToDtr.foo(): #{RustToDtr.foo(10)}"
   
     # Call the Rust function from Ruby
     @transpiled_content = RustToDtr.foo_bar("Hello, World!")
