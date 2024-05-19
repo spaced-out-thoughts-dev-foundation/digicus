@@ -75,12 +75,12 @@ class BlockRenderEngineRequestHandler
 
     @last_method_executed = 'transpile_rust_to_dtr:76'
 
-    puts "content: #{content}"
+    puts "content: #{JSON.parse(@request.body)['content']}"
 
     puts "RustToDtr.foo(): #{RustToDtr.foo()}"
   
     # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.foo_bar(content)
+    @transpiled_content = RustToDtr.foo_bar(JSON.parse(@request.body)['content'])
   end
 
   def compile
