@@ -1,7 +1,11 @@
+require 'fiddle'
+require 'fiddle/import'
+
 class BlockRenderEngineRequestHandler
   SUCCESS_STATUS_CODE = 200
   NO_BODY_STATUS_CODE = 401
   FAILED_TO_COMPILE_STATUS_CODE = 402
+  FAILED_TO_TRANSPILE_STATUS_CODE = 412
 
   def initialize(request)
     @request = request
@@ -12,7 +16,15 @@ class BlockRenderEngineRequestHandler
   end
 
   def response_body
-    return default_response unless @request.body && dtr?
+    return default_response unless @request.body && (dtr? || rust?)
+
+    if rust?
+      begin
+        transpile_rust_to_dtr
+      rescue StandardError => e
+        return { status: FAILED_TO_TRANSPILE_STATUS_CODE, error: e }.to_json
+      end
+    end
 
     compile
 
@@ -25,6 +37,7 @@ class BlockRenderEngineRequestHandler
       contract_state: @contract_state,
       contract_functions: @contract_functions,
       compilation_error: @compilation_error,
+      content_final: @content,
       status: status
     }.to_json
   end
@@ -33,6 +46,24 @@ class BlockRenderEngineRequestHandler
 
   def dtr?
     content_format == 'dtr'
+  end
+
+  def rust?
+    content_format == 'rust'
+  end
+
+  def transpile_rust_to_dtr
+    extend Fiddle::Importer
+
+    # Adjust the path to your shared library as needed
+    dlload 'librust_to_dtr.dylib'
+  
+    # Initialize the Rust library
+    extern 'void Init_my_rust_library()'
+    Init_my_rust_library()
+
+    # Call the Rust function from Ruby
+    @content = MyRustModule.process_string(@content)
   end
 
   def compile
