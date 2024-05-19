@@ -49,7 +49,7 @@ class BlockRenderEngineRequestHandler
       contract_state: @contract_state,
       contract_functions: @contract_functions,
       compilation_error: @compilation_error,
-      content_final: @content,
+      content_final: content,
       status: status,
       last_method_executed: @last_method_executed,
     }.to_json
@@ -76,7 +76,7 @@ class BlockRenderEngineRequestHandler
     @last_method_executed = 'transpile_rust_to_dtr:76'
   
     # Call the Rust function from Ruby
-    @content = RustToDtr.process_string(@content)
+    @transpiled_content = RustToDtr.process_string(content)
   end
 
   def compile
@@ -127,7 +127,7 @@ class BlockRenderEngineRequestHandler
   
   def content_format
     @last_method_executed = 'content_format'
-    JSON.parse(@request.body)['format'] || 'unknown'
+    @transpiled_content || JSON.parse(@request.body)['format'] || 'unknown'
   end
 
   def default_response
