@@ -78,7 +78,7 @@ class BlockRenderEngineRequestHandler
     puts "content: #{content}"
   
     # Call the Rust function from Ruby
-    @transpiled_content = RustToDtr.process_string(content)
+    @transpiled_content = RustToDtr.parse_to_dtr(content)
   end
 
   def compile
