@@ -35,17 +35,15 @@ class BlockRenderEngineRequestHandler
       key2: 'value2'
     }
 
-    # Print the response body
-    puts "Response Code: #{response.code}"
-    puts "Response Body: #{response.body}"
-
     # Convert the request body to JSON
     request.body = request_body.to_json
 
     # Send the request and get the response
     response = http.request(request)
 
-
+    # Print the response body
+    puts "Response Code: #{response.code}"
+    puts "Response Body: #{response.body}"
     
     {
       received: {
