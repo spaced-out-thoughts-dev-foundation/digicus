@@ -8,4 +8,4 @@ RUN bundle install
 
 EXPOSE 8080
 
-CMD ["bundle", "exec", "puma", "-C", "puma.rb", "-t", "8:32", "-w", "3", "-e", "production"]
+CMD ["bundle", "exec", "puma", "-C", "puma.rb"]
