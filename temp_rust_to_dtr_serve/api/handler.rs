@@ -43,6 +43,7 @@ pub async fn handler(req: Request) -> Result<Response<Body>, Error> {
                 "message": "你好，世界",
                 "body_raw_string": body,
                 "content": parsed.content,
+                "dtr": rust_to_dtr::parse_to_dtr(&parsed.content)?,
                 "rust_to_dtr_version": rust_to_dtr::version(),
                 "temp_rust_to_dtr_version": env!("CARGO_PKG_VERSION")
             })

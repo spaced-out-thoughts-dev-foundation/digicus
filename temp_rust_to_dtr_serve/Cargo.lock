@@ -979,7 +979,7 @@ dependencies = [
 
 [[package]]
 name = "my-vercel-api"
-version = "0.1.2"
+version = "0.1.4"
 dependencies = [
  "rust_to_dtr",
  "serde",
