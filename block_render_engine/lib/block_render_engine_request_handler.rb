@@ -43,7 +43,7 @@ class BlockRenderEngineRequestHandler
 
       # Print the response body
       puts "Response Code: #{response.code}"
-      puts "Response Body: #{response}"
+      puts "Response Body: #{response&.body}"
     # else
       # @transpiled_code = content
     end
