@@ -50,6 +50,22 @@ const App = () => {
 
     const handleDeploy = () => {};
 
+    const determineFileFormat = (file) => {
+      if (file == null) {
+        return "";
+      }
+
+      if (file.name.endsWith(".rs")) {
+        return "rust";
+      }
+
+      if (file.name.endsWith(".dtr")) {
+        return "dtr";
+      }
+
+      return "unknown";
+    };
+
     const handleUpload = () => {
       const reader = new FileReader();
 
@@ -65,12 +81,12 @@ const App = () => {
               'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify({format: file.name.endsWith(".rs") ? "rust" : "dtr", content: reader.result})
+            body: JSON.stringify({format: determineFileFormat(file), content: reader.result})
           })
           .then(response => {
             return response.json()
           })
-          .then(json => setContract(json))
+          .then(json => setContract({ contract: json, originalText: reader.result}))
           .catch(error => console.error(error));
         },
         false,
@@ -86,7 +102,7 @@ const App = () => {
       setFile(selectedFile);
     };
 
-    const [contract, setContract] = useState(null);
+    const [contract, setContract] = useState({contract: '', originalText: ``});
 
     // useEffect(() => {
     //   []);
@@ -212,7 +228,7 @@ const App = () => {
             alignItems: 'center',
           }}>
               <ContractHeader
-                name={contract?.contract_name}
+                name={contract?.contract?.contract_name}
               />
               <div style={{ 
                 backgroundColor: 'gray',
@@ -235,7 +251,9 @@ const App = () => {
              
               
               <ContractContainer 
-                functions={contract?.contract_functions}
+                functions={contract?.contract?.contract_functions}
+                filename={file?.name}
+                originalText={contract?.originalText}
                 supportedInstructions={supportedInstructions}
                 supportedInstructionToColor={supportedInstructionToColor}
               />

@@ -1,6 +1,9 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import ReactFlow, { Controls, MarkerType } from 'reactflow';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { rust } from 'react-syntax-highlighter/dist/esm/languages/prism';
 
 function all_nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number) {
   let function_json_data = JSON.parse(function_data);
@@ -69,13 +72,13 @@ function all_function_edges(functions_data) {
 };
 
 // TODO: this only works for one function right now
-function ContractContainer({functions, supportedInstructions, supportedInstructionToColor}) {
+function ContractContainer({functions, supportedInstructions, supportedInstructionToColor, originalText, filename}) {
     return (
       <div style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'column',
+          flexDirection: 'row',
           flex: '15',
           backgroundColor: 'rgb(39 207 230)',
       }}>
@@ -84,6 +87,8 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
               backgroundColor: 'white',
               color: 'black',
               borderRadius: '10px',
+              flex: 10,
+              height: '95%',
             }}
             height={'100%'}
             width={'80%'}
@@ -107,6 +112,36 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
                 >
             </ReactFlow> : ''
           } 
+        </Box>
+
+        <Box
+            style={{
+              backgroundColor: 'black',
+              color: 'black',
+              borderRadius: '10px',
+              flex: 3,
+              margin: '20px',
+              height: '95%',
+              color: "white",
+              flexDirection: 'column',
+            }}
+            height={'100%'}
+            width={'80%'}
+            my={4}
+            display="flex"
+            alignItems="center"
+            gap={4}
+            p={2}
+            sx={{ border: '2px solid grey' }}
+        >
+           <h1>{filename && originalText ? filename : ''} </h1>
+          {
+            filename && originalText ? 
+              <SyntaxHighlighter language="rust" style={dracula}>
+                {originalText}
+              </SyntaxHighlighter> : ''
+          }
+         
         </Box>
       </div>
     );
