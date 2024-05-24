@@ -12,6 +12,7 @@ function all_nodes(function_data, supportedInstructions, supportedInstructionToC
       return { id: `${index}|${function_number}`, style: { 
         backgroundColor:  supportedInstructionToColor(instructionData),
         textShadow: '1px 1px 1px gray',
+        fontSize: '0.5em',
       }, data: { label: instructionData.name.toUpperCase() }, position: { x: 200 * (function_number), y: 100 * (index + 1) } }
     }) 
     
@@ -19,6 +20,7 @@ function all_nodes(function_data, supportedInstructions, supportedInstructionToC
     { id: `0|${function_number}`, style: { 
       backgroundColor: 'white',
       textShadow: '1px 1px 1px gray',
+      fontSize: '0.5em',
     }, data: { label: `FUNCTION: [${function_json_data.name}]` }, position: { x: 200 * (function_number), y: 100} })
     
     return all_function_nodes;
@@ -81,6 +83,7 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
             style={{
               backgroundColor: 'white',
               color: 'black',
+              borderRadius: '10px',
             }}
             height={'100%'}
             width={'80%'}

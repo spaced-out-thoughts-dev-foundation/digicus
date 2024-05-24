@@ -26,6 +26,8 @@ const App = () => {
         return 'orange';
       } else if (supported_instruction.category === "state") {
         return 'red';
+      } else if (supported_instruction.category === "untyped") {
+        return 'silver';
       } else if (supported_instruction.category === "numeric") {
         return 'maroon';
       } else if (supported_instruction.category === "string") {

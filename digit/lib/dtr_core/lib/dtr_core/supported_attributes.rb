@@ -6,12 +6,14 @@ module DTRCore
     ## Instruction Categories ##
     INSTRUCTION_CATEGORY_BASIC = 'basic'
     INSTRUCTION_CATEGORY_STATE = 'state'
+    INSTRUCTION_CATEGORY_UNTYPED = 'untyped'
     INSTRUCTION_CATEGORY_NUMERIC = 'numeric'
     INSTRUCTION_CATEGORY_STRING = 'string'
     INSTRUCTION_CATEGORY_ENVIRONMENT = 'environment'
     INSTRUCTION_CATEGORIES = [
       INSTRUCTION_CATEGORY_BASIC,
       INSTRUCTION_CATEGORY_STATE,
+      INSTRUCTION_CATEGORY_UNTYPED,
       INSTRUCTION_CATEGORY_NUMERIC,
       INSTRUCTION_CATEGORY_STRING,
       INSTRUCTION_CATEGORY_ENVIRONMENT
@@ -21,10 +23,11 @@ module DTRCore
       # basic operations
       { name: 'return', description: 'Return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
       { name: 'assign', description: 'Assign a value to a variable.', category: INSTRUCTION_CATEGORY_BASIC },
-      { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_BASIC },
       # state operations
       { name: 'fetch_state', description: 'Fetch a value from the state.', category: INSTRUCTION_CATEGORY_STATE },
       { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
+      # untyped operations
+      { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
       # numeric operations
       { name: 'add_numbers', description: 'Add two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       { name: 'subtract_numbers', description: 'Subtract two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
