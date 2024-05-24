@@ -1,0 +1,17 @@
+[Contract]: IncrementAnswerToLifeContract
+
+[Functions]:
+-() [fourty_two_and_then_some]
+	* Inputs:
+	{ 
+		and_then_some: u32
+	}
+	* Output: u32
+	* Instructions:
+		$
+			{ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }
+			{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }
+			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }
+			{ instruction: Return, input: (Thing_to_return) }
+		$
+:[Functions]
