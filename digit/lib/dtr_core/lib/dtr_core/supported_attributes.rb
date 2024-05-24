@@ -21,6 +21,7 @@ module DTRCore
       # basic operations
       { name: 'return', description: 'Return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
       { name: 'assign', description: 'Assign a value to a variable.', category: INSTRUCTION_CATEGORY_BASIC },
+      { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_BASIC },
       # state operations
       { name: 'fetch_state', description: 'Fetch a value from the state.', category: INSTRUCTION_CATEGORY_STATE },
       { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
