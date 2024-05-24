@@ -24,7 +24,7 @@ impl Instruction {
         }
 
         format!(
-            "{{ instruction: {}, input: ({:?}), assign: {} }}",
+            "{{ instruction: {}, input: ({:}), assign: {} }}",
             self.name,
             self.input.join(", "),
             self.assign

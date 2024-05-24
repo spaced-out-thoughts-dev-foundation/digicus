@@ -14,7 +14,5 @@ pub fn handle_path_expression(
         assignment.unwrap_or_default(),
     )];
 
-    println!("\n[DEBUG]-[Path]: handle_path_expression");
-
     Ok(result_instruction)
 }

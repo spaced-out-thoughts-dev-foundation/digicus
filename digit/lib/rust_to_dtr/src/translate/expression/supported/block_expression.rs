@@ -32,7 +32,10 @@ pub fn handle_block_expression(
     )])
 }
 
-pub fn parse_block_stmt(stmt: &syn::Stmt) -> Result<Vec<Instruction>, NotTranslatableError> {
+pub fn parse_block_stmt(
+    stmt: &syn::Stmt,
+    assignment: Option<String>,
+) -> Result<Vec<Instruction>, NotTranslatableError> {
     match stmt {
         syn::Stmt::Local(_local) => {
             // let let_expr_str = match &local.init {
@@ -52,7 +55,7 @@ pub fn parse_block_stmt(stmt: &syn::Stmt) -> Result<Vec<Instruction>, NotTransla
         syn::Stmt::Item(_item) => Err(NotTranslatableError::Custom(
             "Item statement not translatable".to_string(),
         )),
-        syn::Stmt::Expr(exp, _r) => parse_expression(exp, None),
+        syn::Stmt::Expr(exp, _r) => parse_expression(exp, assignment),
         syn::Stmt::Macro(_mac) => Err(NotTranslatableError::Custom(
             "Macro statement not translatable".to_string(),
         )),

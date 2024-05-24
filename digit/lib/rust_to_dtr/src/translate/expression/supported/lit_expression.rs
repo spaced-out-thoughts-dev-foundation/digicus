@@ -6,13 +6,9 @@ pub fn handle_lit_expression(
     lit: &syn::Lit,
     assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    println!("\n[DEBUG]-[Lit]: handle_lit_expression");
-
     // TODO: fix this so it actually returns the right type
     // TODO: this is also super hacky for strings, please fix it
     let literal_value: String = parse_lit(lit)?.replace("\"", "");
-
-    println!("Literal Value: {:?}", literal_value);
 
     Ok(vec![Instruction::new(
         "assign".to_string(),

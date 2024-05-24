@@ -6,8 +6,6 @@ pub mod errors;
 pub mod instruction;
 pub mod translate;
 
-use regex::Regex;
-
 pub fn version() -> &'static str {
     env!("CARGO_PKG_VERSION")
 }
@@ -72,23 +70,21 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                         let mut index = 1;
                         let total_block_stmts = block.stmts.len();
                         block.stmts.iter().for_each(|stmt| {
-                            println!("[DEBUG] {} - {}", index, total_block_stmts);
                             if index != 1 {
                               dtr_code.push_str("\n\t\t\t");
                             } else {
                               dtr_code.push_str("\t\t\t");
                             }
-                            match translate::expression::supported::block_expression::parse_block_stmt(&stmt) {
+
+                            let assignment:Option<String> = if index == total_block_stmts { Some("Thing_to_return".to_string()) } else { None };
+                            match translate::expression::supported::block_expression::parse_block_stmt(&stmt, assignment) {
                                 Ok(block_str) => {
                                     let mut instructions_as_strings: Vec<String> = Vec::new();
 
                                     block_str.iter().for_each(|instr|instructions_as_strings.push(instr.as_str()));
 
                                     if index == total_block_stmts {
-                                        println!("[DEBUG] - HERE");
-                                        let last_instruction = instructions_as_strings.pop().unwrap();
-                                        let return_instruction = mutate_to_be_return_instruction(&last_instruction);
-                                        instructions_as_strings.push(return_instruction);
+                                        instructions_as_strings.push("{ instruction: Return, input: (Thing_to_return) }".to_string());
                                     }
 
                                     dtr_code.push_str(&instructions_as_strings.join("\n\t\t\t"));
@@ -98,8 +94,8 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                                     dtr_code.push_str(&format!("Error: {:?}", e));
                                 }
                             }
-
                             index += 1;
+
                         });
 
                         dtr_code.push_str("\n\t\t$\n");
@@ -112,17 +108,6 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
         }
     }
     Ok(dtr_code)
-}
-
-fn mutate_to_be_return_instruction(instruction: &str) -> String {
-    let mut return_instruction = instruction.to_string();
-    let re = Regex::new(r"\bassign\b").unwrap();
-
-    let output = re.replacen(&return_instruction, 1, "Return").into_owned();
-
-    println!("{}", output.to_string());
-
-    output
 }
 
 #[cfg(test)]
@@ -144,34 +129,62 @@ mod tests {
     }
     "#;
 
+    const INCREMENT_ANSWER_TO_LIFE_CONTRACT: &str = r#"
+    #![no_std]
+    use soroban_sdk::{contract, contractimpl, Env};
+
+    #[contract]
+    pub struct IncrementAnswerToLifeContract;
+
+    #[contractimpl]
+    impl IncrementAnswerToLifeContract {
+        pub fn fourty_two_and_then_some(env: Env, and_then_some: u32) -> u32 {
+            42 + and_then_some
+        }
+    }
+    "#;
+
     #[test]
     fn test_parse_answer_to_life_contract() {
         let expected_dtr_code = r#"[Contract]: AnswerToLifeContract
 
 [Functions]:
--() [fourty_two]* Inputs:{ }* Output: u32* Instructions:${ instruction: Return, input: (42) }$:[Functions]"#;
+-() [fourty_two]* Inputs:{ }* Output: u32* Instructions:${ instruction: assign, input: (42), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
 
         let actual_dtr_code = parse_to_dtr(ANSWER_TO_LIFE_CONTRACT);
 
         match actual_dtr_code {
             Ok(dtr_code) => {
-                println!(
-                    "Expected DTR code:\n\n{}",
-                    expected_dtr_code.replace("\t", "").replace("\n", "")
-                );
-
-                println!(
-                    "Actual DTR code:\n\n{}",
-                    dtr_code.replace("\t", "").replace("\n", "")
-                );
-
                 assert_eq!(
                     dtr_code.replace("\t", "").replace("\n", ""),
                     expected_dtr_code.replace("\t", "").replace("\n", "")
                 );
             }
             Err(err) => {
-                println!("Error: {:?}", err);
+                panic!("Error: {:?}", err);
+            }
+        }
+    }
+
+    #[test]
+    fn test_parse_increment_answer_to_life_contract() {
+        let expected_dtr_code = r#"
+[Contract]: IncrementAnswerToLifeContract
+
+[Functions]:
+-() [fourty_two_and_then_some]* Inputs:{ and_then_some: u32}* Output: u32* Instructions:${ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
+
+        let actual_dtr_code = parse_to_dtr(INCREMENT_ANSWER_TO_LIFE_CONTRACT);
+
+        match actual_dtr_code {
+            Ok(dtr_code) => {
+                assert_eq!(
+                    dtr_code.replace("\t", "").replace("\n", ""),
+                    expected_dtr_code.replace("\t", "").replace("\n", "")
+                );
+            }
+            Err(err) => {
+                panic!("Error: {:?}", err);
             }
         }
     }

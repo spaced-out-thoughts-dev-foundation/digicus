@@ -7,8 +7,6 @@ pub fn handle_paren_expression(
     expr_paren: &ExprParen,
     _assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    println!("\n[DEBUG]-[Paren]: handle_paren_expression");
-
     Ok(parse_expression(&expr_paren.expr, None)?)
 }
 
