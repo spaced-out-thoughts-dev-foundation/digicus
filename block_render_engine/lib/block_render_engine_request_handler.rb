@@ -115,7 +115,8 @@ class BlockRenderEngineRequestHandler
       @contract_functions = contract.functions&.map do |f|
         { 
           name: f.name,
-          instructions: f.instructions&.map { |x| x[:instruction] }.join(' ')
+          instructions: f.instructions&.map { |x| x[:instruction] }.join(' '),
+          inputs: f.input&.join(' '),
         }.to_json
       end
 
