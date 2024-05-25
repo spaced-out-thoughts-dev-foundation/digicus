@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 
 class ContractHeader extends Component {
     render() {
-        console.log(this.props)
         return (
           <div style={{
               display: 'flex',

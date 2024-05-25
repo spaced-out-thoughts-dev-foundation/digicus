@@ -18,7 +18,6 @@ const App = () => {
     const [supportedInstructions, setSupportedInstructions] = useState([]);
 
     const supportedInstructionToColor = (supported_instruction) => {
-      console.log(supported_instruction)
       if (supported_instruction == null || supported_instruction.category == null) {
         return 'white';
       }
@@ -73,7 +72,6 @@ const App = () => {
         "load",
         () => {
           // this will then display a text file
-          console.log(reader.result);
           fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
           {
             headers: {
