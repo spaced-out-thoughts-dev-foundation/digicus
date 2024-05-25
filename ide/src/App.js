@@ -12,98 +12,75 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, List, ListItem } from '@mui/material';
 import { index } from 'd3';
 
+import { supportedInstructionToColor } from './common/InstructionNode';
+
 
 const App = () => {
-    const [file, setFile] = useState(null);
-    const [supportedInstructions, setSupportedInstructions] = useState([]);
+  const [contract, setContract] = useState({contract: '', originalText: ``});
+  const [file, setFile] = useState(null);
+  const [supportedInstructions, setSupportedInstructions] = useState([]);
 
-    const supportedInstructionToColor = (supported_instruction) => {
-      if (supported_instruction == null || supported_instruction.category == null) {
-        return 'white';
-      }
-      if (supported_instruction.category === "basic") {
-        return 'orange';
-      } else if (supported_instruction.category === "state") {
-        return 'red';
-      } else if (supported_instruction.category === "untyped") {
-        return 'silver';
-      } else if (supported_instruction.category === "numeric") {
-        return 'maroon';
-      } else if (supported_instruction.category === "string") {
-        return 'yellow';
-      } else if (supported_instruction.category === "environment") {
-        return 'turquoise';
-      } else {
-        return 'white';
-      }
-    };
+  useEffect(() => {
+    fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
+      .then(response => {
+        return response.json()
+      })
+      .then(json => setSupportedInstructions(json.supported_instructions))
+      .catch(error => console.error(error));
+  }, []);
 
-    useEffect(() => {
-      fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
+  const handleDeploy = () => {};
+
+  const determineFileFormat = (file) => {
+    if (file == null) {
+      return "";
+    }
+
+    if (file.name.endsWith(".rs")) {
+      return "rust";
+    }
+
+    if (file.name.endsWith(".dtr")) {
+      return "dtr";
+    }
+
+    return "unknown";
+  };
+
+  const handleUpload = () => {
+    const reader = new FileReader();
+
+    reader.addEventListener(
+      "load",
+      () => {
+        // this will then display a text file
+        fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
+        {
+          headers: {
+            'Accept': 'text/text',
+            'Content-Type': 'application/json'
+          },
+          method: "POST",
+          body: JSON.stringify({format: determineFileFormat(file), content: reader.result})
+        })
         .then(response => {
           return response.json()
         })
-        .then(json => setSupportedInstructions(json.supported_instructions))
+        .then(json => setContract({ contract: json, originalText: reader.result}))
         .catch(error => console.error(error));
-    }, []);
-
-    const handleDeploy = () => {};
-
-    const determineFileFormat = (file) => {
-      if (file == null) {
-        return "";
-      }
-
-      if (file.name.endsWith(".rs")) {
-        return "rust";
-      }
-
-      if (file.name.endsWith(".dtr")) {
-        return "dtr";
-      }
-
-      return "unknown";
+      },
+      false,
+    );
+  
+    if (file) {
+      reader.readAsText(file);
     };
-
-    const handleUpload = () => {
-      const reader = new FileReader();
-
-      reader.addEventListener(
-        "load",
-        () => {
-          // this will then display a text file
-          fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
-          {
-            headers: {
-              'Accept': 'text/text',
-              'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({format: determineFileFormat(file), content: reader.result})
-          })
-          .then(response => {
-            return response.json()
-          })
-          .then(json => setContract({ contract: json, originalText: reader.result}))
-          .catch(error => console.error(error));
-        },
-        false,
-      );
-    
-      if (file) {
-        reader.readAsText(file);
-      };
-    };
+  };
 
     const handleFileChange = (event) => {
       const selectedFile = event.target.files[0];
       setFile(selectedFile);
     };
-
-    const [contract, setContract] = useState({contract: '', originalText: ``});
-
-    // useEffect(() => {
-    //   []);
 
     return ( 
       <div style={{

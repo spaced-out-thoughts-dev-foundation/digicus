@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import '../App.css';
+
 function InfoHeader() {
   const [data, setData] = useState(null);
 
@@ -13,10 +15,7 @@ function InfoHeader() {
   }, []);
 
   return (
-    <div style={{ 
-      flex:1,
-      textAlign: 'right',
-    }}>
+    <div className='info-header'>
       Relevant Software Dependencies:
         {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>}
         {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>}
