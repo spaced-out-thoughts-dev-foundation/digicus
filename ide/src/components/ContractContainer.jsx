@@ -76,7 +76,7 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
             functions ?
               <ReactFlow 
                 nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i)).flatMap(x => x)} 
-                edges={functions.map((f, i) => edges(f, i))}
+                edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
                 fitView={{padding: 10}}
                 panOnDrag={false}
                 zoomOnScroll={false}
