@@ -116,7 +116,7 @@ class BlockRenderEngineRequestHandler
         { 
           name: f.name,
           instructions: f.instructions,
-          inputs: f&.inputs&.join(' '),
+          inputs: f&.inputs,
         }.to_json
       end
 
