@@ -14,7 +14,7 @@ pub fn handle_call_expression(
 
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
-        let arg_name = format!("{} METHOD_CALL_ARG", index);
+        let arg_name = format!("{}_CALL_EXPRESSION_ARG", index);
         let expressions_parsed: Vec<Instruction> =
             match parse_expression(&arg, Some(arg_name.clone())) {
                 Ok(expressions) => expressions,
@@ -37,8 +37,105 @@ pub fn handle_call_expression(
     func.push(Instruction::new(
         "evaluate".to_string(),
         argument_names,
-        "CALL_EXPRESSION_RESULT".to_string(),
+        assignment.unwrap_or("CALL_EXPRESSION_RESULT".to_string()),
     ));
 
     Ok(func)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::instruction::Instruction;
+    use crate::translate::expression::parse_expression;
+    use syn::ExprCall;
+
+    #[test]
+    fn test_handle_call_expression() {
+        let parsed_expr_let: ExprCall = syn::parse_str("foo(bar, baz, 10)").unwrap();
+        let result = parse_expression(&syn::Expr::Call(parsed_expr_let), None);
+        let expected: Vec<Instruction> = vec![
+            Instruction::new(
+                "assign".to_string(),
+                vec!["foo".to_string()],
+                "CALL_EXPRESSION_FUNCTION".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["bar".to_string()],
+                "1_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["baz".to_string()],
+                "2_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["10".to_string()],
+                "3_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "evaluate".to_string(),
+                vec![
+                    "CALL_EXPRESSION_FUNCTION".to_string(),
+                    "1_CALL_EXPRESSION_ARG".to_string(),
+                    "2_CALL_EXPRESSION_ARG".to_string(),
+                    "3_CALL_EXPRESSION_ARG".to_string(),
+                ],
+                "CALL_EXPRESSION_RESULT".to_string(),
+            ),
+        ];
+
+        assert_eq!(result, Ok(expected));
+    }
+
+    #[test]
+    fn test_handle_call_expression_with_path() {
+        let parsed_expr_let: ExprCall = syn::parse_str("Self::foo(bar, baz, 10)").unwrap();
+        let result = parse_expression(&syn::Expr::Call(parsed_expr_let), None);
+        let expected: Vec<Instruction> = vec![
+            Instruction::new(
+                "assign".to_string(),
+                vec!["foo".to_string()],
+                "CALL_EXPRESSION_FUNCTION".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["bar".to_string()],
+                "1_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["baz".to_string()],
+                "2_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "assign".to_string(),
+                vec!["10".to_string()],
+                "3_CALL_EXPRESSION_ARG".to_string(),
+            ),
+            Instruction::new(
+                "evaluate".to_string(),
+                vec![
+                    "CALL_EXPRESSION_FUNCTION".to_string(),
+                    "1_CALL_EXPRESSION_ARG".to_string(),
+                    "2_CALL_EXPRESSION_ARG".to_string(),
+                    "3_CALL_EXPRESSION_ARG".to_string(),
+                ],
+                "CALL_EXPRESSION_RESULT".to_string(),
+            ),
+        ];
+
+        match &result {
+            Ok(result_thing) => {
+                // assert_eq!(result.len(), expected.len());
+                for (index, instruction) in result_thing.iter().enumerate() {
+                    println!("{:?}", instruction);
+                }
+            }
+            Err(_) => assert!(false),
+        }
+
+        assert_eq!(result, Ok(expected));
+    }
 }

@@ -73,9 +73,8 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         "u8" | "u16" | "u32" | "u64 " => Ok(rust_name.to_string()),
         "()" | "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref" | "RefCell"
         | "Result" | "usize" => unable_to_translate_type_helper(rust_name),
-        _ => Err(NotTranslatableError::Custom(
-            "Could not figure out type".to_string(),
-        )),
+        // ASSUMPTION: these are custom type names
+        _ => Ok(rust_name.to_string()),
     }
 }
 

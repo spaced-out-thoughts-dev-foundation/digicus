@@ -1,3 +1,8 @@
+use translate::{
+    expression::supported::path_expression::handle_path_expression,
+    type_name::{self, parse_path},
+};
+
 // syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
 
@@ -19,9 +24,39 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     for item in parsed_ast.items {
         match item {
             syn::Item::Struct(item_struct) => {
-                dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
+                // here we look at the attributes of the struct such as #[contract] or #[contractimpl]
+                item_struct.attrs.iter().for_each(|attr| {
+                    // dtr_code.push_str(&format!("{}\n", parse_path(attr.meta.path())));
+                    if parse_path(attr.meta.path()) == "contract" {
+                        dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
+                    }
+                });
             }
             syn::Item::Impl(item_impl) => {
+                let mut is_a_contract_impl = false;
+                if item_impl.attrs.len() > 0 {
+                    item_impl.attrs.iter().for_each(|attr| {
+                        // dtr_code.push_str(&format!("{}\n", parse_path(attr.path)));
+                        if parse_path(attr.meta.path()) == "contractimpl" {
+                            is_a_contract_impl = true;
+                        }
+                    });
+                }
+
+                if !is_a_contract_impl {
+                    continue;
+                }
+
+                // match type_name::figure_out_type(&item_impl.self_ty) {
+                //     Ok(type_name) => {
+                //         dtr_code.push_str(&format!("[Contract]: {}\n\n", type_name));
+                //     }
+                //     Err(e) => {
+                //         // return Err(e);
+                //         dtr_code.push_str(&format!("Error: {:?}", e));
+                //     }
+                // }
+
                 dtr_code.push_str("[Functions]:\n");
 
                 item_impl.items.iter().for_each(|item_impl_item| {
@@ -100,9 +135,10 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
                         dtr_code.push_str("\n\t\t$\n");
 
-                        dtr_code.push_str(":[Functions]\n");
                     }
+
                 });
+                dtr_code.push_str(":[Functions]\n");
             }
             _ => {} // We're ignoring other types of items for simplicity
         }
@@ -165,17 +201,19 @@ mod tests {
         /// Increment increments an internal counter, and returns the value.
         pub fn increment(env: Env, incr: u32) -> u32 {
             // Get the current count.
-            let mut state = Self::get_state(env.clone());
+            //let mut state = Self::get_state(env.clone());
     
             // Increment the count.
-            state.count += incr;
-            state.last_incr = incr;
+            //state.count += incr;
+            //state.last_incr = incr;
     
             // Save the count.
-            env.storage().instance().set(&STATE, &state);
+            // env.storage().instance().set(&STATE, &state);
     
             // Return the count to the caller.
-            state.count
+            //state.count
+
+            10
         }
         /// Return the current state.
         pub fn get_state(env: Env) -> State {
@@ -235,10 +273,56 @@ mod tests {
     #[test]
     fn test_parse_custom_types_contract() {
         let expected_dtr_code = r#"
-[Contract]: IncrementAnswerToLifeContract
+[Contract]: IncrementContract
 
 [Functions]:
--() [fourty_two_and_then_some]* Inputs:{ and_then_some: u32}* Output: u32* Instructions:${ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
+-() [increment]
+    * Inputs:
+    { 
+        incr: u32
+    }
+    * Output: u32
+    * Instructions:
+        $
+            { instruction: assign, input: (Self), assign: CALL_EXPRESSION_FUNCTION }
+            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
+            { instruction: evaluate, input: (CALL_EXPRESSION_FUNCTION, 1 METHOD_CALL_ARG), assign: CALL_EXPRESSION_RESULT }
+            { instruction: assign, input: (state), assign: FIELD_BASE }
+            { instruction: field, input: (FIELD_BASE, count), assign: BINARY_EXPRESSION_LEFT }
+            { instruction: assign, input: (incr), assign: BINARY_EXPRESSION_RIGHT }
+            { instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT) }
+            { instruction: assign, input: (state), assign: FIELD_BASE }
+            { instruction: field, input: (FIELD_BASE, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
+            { instruction: assign, input: (incr), assign: ASSIGN_EXPRESSION_RIGHT }
+            { instruction: assign, input: (ASSIGN_EXPRESSION_LEFT, ASSIGN_EXPRESSION_RIGHT) }
+            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
+            { instruction: assign, input: (STATE), assign: 1 METHOD_CALL_ARG }
+            { instruction: assign, input: (state), assign: 2 METHOD_CALL_ARG }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG, 2 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
+            { instruction: assign, input: (state), assign: FIELD_BASE }
+            { instruction: field, input: (FIELD_BASE, count), assign: Thing_to_return }
+            { instruction: Return, input: (Thing_to_return) }
+        $
+-() [get_state]
+    * Inputs:
+    { 
+    }
+    * Output: Could not figure out type
+    * Instructions:
+        $
+            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
+            { instruction: assign, input: (STATE), assign: 1 METHOD_CALL_ARG }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
+            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
+            { instruction: Return, input: (Thing_to_return) }
+        $
+:[Functions]
+"#;
 
         let actual_dtr_code = parse_to_dtr(CUSTOM_TYPES_CONTRACT);
 
@@ -248,7 +332,7 @@ mod tests {
 
                 assert_eq!(
                     dtr_code.replace("\t", "").replace("\n", ""),
-                    expected_dtr_code.replace("\t", "").replace("\n", "")
+                    "".replace("\t", "").replace("\n", "")
                 );
             }
             Err(err) => {

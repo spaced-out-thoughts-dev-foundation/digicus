@@ -114,13 +114,28 @@ pub fn parse_path(path: &syn::Path) -> String {
     let segments = &path.segments;
     let segment = &segments[0];
 
+    let path_str = parse_path_segment(segment);
+    if segments.len() > 1 {
+        return format_segment_name(
+            segments
+                .into_iter()
+                .map(|segment| format!("{}", segment.ident.to_string()))
+                .collect::<Vec<String>>()
+                .join("::"),
+        );
+    }
+
+    format!("{}", format_segment_name(path_str))
+}
+
+fn parse_path_segment(segment: &syn::PathSegment) -> String {
     match &segment.arguments {
         syn::PathArguments::None => {
             return format!("{}", segment.ident);
         }
         syn::PathArguments::AngleBracketed(args) => {
             let mut path_str = String::new();
-            path_str.push_str(&format!("{}", segment.ident));
+            path_str.push_str(&format!("{}", segment.ident.to_string()));
             path_str.push_str("<");
             path_str.push_str(&parse_angle_bracketed_generic_arguments(args));
             path_str.push_str(">");
@@ -128,15 +143,14 @@ pub fn parse_path(path: &syn::Path) -> String {
         }
         _ => {}
     }
-    if segments.len() > 1 {
-        let mut path_str = String::new();
-        for segment in segments {
-            path_str.push_str(&format!("{}::", segment.ident));
-        }
-        return path_str;
-    }
 
     format!("{}", segment.ident)
+}
+
+fn format_segment_name(mut segment_name: String) -> String {
+    segment_name = segment_name.replace("Self::", "");
+
+    segment_name
 }
 
 #[cfg(test)]

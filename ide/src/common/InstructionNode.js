@@ -14,6 +14,10 @@ export function supportedInstructionToColor (supported_instruction) {
     return 'yellow';
   } else if (supported_instruction.category === "environment") {
     return 'turquoise';
+  } else if (supported_instruction.category === "methods") {
+    return 'pink';
+  } else if (supported_instruction.category === "objects") {
+    return 'green';
   } else {
     return 'white';
   }

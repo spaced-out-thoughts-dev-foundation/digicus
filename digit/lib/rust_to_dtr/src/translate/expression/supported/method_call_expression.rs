@@ -7,14 +7,14 @@ use syn::ExprMethodCall;
 
 pub fn handle_method_call_expression(
     expr: &ExprMethodCall,
-    _assignment: Option<String>,
+    assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut argument_names: Vec<String> = Vec::new();
     let mut index = 1;
 
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
-        let arg_name = format!("{} METHOD_CALL_ARG", index);
+        let arg_name = format!("{}_METHOD_CALL_ARG", index);
         let expressions_parsed: Vec<Instruction> =
             match parse_expression(&arg, Some(arg_name.clone())) {
                 Ok(expressions) => expressions,
@@ -35,10 +35,12 @@ pub fn handle_method_call_expression(
 
     receiver.extend(expressions);
 
+    argument_names.insert(0, expr.method.to_string());
+
     receiver.push(Instruction::new(
         "evaluate".to_string(),
         argument_names,
-        "METHOD_CALL_RESULT".to_string(),
+        assignment.unwrap_or("METHOD_CALL_RESULT".to_string()),
     ));
 
     Ok(receiver)
