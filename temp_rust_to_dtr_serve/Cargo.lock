@@ -978,17 +978,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "my-vercel-api"
-version = "0.1.4"
-dependencies = [
- "rust_to_dtr",
- "serde",
- "serde_json",
- "tokio",
- "vercel_runtime",
-]
-
-[[package]]
 name = "num-bigint"
 version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1242,9 +1231,9 @@ dependencies = [
 
 [[package]]
 name = "rust_to_dtr"
-version = "0.1.4"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b75ad7818e52f6bb37a192ff0c95585868c3617b4a5b374b0dde88c295427e3a"
+checksum = "be8a5dd625b1737e39f03061740a920bf7757ce255bc47db0411fde35a3f0494"
 dependencies = [
  "proc-macro2",
  "rand",
@@ -1693,6 +1682,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "temp_rust_to_dtr_server"
+version = "0.1.5"
+dependencies = [
+ "rust_to_dtr",
+ "serde",
+ "serde_json",
+ "tokio",
+ "vercel_runtime",
 ]
 
 [[package]]
