@@ -41,9 +41,9 @@ module DTRCore
       # string operations
       { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING },
       # environment operations
-      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT }
+      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT },
       # method operations
-      { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow', category: INSTRUCTION_CATEGORY_METHODS }
+      { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow', category: INSTRUCTION_CATEGORY_METHODS },
       # object operations
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS }
     ].freeze
