@@ -1,38 +1,47 @@
 use crate::instruction::Instruction;
+use crate::translate::expression::parse_expression;
 use crate::{
     errors::not_translatable_error::NotTranslatableError, //, translate::expression::parse_expression,
 };
-use syn::Expr;
+use syn::ExprMethodCall;
 
 pub fn handle_method_call_expression(
-    _expr: &Expr,
+    expr: &ExprMethodCall,
     _assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    // if let syn::Expr::MethodCall(expr_method_call) = expr {
-    //     let method_name = get_method_names(expr);
+    let mut argument_names: Vec<String> = Vec::new();
+    let mut index = 1;
 
-    //     let mut input_strings: Vec<String> = Vec::new();
+    let mut expressions: Vec<Instruction> = Vec::new();
+    expr.args.iter().for_each(|arg| {
+        let arg_name = format!("{} METHOD_CALL_ARG", index);
+        let expressions_parsed: Vec<Instruction> =
+            match parse_expression(&arg, Some(arg_name.clone())) {
+                Ok(expressions) => expressions,
+                Err(_) => Vec::new(),
+            };
 
-    //     let index = 1;
-    //     expr_method_call.args.iter().for_each(|arg| {
-    //         let arg_name = match parse_expression(&arg, Some(format!("arg-{}-method_call", index)))
-    //         {
-    //             Ok(arg_name) => arg_name,
-    //             Err(_) => "ERR".to_string(),
-    //         };
+        expressions.extend(expressions_parsed);
 
-    //         input_strings.push(arg_name);
-    //         index += 1;
-    //     });
-    // }
+        argument_names.push(arg_name);
 
-    // panic!("Impossible to get here in a method call expression.");
+        index += 1;
+    });
 
-    Ok(vec![Instruction::new(
-        "assign".to_string(),
-        vec!["INPUT_VALUE_NAME_FOR_METHOD_CALL".to_string()],
+    let mut receiver: Vec<Instruction> =
+        parse_expression(&expr.receiver, Some("METHOD_CALL_EXPRESSION".to_string()))?;
+
+    argument_names.insert(0, "METHOD_CALL_EXPRESSION".to_string());
+
+    receiver.extend(expressions);
+
+    receiver.push(Instruction::new(
+        "evaluate".to_string(),
+        argument_names,
         "METHOD_CALL_RESULT".to_string(),
-    )])
+    ));
+
+    Ok(receiver)
 }
 
 // fn translate_env_method_call_expressions(method_name: &str) -> String {

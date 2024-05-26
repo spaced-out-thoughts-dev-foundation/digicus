@@ -144,6 +144,49 @@ mod tests {
     }
     "#;
 
+    const CUSTOM_TYPES_CONTRACT: &str = r#"
+    #![no_std]
+    use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Env, Symbol};
+    
+    #[contracttype]
+    #[derive(Clone, Debug, Eq, PartialEq)]
+    pub struct State {
+        pub count: u32,
+        pub last_incr: u32,
+    }
+    
+    const STATE: Symbol = symbol_short!("STATE");
+    
+    #[contract]
+    pub struct IncrementContract;
+    
+    #[contractimpl]
+    impl IncrementContract {
+        /// Increment increments an internal counter, and returns the value.
+        pub fn increment(env: Env, incr: u32) -> u32 {
+            // Get the current count.
+            let mut state = Self::get_state(env.clone());
+    
+            // Increment the count.
+            state.count += incr;
+            state.last_incr = incr;
+    
+            // Save the count.
+            env.storage().instance().set(&STATE, &state);
+    
+            // Return the count to the caller.
+            state.count
+        }
+        /// Return the current state.
+        pub fn get_state(env: Env) -> State {
+            env.storage().instance().get(&STATE).unwrap_or(State {
+                count: 0,
+                last_incr: 0,
+            }) // If no value set, assume 0.
+        }
+    }
+    "#;
+
     #[test]
     fn test_parse_answer_to_life_contract() {
         let expected_dtr_code = r#"[Contract]: AnswerToLifeContract
@@ -178,6 +221,31 @@ mod tests {
 
         match actual_dtr_code {
             Ok(dtr_code) => {
+                assert_eq!(
+                    dtr_code.replace("\t", "").replace("\n", ""),
+                    expected_dtr_code.replace("\t", "").replace("\n", "")
+                );
+            }
+            Err(err) => {
+                panic!("Error: {:?}", err);
+            }
+        }
+    }
+
+    #[test]
+    fn test_parse_custom_types_contract() {
+        let expected_dtr_code = r#"
+[Contract]: IncrementAnswerToLifeContract
+
+[Functions]:
+-() [fourty_two_and_then_some]* Inputs:{ and_then_some: u32}* Output: u32* Instructions:${ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
+
+        let actual_dtr_code = parse_to_dtr(CUSTOM_TYPES_CONTRACT);
+
+        match actual_dtr_code {
+            Ok(dtr_code) => {
+                println!("dtr_code: {:}\n", dtr_code);
+
                 assert_eq!(
                     dtr_code.replace("\t", "").replace("\n", ""),
                     expected_dtr_code.replace("\t", "").replace("\n", "")

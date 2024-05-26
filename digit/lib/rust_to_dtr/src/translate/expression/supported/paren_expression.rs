@@ -5,9 +5,9 @@ use syn::ExprParen;
 
 pub fn handle_paren_expression(
     expr_paren: &ExprParen,
-    _assignment: Option<String>,
+    assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    Ok(parse_expression(&expr_paren.expr, None)?)
+    Ok(parse_expression(&expr_paren.expr, assignment)?)
 }
 
 // #[cfg(test)]

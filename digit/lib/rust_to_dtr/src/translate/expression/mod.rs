@@ -62,8 +62,11 @@ fn parse_expression(
         syn::Expr::Lit(lit_expr) => {
             supported::lit_expression::handle_lit_expression(&lit_expr.lit, assignment)
         }
-        syn::Expr::MethodCall(_) => {
-            supported::method_call_expression::handle_method_call_expression(&exp, assignment)
+        syn::Expr::MethodCall(method_call_expr) => {
+            supported::method_call_expression::handle_method_call_expression(
+                method_call_expr,
+                assignment,
+            )
         }
         syn::Expr::Paren(paren_expr) => {
             supported::paren_expression::handle_paren_expression(paren_expr, assignment)
@@ -77,23 +80,53 @@ fn parse_expression(
         syn::Expr::Return(return_expr_expr) => {
             supported::return_expression::handle_return_expression(return_expr_expr, assignment)
         }
-
+        syn::Expr::Group(group_expr) => {
+            supported::group_expression::handle_group_expression(group_expr, assignment)
+        }
+        syn::Expr::Field(field_expr) => {
+            supported::field_expression::handle_field_expression(field_expr, assignment)
+        }
+        syn::Expr::Assign(assign_expr) => {
+            supported::assign_expression::handle_assign_expression(assign_expr, assignment)
+        }
+        syn::Expr::Call(call_expr) => {
+            supported::call_expression::handle_call_expression(call_expr, assignment)
+        }
         // NOT IMPLEMENTED //
-        // syn::Expr::Assign(_) => {
-        // syn::Expr::Break(_) => {
-        // syn::Expr::Call(_) => Ok(format!("Call")),
-        // syn::Expr::Cast(_) => {
-        // syn::Expr::Closure(_) => {
-        // syn::Expr::Const(_) => {
-        // syn::Expr::Continue(_) => {
-        // syn::Expr::Field(_) => Ok(format!("Field")),
-        // syn::Expr::Group(_) => Ok(format!("Group")),
-        // syn::Expr::Index(_) => {
-        // syn::Expr::Infer(_) => {
-        // syn::Expr::Macro(_) => Ok(format!("Macro")),
-        // syn::Expr::Range(_) => {
-        // syn::Expr::Struct(_) => {
-        // syn::Expr::Unary(_) => {
+        syn::Expr::Break(_) => Err(NotTranslatableError::Custom(
+            "Break expression not supported".to_string(),
+        )),
+
+        syn::Expr::Cast(_) => Err(NotTranslatableError::Custom(
+            "Cast expression not supported".to_string(),
+        )),
+        syn::Expr::Closure(_) => Err(NotTranslatableError::Custom(
+            "Closure expression not supported".to_string(),
+        )),
+        syn::Expr::Const(_) => Err(NotTranslatableError::Custom(
+            "Const expression not supported".to_string(),
+        )),
+        syn::Expr::Continue(_) => Err(NotTranslatableError::Custom(
+            "Continue expression not supported".to_string(),
+        )),
+        syn::Expr::Infer(_) => Err(NotTranslatableError::Custom(
+            "Infer expression not supported".to_string(),
+        )),
+        syn::Expr::Index(_) => Err(NotTranslatableError::Custom(
+            "Index expression not supported".to_string(),
+        )),
+        syn::Expr::Macro(_) => Err(NotTranslatableError::Custom(
+            "Macro expression not supported".to_string(),
+        )),
+        syn::Expr::Range(_) => Err(NotTranslatableError::Custom(
+            "Range expression not supported".to_string(),
+        )),
+        syn::Expr::Struct(_) => Err(NotTranslatableError::Custom(
+            "Struct expression not supported".to_string(),
+        )),
+        syn::Expr::Unary(_) => Err(NotTranslatableError::Custom(
+            "Unary expression not supported".to_string(),
+        )),
         _ => Err(NotTranslatableError::Custom(
             "Unknown expression".to_string(),
         )),

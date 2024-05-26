@@ -2,6 +2,8 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
+use crate::translate::pattern::handle_pattern;
+use syn::token::In;
 // use crate::translate::pattern::handle_pattern;
 use syn::ExprBlock;
 
@@ -37,20 +39,16 @@ pub fn parse_block_stmt(
     assignment: Option<String>,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     match stmt {
-        syn::Stmt::Local(_local) => {
-            // let let_expr_str = match &local.init {
-            //     Some((local_init)) => parse_expression(&local_init.expr)?,
-            //     None => {
-            //         return Err(NotTranslatableError::Custom(
-            //             "No expression in let".to_string(),
-            //         ))
-            //     }
-            // };
-
-            // handle_pattern(local.pat.clone())
-            Err(NotTranslatableError::Custom(
-                "Local statement not translatable".to_string(),
-            ))
+        syn::Stmt::Local(local) => {
+            let pattern_as_string = handle_pattern(local.pat.clone()).unwrap();
+            match &local.init {
+                Some(local_init) => parse_expression(&local_init.expr, Some(pattern_as_string)),
+                None => Ok(vec![Instruction::new(
+                    "assign".to_string(),
+                    vec![pattern_as_string],
+                    "".to_string(),
+                )]),
+            }
         }
         syn::Stmt::Item(_item) => Err(NotTranslatableError::Custom(
             "Item statement not translatable".to_string(),
