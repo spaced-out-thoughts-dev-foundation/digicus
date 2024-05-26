@@ -49,7 +49,8 @@ module DTRCore
       { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow',
         category: INSTRUCTION_CATEGORY_METHODS },
       # object operations
-      { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS }
+      { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
+      { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS }
     ].freeze
 
     # Supported Types for DTR.
