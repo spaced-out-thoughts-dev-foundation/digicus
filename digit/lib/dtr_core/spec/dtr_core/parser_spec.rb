@@ -146,5 +146,81 @@ RSpec.describe DTRCore::Parser do
         expect(parser.function_section).to contain_exactly(hello_function, world_function)
       end
     end
+
+    context 'when contract name and user defined types sections are present' do
+      let(:user_defined_types) do
+        [
+          DTRCore::UserDefinedType.new('State', [
+                                         { name: 'count', type: 'u32' },
+                                         { name: 'last_incr', type: 'u32' }
+                                       ]),
+          DTRCore::UserDefinedType.new('State_Two', [
+                                         { name: 'name', type: 'String' }
+                                       ])
+        ]
+      end
+
+      it 'parses the contract name and user defined types sections' do
+        parser = described_class.new('./spec/test_dtr_files/contract_and_user_defined_types_only_rust_struct_type.dtr')
+
+        expect(parser.name_section).to eq('USER_DEFINED_TYPES_CONTRACT')
+        expect(parser.user_defined_types_section).to match_array(user_defined_types)
+
+        # empty contract so these optional sections are nil
+        expect(parser.state_section).to be_nil
+        expect(parser.function_section).to be_nil
+      end
+    end
+
+    context 'when contract name, state, function, and user defined types sections are present' do
+      let(:hello_function) do
+        DTRCore::Function.new('hello', [
+                                { name: 'to', type_name: 'Symbol' },
+                                { name: 'from', type_name: 'State' }
+                              ], 'State_Two', [
+                                { instruction: 'Add_Strings',
+                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                { instruction: 'Return',
+                                  inputs: ['HelloToResult'], assign: nil }
+                              ])
+      end
+
+      let(:world_function) do
+        DTRCore::Function.new('world', [], 'Symbol', [
+                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                              ])
+      end
+
+      let(:state_definitions) do
+        [
+          DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
+          DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
+          DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
+        ]
+      end
+
+      let(:user_defined_types) do
+        [
+          DTRCore::UserDefinedType.new('State', [
+                                         { name: 'count', type: 'u32' },
+                                         { name: 'last_incr', type: 'u32' }
+                                       ]),
+          DTRCore::UserDefinedType.new('State_Two', [
+                                         { name: 'name', type: 'String' }
+                                       ])
+        ]
+      end
+
+      it 'parses the contract name, state, and function sections' do
+        parser = described_class.new(
+          './spec/test_dtr_files/multi_function_with_state_and_name_contract_and_custom_types.dtr'
+        )
+
+        expect(parser.name_section).to eq('MultiFunctionContract')
+        expect(parser.state_section).to match_array(state_definitions)
+        expect(parser.function_section).to contain_exactly(hello_function, world_function)
+        expect(parser.user_defined_types_section).to match_array(user_defined_types)
+      end
+    end
   end
 end

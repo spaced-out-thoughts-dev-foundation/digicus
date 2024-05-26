@@ -32,7 +32,9 @@ module DTRCore
       { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
       # untyped operations
       { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'add_and_assign', description: 'Add two things of unknown types together and then assign to the first one.', category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'add_and_assign',
+        description: 'Add two things of unknown types together and then assign to the first one.',
+        category: INSTRUCTION_CATEGORY_UNTYPED },
       # numeric operations
       { name: 'add_numbers', description: 'Add two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       { name: 'subtract_numbers', description: 'Subtract two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
@@ -41,9 +43,11 @@ module DTRCore
       # string operations
       { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING },
       # environment operations
-      { name: 'contract_address', description: 'Get the contract address.', category: INSTRUCTION_CATEGORY_ENVIRONMENT },
+      { name: 'contract_address', description: 'Get the contract address.',
+        category: INSTRUCTION_CATEGORY_ENVIRONMENT },
       # method operations
-      { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow', category: INSTRUCTION_CATEGORY_METHODS },
+      { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow',
+        category: INSTRUCTION_CATEGORY_METHODS },
       # object operations
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS }
     ].freeze

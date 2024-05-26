@@ -73,7 +73,7 @@ RSpec.describe DTRCore::Contract do
       ]
     end
 
-    it 'parses the contract name, state, and function sections' do
+    it 'parses the contract name, state, and function sections_for_multi_function_with_state_and_name_contract' do
       content = File.read('./spec/test_dtr_files/multi_function_with_state_and_name_contract.dtr')
 
       contract = described_class.from_dtr_raw(content)
@@ -92,7 +92,7 @@ RSpec.describe DTRCore::Contract do
       expect(contract.state).to match_array(simplified_state_definitions)
     end
 
-    it 'parses the contract name, state, and function sections' do
+    it 'parses the contract name, state, and function sections_for_increment_answer_to_life_contract' do
       content = File.read('./spec/test_dtr_files/increment_answer_to_life_contract.dtr')
 
       contract = described_class.from_dtr_raw(content)
@@ -100,15 +100,17 @@ RSpec.describe DTRCore::Contract do
       expect(contract.name).to eq('IncrementAnswerToLifeContract')
       expect(contract.functions).to contain_exactly(
         DTRCore::Function.new(
-          'fourty_two_and_then_some', 
-          [{ name: 'and_then_some', type_name: 'u32' }], 
-          'u32', 
+          'fourty_two_and_then_some',
+          [{ name: 'and_then_some', type_name: 'u32' }],
+          'u32',
           [
-            { instruction: 'assign', inputs: ["42"], assign: 'BINARY_EXPRESSION_LEFT' },
+            { instruction: 'assign', inputs: ['42'], assign: 'BINARY_EXPRESSION_LEFT' },
             { instruction: 'assign', inputs: ['and_then_some'], assign: 'BINARY_EXPRESSION_RIGHT' },
-            { instruction: 'add', inputs: ['BINARY_EXPRESSION_LEFT', 'BINARY_EXPRESSION_RIGHT'], assign: 'Thing_to_return' },
+            { instruction: 'add', inputs: %w[BINARY_EXPRESSION_LEFT BINARY_EXPRESSION_RIGHT],
+              assign: 'Thing_to_return' },
             { instruction: 'Return', inputs: ['Thing_to_return'], assign: nil }
-          ])
+          ]
+        )
       )
     end
   end

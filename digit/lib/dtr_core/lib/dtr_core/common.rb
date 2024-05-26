@@ -11,8 +11,8 @@ module DTRCore
       some_list&.split("\n")&.map(&:strip)&.select { |x| x.length.positive? }
     end
 
-    def first_match_for_content(patterm)
-      content.match(patterm)&.captures&.first
+    def first_match_for_content(pattern)
+      content.match(pattern)&.captures&.first
     end
 
     def clean_name(definition)

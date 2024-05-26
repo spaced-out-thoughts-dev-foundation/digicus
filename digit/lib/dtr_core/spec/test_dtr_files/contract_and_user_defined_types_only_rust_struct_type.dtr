@@ -1,0 +1,13 @@
+[Contract]: USER_DEFINED_TYPES_CONTRACT
+
+[User Defined Types]:
+  * (State)
+  {
+    count: u32
+    last_incr: u32
+  }
+  * (State_Two)
+  {
+    name: String
+  }
+:[User Defined Types]

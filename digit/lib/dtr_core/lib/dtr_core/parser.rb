@@ -63,5 +63,21 @@ module DTRCore
 
       @function_section ||= function_definitions
     end
+
+    def user_defined_types_section
+      return @user_defined_types if @user_defined_types
+
+      user_defined_types_regex = /\[User Defined Types\]:([\s\S]*?)\s*:\[User Defined Types\]/
+      user_defined_types_section_parsed_out = first_match_for_content(user_defined_types_regex)
+
+      return nil if user_defined_types_section_parsed_out.nil?
+
+      user_defined_types = user_defined_types_section_parsed_out
+                           .split(/\n\s*\*\s*\(/).map { |x| "(#{x.strip}" }
+                           .filter { |x| x.length > 1 }
+                           .map { |definition| DTRCore::UserDefinedType.from_definition(definition) }
+
+      @user_defined_types_section ||= user_defined_types
+    end
   end
 end
