@@ -3,22 +3,46 @@ import React, { useEffect, useState } from 'react';
 import '.././styles/InfoHeader.css';
 
 function InfoHeader() {
-  const [data, setData] = useState(null);
+  const [blockRenderEnginerVersions, setBlockRenderEngineVersions] = useState(null);
+  const [tempRustToDtrServerVersions, setTempRustToDtrServerVersions] = useState(null);
 
   useEffect(() => {
     fetch('https://block-render-engine.vercel.app/api/ide_version')
       .then(response => {
         return response.json()
       })
-      .then(json => setData(json))
+      .then(json => setBlockRenderEngineVersions(json))
       .catch(error => console.error(error));
   }, []);
+
+
+  useEffect(() => {
+    fetch('https://temprustfunctions-14zmlnh3e-robertdursts-projects.vercel.app/api/versions',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'text/text',
+          'Accept': 'application/json',
+          // 'Access-Control-Allow-Origin': '*'
+        }
+      }
+    )
+      .then(response => {
+        console.log(response)
+        return response.json()
+      })
+      .then(json => setTempRustToDtrServerVersions(json))
+      .catch(error => console.error(error));
+  }, []);
+ 
 
   return (
     <div className='info-header'>
       Relevant Software Dependencies:
-        {data ? <p>[dtr_core]: {data.dtr_core}</p> : <p>Loading...</p>}
-        {data ? <p>[block render engine]: {data.block_render_engine}</p> : <p>Loading...</p>}
+        {blockRenderEnginerVersions ? <p>[dtr_core]: {blockRenderEnginerVersions.dtr_core}</p> : <p>Loading...</p>}
+        {blockRenderEnginerVersions ? <p>[block render engine]: {blockRenderEnginerVersions.block_render_engine}</p> : <p>Loading...</p>}
+        {tempRustToDtrServerVersions ? <p>[rust_to_dtr_version]: {tempRustToDtrServerVersions.rust_to_dtr_version}</p> : <p>Loading...</p>}
+        {tempRustToDtrServerVersions ? <p>[block temp_rust_to_dtr_version engine]: {tempRustToDtrServerVersions.temp_rust_to_dtr_version}</p> : <p>Loading...</p>}
     </div>
   );
 }
