@@ -1,19 +1,14 @@
 // import BarChart from './BarChart'
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { Analytics } from "@vercel/analytics/react"
 import ContractContainer from './components/ContractContainer'
 import ContractHeader from './components/ContractHeader'
-import InfoHeader from './components/InfoHeader'
 import React, { useEffect, useState } from 'react';
-import { Box, Button, List, ListItem } from '@mui/material';
-import { index } from 'd3';
-
 import { supportedInstructionToColor } from './common/InstructionNode';
-
+import FileUpload from './components/FileUpload';
+import TopHeaderBar from './components/TopHeaderBar';
+import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 
 const App = () => {
   const [contract, setContract] = useState({contract: '', originalText: ``});
@@ -83,160 +78,27 @@ const App = () => {
     };
 
     return ( 
-      <div style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-      }}>
-       
-        <AppBar position="static" style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        backgroundColor: 'black',
-      }}>
-          <Toolbar style={{ 
-              display: 'flex', 
-              backgroundColor: 'black',
-            }}>
-            <div style={{flex: 1}}>
-              <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
-            </div>
-            <div style={{
-                flex: 1, 
-                display: 'flex', 
-                justifyContent: 'center',
-                color: 'rgb(39 207 230)'
-              }}>
-              <Typography style={{fontSize: '1.5em'}}>
-                Digicus IDE
-              </Typography>
-            </div>
-            <div style={{flex: 1, justifyContent: 'right', display: 'flex'}}>
-              <InfoHeader />
-            </div>
-          
-            </Toolbar>
-
-          <div style={{ 
-            display: 'flex', 
-            flex: 1, 
-            width: '100%', 
-            height: '90%',
-            flexDirection: 'row',
-            backgroundColor: 'rgb(39 207 230)',
-
-          }}>
-          <div style={{
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            height: '100%',
-          }}>
-            <div style={{ 
-              flex: 2, 
-              justifyContent: 'center',
-              alignContent: 'center',
-              alignItems: 'center',
-              border: '1px solid white',
-              padding: '1%',
-              margin: '1%',
-              overflowY: 'auto',
-              height: '100%',
-              align: 'center',
-              textAlign: 'center',
-            }}>
-              <h2>Instructions Menu</h2>
-            </div>
-              <div style={{ 
-              flex: 19, 
-              justifyContent: 'center',
-              alignContent: 'center',
-              alignItems: 'center',
-              border: '5px solid black',
-              padding: '1%',
-              margin: '1%',
-              overflowY: 'auto',
-              height: '100%',
-            }}>
-              <List>
-                {supportedInstructions.map((supported_instruction_data, index) => (
-                  <ListItem key={index} button style={{
-                    backgroundColor: supportedInstructionToColor(supported_instruction_data),
-                    border: '1px solid black',
-                    margin: '1px',
-                  }}>
-                    <Button
-                      style={{
-                        color: 'white',
-                        fontSize: '0.75em',
-                        textShadow: '1px 1px 1px gray'
-                      }}
-                    >{<strong style={{color: 'black', fontSize: '1.25em', marginRight: '0.5em',  textShadow: '1px 1px 1px gray'}}>{supported_instruction_data.name}</strong>}{'(' + supported_instruction_data.category + ')'}</Button>
-                  </ListItem>
-                ))}
-              </List>
-
+      <div className='top-level-div-container'>
+        <AppBar position="static" className='top-app-bar'>
+          <TopHeaderBar/>
+          <div className='top-level-second-level-container'>
+            <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions}/>
+            <div className='top-level-third-level-container'>
+              <div className='top-level-third-level-container-secondary-header-bar'>
+                <ContractHeader name={contract?.contract?.contract_name}/>
+                <FileUpload handleFileChange={handleFileChange} handleUpload={handleUpload}/>
               </div>
-            <div style={{
-              flex: 1,
-              display: 'flex', 
-              padding: '1%',
-              margin: '5%',
-              }}>
-              <button style={{width: '100%'}} onClick={handleDeploy}>Deploy</button>
-            </div>
-
-            </div>
-            <div style={{ 
-            display: 'flex', 
-            flex: 5, 
-            flexDirection: 'column',
-          }}>
-            
-            <div style={{ 
-            display: 'flex', 
-            flex: 2, 
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}>
-              <ContractHeader
-                name={contract?.contract?.contract_name}
-              />
-              <div style={{ 
-                backgroundColor: 'gray',
-                display: 'flex', 
-                flex: 1, 
-                justifyContent: 'center',
-                alignContent: 'center',
-                alignItems: 'center',
-                // width: '100%', 
-                height: '50%',
-                margin: '10px',
-                padding: '10px',
-                boxShadow: '5px 5px 5px black',
-                // flexDirection: 'row',
-              }}>
-                <input style={{fontSize: '1.25em', backgroundColor: 'white', margin: '2%', color: 'black'}} type="file" onChange={handleFileChange} />
-                <button style={{flex: 1, fontSize: '1.25em'}}onClick={handleUpload}>Upload</button>
-              </div>
-            </div>
-             
-              
               <ContractContainer 
                 functions={contract?.contract?.contract_functions}
                 filename={file?.name}
                 originalText={contract?.originalText}
                 supportedInstructions={supportedInstructions}
                 supportedInstructionToColor={supportedInstructionToColor}
+                contractName={contract?.contract?.contract_name}
               />
             </div>
           </div>
-          
         </AppBar>
-
         <SpeedInsights />
         <Analytics />
       </div>

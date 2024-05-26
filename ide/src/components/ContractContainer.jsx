@@ -2,12 +2,14 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import ReactFlow, { MarkerType } from 'reactflow';
 import InstructionNode from './InstructionNode';
+import FunctionNode from './FunctionNode';
 import CodeContainer from './CodeContainer';
 
-import "../App.css";
+import ".././styles/ContractContainer.css";
 
 const nodeTypes = {
   instructionNode: InstructionNode,
+  functionNode: FunctionNode,
 };
 
 function determineInstructionColor(instructionName, supportedInstructions, supportedInstructionToColor) {
@@ -27,8 +29,9 @@ function constructNode(instruction, index, function_number, instructionColor) {
       instruction: instruction, 
       label: `${instruction.instruction.toUpperCase()} ${instruction.inputs ? `(${instruction.inputs.join(',')})` : ''}` 
     }, 
-    position: { x: 200 * (function_number), y: 150 * (index + 1) },
-    type: 'instructionNode', 
+    position: { x: 0 * (function_number), y: 150 * (index) },
+    type: 'instructionNode',
+    parentId: `f-${function_number}`
   };
 };
 
@@ -44,6 +47,28 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         determineInstructionColor(instruction.instruction, supportedInstructions, supportedInstructionToColor)
       );
     }) 
+
+    all_function_nodes.unshift({
+      id: `f-${function_number}`, 
+      data: { 
+        functionName: function_json_data.name,
+        functionInputs: function_json_data.inputs,
+      }, 
+      position: { x: 250 * (function_number * 1.5), y: 0 },
+      style: {
+        color: 'black',
+        fontSize: '1em',
+        borderRadius: 10,
+        width: 300,
+        height: 150 * (function_json_data.instructions.length + 1),
+        marginLeft: '-50px',
+        backgroundColor: 'rgba(255, 255, 0, 0.15)',
+        textShadow: '0.5px 0.5px 0.5px black',
+        border: '1px solid black'
+      },
+      extent: 'parent',
+      type: 'functionNode',
+    })
     
     return all_function_nodes;
 }
@@ -77,7 +102,7 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
               <ReactFlow 
                 nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i)).flatMap(x => x)} 
                 edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
-                fitView={{padding: 10}}
+                fitView={{padding: 100}}
                 panOnDrag={false}
                 zoomOnScroll={false}
                 zoomOnPinch={false}

@@ -1,0 +1,12 @@
+.file-upload-container {
+  align-content: center;
+  align-items: center;
+  background-color: gray;
+  box-shadow: 5px 5px 5px black;
+  display: flex;
+  flex: 1;
+  height: 50%;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+}

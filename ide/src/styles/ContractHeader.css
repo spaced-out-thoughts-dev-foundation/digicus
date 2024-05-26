@@ -1,0 +1,14 @@
+.contract-header {
+  align-content: center;
+  align-items: center;
+  background-color: rgb(39 190 230);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px black;
+  display: flex;
+  flex: 5;
+  flex-direction: row;
+  font-size: 1em;
+  justify-content: center;
+  margin: 0em 2em;
+  padding: 1em;
+}

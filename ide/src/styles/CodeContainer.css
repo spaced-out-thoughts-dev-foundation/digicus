@@ -1,0 +1,13 @@
+.code-container{
+  align-items: center;
+  background-color: #282a36;
+  border: 2px solid black;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  flex: 3;
+  flex-direction: column;
+  height: 95%;
+  margin: 20px;
+  width: 80%;
+}

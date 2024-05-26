@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import '../App.css';
+import '.././styles/InfoHeader.css';
 
 function InfoHeader() {
   const [data, setData] = useState(null);

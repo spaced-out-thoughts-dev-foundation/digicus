@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 
-import '../App.css';
+import '.././styles/InstructionNode.css';
 
 export default memo(({ data, isConnectable }) => {
   return (
