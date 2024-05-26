@@ -1,6 +1,6 @@
 [package]
 name = "rust_to_dtr"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Rob Durst <me@robdurst.com>"]
 edition = "2021"
 description = "Convert Rust Soroban contracts to DTR format."
