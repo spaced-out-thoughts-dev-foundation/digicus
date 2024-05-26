@@ -11,3 +11,4 @@ pub mod paren_expression;
 pub mod path_expression;
 pub mod reference_expression;
 pub mod return_expression;
+pub mod struct_expression;

@@ -92,6 +92,10 @@ fn parse_expression(
         syn::Expr::Call(call_expr) => {
             supported::call_expression::handle_call_expression(call_expr, assignment)
         }
+        syn::Expr::Struct(struct_expr) => {
+            supported::struct_expression::handle_struct_expression(struct_expr, assignment)
+        }
+
         // NOT IMPLEMENTED //
         syn::Expr::Break(_) => Err(NotTranslatableError::Custom(
             "Break expression not supported".to_string(),
@@ -120,9 +124,6 @@ fn parse_expression(
         )),
         syn::Expr::Range(_) => Err(NotTranslatableError::Custom(
             "Range expression not supported".to_string(),
-        )),
-        syn::Expr::Struct(_) => Err(NotTranslatableError::Custom(
-            "Struct expression not supported".to_string(),
         )),
         syn::Expr::Unary(_) => Err(NotTranslatableError::Custom(
             "Unary expression not supported".to_string(),

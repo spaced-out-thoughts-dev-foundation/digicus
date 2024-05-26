@@ -1,7 +1,5 @@
-use translate::{
-    expression::supported::path_expression::handle_path_expression,
-    type_name::{self, parse_path},
-};
+use syn::ItemStruct;
+use translate::type_name::{self, parse_path};
 
 // syn docs: https://docs.rs/syn/2.0.60/syn/index.html
 extern crate syn;
@@ -18,6 +16,7 @@ pub fn version() -> &'static str {
 pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
     // Parse the Rust code into a syn data structure
     let parsed_ast = syn::parse_file(rust_code).unwrap();
+    let mut user_defined_types: Vec<ItemStruct> = Vec::new();
 
     // Extract information from the parsed AST
     let mut dtr_code = String::new();
@@ -29,6 +28,8 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     // dtr_code.push_str(&format!("{}\n", parse_path(attr.meta.path())));
                     if parse_path(attr.meta.path()) == "contract" {
                         dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
+                    } else if parse_path(attr.meta.path()) == "contracttype" {
+                        user_defined_types.push(item_struct.clone());
                     }
                 });
             }
@@ -143,6 +144,28 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
+
+    dtr_code.push_str("\n\n[User Defined Types]:");
+
+    user_defined_types.iter().for_each(|item_struct| {
+        dtr_code.push_str(&format!("\n\n\t* ({})\n", item_struct.ident));
+        dtr_code.push_str("\t{\n");
+
+        item_struct.fields.iter().for_each(|field| {
+            if let syn::Type::Path(type_path) = &field.ty {
+                dtr_code.push_str(&format!(
+                    "\t\t{}: {}\n",
+                    field.ident.as_ref().unwrap(),
+                    type_name::parse_path(&type_path.path)
+                ));
+            }
+        });
+
+        dtr_code.push_str("\t}\n");
+    });
+
+    dtr_code.push_str("\n:[User Defined Types]\n");
+
     Ok(dtr_code)
 }
 
@@ -199,25 +222,23 @@ mod tests {
     #[contractimpl]
     impl IncrementContract {
         /// Increment increments an internal counter, and returns the value.
-        pub fn increment(env: Env, incr: u32) -> u32 {
+       pub fn increment(env: Env, incr: u32) -> u32 {
             // Get the current count.
-            //let mut state = Self::get_state(env.clone());
+            let mut state = Self::get_state(env.clone());
     
             // Increment the count.
-            //state.count += incr;
-            //state.last_incr = incr;
+            state.count += incr;
+            state.last_incr = incr;
     
             // Save the count.
-            // env.storage().instance().set(&STATE, &state);
+            env.storage().instance().set(&STATE, &state);
     
             // Return the count to the caller.
-            //state.count
-
-            10
+            state.count
         }
         /// Return the current state.
         pub fn get_state(env: Env) -> State {
-            env.storage().instance().get(&STATE).unwrap_or(State {
+            unwrap_or(State {
                 count: 0,
                 last_incr: 0,
             }) // If no value set, assume 0.
@@ -230,7 +251,7 @@ mod tests {
         let expected_dtr_code = r#"[Contract]: AnswerToLifeContract
 
 [Functions]:
--() [fourty_two]* Inputs:{ }* Output: u32* Instructions:${ instruction: assign, input: (42), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
+-() [fourty_two]* Inputs:{ }* Output: u32* Instructions:${ instruction: assign, input: (42), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions][User Defined Types]::[User Defined Types]"#;
 
         let actual_dtr_code = parse_to_dtr(ANSWER_TO_LIFE_CONTRACT);
 
@@ -253,7 +274,7 @@ mod tests {
 [Contract]: IncrementAnswerToLifeContract
 
 [Functions]:
--() [fourty_two_and_then_some]* Inputs:{ and_then_some: u32}* Output: u32* Instructions:${ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions]"#;
+-() [fourty_two_and_then_some]* Inputs:{ and_then_some: u32}* Output: u32* Instructions:${ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }{ instruction: Return, input: (Thing_to_return) }$:[Functions][User Defined Types]::[User Defined Types]"#;
 
         let actual_dtr_code = parse_to_dtr(INCREMENT_ANSWER_TO_LIFE_CONTRACT);
 
@@ -274,54 +295,63 @@ mod tests {
     fn test_parse_custom_types_contract() {
         let expected_dtr_code = r#"
 [Contract]: IncrementContract
-
 [Functions]:
 -() [increment]
-    * Inputs:
-    { 
-        incr: u32
-    }
-    * Output: u32
-    * Instructions:
-        $
-            { instruction: assign, input: (Self), assign: CALL_EXPRESSION_FUNCTION }
-            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
-            { instruction: evaluate, input: (CALL_EXPRESSION_FUNCTION, 1 METHOD_CALL_ARG), assign: CALL_EXPRESSION_RESULT }
-            { instruction: assign, input: (state), assign: FIELD_BASE }
-            { instruction: field, input: (FIELD_BASE, count), assign: BINARY_EXPRESSION_LEFT }
-            { instruction: assign, input: (incr), assign: BINARY_EXPRESSION_RIGHT }
-            { instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT) }
-            { instruction: assign, input: (state), assign: FIELD_BASE }
-            { instruction: field, input: (FIELD_BASE, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
-            { instruction: assign, input: (incr), assign: ASSIGN_EXPRESSION_RIGHT }
-            { instruction: assign, input: (ASSIGN_EXPRESSION_LEFT, ASSIGN_EXPRESSION_RIGHT) }
-            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
-            { instruction: assign, input: (STATE), assign: 1 METHOD_CALL_ARG }
-            { instruction: assign, input: (state), assign: 2 METHOD_CALL_ARG }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG, 2 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
-            { instruction: assign, input: (state), assign: FIELD_BASE }
-            { instruction: field, input: (FIELD_BASE, count), assign: Thing_to_return }
-            { instruction: Return, input: (Thing_to_return) }
-        $
+* Inputs:
+{ 
+incr: u32
+}
+* Output: u32
+* Instructions:
+$
+{ instruction: assign, input: (get_state), assign: CALL_EXPRESSION_FUNCTION }
+{ instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (clone, METHOD_CALL_EXPRESSION), assign: 1_CALL_EXPRESSION_ARG }
+{ instruction: evaluate, input: (CALL_EXPRESSION_FUNCTION, 1_CALL_EXPRESSION_ARG), assign: state }
+{ instruction: assign, input: (state), assign: FIELD_BASE }
+{ instruction: field, input: (FIELD_BASE, count), assign: BINARY_EXPRESSION_LEFT }
+{ instruction: assign, input: (incr), assign: BINARY_EXPRESSION_RIGHT }
+{ instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT) }
+{ instruction: assign, input: (state), assign: FIELD_BASE }
+{ instruction: field, input: (FIELD_BASE, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
+{ instruction: assign, input: (incr), assign: ASSIGN_EXPRESSION_RIGHT }
+{ instruction: assign, input: (ASSIGN_EXPRESSION_LEFT, ASSIGN_EXPRESSION_RIGHT) }
+{ instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (storage, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: assign, input: (STATE), assign: 1_METHOD_CALL_ARG }
+{ instruction: assign, input: (state), assign: 2_METHOD_CALL_ARG }
+{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, 1_METHOD_CALL_ARG, 2_METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
+{ instruction: assign, input: (state), assign: FIELD_BASE }
+{ instruction: field, input: (FIELD_BASE, count), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
 -() [get_state]
-    * Inputs:
-    { 
-    }
-    * Output: Could not figure out type
-    * Instructions:
-        $
-            { instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION), assign: METHOD_CALL_RESULT }
-            { instruction: assign, input: (STATE), assign: 1 METHOD_CALL_ARG }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
-            { instruction: evaluate, input: (METHOD_CALL_EXPRESSION, 1 METHOD_CALL_ARG), assign: METHOD_CALL_RESULT }
-            { instruction: Return, input: (Thing_to_return) }
-        $
+* Inputs:
+{ 
+}
+* Output: State
+* Instructions:
+$
+{ instruction: assign, input: (unwrap_or), assign: CALL_EXPRESSION_FUNCTION }
+{ instruction: assign, input: (0), assign: count }
+{ instruction: assign, input: (0), assign: last_incr }
+{ instruction: initialize_udt, input: (State, count, last_incr), assign: 1_CALL_EXPRESSION_ARG }
+{ instruction: evaluate, input: (CALL_EXPRESSION_FUNCTION, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
 :[Functions]
+
+
+[User Defined Types]:
+
+* (State)
+{
+count: u32
+last_incr: u32
+}
+
+:[User Defined Types]
 "#;
 
         let actual_dtr_code = parse_to_dtr(CUSTOM_TYPES_CONTRACT);
@@ -332,7 +362,7 @@ mod tests {
 
                 assert_eq!(
                     dtr_code.replace("\t", "").replace("\n", ""),
-                    "".replace("\t", "").replace("\n", "")
+                    expected_dtr_code.replace("\t", "").replace("\n", "")
                 );
             }
             Err(err) => {
