@@ -176,7 +176,6 @@ mod tests {
 * Output: u32
 * Instructions:
 $
-{ instruction: assign, input: (42), assign: Thing_to_return }
 { instruction: Return, input: (42) }
 $
 :[Functions]
@@ -210,8 +209,6 @@ $
 * Output: u32
 * Instructions:
 $
-{ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }
-{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }
 { instruction: add, input: (42, and_then_some), assign: Thing_to_return }
 { instruction: Return, input: (Thing_to_return) }
 $
@@ -248,25 +245,14 @@ incr: u32
 * Output: u32
 * Instructions:
 $
-{ instruction: assign, input: (get_state), assign: CALL_EXPRESSION_FUNCTION }
-{ instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
 { instruction: evaluate, input: (clone, env), assign: 1_CALL_EXPRESSION_ARG }
 { instruction: evaluate, input: (get_state, 1_CALL_EXPRESSION_ARG), assign: state }
-{ instruction: assign, input: (state), assign: FIELD_BASE }
 { instruction: field, input: (state, count), assign: BINARY_EXPRESSION_LEFT }
-{ instruction: assign, input: (incr), assign: BINARY_EXPRESSION_RIGHT }
 { instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, incr) }
-{ instruction: assign, input: (state), assign: FIELD_BASE }
 { instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
-{ instruction: assign, input: (incr), assign: ASSIGN_EXPRESSION_RIGHT }
-{ instruction: assign, input: (ASSIGN_EXPRESSION_LEFT, incr) }
-{ instruction: assign, input: (env), assign: METHOD_CALL_EXPRESSION }
 { instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
 { instruction: evaluate, input: (instance, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: assign, input: (STATE), assign: 1_METHOD_CALL_ARG }
-{ instruction: assign, input: (state), assign: 2_METHOD_CALL_ARG }
 { instruction: evaluate, input: (set, env, STATE, state), assign: METHOD_CALL_RESULT }
-{ instruction: assign, input: (state), assign: FIELD_BASE }
 { instruction: field, input: (state, count), assign: Thing_to_return }
 { instruction: Return, input: (Thing_to_return) }
 $
@@ -277,9 +263,6 @@ $
 * Output: State
 * Instructions:
 $
-{ instruction: assign, input: (unwrap_or), assign: CALL_EXPRESSION_FUNCTION }
-{ instruction: assign, input: (0), assign: count }
-{ instruction: assign, input: (0), assign: last_incr }
 { instruction: initialize_udt, input: (State, 0, 0), assign: 1_CALL_EXPRESSION_ARG }
 { instruction: evaluate, input: (unwrap_or, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return }
 { instruction: Return, input: (Thing_to_return) }

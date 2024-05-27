@@ -34,6 +34,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::optimize::create_instruction;
 
     #[test]
     fn constant_propagation_only_propagates_if_assign() {
@@ -143,13 +144,5 @@ mod tests {
             apply(unoptimized_instructions),
             expected_optimized_instructions
         );
-    }
-
-    fn create_instruction(name: &str, input: Vec<&str>, assign: &str) -> Instruction {
-        Instruction::new(
-            name.to_string(),
-            input.into_iter().map(|s| s.to_string()).collect(),
-            assign.to_string(),
-        )
     }
 }
