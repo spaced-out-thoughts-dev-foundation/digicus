@@ -22,7 +22,7 @@ function TopHeaderBar() {
         justifyContent: 'center',
         color: 'rgb(39 207 230)'
       }}>
-      <Typography style={{fontSize: '1.5em'}}>
+      <Typography style={{fontSize: '3em'}}>
         Digicus IDE
       </Typography>
     </div>

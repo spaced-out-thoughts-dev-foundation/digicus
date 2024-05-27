@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box';
-import ReactFlow, { MarkerType } from 'reactflow';
+import ReactFlow, { Controls, MarkerType, MiniMap } from 'reactflow';
 import InstructionNode from './InstructionNode';
 import FunctionNode from './FunctionNode';
 import CodeContainer from './CodeContainer';
@@ -93,7 +93,7 @@ function edges(function_data, function_number) {
     .map((_, index) => constructEdge(index, function_number));
 };
 
-function ContractContainer({functions, supportedInstructions, supportedInstructionToColor, originalText, filename}) {
+function ContractContainer({functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer}) {
     return (
       <div className='contract-container-container'>
         <Box className='contract-container-box'>
@@ -103,16 +103,20 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
                 nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i)).flatMap(x => x)} 
                 edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
                 fitView={{padding: 100}}
-                panOnDrag={true}
-                zoomOnScroll={true}
-                zoomOnPinch={true}
-                zoomOnDoubleClick={false}
                 nodeTypes={nodeTypes}
-              />
+              >
+                <Controls />
+                <MiniMap
+                  pannable={true}
+                  zoomable={true}
+                />
+              </ReactFlow>
                : ''
             }
         </Box>
-       <CodeContainer originalText={originalText} filename={filename} />
+       <div className='code-container-div'>
+          { showCodeContainer ?  <CodeContainer originalText={originalText} filename={filename} /> : '' }
+        </div>
       </div>
     );
 }

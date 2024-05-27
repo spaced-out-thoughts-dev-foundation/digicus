@@ -14,6 +14,8 @@ const App = () => {
   const [contract, setContract] = useState({contract: '', originalText: ``});
   const [file, setFile] = useState(null);
   const [supportedInstructions, setSupportedInstructions] = useState([]);
+  const [showCodeContainer, setShowCodeContainer] = useState(true);
+  const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
   useEffect(() => {
     fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
@@ -25,6 +27,16 @@ const App = () => {
   }, []);
 
   const handleDeploy = () => {};
+
+  const handleShowCodeContainer = () => {
+    setShowCodeContainer(!showCodeContainer);
+    setShowUserDefinedTypes(!showUserDefinedTypes);
+  }
+
+  const handleShowUserDefinedTypes = () => {
+    setShowCodeContainer(!showCodeContainer);
+    setShowUserDefinedTypes(!showUserDefinedTypes);
+  }
 
   const determineFileFormat = (file) => {
     if (file == null) {
@@ -86,7 +98,28 @@ const App = () => {
             <div className='top-level-third-level-container'>
               <div className='top-level-third-level-container-secondary-header-bar'>
                 <ContractHeader name={contract?.contract?.contract_name}/>
-                <FileUpload handleFileChange={handleFileChange} handleUpload={handleUpload}/>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                  <FileUpload style={{flex: 10}} handleFileChange={handleFileChange} handleUpload={handleUpload}/>
+                  <div style={{border: '1px solid black', borderRadius: '10px', margin: '10px'}}>
+                      <label>
+                        <input 
+                            type="checkbox" 
+                            checked={showCodeContainer} 
+                            onChange={handleShowCodeContainer} 
+                        />
+                        Source code
+                    </label>
+                    <br></br>
+                    <label>
+                        <input 
+                            type="checkbox" 
+                            checked={showUserDefinedTypes} 
+                            onChange={handleShowUserDefinedTypes} 
+                        />
+                        User Defined Types
+                    </label>
+                  </div>
+                </div>
               </div>
               <ContractContainer 
                 functions={contract?.contract?.contract_functions}
@@ -95,6 +128,7 @@ const App = () => {
                 supportedInstructions={supportedInstructions}
                 supportedInstructionToColor={supportedInstructionToColor}
                 contractName={contract?.contract?.contract_name}
+                showCodeContainer={showCodeContainer}
               />
             </div>
           </div>

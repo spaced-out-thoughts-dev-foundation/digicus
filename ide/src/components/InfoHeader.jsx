@@ -17,16 +17,7 @@ function InfoHeader() {
 
 
   useEffect(() => {
-    fetch('https://temprustfunctions-14zmlnh3e-robertdursts-projects.vercel.app/api/versions',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'text/text',
-          'Accept': 'application/json',
-          // 'Access-Control-Allow-Origin': '*'
-        }
-      }
-    )
+    fetch('https://rust-to-dtr.vercel.app/api/versions')
       .then(response => {
         console.log(response)
         return response.json()
