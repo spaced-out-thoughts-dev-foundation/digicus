@@ -174,18 +174,6 @@ mod tests {
             ),
         ];
 
-        match &result {
-            Ok(result_thing) => {
-                // assert_eq!(result.len(), expected.len());
-                for (index, instruction) in result_thing.iter().enumerate() {
-                    println!("{:?}", instruction);
-                }
-            }
-            Err(_) => assert!(false),
-        }
-
-        println!("\n");
-
         assert_eq!(result, Ok(expected));
     }
 }

@@ -3,8 +3,6 @@ use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::translate::pattern::handle_pattern;
-use syn::token::In;
-// use crate::translate::pattern::handle_pattern;
 use syn::ExprBlock;
 
 // A block is a collection of statements

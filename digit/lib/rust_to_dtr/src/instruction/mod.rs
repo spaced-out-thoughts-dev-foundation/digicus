@@ -1,4 +1,4 @@
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Instruction {
     pub name: String,
     pub input: Vec<String>,
@@ -31,3 +31,11 @@ impl Instruction {
         )
     }
 }
+
+impl PartialEq for Instruction {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name && self.input == other.input && self.assign == other.assign
+    }
+}
+
+impl Eq for Instruction {}

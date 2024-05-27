@@ -33,19 +33,20 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
             fn_str.push_str("fn(");
             let mut args: Vec<String> = Vec::new();
             for arg in &bare_fn.inputs {
-                if let syn::BareFnArg {
-                    attrs: _,
-                    name: _,
-                    ty: pat_type,
-                } = arg
-                {
-                    let val = figure_out_type(&pat_type);
-                    match val {
-                        Ok(val) => args.push(val),
-                        Err(_) => {
-                            return Err(NotTranslatableError::Custom(
-                                "Could not figure out type".to_string(),
-                            ))
+                match arg {
+                    syn::BareFnArg {
+                        attrs: _,
+                        name: _,
+                        ty: pat_type,
+                    } => {
+                        let val = figure_out_type(&pat_type);
+                        match val {
+                            Ok(val) => args.push(val),
+                            Err(_) => {
+                                return Err(NotTranslatableError::Custom(
+                                    "Could not figure out type".to_string(),
+                                ));
+                            }
                         }
                     }
                 }
