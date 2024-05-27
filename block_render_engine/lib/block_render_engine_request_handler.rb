@@ -52,12 +52,6 @@ class BlockRenderEngineRequestHandler
         response_body = response.body.force_encoding('ASCII-8BIT').encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
       end
 
-  
-
-      # Print the response code and body
-      puts "Response Code: #{response.code}"
-      puts "Response Body: #{response_body['dtr']}"
-      puts "DTR: #{JSON.parse(response_body)['dtr']}"
       @transpiled_code = JSON.parse(response_body)['dtr']
     else
       @transpiled_code = content
@@ -74,6 +68,7 @@ class BlockRenderEngineRequestHandler
       contract_name: @contract_name,
       contract_state: @contract_state,
       contract_functions: @contract_functions,
+      contract_user_defined_types: @contract_user_defined_types,
       compilation_error: @compilation_error,
       content_final: content,
       status: status,
@@ -119,6 +114,12 @@ class BlockRenderEngineRequestHandler
           inputs: f&.inputs,
         }.to_json
       end
+      @contract_user_defined_types = contract.user_defined_types&.map do |t|
+        {
+          name: t.name,
+          attributes: t.attributes
+        }.to_json
+      end
 
       @compilation_success = true
       @compilation_error = ''
@@ -126,6 +127,7 @@ class BlockRenderEngineRequestHandler
       @contract_name = "Unknown"
       @contract_state = []
       @contract_functions = []
+      @contract_user_defined_types = []
 
       @compilation_error = e
     end
