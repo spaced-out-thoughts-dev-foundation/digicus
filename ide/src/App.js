@@ -129,6 +129,8 @@ const App = () => {
                 supportedInstructionToColor={supportedInstructionToColor}
                 contractName={contract?.contract?.contract_name}
                 showCodeContainer={showCodeContainer}
+                showUserDefinedTypes={showUserDefinedTypes}
+                userDefinedTypes={contract?.contract?.contract_user_defined_types}
               />
             </div>
           </div>

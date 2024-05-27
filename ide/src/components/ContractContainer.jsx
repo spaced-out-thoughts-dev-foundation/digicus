@@ -4,6 +4,7 @@ import ReactFlow, { Controls, MarkerType, MiniMap } from 'reactflow';
 import InstructionNode from './InstructionNode';
 import FunctionNode from './FunctionNode';
 import CodeContainer from './CodeContainer';
+import UserDefinedTypesContainer from './UserDefinedTypesContainer';
 
 import ".././styles/ContractContainer.css";
 
@@ -93,7 +94,7 @@ function edges(function_data, function_number) {
     .map((_, index) => constructEdge(index, function_number));
 };
 
-function ContractContainer({functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer}) {
+function ContractContainer({functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer, showUserDefinedTypes, userDefinedTypes}) {
     return (
       <div className='contract-container-container'>
         <Box className='contract-container-box'>
@@ -116,6 +117,7 @@ function ContractContainer({functions, supportedInstructions, supportedInstructi
         </Box>
        <div className='code-container-div'>
           { showCodeContainer ?  <CodeContainer originalText={originalText} filename={filename} /> : '' }
+          { showUserDefinedTypes ?  <UserDefinedTypesContainer userDefinedTypes={userDefinedTypes} /> : '' }
         </div>
       </div>
     );

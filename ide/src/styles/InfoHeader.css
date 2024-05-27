@@ -1,6 +1,12 @@
 .info-header {
   flex: 1;
-  text-align: right;
+  text-align: left;
   font-size: 0.8em;
   margin: 1em;
+}
+
+.info-header-dependency-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

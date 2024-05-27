@@ -29,11 +29,19 @@ function InfoHeader() {
 
   return (
     <div className='info-header'>
-      Relevant Software Dependencies:
-        {blockRenderEnginerVersions ? <p>[dtr_core]: {blockRenderEnginerVersions.dtr_core}</p> : <p>Loading...</p>}
-        {blockRenderEnginerVersions ? <p>[block render engine]: {blockRenderEnginerVersions.block_render_engine}</p> : <p>Loading...</p>}
-        {tempRustToDtrServerVersions ? <p>[rust_to_dtr_version]: {tempRustToDtrServerVersions.rust_to_dtr_version}</p> : <p>Loading...</p>}
-        {tempRustToDtrServerVersions ? <p>[block temp_rust_to_dtr_version engine]: {tempRustToDtrServerVersions.temp_rust_to_dtr_version}</p> : <p>Loading...</p>}
+      <div className='info-header-dependency-container'>
+        <div>
+          <h3>Block Render Engine ({blockRenderEnginerVersions ? blockRenderEnginerVersions.block_render_engine : "Loading..."})</h3>
+          {blockRenderEnginerVersions ? <p>[dtr_core]: {blockRenderEnginerVersions.dtr_core}</p> : <p>Loading...</p>}
+          
+        </div>
+        <div>
+          <h3>Rust to DTR Server ({tempRustToDtrServerVersions ? tempRustToDtrServerVersions.temp_rust_to_dtr_version : "Loading..."}) </h3> 
+          {tempRustToDtrServerVersions ? <p>[rust_to_dtr]: {tempRustToDtrServerVersions.rust_to_dtr_version}</p> : <p>Loading...</p>}
+        </div>
+
+       
+      </div>
     </div>
   );
 }
