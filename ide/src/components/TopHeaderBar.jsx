@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import InfoHeader from './InfoHeader'
 import React from 'react';
+import packageJson from '../../package.json';
 
 import ".././styles/App.css";
 
@@ -25,6 +26,7 @@ function TopHeaderBar() {
       <Typography style={{fontSize: '3em'}}>
         Digicus IDE
       </Typography>
+      {packageJson.version}
     </div>
     <div style={{flex: 1, justifyContent: 'right', display: 'flex'}}>
       <InfoHeader />

@@ -33,14 +33,11 @@ function InfoHeader() {
         <div>
           <h3>Block Render Engine ({blockRenderEnginerVersions ? blockRenderEnginerVersions.block_render_engine : "Loading..."})</h3>
           {blockRenderEnginerVersions ? <p>[dtr_core]: {blockRenderEnginerVersions.dtr_core}</p> : <p>Loading...</p>}
-          
         </div>
         <div>
           <h3>Rust to DTR Server ({tempRustToDtrServerVersions ? tempRustToDtrServerVersions.temp_rust_to_dtr_version : "Loading..."}) </h3> 
           {tempRustToDtrServerVersions ? <p>[rust_to_dtr]: {tempRustToDtrServerVersions.rust_to_dtr_version}</p> : <p>Loading...</p>}
         </div>
-
-       
       </div>
     </div>
   );
