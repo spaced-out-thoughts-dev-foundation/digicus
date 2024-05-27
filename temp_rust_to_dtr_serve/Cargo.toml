@@ -9,7 +9,7 @@ serde_json = { version = "1", features = ["raw_value"] }
 serde = { version = "1" }
 # Documentation: https://docs.rs/vercel_runtime/latest/vercel_runtime
 vercel_runtime = { version = "1.1.0" }
-rust_to_dtr = "0.1.6"
+rust_to_dtr = "0.2.0"
 
 # You can specify a library for shared logic here (optional)
 # [lib]
