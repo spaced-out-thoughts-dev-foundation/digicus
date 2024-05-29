@@ -17,7 +17,7 @@ function InstructionsAndActionsSideBar({handleDeploy, supportedInstructions}) {
           {supportedInstructions?.map((supported_instruction_data, index) => (
             <ListItem key={index} className='instructions-menu-list-item' style={{backgroundColor: supportedInstructionToColor(supported_instruction_data)}}>
               <Button className='instructions-menu-list-item-button'>
-                {<strong style={{color: 'black', fontSize: '1.25em', marginRight: '0.5em',  textShadow: '1px 1px 1px gray'}}>{supported_instruction_data.name}</strong>}{'(' + supported_instruction_data.category + ')'}
+                {<strong style={{color: 'black', fontSize: '0.9em', marginRight: '0.5em',  textShadow: '1px 1px 1px gray'}}>{supported_instruction_data.name}</strong>}{'(' + supported_instruction_data.category + ')'}
               </Button>
             </ListItem>
           ))}

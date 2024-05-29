@@ -1,6 +1,6 @@
 {
   "name": "ide",
-  "version": "0.2.7",
+  "version": "0.2.8-5.28.24",
   "private": true,
   "proxy": "http://localhost:3000/",
   "dependencies": {

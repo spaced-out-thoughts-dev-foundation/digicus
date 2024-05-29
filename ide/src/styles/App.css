@@ -61,7 +61,7 @@
 
 .top-level-third-level-container {
   display: flex; 
-  flex: 5;
+  flex: 8;
   flex-direction: column;
 }
 

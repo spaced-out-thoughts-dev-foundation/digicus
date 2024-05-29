@@ -8,9 +8,10 @@ import ".././styles/CodeContainer.css";
 const codeContainerBody = (originalText, filename) => {
   return (
       filename && originalText ? 
+      <div style={{fontSize: '0.75em', overflow: 'auto'}}>
         <SyntaxHighlighter language="rust" style={dracula}>
           {originalText}
-        </SyntaxHighlighter> : ''
+        </SyntaxHighlighter> </div> : ''
 
   );
 }

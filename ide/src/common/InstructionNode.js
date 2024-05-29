@@ -9,7 +9,7 @@ export function supportedInstructionToColor (supported_instruction) {
   } else if (supported_instruction.category === "untyped") {
     return 'silver';
   } else if (supported_instruction.category === "numeric") {
-    return 'maroon';
+    return 'lavender';
   } else if (supported_instruction.category === "string") {
     return 'yellow';
   } else if (supported_instruction.category === "environment") {
@@ -17,7 +17,7 @@ export function supportedInstructionToColor (supported_instruction) {
   } else if (supported_instruction.category === "methods") {
     return 'pink';
   } else if (supported_instruction.category === "objects") {
-    return 'green';
+    return 'skyblue';
   } else {
     return 'white';
   }

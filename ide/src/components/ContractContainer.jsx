@@ -30,7 +30,7 @@ function constructNode(instruction, index, function_number, instructionColor) {
       instruction: instruction, 
       label: `${instruction.instruction.toUpperCase()} ${instruction.inputs ? `(${instruction.inputs.join(',')})` : ''}` 
     }, 
-    position: { x: 0 * (function_number), y: 150 * (index) },
+    position: { x: 0 * (function_number), y:index ==1 ? 150: 50 + 100 * (index) },
     type: 'instructionNode',
     parentId: `f-${function_number}`
   };
@@ -61,7 +61,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         fontSize: '1em',
         borderRadius: 10,
         width: 300,
-        height: 150 * (function_json_data.instructions.length + 1),
+        height: 100 * (function_json_data.instructions.length + 1) + 25,
         marginLeft: '-50px',
         backgroundColor: 'rgba(255, 255, 0, 0.15)',
         textShadow: '0.5px 0.5px 0.5px black',
