@@ -1,0 +1,46 @@
+[Contract]: IncrementContract
+[Functions]:
+-() [increment]
+* Inputs:
+{
+env: Env
+incr: u32
+}
+* Output: u32
+* Instructions:
+$
+{ instruction: evaluate, input: (clone, env), assign: 1_CALL_EXPRESSION_ARG }
+{ instruction: evaluate, input: (get_state, 1_CALL_EXPRESSION_ARG), assign: state }
+{ instruction: field, input: (state, count), assign: BINARY_EXPRESSION_LEFT }
+{ instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, incr) }
+{ instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (set, env, STATE, state), assign: METHOD_CALL_RESULT }
+{ instruction: field, input: (state, count), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
+-() [get_state]
+* Inputs:
+{
+env: Env
+}
+* Output: State
+* Instructions:
+$
+{ instruction: initialize_udt, input: (State, 0, 0), assign: 1_CALL_EXPRESSION_ARG }
+{ instruction: evaluate, input: (unwrap_or, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
+:[Functions]
+
+
+[User Defined Types]:
+
+* (State)
+{
+count: u32
+last_incr: u32
+}
+
+:[User Defined Types]

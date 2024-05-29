@@ -13,6 +13,9 @@ syn = { version = "2.0", features = ["full"] }
 proc-macro2 = "1.0"
 rand = "0.8.5"
 
+[dev-dependencies]
+paste = "1.0"
+
 [lib]
 name = "rust_to_dtr"
 crate-type = ["cdylib", "lib"]

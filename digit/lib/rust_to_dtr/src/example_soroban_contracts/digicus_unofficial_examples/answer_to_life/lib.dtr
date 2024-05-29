@@ -1,0 +1,16 @@
+[Contract]: AnswerToLifeContract
+
+[Functions]:
+-() [fourty_two]
+* Inputs:
+{
+env: Env
+}
+* Output: u32
+* Instructions:
+$
+{ instruction: Return, input: (42) }
+$
+:[Functions]
+[User Defined Types]:
+:[User Defined Types]
