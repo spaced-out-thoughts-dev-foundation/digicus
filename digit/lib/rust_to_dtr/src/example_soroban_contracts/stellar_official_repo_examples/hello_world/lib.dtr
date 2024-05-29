@@ -1,0 +1,18 @@
+[Contract]: HelloContract
+[Functions]:
+-() [hello]
+* Inputs:
+{
+env: Env
+to: String
+}
+* Output: List<String>
+* Instructions:
+$
+{ instruction: create_list, input: (env, "Hello", to), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
+:[Functions]
+
+[User Defined Types]:
+:[User Defined Types]

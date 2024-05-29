@@ -1,0 +1,62 @@
+[Contract]: TtlContract
+
+[Functions]:
+-() [setup]
+  * Inputs:
+  {
+    env: Env
+  }
+  * Output:
+  * Instructions
+  $
+  { instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (persistent, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (set, env, DataKey::MyKey, 0), assign: METHOD_CALL_RESULT }
+  { instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (instance, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (set, env, DataKey::MyKey, 1), assign: METHOD_CALL_RESULT }
+  { instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (temporary, env), assign: METHOD_CALL_EXPRESSION }
+  { instruction: evaluate, input: (set, env, DataKey::MyKey, 2), assign: Thing_to_return }
+  { instruction: Return, input: (Thing_to_return) }
+  $
+-() [extend_persistent]
+  * Inputs:
+  {
+    env: Env
+  }
+  * Output:
+  * Instructions
+  $
+    {}
+  $
+-() [extend_instance]
+  * Inputs:
+  {
+    env: Env
+  }
+  * Output:
+  * Instructions
+  $
+    {}
+  $
+-() [extend_temporary]
+  * Inputs:
+  {
+    env: Env
+  }
+  * Output:
+  * Instructions
+  $
+    {}
+  $
+:[Functions]
+
+[User Defined Types]:
+
+* (DataKey)
+{
+MyKey: u32
+}
+
+:[User Defined Types]

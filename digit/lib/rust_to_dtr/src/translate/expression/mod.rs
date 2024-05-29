@@ -119,9 +119,9 @@ fn parse_expression(
         syn::Expr::Index(_) => Err(NotTranslatableError::Custom(
             "Index expression not supported".to_string(),
         )),
-        syn::Expr::Macro(_) => Err(NotTranslatableError::Custom(
-            "Macro expression not supported".to_string(),
-        )),
+        syn::Expr::Macro(expr_macro) => {
+            supported::macro_expression::handle_macro_expression(expr_macro, assignment)
+        }
         syn::Expr::Range(_) => Err(NotTranslatableError::Custom(
             "Range expression not supported".to_string(),
         )),

@@ -1,5 +1,3 @@
-use syn::ItemStruct;
-
 use crate::errors;
 use crate::translate;
 use crate::translate::type_name::{self, parse_path};
@@ -7,12 +5,12 @@ use crate::translate::type_name::{self, parse_path};
 pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
     // Parse the Rust code into a syn data structure
     let parsed_ast = syn::parse_file(rust_code).unwrap();
-    let mut user_defined_types: Vec<ItemStruct> = Vec::new();
+    let mut user_defined_types: Vec<syn::Item> = Vec::new();
 
     // Extract information from the parsed AST
     let mut dtr_code = String::new();
     for item in parsed_ast.items {
-        match item {
+        match &item {
             syn::Item::Struct(item_struct) => {
                 // here we look at the attributes of the struct such as #[contract] or #[contractimpl]
                 item_struct.attrs.iter().for_each(|attr| {
@@ -20,7 +18,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     if parse_path(attr.meta.path()) == "contract" {
                         dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
                     } else if parse_path(attr.meta.path()) == "contracttype" {
-                        user_defined_types.push(item_struct.clone());
+                        user_defined_types.push(item.clone());
                     }
                 });
             }
@@ -48,6 +46,13 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                 });
                 dtr_code.push_str(":[Functions]\n");
             }
+            syn::Item::Enum(enum_item) => {
+                enum_item.attrs.iter().for_each(|attr| {
+                    if parse_path(attr.meta.path()) == "contracttype" {
+                        user_defined_types.push(item.clone());
+                    }
+                });
+            }
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
@@ -56,24 +61,70 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
     dtr_code.push_str("\n\n[User Defined Types]:");
 
-    user_defined_types.iter().for_each(|item_struct| {
-        dtr_code.push_str(&format!("\n\n\t* ({})\n", item_struct.ident));
-        dtr_code.push_str("\t{\n");
-
-        item_struct.fields.iter().for_each(|field| {
-            if let syn::Type::Path(type_path) = &field.ty {
-                dtr_code.push_str(&format!(
-                    "\t\t{}: {}\n",
-                    field.ident.as_ref().unwrap(),
-                    type_name::parse_path(&type_path.path)
-                ));
-            }
-        });
-
-        dtr_code.push_str("\t}\n");
+    user_defined_types.iter().for_each(|item| {
+        dtr_code.push_str(&syn_item_to_user_defined_type(item));
     });
 
     dtr_code.push_str("\n:[User Defined Types]\n");
 
     Ok(dtr_code)
+}
+
+fn syn_item_to_user_defined_type(item: &syn::Item) -> String {
+    match item {
+        syn::Item::Struct(item_struct) => syn_item_struct_to_user_defined_type(item_struct),
+        syn::Item::Enum(item_enum) => syn_item_enum_to_user_defined_type(item_enum),
+        _ => "".to_string(),
+    }
+}
+
+fn syn_item_struct_to_user_defined_type(item: &syn::ItemStruct) -> String {
+    let mut dtr_code = String::new();
+
+    dtr_code.push_str(&format!("* ({})\n", item.ident));
+    dtr_code.push_str("{\n");
+
+    item.fields.iter().for_each(|field| {
+        if let syn::Type::Path(type_path) = &field.ty {
+            dtr_code.push_str(&format!(
+                "\t{}: {}\n",
+                field.ident.as_ref().unwrap(),
+                type_name::parse_path(&type_path.path)
+            ));
+        }
+    });
+
+    dtr_code.push_str("}\n");
+
+    dtr_code
+}
+
+fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
+    let mut dtr_code = String::new();
+
+    dtr_code.push_str(&format!("* ({})\n", item.ident));
+    dtr_code.push_str("{\n");
+
+    item.variants.iter().for_each(|variant| {
+        dtr_code.push_str(&format!("\t* ({})\n", variant.ident));
+        dtr_code.push_str("\t{\n");
+
+        if let syn::Fields::Named(fields_named) = &variant.fields {
+            fields_named.named.iter().for_each(|field| {
+                if let syn::Type::Path(type_path) = &field.ty {
+                    dtr_code.push_str(&format!(
+                        "\t\t{}: {}\n",
+                        field.ident.as_ref().unwrap(),
+                        type_name::parse_path(&type_path.path)
+                    ));
+                }
+            });
+        }
+
+        dtr_code.push_str("\t}\n");
+    });
+
+    dtr_code.push_str("}\n");
+
+    dtr_code
 }

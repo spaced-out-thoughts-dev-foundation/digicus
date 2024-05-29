@@ -66,6 +66,7 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
             "Unable to translate typeless collection".to_string(),
         )),
         "String" => Ok("String".to_string()),
+        "Symbol" => Ok("String".to_string()),
         "bool" => Ok("Boolean".to_string()),
         "char" => Ok("Character".to_string()),
         "f32" | "f64" => Ok("Float".to_string()),
