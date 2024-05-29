@@ -1,0 +1,16 @@
+[Contract]: Contract
+[Functions]:
+-() [hello]
+* Inputs:
+{
+env: Env
+value: String
+}
+* Instructions:
+$
+{ instruction: log_string, input: (env, "Hello {}", value), assign: Thing_to_return }
+{ instruction: Return, input: (Thing_to_return) }
+$
+:[Functions]
+[User Defined Types]:
+:[User Defined Types]

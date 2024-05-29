@@ -9,17 +9,17 @@ Progress:
 * [ ] Atomic Swap
 * [ ] Auth
 * [ ] Cross Contract
-* [ ] Custom Types
+* [x] Custom Types
 * [ ] Deep Contract Auth
 * [ ] Deployer
 * [ ] Errors
 * [ ] Eth ABI
 * [ ] Events
 * [ ] Fuzzing
-* [ ] Hello World
-* [ ] Increment
+* [x] Hello World
+* [x] Increment
 * [ ] Liquidity Pool
-* [ ] Logging
+* [x] Logging
 * [ ] Mint Lock
 * [ ] Simple Account
 * [ ] Single Offer

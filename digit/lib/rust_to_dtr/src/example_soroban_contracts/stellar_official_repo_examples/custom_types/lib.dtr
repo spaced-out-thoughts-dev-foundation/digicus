@@ -28,8 +28,11 @@ env: Env
 * Output: State
 * Instructions:
 $
-{ instruction: initialize_udt, input: (State, 0, 0), assign: 1_CALL_EXPRESSION_ARG }
-{ instruction: evaluate, input: (unwrap_or, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (get, METHOD_CALL_EXPRESSION, STATE), assign: METHOD_CALL_EXPRESSION }
+{ instruction: initialize_udt, input: (State, 0, 0), assign: 1_METHOD_CALL_ARG }
+{ instruction: evaluate, input: (unwrap_or, METHOD_CALL_EXPRESSION, 1_METHOD_CALL_ARG), assign: Thing_to_return }
 { instruction: Return, input: (Thing_to_return) }
 $
 :[Functions]

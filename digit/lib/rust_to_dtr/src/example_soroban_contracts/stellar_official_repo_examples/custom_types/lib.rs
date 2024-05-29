@@ -32,7 +32,7 @@ impl IncrementContract {
     }
     /// Return the current state.
     pub fn get_state(env: Env) -> State {
-        unwrap_or(State {
+        env.storage().instance().get(&STATE).unwrap_or(State {
             count: 0,
             last_incr: 0,
         }) // If no value set, assume 0.
