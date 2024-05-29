@@ -172,7 +172,10 @@ mod tests {
 
 [Functions]:
 -() [fourty_two]
-* Inputs:{ }
+* Inputs:
+{
+env: Env
+}
 * Output: u32
 * Instructions:
 $
@@ -205,7 +208,11 @@ $
 
 [Functions]:
 -() [fourty_two_and_then_some]
-* Inputs:{ and_then_some: u32}
+* Inputs:
+{
+env: Env
+and_then_some: u32
+}
 * Output: u32
 * Instructions:
 $
@@ -240,6 +247,7 @@ $
 -() [increment]
 * Inputs:
 { 
+env: Env
 incr: u32
 }
 * Output: u32
@@ -259,6 +267,7 @@ $
 -() [get_state]
 * Inputs:
 { 
+env: Env
 }
 * Output: State
 * Instructions:

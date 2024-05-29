@@ -24,24 +24,28 @@ pub fn parse_inputs(method: &syn::ImplItemFn) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Inputs:\n");
-    dtr_code.push_str("\t{ \n");
+    dtr_code.push_str("\t{\n");
 
     method.sig.inputs.iter().for_each(|input| {
         if let syn::FnArg::Typed(pat_type) = input {
             if let syn::Pat::Ident(pat_ident) = &*pat_type.pat {
                 // dtr_code
                 //     .push_str(&translate::pattern::handle_pattern(pat_ident).unwrap());
-                if pat_ident.ident != "env" {
-                    match translate::type_name::figure_out_type(&pat_type.ty) {
-                        Ok(type_name) => {
-                            dtr_code.push_str(&format!("\t\t{}: {}\n", pat_ident.ident, type_name));
-                        }
-                        Err(e) => {
-                            // return Err(e);
-                            dtr_code.push_str(&format!("Error: {:?}", e));
-                        }
+                // if pat_ident.ident != "env" {
+                match translate::type_name::figure_out_type(&pat_type.ty) {
+                    Ok(type_name) => {
+                        dtr_code.push_str(&format!(
+                            "\t\t{}: {}\n",
+                            pat_ident.ident.to_string().trim(),
+                            type_name.trim()
+                        ));
+                    }
+                    Err(e) => {
+                        // return Err(e);
+                        dtr_code.push_str(&format!("Error: {:?}", e));
                     }
                 }
+                // }
             }
         }
     });
