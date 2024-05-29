@@ -54,6 +54,23 @@ pub fn remove_unused_assigns(instructions: Vec<Instruction>) -> Vec<Instruction>
 
                 // }
             } else {
+                // if you had an assign but then you have an instruction that re-assigns (not in an assign instruction), remove the assign
+                let assigned_value = instruction.assign.as_str();
+
+                if assign_hash.contains_key(assigned_value) {
+                    let the_value: &AssignHashValue = assign_hash.get(assigned_value).unwrap();
+
+                    tagged_instructions.entry(the_value.index).and_modify(|e| {
+                        *e = if the_value.is_used {
+                            should_keep
+                        } else {
+                            get_rid_off
+                        }
+                    });
+
+                    assign_hash.remove(assigned_value);
+                }
+
                 tagged_instructions
                     .entry(index)
                     .and_modify(|e| *e = should_keep);
@@ -135,6 +152,25 @@ mod tests {
             create_instruction("add", vec!["c", "10"], "e"),
             create_instruction("assign", vec!["d"], "f"),
             create_instruction("add", vec!["f", "e"], "g"),
+        ];
+
+        assert_eq!(
+            remove_unused_assigns(unoptimized_instructions),
+            expected_optimized_instructions
+        );
+    }
+
+    #[test]
+    fn remove_unused_assigns_due_to_eval_after() {
+        let unoptimized_instructions = vec![
+            create_instruction("assign", vec!["1"], "a"),
+            create_instruction("evaluate", vec!["1", "b"], "a"),
+            create_instruction("add", vec!["a", "b"], "d"),
+        ];
+
+        let expected_optimized_instructions = vec![
+            create_instruction("evaluate", vec!["1", "b"], "a"),
+            create_instruction("add", vec!["a", "b"], "d"),
         ];
 
         assert_eq!(

@@ -15,8 +15,8 @@ $
 { instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, incr) }
 { instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT }
 { instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (instance, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (set, env, STATE, state), assign: METHOD_CALL_RESULT }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, STATE, state), assign: METHOD_CALL_RESULT }
 { instruction: field, input: (state, count), assign: Thing_to_return }
 { instruction: Return, input: (Thing_to_return) }
 $

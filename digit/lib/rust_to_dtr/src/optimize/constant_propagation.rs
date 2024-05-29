@@ -8,6 +8,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     instructions.clone().into_iter().for_each(|instruction| {
         if instruction.name == "assign" {
             instruction_hash_table.insert(instruction.assign.clone(), instruction.input.clone());
+        } else {
         }
 
         let mut new_inputs: Vec<String> = Vec::new();
@@ -18,6 +19,14 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
                 new_inputs.push(input);
             }
         });
+
+        if instruction.name == "assign" {
+        } else {
+            // if you had an assign but then you have an instruction that re-assigns (not in an assign instruction), remove the assign
+            if instruction_hash_table.contains_key(&instruction.assign) {
+                instruction_hash_table.remove_entry(&instruction.assign);
+            }
+        }
 
         let optimized_instruction = Instruction::new(
             instruction.name.clone(),
@@ -138,6 +147,28 @@ mod tests {
             create_instruction("assign", vec!["1"], "a"),
             create_instruction("add", vec!["1", "b"], "c"),
             create_instruction("add", vec!["c", "1"], "d"),
+        ];
+
+        assert_eq!(
+            apply(unoptimized_instructions),
+            expected_optimized_instructions
+        );
+    }
+
+    #[test]
+    fn constant_propagation_does_not_propagate_after_evaluate_reassignment() {
+        let unoptimized_instructions = vec![
+            create_instruction("assign", vec!["1"], "a"),
+            create_instruction("add", vec!["a", "b"], "c"),
+            create_instruction("evaluate", vec!["5", "a"], "a"),
+            create_instruction("add", vec!["a", "b"], "d"),
+        ];
+
+        let expected_optimized_instructions = vec![
+            create_instruction("assign", vec!["1"], "a"),
+            create_instruction("add", vec!["1", "b"], "c"),
+            create_instruction("evaluate", vec!["5", "1"], "a"),
+            create_instruction("add", vec!["a", "b"], "d"),
         ];
 
         assert_eq!(

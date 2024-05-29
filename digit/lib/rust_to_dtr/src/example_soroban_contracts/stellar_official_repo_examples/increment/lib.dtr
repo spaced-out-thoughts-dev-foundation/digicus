@@ -1,0 +1,29 @@
+[Contract]: IncrementContract
+[Functions]:
+-() [increment]
+* Inputs:
+{
+env: Env
+}
+* Output: u32
+* Instructions:
+$
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (get, METHOD_CALL_EXPRESSION, COUNTER), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (unwrap_or, METHOD_CALL_EXPRESSION, 0), assign: u32 }
+{ instruction: log_string, input: (env, "count: {}", count) }
+{ instruction: add_and_assign, input: (count, 1) }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, COUNTER, count), assign: METHOD_CALL_RESULT }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
+{ instruction: evaluate, input: (extend_ttl, METHOD_CALL_EXPRESSION, 50, 100), assign: METHOD_CALL_RESULT }
+{ instruction: Return, input: (count) }
+$
+:[Functions]
+
+
+[User Defined Types]:
+:[User Defined Types]

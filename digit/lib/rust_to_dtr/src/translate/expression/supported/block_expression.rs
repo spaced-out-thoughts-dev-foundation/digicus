@@ -3,6 +3,7 @@ use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::translate::pattern::handle_pattern;
+use crate::translate::statement::macro_statement::handle_macro_statement;
 use syn::ExprBlock;
 
 // A block is a collection of statements
@@ -52,9 +53,7 @@ pub fn parse_block_stmt(
             "Item statement not translatable".to_string(),
         )),
         syn::Stmt::Expr(exp, _r) => parse_expression(exp, assignment),
-        syn::Stmt::Macro(_mac) => Err(NotTranslatableError::Custom(
-            "Macro statement not translatable".to_string(),
-        )),
+        syn::Stmt::Macro(stmt_mac) => handle_macro_statement(stmt_mac, assignment),
     }
 }
 
