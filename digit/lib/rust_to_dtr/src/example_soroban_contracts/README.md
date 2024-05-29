@@ -14,7 +14,7 @@ Progress:
 * [ ] Deployer
 * [ ] Errors
 * [ ] Eth ABI
-* [ ] Events
+* [x] Events
 * [ ] Fuzzing
 * [x] Hello World
 * [x] Increment

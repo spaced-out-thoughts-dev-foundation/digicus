@@ -36,9 +36,6 @@ fn parse_expression(
         syn::Expr::TryBlock(try_block_expr) => {
             unsupported::try_block_expression::handle_try_block_expression(try_block_expr)
         }
-        syn::Expr::Tuple(tuple_expr) => {
-            unsupported::tuple_expression::handle_tuple_expression(tuple_expr)
-        }
         syn::Expr::Unsafe(unsafe_expr) => {
             unsupported::unsafe_expression::handle_unsafe_expression(unsafe_expr)
         }
@@ -94,6 +91,9 @@ fn parse_expression(
         }
         syn::Expr::Struct(struct_expr) => {
             supported::struct_expression::handle_struct_expression(struct_expr, assignment)
+        }
+        syn::Expr::Tuple(tuple_expr) => {
+            supported::tuple_expression::handle_tuple_expression(tuple_expr, assignment)
         }
 
         // NOT IMPLEMENTED //

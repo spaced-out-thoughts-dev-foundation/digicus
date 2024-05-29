@@ -18,7 +18,7 @@ pub fn handle_method_call_expression(
         let expressions_parsed: Vec<Instruction> =
             match parse_expression(&arg, Some(arg_name.clone())) {
                 Ok(expressions) => expressions,
-                Err(_) => Vec::new(),
+                Err(e) => panic!("Error parsing expression: {:?}", e),
             };
 
         expressions.extend(expressions_parsed);

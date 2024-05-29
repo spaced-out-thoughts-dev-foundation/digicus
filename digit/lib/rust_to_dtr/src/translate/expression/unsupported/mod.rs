@@ -8,7 +8,6 @@ pub mod match_expression;
 pub mod repeat_expression;
 pub mod try_block_expression;
 pub mod try_expression;
-pub mod tuple_expression;
 pub mod unsafe_expression;
 pub mod while_expression;
 pub mod yield_expression;

@@ -13,3 +13,4 @@ pub mod path_expression;
 pub mod reference_expression;
 pub mod return_expression;
 pub mod struct_expression;
+pub mod tuple_expression;
