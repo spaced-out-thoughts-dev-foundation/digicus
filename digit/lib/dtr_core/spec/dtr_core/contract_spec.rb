@@ -10,15 +10,15 @@ RSpec.describe DTRCore::Contract do
                               { name: 'from', type_name: 'I32' }
                             ], 'Symbol', [
                               { instruction: 'Add_Strings',
-                                inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
                               { instruction: 'Return',
-                                inputs: ['HelloToResult'], assign: nil }
+                                inputs: ['HelloToResult'], assign: nil, scope: 0 }
                             ])
     end
 
     let(:world_function) do
       DTRCore::Function.new('world', [], 'Symbol', [
-                              { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                              { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
                             ])
     end
 
@@ -46,15 +46,15 @@ RSpec.describe DTRCore::Contract do
                               { name: 'from', type_name: 'I32' }
                             ], 'Symbol', [
                               { instruction: 'Add_Strings',
-                                inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
                               { instruction: 'Return',
-                                inputs: ['HelloToResult'], assign: nil }
+                                inputs: ['HelloToResult'], assign: nil, scope: 0 }
                             ])
     end
 
     let(:world_function) do
       DTRCore::Function.new('world', [], 'Symbol', [
-                              { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                              { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
                             ])
     end
 
@@ -104,11 +104,11 @@ RSpec.describe DTRCore::Contract do
           [{ name: 'and_then_some', type_name: 'u32' }],
           'u32',
           [
-            { instruction: 'assign', inputs: ['42'], assign: 'BINARY_EXPRESSION_LEFT' },
-            { instruction: 'assign', inputs: ['and_then_some'], assign: 'BINARY_EXPRESSION_RIGHT' },
+            { instruction: 'assign', inputs: ['42'], assign: 'BINARY_EXPRESSION_LEFT', scope: 0 },
+            { instruction: 'assign', inputs: ['and_then_some'], assign: 'BINARY_EXPRESSION_RIGHT', scope: 0 },
             { instruction: 'add', inputs: %w[BINARY_EXPRESSION_LEFT BINARY_EXPRESSION_RIGHT],
-              assign: 'Thing_to_return' },
-            { instruction: 'Return', inputs: ['Thing_to_return'], assign: nil }
+              assign: 'Thing_to_return', scope: 0 },
+            { instruction: 'Return', inputs: ['Thing_to_return'], assign: nil, scope: 0 }
           ]
         )
       )

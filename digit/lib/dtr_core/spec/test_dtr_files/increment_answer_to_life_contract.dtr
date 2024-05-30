@@ -9,9 +9,9 @@
 	* Output: u32
 	* Instructions:
 		$
-			{ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT }
-			{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT }
-			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return }
-			{ instruction: Return, input: (Thing_to_return) }
+			{ instruction: assign, input: (42), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+			{ instruction: assign, input: (and_then_some), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 :[Functions]

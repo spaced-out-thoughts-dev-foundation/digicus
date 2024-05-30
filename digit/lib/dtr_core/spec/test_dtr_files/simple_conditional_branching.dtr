@@ -1,0 +1,17 @@
+[Contract]: ConditionalBranching
+
+[Functions]:
+-() [is_answer_to_life]
+	* Inputs:
+	{ 
+		numerical_question: u32
+	}
+	* Output: String
+	* Instructions:
+		$
+			{ instruction: conditional_jump, input: (equal_to, 42, numerical_question, 1)}
+			{ instruction: jump, input: (2)}
+			{ instruction: return, input: ("yes"), scope: 1}
+			{ instruction: return, input: ("no"), scope: 2}
+		$
+:[Functions]

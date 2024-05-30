@@ -93,9 +93,9 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'to', type_name: 'Symbol' }
                               ], 'Symbol', [
                                 { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
                                 { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil }
+                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
                               ])
       end
 
@@ -118,15 +118,15 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'from', type_name: 'I32' }
                               ], 'Symbol', [
                                 { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
                                 { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil }
+                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
                               ])
       end
 
       let(:world_function) do
         DTRCore::Function.new('world', [], 'Symbol', [
-                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
                               ])
       end
 
@@ -179,15 +179,15 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'from', type_name: 'State' }
                               ], 'State_Two', [
                                 { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult' },
+                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
                                 { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil }
+                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
                               ])
       end
 
       let(:world_function) do
         DTRCore::Function.new('world', [], 'Symbol', [
-                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue' }
+                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
                               ])
       end
 
@@ -220,6 +220,31 @@ RSpec.describe DTRCore::Parser do
         expect(parser.state_section).to match_array(state_definitions)
         expect(parser.function_section).to contain_exactly(hello_function, world_function)
         expect(parser.user_defined_types_section).to match_array(user_defined_types)
+      end
+    end
+
+    context 'when contract contains branching logic' do
+      let(:is_answer_to_life_function) do
+        DTRCore::Function.new('is_answer_to_life', [
+                                { name: 'numerical_question', type_name: 'u32' }
+                              ], 'String', [
+                                { instruction: 'conditional_jump',
+                                  inputs: %w[equal_to 42 numerical_question 1], assign: nil, scope: 0 },
+                                { instruction: 'jump',
+                                  inputs: ['2'], assign: nil, scope: 0 },
+                                { instruction: 'return', inputs: ['"yes"'], assign: nil, scope: 1 },
+                                { instruction: 'return', inputs: ['"no"'], assign: nil, scope: 2 }
+                              ])
+      end
+
+      it 'parses the contract name and function sections' do
+        parser = described_class.new(
+          './spec/test_dtr_files/simple_conditional_branching.dtr'
+        )
+
+        expect(parser.name_section).to eq('ConditionalBranching')
+        expect(parser.state_section).to be_nil
+        expect(parser.function_section).to contain_exactly(is_answer_to_life_function)
       end
     end
   end

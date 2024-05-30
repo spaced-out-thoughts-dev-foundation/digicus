@@ -58,7 +58,8 @@ module DTRCore
       {
         instruction: instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
         inputs: parse_function_instruction_input(instruction),
-        assign: instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1]
+        assign: instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1],
+        scope: instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0
       }
     end
 
