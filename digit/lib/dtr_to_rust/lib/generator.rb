@@ -5,9 +5,8 @@ require 'dtr_core'
 module DTRToRust
   # Generates Rust code from a DTR contract
   class Generator
-    def initialize(file_path)
-      @file_path = file_path
-      @dtr_contract = ::DTRCore::Parser.parse(file_path)
+    def initialize(content)
+      @dtr_contract = ::DTRCore::Contract.from_dtr_raw(content)
     end
 
     def generate
@@ -19,6 +18,14 @@ module DTRToRust
       generate_functions
 
       @content
+    end
+
+    def self.generate_from_file(file_path)
+      new(File.read(file_path)).generate
+    end
+
+    def self.generate_from_string(dtr_string)
+      new(dtr_string).generate
     end
 
     private
@@ -49,10 +56,10 @@ module DTRToRust
     end
 
     def generate_functions_each(functions)
-      functions.map do |function|
+      functions&.map do |function|
         "\n    pub fn #{function.name}(#{generate_function_args(function)}) " \
           "-> #{function.output} {\n#{generate_instructions_each(function.instructions)}\n    }\n"
-      end.join("\n")
+      end&.join("\n")
     end
 
     def generate_function_args(function)
