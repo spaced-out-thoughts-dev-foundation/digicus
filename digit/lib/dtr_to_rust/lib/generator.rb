@@ -63,7 +63,7 @@ module DTRToRust
     end
 
     def generate_function_args(function)
-      all_inputs = [{ name: 'env', type_name: 'Env' }] + function.inputs
+      all_inputs = [] + function.inputs
 
       all_inputs.map { |x| "#{x[:name]}: #{x[:type_name]}" }.join(', ')
     end
