@@ -8,18 +8,18 @@ env: Env
 * Output: u32
 * Instructions:
 $
-{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (get, METHOD_CALL_EXPRESSION, COUNTER), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (unwrap_or, METHOD_CALL_EXPRESSION, 0), assign: u32 }
-{ instruction: add_and_assign, input: (count, 1) }
-{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION }
-{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, COUNTER, count), assign: METHOD_CALL_RESULT }
-{ instruction: evaluate, input: (events, env), assign: METHOD_CALL_EXPRESSION }
-{ instruction: create_tuple, input: (COUNTER, "increment"), assign: 1_METHOD_CALL_ARG }
-{ instruction: evaluate, input: (publish, METHOD_CALL_EXPRESSION, 1_METHOD_CALL_ARG, count), assign: METHOD_CALL_RESULT }
-{ instruction: Return, input: (count) }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (get, METHOD_CALL_EXPRESSION, COUNTER), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (unwrap_or, METHOD_CALL_EXPRESSION, 0), assign: u32, scope: 0 }
+{ instruction: add_and_assign, input: (count, 1), scope: 0 }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, COUNTER, count), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (events, env), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: create_tuple, input: (COUNTER, "increment"), assign: 1_METHOD_CALL_ARG, scope: 0 }
+{ instruction: evaluate, input: (publish, METHOD_CALL_EXPRESSION, 1_METHOD_CALL_ARG, count), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: Return, input: (count), scope: 0 }
 $
 :[Functions]
 

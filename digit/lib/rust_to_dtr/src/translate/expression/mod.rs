@@ -6,6 +6,7 @@ pub mod unsupported;
 fn parse_expression(
     exp: &syn::Expr,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     match exp {
         // NOT SUPPORTED
@@ -22,7 +23,6 @@ fn parse_expression(
         syn::Expr::ForLoop(for_loop_expr) => {
             unsupported::for_loop_expression::handle_for_loop_expression(for_loop_expr)
         }
-        syn::Expr::If(if_expr) => unsupported::if_expression::handle_if_expression(if_expr),
         syn::Expr::Loop(loop_expr) => {
             unsupported::loop_expression::handle_loop_expression(loop_expr)
         }
@@ -48,52 +48,64 @@ fn parse_expression(
 
         // SUPPORTED
         syn::Expr::Binary(binary_expr) => {
-            supported::binary_expression::handle_binary_expression(binary_expr, assignment)
+            supported::binary_expression::handle_binary_expression(binary_expr, assignment, scope)
         }
         syn::Expr::Block(block_expr) => {
-            supported::block_expression::handle_block_expression(block_expr, assignment)
+            supported::block_expression::handle_block_expression(block_expr, assignment, scope)
         }
         syn::Expr::Let(let_expr) => {
-            supported::let_expression::handle_let_expression(let_expr.clone(), assignment)
+            supported::let_expression::handle_let_expression(let_expr.clone(), assignment, scope)
         }
         syn::Expr::Lit(lit_expr) => {
-            supported::lit_expression::handle_lit_expression(&lit_expr.lit, assignment)
+            supported::lit_expression::handle_lit_expression(&lit_expr.lit, assignment, scope)
         }
         syn::Expr::MethodCall(method_call_expr) => {
             supported::method_call_expression::handle_method_call_expression(
                 method_call_expr,
                 assignment,
+                scope,
             )
         }
         syn::Expr::Paren(paren_expr) => {
-            supported::paren_expression::handle_paren_expression(paren_expr, assignment)
+            supported::paren_expression::handle_paren_expression(paren_expr, assignment, scope)
         }
         syn::Expr::Path(path) => {
-            supported::path_expression::handle_path_expression(&path.path, assignment)
+            supported::path_expression::handle_path_expression(&path.path, assignment, scope)
         }
         syn::Expr::Reference(reference_expr) => {
-            supported::reference_expression::handle_reference_expression(reference_expr, assignment)
+            supported::reference_expression::handle_reference_expression(
+                reference_expr,
+                assignment,
+                scope,
+            )
         }
         syn::Expr::Return(return_expr_expr) => {
-            supported::return_expression::handle_return_expression(return_expr_expr, assignment)
+            supported::return_expression::handle_return_expression(
+                return_expr_expr,
+                assignment,
+                scope,
+            )
         }
         syn::Expr::Group(group_expr) => {
-            supported::group_expression::handle_group_expression(group_expr, assignment)
+            supported::group_expression::handle_group_expression(group_expr, assignment, scope)
         }
         syn::Expr::Field(field_expr) => {
-            supported::field_expression::handle_field_expression(field_expr, assignment)
+            supported::field_expression::handle_field_expression(field_expr, assignment, scope)
         }
         syn::Expr::Assign(assign_expr) => {
-            supported::assign_expression::handle_assign_expression(assign_expr, assignment)
+            supported::assign_expression::handle_assign_expression(assign_expr, assignment, scope)
         }
         syn::Expr::Call(call_expr) => {
-            supported::call_expression::handle_call_expression(call_expr, assignment)
+            supported::call_expression::handle_call_expression(call_expr, assignment, scope)
         }
         syn::Expr::Struct(struct_expr) => {
-            supported::struct_expression::handle_struct_expression(struct_expr, assignment)
+            supported::struct_expression::handle_struct_expression(struct_expr, assignment, scope)
         }
         syn::Expr::Tuple(tuple_expr) => {
-            supported::tuple_expression::handle_tuple_expression(tuple_expr, assignment)
+            supported::tuple_expression::handle_tuple_expression(tuple_expr, assignment, scope)
+        }
+        syn::Expr::If(if_expr) => {
+            supported::if_expression::handle_if_expression(if_expr, assignment, scope)
         }
 
         // NOT IMPLEMENTED //
@@ -120,7 +132,7 @@ fn parse_expression(
             "Index expression not supported".to_string(),
         )),
         syn::Expr::Macro(expr_macro) => {
-            supported::macro_expression::handle_macro_expression(expr_macro, assignment)
+            supported::macro_expression::handle_macro_expression(expr_macro, assignment, scope)
         }
         syn::Expr::Range(_) => Err(NotTranslatableError::Custom(
             "Range expression not supported".to_string(),
@@ -229,5 +241,17 @@ fn parse_binary_op(syn_bin_op: &syn::BinOp) -> Result<String, NotTranslatableErr
         _ => Err(NotTranslatableError::Custom(
             "Unknown binary operator".to_string(),
         )),
+    }
+}
+
+pub fn is_conditional_comparative_operator(syn_bin_op: &syn::BinOp) -> bool {
+    match syn_bin_op {
+        syn::BinOp::Eq(_)
+        | syn::BinOp::Lt(_)
+        | syn::BinOp::Le(_)
+        | syn::BinOp::Ne(_)
+        | syn::BinOp::Ge(_)
+        | syn::BinOp::Gt(_) => true,
+        _ => false,
     }
 }

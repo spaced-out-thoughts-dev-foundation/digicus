@@ -8,8 +8,8 @@ value: String
 }
 * Instructions:
 $
-{ instruction: log_string, input: (env, "Hello {}", value), assign: Thing_to_return }
-{ instruction: Return, input: (Thing_to_return) }
+{ instruction: log_string, input: (env, "Hello {}", value), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[Functions]
 [User Defined Types]:

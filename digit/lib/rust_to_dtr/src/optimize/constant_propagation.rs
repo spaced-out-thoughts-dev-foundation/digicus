@@ -32,6 +32,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
             instruction.name.clone(),
             new_inputs,
             instruction.assign.clone(),
+            instruction.scope,
         );
 
         optimized_instructions.push(optimized_instruction);

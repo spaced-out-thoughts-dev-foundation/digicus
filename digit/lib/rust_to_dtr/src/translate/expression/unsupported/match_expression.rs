@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_match_expression() {
         let parsed_expr_match: ExprMatch = syn::parse_str("match 1 { _ => 0 }").unwrap();
-        let result = parse_expression(&syn::Expr::Match(parsed_expr_match), None);
+        let result = parse_expression(&syn::Expr::Match(parsed_expr_match), None, 0);
 
         assert_eq!(
             result,

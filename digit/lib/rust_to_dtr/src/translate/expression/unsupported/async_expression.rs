@@ -18,7 +18,7 @@ mod tests {
     #[test]
     fn test_async_expression() {
         let parsed_expr_async: ExprAsync = syn::parse_str("async { }").unwrap();
-        let result = parse_expression(&syn::Expr::Async(parsed_expr_async), None);
+        let result = parse_expression(&syn::Expr::Async(parsed_expr_async), None, 0);
 
         assert_eq!(
             result,

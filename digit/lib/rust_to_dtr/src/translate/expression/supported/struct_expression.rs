@@ -7,6 +7,7 @@ use syn::ExprStruct;
 pub fn handle_struct_expression(
     expr: &ExprStruct,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut instructions: Vec<Instruction> = Vec::new();
     let path_value: String = parse_path(&expr.path);
@@ -20,7 +21,7 @@ pub fn handle_struct_expression(
         };
         let field_value = field.expr.clone();
 
-        let field_value_parsed = parse_expression(&field_value, Some(field_name.clone()));
+        let field_value_parsed = parse_expression(&field_value, Some(field_name.clone()), scope);
 
         instructions.extend(field_value_parsed.unwrap_or(Vec::new()));
         field_names.push(field_name.clone());
@@ -32,6 +33,7 @@ pub fn handle_struct_expression(
         "initialize_udt".to_string(),
         field_names,
         assignment.unwrap_or("STRUCT_EXPRESSION_RESULT".to_string()),
+        scope,
     ));
 
     Ok(instructions)

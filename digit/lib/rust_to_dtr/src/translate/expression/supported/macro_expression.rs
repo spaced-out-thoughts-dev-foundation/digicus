@@ -8,6 +8,7 @@ use syn::ExprMacro;
 pub fn handle_macro_expression(
     expr: &ExprMacro,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    handle_macro(&expr.mac, assignment)
+    handle_macro(&expr.mac, assignment, scope)
 }

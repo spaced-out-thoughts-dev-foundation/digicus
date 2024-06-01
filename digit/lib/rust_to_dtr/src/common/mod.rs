@@ -18,6 +18,7 @@ pub fn join_with_newline(s1: &str, s2: &str) -> String {
 pub fn handle_macro(
     mac: &Macro,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let macro_path = parse_path(&mac.path);
 
@@ -25,6 +26,7 @@ pub fn handle_macro(
         macro_path_to_instruction(macro_path.clone()),
         macro_tokens_to_inputs(mac.tokens.clone()),
         assignment.unwrap_or("".to_string()),
+        scope,
     )])
 }
 

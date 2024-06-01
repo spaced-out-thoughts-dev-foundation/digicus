@@ -19,7 +19,7 @@ mod tests {
     #[test]
     fn test_for_loop_expression() {
         let parsed_expr_for_loop: ExprForLoop = syn::parse_str("for i in 0..10 { }").unwrap();
-        let result = parse_expression(&syn::Expr::ForLoop(parsed_expr_for_loop), None);
+        let result = parse_expression(&syn::Expr::ForLoop(parsed_expr_for_loop), None, 0);
 
         assert_eq!(
             result,

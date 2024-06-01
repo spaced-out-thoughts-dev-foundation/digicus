@@ -4,6 +4,7 @@ pub mod block_expression;
 pub mod call_expression;
 pub mod field_expression;
 pub mod group_expression;
+pub mod if_expression;
 pub mod let_expression;
 pub mod lit_expression;
 pub mod macro_expression;

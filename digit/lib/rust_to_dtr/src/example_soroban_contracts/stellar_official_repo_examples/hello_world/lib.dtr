@@ -9,8 +9,8 @@ to: String
 * Output: List<String>
 * Instructions:
 $
-{ instruction: create_list, input: (env, "Hello", to), assign: Thing_to_return }
-{ instruction: Return, input: (Thing_to_return) }
+{ instruction: create_list, input: (env, "Hello", to), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[Functions]
 

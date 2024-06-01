@@ -7,6 +7,7 @@ use syn::StmtMacro;
 pub fn handle_macro_statement(
     mac: &StmtMacro,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    handle_macro(&mac.mac, assignment)
+    handle_macro(&mac.mac, assignment, scope)
 }

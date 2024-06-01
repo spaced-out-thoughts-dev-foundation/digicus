@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_try_expression() {
         let parsed_expr_try: ExprTry = syn::parse_str("expr?").unwrap();
-        let result = parse_expression(&syn::Expr::Try(parsed_expr_try), None);
+        let result = parse_expression(&syn::Expr::Try(parsed_expr_try), None, 0);
 
         assert_eq!(
             result,

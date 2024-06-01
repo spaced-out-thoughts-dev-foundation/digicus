@@ -6,15 +6,20 @@ use crate::translate::pattern::handle_pattern;
 pub fn handle_let_expression(
     let_expr: syn::ExprLet,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let input_value_name_for_let = "INPUT_VALUE_NAME_FOR_LET";
-    let mut preceding_instructions =
-        parse_expression(&let_expr.expr, Some(input_value_name_for_let.to_string()))?;
+    let mut preceding_instructions = parse_expression(
+        &let_expr.expr,
+        Some(input_value_name_for_let.to_string()),
+        0,
+    )?;
     let result = handle_pattern(*(let_expr.pat.clone()));
     let result_instruction: Instruction = Instruction::new(
         "assign".to_string(),
         vec![input_value_name_for_let.to_string()],
         assignment.unwrap_or(result.unwrap_or_default()),
+        scope,
     );
 
     preceding_instructions.push(result_instruction);
@@ -36,17 +41,19 @@ mod tests {
         #[test]
         fn test_let_expression_simple_x_equals_1() {
             let parsed_expr_let: ExprLet = syn::parse_str("let x = 1").unwrap();
-            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None);
+            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None, 0);
             let expected: Vec<Instruction> = vec![
                 Instruction::new(
                     "assign".to_string(),
                     vec!["1".to_string()],
                     "INPUT_VALUE_NAME_FOR_LET".to_string(),
+                    0,
                 ),
                 Instruction::new(
                     "assign".to_string(),
                     vec!["INPUT_VALUE_NAME_FOR_LET".to_string()],
                     "x".to_string(),
+                    0,
                 ),
             ];
 
@@ -56,17 +63,19 @@ mod tests {
         #[test]
         fn test_let_expression_less_simple_foo_equals_bar() {
             let parsed_expr_let: ExprLet = syn::parse_str("let foo = bar").unwrap();
-            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None);
+            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None, 0);
             let expected = vec![
                 Instruction::new(
                     "assign".to_string(),
                     vec!["bar".to_string()],
                     "INPUT_VALUE_NAME_FOR_LET".to_string(),
+                    0,
                 ),
                 Instruction::new(
                     "assign".to_string(),
                     vec!["INPUT_VALUE_NAME_FOR_LET".to_string()],
                     "foo".to_string(),
+                    0,
                 ),
             ];
 

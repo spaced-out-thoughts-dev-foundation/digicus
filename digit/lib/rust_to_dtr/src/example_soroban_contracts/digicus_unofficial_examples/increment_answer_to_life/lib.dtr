@@ -10,8 +10,8 @@ and_then_some: u32
 * Output: u32
 * Instructions:
 $
-{ instruction: add, input: (42, and_then_some), assign: Thing_to_return }
-{ instruction: Return, input: (Thing_to_return) }
+{ instruction: add, input: (42, and_then_some), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[Functions]
 [User Defined Types]:

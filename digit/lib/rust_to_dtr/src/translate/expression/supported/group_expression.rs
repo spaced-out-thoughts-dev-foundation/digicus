@@ -7,10 +7,12 @@ use syn::ExprGroup;
 pub fn handle_group_expression(
     _expr: &ExprGroup,
     _assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     Ok(vec![Instruction::new(
         "group".to_string(),
         vec!["DO_A_GROUP".to_string()],
         "DID_A_GROUP".to_string(),
+        scope,
     )])
 }

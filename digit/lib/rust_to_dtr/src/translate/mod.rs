@@ -1,5 +1,6 @@
 extern crate syn;
 
+pub mod block;
 pub mod expression;
 pub mod impl_block;
 pub mod pattern;

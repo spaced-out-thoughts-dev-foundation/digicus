@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_while_expression() {
         let parsed_expr_while: ExprWhile = syn::parse_str("while true { }").unwrap();
-        let result = parse_expression(&syn::Expr::While(parsed_expr_while), None);
+        let result = parse_expression(&syn::Expr::While(parsed_expr_while), None, 0);
 
         assert_eq!(
             result,

@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_repeat_expression() {
         let parsed_expr_repeat: ExprRepeat = syn::parse_str("[1; 3]").unwrap();
-        let result = parse_expression(&syn::Expr::Repeat(parsed_expr_repeat), None);
+        let result = parse_expression(&syn::Expr::Repeat(parsed_expr_repeat), None, 0);
 
         assert_eq!(
             result,

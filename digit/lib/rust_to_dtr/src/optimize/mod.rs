@@ -15,5 +15,6 @@ pub fn create_instruction(name: &str, input: Vec<&str>, assign: &str) -> Instruc
         name.to_string(),
         input.into_iter().map(|s| s.to_string()).collect(),
         assign.to_string(),
+        0, // does not really matter here yet... but it might in the future
     )
 }

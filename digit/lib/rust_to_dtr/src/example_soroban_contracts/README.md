@@ -2,7 +2,7 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress:
+Progress [ 6/25 | 24% ]:
 * [ ] Account
 * [ ] Alloc
 * [ ] Atomic Multiswap
@@ -12,7 +12,7 @@ Progress:
 * [x] Custom Types
 * [ ] Deep Contract Auth
 * [ ] Deployer
-* [ ] Errors
+* [x] Errors
 * [ ] Eth ABI
 * [x] Events
 * [ ] Fuzzing

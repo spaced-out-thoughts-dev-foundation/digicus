@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_yield_expression() {
         let parsed_expr_yield: ExprYield = syn::parse_str("yield 1").unwrap();
-        let result = parse_expression(&syn::Expr::Yield(parsed_expr_yield), None);
+        let result = parse_expression(&syn::Expr::Yield(parsed_expr_yield), None, 0);
 
         assert_eq!(
             result,

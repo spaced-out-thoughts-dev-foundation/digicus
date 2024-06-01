@@ -15,12 +15,12 @@ pub fn parse_function_block(method: &syn::ImplItemFn) -> String {
         dtr_code.push_str(translate::parse_return_type(ty).as_str());
     }
 
-    dtr_code.push_str(&parse_instructions(&method.clone()));
+    dtr_code.push_str(&&parse_instructions(&method.clone()));
 
     dtr_code
 }
 
-pub fn parse_inputs(method: &syn::ImplItemFn) -> String {
+fn parse_inputs(method: &syn::ImplItemFn) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Inputs:\n");
@@ -55,55 +55,14 @@ pub fn parse_inputs(method: &syn::ImplItemFn) -> String {
     dtr_code
 }
 
-pub fn parse_instructions(method: &syn::ImplItemFn) -> String {
+fn parse_instructions(method: &syn::ImplItemFn) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Instructions:\n");
     dtr_code.push_str("\t\t$\n");
 
-    let block = &method.block;
-
-    let mut index = 1;
-    let total_block_stmts = block.stmts.len();
-    block.stmts.iter().for_each(|stmt| {
-        if index != 1 {
-            dtr_code.push_str("\n\t\t\t");
-        } else {
-            dtr_code.push_str("\t\t\t");
-        }
-
-        let assignment: Option<String> = if index == total_block_stmts {
-            Some("Thing_to_return".to_string())
-        } else {
-            None
-        };
-        match translate::expression::supported::block_expression::parse_block_stmt(
-            &stmt, assignment,
-        ) {
-            Ok(block_str) => {
-                let mut instructions: Vec<Instruction> = Vec::new();
-
-                block_str.iter().for_each(|instr| {
-                    instructions.push(instr.clone());
-                });
-
-                if index == total_block_stmts {
-                    instructions.push(Instruction::new(
-                        "Return".to_string(),
-                        vec!["Thing_to_return".to_string()],
-                        "".to_string(),
-                    ));
-                }
-
-                dtr_code.push_str(&instructions_to_string(instructions));
-            }
-            Err(e) => {
-                // return Err(e);
-                dtr_code.push_str(&format!("Error: {:?}", e));
-            }
-        }
-        index += 1;
-    });
+    let block_instructions: Vec<Instruction> = translate::block::handle_block(&method.block, 0);
+    dtr_code.push_str(instructions_to_string(block_instructions.clone()).as_str());
 
     dtr_code.push_str("\n\t\t$\n");
 
@@ -113,9 +72,13 @@ pub fn parse_instructions(method: &syn::ImplItemFn) -> String {
 fn instructions_to_string(instructions: Vec<Instruction>) -> String {
     let optimized_instructions = optimize::apply(instructions);
 
-    let instructions_as_strings: Vec<String> = optimized_instructions
+    let mut instructions_as_strings: Vec<String> = optimized_instructions
         .iter()
         .map(|instr| instr.as_str())
         .collect();
-    instructions_as_strings.join("\n\t\t\t")
+
+    let mut instructions_string = instructions_as_strings.join("\n\t\t\t");
+    instructions_string = format!("\t\t\t{}", instructions_string);
+
+    instructions_string
 }

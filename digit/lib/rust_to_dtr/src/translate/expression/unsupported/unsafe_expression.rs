@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_unsafe_expression() {
         let parsed_expr_unsafe: ExprUnsafe = syn::parse_str("unsafe { }").unwrap();
-        let result = parse_expression(&syn::Expr::Unsafe(parsed_expr_unsafe), None);
+        let result = parse_expression(&syn::Expr::Unsafe(parsed_expr_unsafe), None, 0);
 
         assert_eq!(
             result,

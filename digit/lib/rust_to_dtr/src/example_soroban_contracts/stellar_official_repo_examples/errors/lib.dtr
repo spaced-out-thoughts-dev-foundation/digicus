@@ -1,0 +1,35 @@
+[Contract]: IncrementContract
+
+[Functions]:
+-() [increment]
+* Inputs:
+{
+env: Env
+}
+* Output: Result<u32, Error>
+* Instructions:
+$
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (get, METHOD_CALL_EXPRESSION, COUNTER), assign: METHOD_CALL_EXPRESSION, scope: 0 }
+{ instruction: evaluate, input: (unwrap_or, METHOD_CALL_EXPRESSION, 0), assign: count, scope: 0 }
+{ instruction: log_string, input: (env, "count: {}", count), scope: 0 }
+{ instruction: add_and_assign, input: (count, 1), scope: 0 }
+{ instruction: conditional_jump, input: (less_than_or_equal_to, count, MAX, 1), scope: 0 }
+{ instruction: unconditional_jump, input: (2), scope: 0 }
+{ instruction: evaluate, input: (storage, env), assign: METHOD_CALL_EXPRESSION, scope: 1 }
+{ instruction: evaluate, input: (instance, METHOD_CALL_EXPRESSION), assign: METHOD_CALL_EXPRESSION, scope: 1 }
+{ instruction: evaluate, input: (set, METHOD_CALL_EXPRESSION, COUNTER, count), assign: METHOD_CALL_RESULT, scope: 1 }
+{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
+{ instruction: Return, input: (Thing_to_return), scope: 1 }
+{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 2 }
+{ instruction: Return, input: (Thing_to_return), scope: 2 }
+$
+:[Functions]
+
+[User Defined Types]:
+* (Error)
+{
+  LimitReached
+}
+:[User Defined Types]

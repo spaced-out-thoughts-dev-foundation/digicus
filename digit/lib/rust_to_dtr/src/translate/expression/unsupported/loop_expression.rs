@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_loop_expression() {
         let parsed_expr_loop: ExprLoop = syn::parse_str("loop { }").unwrap();
-        let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop), None);
+        let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop), None, 0);
 
         assert_eq!(
             result,

@@ -5,6 +5,7 @@ use crate::translate::expression::parse_lit;
 pub fn handle_lit_expression(
     lit: &syn::Lit,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     // TODO: fix this so it actually returns the right type
     // TODO: this is also super hacky for strings, please fix it
@@ -14,6 +15,7 @@ pub fn handle_lit_expression(
         "assign".to_string(),
         vec![literal_value],
         assignment.unwrap_or_default(),
+        scope,
     )])
 }
 
@@ -36,11 +38,13 @@ mod tests {
                     lit: Lit::Bool(parsed_lit_bool),
                 }),
                 None,
+                0,
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["true".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));
@@ -55,11 +59,13 @@ mod tests {
                     lit: Lit::Byte(parsed_lit_byte),
                 }),
                 None,
+                0,
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["49".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));
@@ -74,11 +80,13 @@ mod tests {
                     lit: Lit::ByteStr(parsed_lit_byte_str),
                 }),
                 None,
+                0,
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["hello".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));
@@ -93,12 +101,14 @@ mod tests {
                     lit: Lit::Char(parsed_lit_char),
                 }),
                 None,
+                0,
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["\'a\'".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));
@@ -113,12 +123,14 @@ mod tests {
                     lit: Lit::Float(parsed_lit_float),
                 }),
                 None,
+                0,
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["3.14".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));
@@ -133,12 +145,14 @@ mod tests {
                     lit: Lit::Int(parsed_lit_int),
                 }),
                 None,
+                0,
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
                 vec!["42".to_string()],
                 "".to_string(),
+                0,
             )];
 
             assert_eq!(result, Ok(expected));

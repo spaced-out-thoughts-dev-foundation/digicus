@@ -8,6 +8,7 @@ use syn::ExprTuple;
 pub fn handle_tuple_expression(
     expr: &ExprTuple,
     assignment: Option<String>,
+    scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut instructions_to_return: Vec<Instruction> = Vec::new();
 
@@ -18,7 +19,7 @@ pub fn handle_tuple_expression(
 
         arguments.push(arg_name.clone());
 
-        let instructions: Vec<Instruction> = parse_expression(arg, Some(arg_name)).unwrap();
+        let instructions: Vec<Instruction> = parse_expression(arg, Some(arg_name), scope).unwrap();
         instructions_to_return.extend(instructions);
 
         index += 1;
@@ -28,6 +29,7 @@ pub fn handle_tuple_expression(
         "create_tuple".to_string(),
         arguments,
         assignment.unwrap_or("TUPLE_RESULT".to_string()),
+        scope,
     ));
 
     Ok(instructions_to_return)

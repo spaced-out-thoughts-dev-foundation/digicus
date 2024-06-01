@@ -17,7 +17,7 @@ mod tests {
     #[test]
     fn test_array_expression() {
         let parsed_expr_array: ExprArray = syn::parse_str("[1,2,3]").unwrap();
-        let result = parse_expression(&syn::Expr::Array(parsed_expr_array), None);
+        let result = parse_expression(&syn::Expr::Array(parsed_expr_array), None, 0);
 
         assert_eq!(
             result,
