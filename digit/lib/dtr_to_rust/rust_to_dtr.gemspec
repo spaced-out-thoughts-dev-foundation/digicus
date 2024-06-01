@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Gem::Specification.new do |spec|
-  spec.name          = 'dtr_core'
+  spec.name          = 'rust_to_dtr'
   spec.version       = '0.0.1'
   spec.authors = ['Rob Durst']
   spec.email         = ['me@robdurst.com']
