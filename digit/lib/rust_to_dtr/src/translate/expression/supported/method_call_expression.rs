@@ -35,11 +35,12 @@ pub fn handle_method_call_expression(
         0,
     )?;
 
-    argument_names.insert(0, "METHOD_CALL_EXPRESSION".to_string());
-
     receiver.extend(expressions);
 
-    argument_names.insert(0, expr.method.to_string());
+    argument_names.insert(
+        0,
+        format!("METHOD_CALL_EXPRESSION.{}", expr.method.to_string()),
+    );
 
     receiver.push(Instruction::new(
         "evaluate".to_string(),

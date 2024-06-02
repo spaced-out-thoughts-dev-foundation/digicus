@@ -8,7 +8,6 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     instructions.clone().into_iter().for_each(|instruction| {
         if instruction.name == "assign" {
             instruction_hash_table.insert(instruction.assign.clone(), instruction.input.clone());
-        } else {
         }
 
         let mut new_inputs: Vec<String> = Vec::new();
@@ -16,12 +15,25 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
             if instruction_hash_table.contains_key(&input) {
                 new_inputs.extend(instruction_hash_table.get(&input).unwrap().clone());
             } else {
-                new_inputs.push(input);
+                let splitted_input_string: Vec<&str> = input.split('.').collect();
+
+                if splitted_input_string.len() > 0 {
+                    let base_object = splitted_input_string[0];
+                    if instruction_hash_table.contains_key(base_object) {
+                        let mut new_input =
+                            instruction_hash_table.get(base_object).unwrap().clone();
+                        new_input.push(splitted_input_string[1].to_string());
+                        new_inputs.push(new_input.join("."));
+                    } else {
+                        new_inputs.push(input);
+                    }
+                } else {
+                    new_inputs.push(input);
+                }
             }
         });
 
-        if instruction.name == "assign" {
-        } else {
+        if instruction.name != "assign" {
             // if you had an assign but then you have an instruction that re-assigns (not in an assign instruction), remove the assign
             if instruction_hash_table.contains_key(&instruction.assign) {
                 instruction_hash_table.remove_entry(&instruction.assign);
@@ -170,6 +182,24 @@ mod tests {
             create_instruction("add", vec!["1", "b"], "c"),
             create_instruction("evaluate", vec!["5", "1"], "a"),
             create_instruction("add", vec!["a", "b"], "d"),
+        ];
+
+        assert_eq!(
+            apply(unoptimized_instructions),
+            expected_optimized_instructions
+        );
+    }
+
+    #[test]
+    fn constant_propagation_works_for_method_call_base_object() {
+        let unoptimized_instructions = vec![
+            create_instruction("assign", vec!["foo"], "a"),
+            create_instruction("evaluate", vec!["a.bar"], "b"),
+        ];
+
+        let expected_optimized_instructions = vec![
+            create_instruction("assign", vec!["foo"], "a"),
+            create_instruction("evaluate", vec!["foo.bar"], "b"),
         ];
 
         assert_eq!(
