@@ -5,7 +5,9 @@ module DTRToRust
     # This class is responsible for generating Rust code for the Evaluate instruction.
     class Evaluate < Handler
       def handle
-        form_rust_string(@instruction[:inputs][0], @instruction[:scope])
+        rust_string = "#{@instruction[:assign]} = #{@instruction[:inputs][0]}(#{@instruction[:inputs][1..].join(', ')})"
+
+        form_rust_string(rust_string, @instruction[:scope])
       end
     end
   end
