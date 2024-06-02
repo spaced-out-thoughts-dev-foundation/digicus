@@ -9,10 +9,14 @@ module DTRToRust
 
     def generate_rust
       case @instruction[:instruction]
-      when 'AddSymbols'
-        handle_add_symbols
       when 'Return'
-        handle_return
+        Instruction::Return.handle(@instruction)
+      when 'log_string'
+        Instruction::LogString.handle(@instruction)
+      when 'add_and_assign'
+        Instruction::AddAndAssign.handle(@instruction)
+      when 'evaluate'
+        Instruction::Evaluate.handle(@instruction)
       else
         raise "Unknown instruction type: #{@instruction[:instruction]}"
       end
@@ -21,15 +25,5 @@ module DTRToRust
     private
 
     attr_reader :instruction
-
-    def handle_add_symbols
-      "      let #{instruction[:assign]} " \
-        '= vec![&env, ' \
-        "symbol_short!(#{instruction[:inputs][0]}), #{instruction[:inputs][1]}];"
-    end
-
-    def handle_return
-      "      #{instruction[:inputs][0]}"
-    end
   end
 end
