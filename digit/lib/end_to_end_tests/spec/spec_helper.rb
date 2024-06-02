@@ -128,3 +128,11 @@ def run_cargo_test_in_dir(dir)
     status.success?
   end
 end
+
+def assert_translates_rust_to_dtr_and_back(dir)
+  rust_string = DTRToRust::Generator.generate_from_string(rust_to_dtr(File.read("#{dir}/src/original.rs")))
+  rust_string += "\n\nmod test;\n"
+  File.write("#{dir}/src/lib.rs", rust_string)
+
+  expect(run_cargo_test_in_dir(dir)).to be true
+end
