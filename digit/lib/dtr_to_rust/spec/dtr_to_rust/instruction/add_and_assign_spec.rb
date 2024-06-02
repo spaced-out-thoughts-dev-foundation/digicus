@@ -12,7 +12,7 @@ describe DTRToRust::Instruction::AddAndAssign do
         scope: 0
       }
 
-      expect(described_class.handle(instruction)).to eq('count += 1')
+      expect(described_class.handle(instruction)).to eq('count += 1;')
     end
   end
 end
