@@ -74,7 +74,7 @@ fn parse_instructions(method: &syn::ImplItemFn) -> String {
 fn instructions_to_string(instructions: Vec<Instruction>) -> String {
     let optimized_instructions = optimize::apply(instructions);
 
-    let mut instructions_as_strings: Vec<String> = optimized_instructions
+    let instructions_as_strings: Vec<String> = optimized_instructions
         .iter()
         .map(|instr| instr.as_str())
         .collect();
