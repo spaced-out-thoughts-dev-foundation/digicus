@@ -29,6 +29,6 @@ $
 :[User Defined Types]
 
 [State]:
-* [COUNTER]:
+* [COUNTER]
 * Type: String
 * Initial Value: "COUNTER"

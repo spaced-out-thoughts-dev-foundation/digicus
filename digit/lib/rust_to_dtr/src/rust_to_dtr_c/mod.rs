@@ -1,7 +1,5 @@
-use crate::common::compilation_state::CompilationState;
 use crate::errors;
 use crate::translate;
-use crate::translate::expression::parse_expression;
 use crate::translate::type_name::figure_out_type;
 use crate::translate::type_name::{self, parse_path};
 

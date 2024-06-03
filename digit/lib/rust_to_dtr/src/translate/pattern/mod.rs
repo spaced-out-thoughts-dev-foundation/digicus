@@ -1,4 +1,4 @@
-use super::type_name::{figure_out_type, parse_path};
+use super::type_name::parse_path;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::translate::expression::parse_lit;
 use syn;

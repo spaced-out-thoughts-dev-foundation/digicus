@@ -49,6 +49,6 @@ last_incr: u32
 :[User Defined Types]
 
 [State]:
-* [STATE]:
+* [STATE]
 * Type: String
 * Initial Value: "STATE"
