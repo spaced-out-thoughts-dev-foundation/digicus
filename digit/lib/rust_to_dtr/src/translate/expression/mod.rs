@@ -4,7 +4,7 @@ use crate::instruction::Instruction;
 pub mod supported;
 pub mod unsupported;
 
-fn parse_expression(
+pub fn parse_expression(
     exp: &syn::Expr,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
@@ -115,9 +115,6 @@ fn parse_expression(
         )),
         syn::Expr::Closure(_) => Err(NotTranslatableError::Custom(
             "Closure expression not supported".to_string(),
-        )),
-        syn::Expr::Const(_) => Err(NotTranslatableError::Custom(
-            "Const expression not supported".to_string(),
         )),
         syn::Expr::Continue(_) => Err(NotTranslatableError::Custom(
             "Continue expression not supported".to_string(),

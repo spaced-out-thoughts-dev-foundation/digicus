@@ -1,11 +1,17 @@
+use crate::common::compilation_state::CompilationState;
 use crate::errors;
 use crate::translate;
+use crate::translate::expression::parse_expression;
+use crate::translate::type_name::figure_out_type;
 use crate::translate::type_name::{self, parse_path};
 
 pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableError> {
     // Parse the Rust code into a syn data structure
     let parsed_ast = syn::parse_file(rust_code).unwrap();
     let mut user_defined_types: Vec<syn::Item> = Vec::new();
+    let mut state_str: String = String::new();
+
+    state_str.push_str("[State]:\n");
 
     // Extract information from the parsed AST
     let mut dtr_code = String::new();
@@ -51,6 +57,17 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     }
                 });
             }
+            syn::Item::Const(const_item) => {
+                let name = const_item.ident.to_string();
+
+                state_str.push_str(&format!("* [{}]:", name));
+                state_str.push_str(&format!(
+                    "\t* Type: Const {}",
+                    figure_out_type(&const_item.ty.clone())?
+                ));
+                // TODO: this is super hacky and won't always work
+                state_str.push_str(&format!("\t* Value: \"{}\"", name));
+            }
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
@@ -64,6 +81,8 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     });
 
     dtr_code.push_str("\n:[User Defined Types]\n");
+
+    dtr_code.push_str(&state_str);
 
     Ok(dtr_code)
 }
