@@ -21,7 +21,7 @@ module DTRCore
         validate_numeric!
 
       # TODO: check type
-      when 'Symbol'
+      when 'Symbol', 'String'
         strip_and_remove_quotes(@initial_value)
       else
         raise 'Missing Invalid Type Name.'

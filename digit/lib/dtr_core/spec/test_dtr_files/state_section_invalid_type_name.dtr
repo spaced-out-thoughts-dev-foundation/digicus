@@ -8,5 +8,5 @@
     * Type: Symbol
     * Initial Value: "Hello World"
   * [STATE_DEFINITION_3]
-    * Type: String
+    * Type: StringThing
     * Initial Value: -1234
