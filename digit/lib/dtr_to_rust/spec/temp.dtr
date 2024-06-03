@@ -1,1 +1,7 @@
 [Contract]: MyContract
+
+[State]:
+  * [COUNTER]
+    * Type: String
+    * Initial Value: "COUNTER"
+

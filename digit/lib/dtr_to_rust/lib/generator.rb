@@ -44,11 +44,13 @@ module DTRToRust
     def generate_state
       return if dtr_contract.state.nil?
 
-      @content += 'pub struct State {'
-      dtr_contract.state.each do |state|
-        @content += "  pub #{state.name}: #{state.type},"
+      dtr_contract.state.each do |state_value|
+        if state_value.type == 'String'
+          @content += "const #{state_value.name}: Symbol = symbol_short!(\"#{state_value.initial_value}\");\n"
+        end
       end
-      @content += "}\n\n"
+
+      @content += "\n"
     end
 
     def generate_functions

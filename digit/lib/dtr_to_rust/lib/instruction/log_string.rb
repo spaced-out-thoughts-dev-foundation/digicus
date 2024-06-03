@@ -17,7 +17,7 @@ module DTRToRust
       def ref_appender(input)
         decorated_input = Common::InputInterpreter.interpret(input)
 
-        if decorated_input[:needs_reference]
+        if decorated_input[:needs_reference] && decorated_input[:value] == 'env'
           "&#{decorated_input[:value]}"
         else
           decorated_input[:value]

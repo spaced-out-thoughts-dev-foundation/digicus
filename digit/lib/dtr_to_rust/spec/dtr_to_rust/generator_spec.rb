@@ -8,7 +8,15 @@ RSpec.describe DTRToRust::Generator do
 
   describe '#generate_from_string' do
     it 'generates Rust code from a DTR contract' do
-      minimal_dtr_code = '[Contract]: MyContract'
+      minimal_dtr_code = <<~DTR
+        [Contract]: MyContract
+
+        [State]:
+          * [COUNTER]
+            * Type: String
+            * Initial Value: "COUNTER"
+
+      DTR
 
       expected = <<~RUST
         #![no_std]
@@ -16,6 +24,8 @@ RSpec.describe DTRToRust::Generator do
 
         #[contract]
         pub struct MyContract;
+
+        const COUNTER: Symbol = symbol_short!("COUNTER");
 
         #[contractimpl]
         impl MyContract {}
@@ -27,7 +37,15 @@ RSpec.describe DTRToRust::Generator do
 
   describe '#generate' do
     it 'generates Rust code from a DTR contract' do
-      minimal_dtr_code = '[Contract]: MyContract'
+      minimal_dtr_code = <<~DTR
+        [Contract]: MyContract
+
+        [State]:
+          * [COUNTER]
+            * Type: String
+            * Initial Value: "COUNTER"
+
+      DTR
       minimal_dtr_file_path = 'spec/temp.dtr'
 
       FileUtils.rm_f(minimal_dtr_file_path)
@@ -39,6 +57,8 @@ RSpec.describe DTRToRust::Generator do
 
         #[contract]
         pub struct MyContract;
+
+        const COUNTER: Symbol = symbol_short!("COUNTER");
 
         #[contractimpl]
         impl MyContract {}
