@@ -33,10 +33,6 @@ module DTRToRust
           decorated_input[:value]
         end
       end
-
-      def variable?(input)
-        !input.contains?('"') && !input.contains?("'") && !input.match?(/$\d+/)
-      end
     end
   end
 end

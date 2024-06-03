@@ -13,12 +13,12 @@ module DTRToRust
       end
 
       def interpret
-        if variable?(@input)
-          variable_return(@input)
+        if number?(@input)
+          number_return(@input)
         elsif string?(@input)
           string_return(@input)
-        elsif number?(@input)
-          number_return(@input)
+        else
+          variable_return(@input)
         end
       end
 
@@ -44,11 +44,19 @@ module DTRToRust
 
       ## Number ##
       def number?(input)
-        input.is_a?(Numeric)
+        input.is_a?(Numeric) || input&.match?(/^\s*\d+\.?\d*\s*$/)
       end
 
       def number_return(_input)
-        { value: @input, type: 'number', needs_reference: false }
+        { value: contains_decimal?(@input.to_s) ? @input.to_f : @input.to_i, type: 'number', needs_reference: false }
+      end
+
+      def contains_decimal?(str)
+        # Define a regular expression pattern for a decimal number
+        decimal_pattern = /\d+\.\d+/
+
+        # Check if the string matches the pattern
+        !!(str =~ decimal_pattern)
       end
     end
   end

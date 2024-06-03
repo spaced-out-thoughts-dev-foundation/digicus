@@ -36,12 +36,28 @@ RSpec.describe DTRToRust::Common::InputInterpreter do
                                                                           })
     end
 
-    it 'detects number' do
-      expect(described_class.interpret(1)).to eq({
-                                                   value: 1,
-                                                   type: 'number',
-                                                   needs_reference: false
-                                                 })
+    it 'detects simple number' do
+      expect(described_class.interpret('1')).to eq({
+                                                     value: 1,
+                                                     type: 'number',
+                                                     needs_reference: false
+                                                   })
+    end
+
+    it 'detects simple number with extra spacing' do
+      expect(described_class.interpret(' 10 ')).to eq({
+                                                        value: 10,
+                                                        type: 'number',
+                                                        needs_reference: false
+                                                      })
+    end
+
+    it 'detects simple number with decimal' do
+      expect(described_class.interpret('10.5')).to eq({
+                                                        value: 10.5,
+                                                        type: 'number',
+                                                        needs_reference: false
+                                                      })
     end
   end
 end
