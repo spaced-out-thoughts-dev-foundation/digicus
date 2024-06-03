@@ -62,11 +62,11 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
                 state_str.push_str(&format!("* [{}]:", name));
                 state_str.push_str(&format!(
-                    "\t* Type: Const {}",
+                    "\t* Type: {}",
                     figure_out_type(&const_item.ty.clone())?
                 ));
                 // TODO: this is super hacky and won't always work
-                state_str.push_str(&format!("\t* Value: \"{}\"", name));
+                state_str.push_str(&format!("\t* Initial Value: \"{}\"", name));
             }
             _ => {} // We're ignoring other types of items for simplicity
         }
@@ -82,7 +82,9 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
     dtr_code.push_str("\n:[User Defined Types]\n");
 
-    dtr_code.push_str(&state_str);
+    if state_str != "[State]:\n" {
+        dtr_code.push_str(&state_str);
+    }
 
     Ok(dtr_code)
 }

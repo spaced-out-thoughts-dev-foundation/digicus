@@ -26,3 +26,8 @@ $
 
 [User Defined Types]:
 :[User Defined Types]
+
+[State]:
+* [COUNTER]:
+* Type: String
+* Initial Value: "COUNTER"
