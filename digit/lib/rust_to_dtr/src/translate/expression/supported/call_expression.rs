@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::{
@@ -7,8 +8,7 @@ use syn::ExprCall;
 
 pub fn handle_call_expression(
     expr: &ExprCall,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut argument_names: Vec<String> = Vec::new();
     let mut index = 1;
@@ -16,11 +16,13 @@ pub fn handle_call_expression(
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
         let arg_name = format!("{}_CALL_EXPRESSION_ARG", index);
-        let expressions_parsed: Vec<Instruction> =
-            match parse_expression(&arg, Some(arg_name.clone()), scope) {
-                Ok(expressions) => expressions,
-                Err(_) => panic!("Error parsing call expression"),
-            };
+        let expressions_parsed: Vec<Instruction> = match parse_expression(
+            &arg,
+            &mut compilation_state.with_assignment(Some(arg_name.clone())),
+        ) {
+            Ok(expressions) => expressions,
+            Err(_) => panic!("Error parsing call expression"),
+        };
 
         expressions.extend(expressions_parsed);
 
@@ -31,8 +33,7 @@ pub fn handle_call_expression(
 
     let mut func: Vec<Instruction> = parse_expression(
         &expr.func,
-        Some("CALL_EXPRESSION_FUNCTION".to_string()),
-        scope,
+        &mut compilation_state.with_assignment(Some("CALL_EXPRESSION_FUNCTION".to_string())),
     )?;
 
     argument_names.insert(0, "CALL_EXPRESSION_FUNCTION".to_string());
@@ -41,8 +42,11 @@ pub fn handle_call_expression(
     func.push(Instruction::new(
         "evaluate".to_string(),
         argument_names,
-        assignment.unwrap_or("CALL_EXPRESSION_RESULT".to_string()),
-        scope,
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or("CALL_EXPRESSION_RESULT".to_string()),
+        compilation_state.scope,
     ));
 
     Ok(func)
@@ -50,6 +54,7 @@ pub fn handle_call_expression(
 
 #[cfg(test)]
 mod tests {
+    use crate::common::compilation_state::CompilationState;
     use crate::instruction::Instruction;
     use crate::translate::expression::parse_expression;
     use syn::ExprCall;
@@ -57,7 +62,10 @@ mod tests {
     #[test]
     fn test_handle_call_expression() {
         let parsed_expr_let: ExprCall = syn::parse_str("foo(bar, baz, 10)").unwrap();
-        let result = parse_expression(&syn::Expr::Call(parsed_expr_let), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Call(parsed_expr_let),
+            &mut CompilationState::new(),
+        );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
                 "assign".to_string(),
@@ -102,7 +110,10 @@ mod tests {
     #[test]
     fn test_handle_call_expression_with_path() {
         let parsed_expr_let: ExprCall = syn::parse_str("Self::foo(bar, baz, 10)").unwrap();
-        let result = parse_expression(&syn::Expr::Call(parsed_expr_let), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Call(parsed_expr_let),
+            &mut CompilationState::new(),
+        );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
                 "assign".to_string(),
@@ -153,7 +164,10 @@ mod tests {
         })",
         )
         .unwrap();
-        let result = parse_expression(&syn::Expr::Call(parsed_expr_let), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Call(parsed_expr_let),
+            &mut CompilationState::new(),
+        );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
                 "assign".to_string(),

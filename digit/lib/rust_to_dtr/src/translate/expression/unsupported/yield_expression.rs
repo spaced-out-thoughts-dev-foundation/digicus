@@ -11,13 +11,17 @@ pub fn handle_yield_expression(_: &ExprYield) -> Result<Vec<Instruction>, NotTra
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprYield;
 
     #[test]
     fn test_yield_expression() {
         let parsed_expr_yield: ExprYield = syn::parse_str("yield 1").unwrap();
-        let result = parse_expression(&syn::Expr::Yield(parsed_expr_yield), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Yield(parsed_expr_yield),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

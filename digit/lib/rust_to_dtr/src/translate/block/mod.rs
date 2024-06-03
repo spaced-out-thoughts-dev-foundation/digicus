@@ -1,8 +1,12 @@
+use crate::common::compilation_state;
 use crate::instruction::Instruction;
 use crate::translate;
 use core::panic;
 
-pub fn handle_block(block: &syn::Block, scope: u32) -> Vec<Instruction> {
+pub fn handle_block(
+    block: &syn::Block,
+    compilation_state: &mut compilation_state::CompilationState,
+) -> Vec<Instruction> {
     let mut index = 1;
     let total_block_stmts = block.stmts.len();
     let mut instructions_to_return: Vec<Instruction> = Vec::new();
@@ -13,7 +17,8 @@ pub fn handle_block(block: &syn::Block, scope: u32) -> Vec<Instruction> {
             None
         };
         match translate::expression::supported::block_expression::parse_block_stmt(
-            &stmt, assignment, scope,
+            &stmt,
+            &mut compilation_state.with_assignment(assignment),
         ) {
             Ok(block_str) => {
                 block_str.iter().for_each(|instr| {
@@ -25,7 +30,7 @@ pub fn handle_block(block: &syn::Block, scope: u32) -> Vec<Instruction> {
                         "Return".to_string(),
                         vec!["Thing_to_return".to_string()],
                         "".to_string(),
-                        scope,
+                        compilation_state.scope,
                     ));
                 }
             }

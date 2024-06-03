@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::{
@@ -7,8 +8,7 @@ use syn::ExprTuple;
 
 pub fn handle_tuple_expression(
     expr: &ExprTuple,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut instructions_to_return: Vec<Instruction> = Vec::new();
 
@@ -19,7 +19,8 @@ pub fn handle_tuple_expression(
 
         arguments.push(arg_name.clone());
 
-        let instructions: Vec<Instruction> = parse_expression(arg, Some(arg_name), scope).unwrap();
+        let instructions: Vec<Instruction> =
+            parse_expression(arg, &mut compilation_state.with_assignment(Some(arg_name))).unwrap();
         instructions_to_return.extend(instructions);
 
         index += 1;
@@ -28,8 +29,11 @@ pub fn handle_tuple_expression(
     instructions_to_return.push(Instruction::new(
         "create_tuple".to_string(),
         arguments,
-        assignment.unwrap_or("TUPLE_RESULT".to_string()),
-        scope,
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or("TUPLE_RESULT".to_string()),
+        compilation_state.scope,
     ));
 
     Ok(instructions_to_return)

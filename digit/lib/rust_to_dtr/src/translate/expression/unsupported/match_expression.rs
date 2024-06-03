@@ -11,13 +11,17 @@ pub fn handle_match_expression(_: &ExprMatch) -> Result<Vec<Instruction>, NotTra
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprMatch;
 
     #[test]
     fn test_match_expression() {
         let parsed_expr_match: ExprMatch = syn::parse_str("match 1 { _ => 0 }").unwrap();
-        let result = parse_expression(&syn::Expr::Match(parsed_expr_match), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Match(parsed_expr_match),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

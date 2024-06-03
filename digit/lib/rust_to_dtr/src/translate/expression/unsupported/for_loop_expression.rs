@@ -13,13 +13,17 @@ pub fn handle_for_loop_expression(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprForLoop;
 
     #[test]
     fn test_for_loop_expression() {
         let parsed_expr_for_loop: ExprForLoop = syn::parse_str("for i in 0..10 { }").unwrap();
-        let result = parse_expression(&syn::Expr::ForLoop(parsed_expr_for_loop), None, 0);
+        let result = parse_expression(
+            &syn::Expr::ForLoop(parsed_expr_for_loop),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

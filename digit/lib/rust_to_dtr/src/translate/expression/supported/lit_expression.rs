@@ -1,11 +1,11 @@
+use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_lit;
 
 pub fn handle_lit_expression(
     lit: &syn::Lit,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     // TODO: fix this so it actually returns the right type
     // TODO: this is also super hacky for strings, please fix it
@@ -14,17 +14,22 @@ pub fn handle_lit_expression(
     Ok(vec![Instruction::new(
         "assign".to_string(),
         vec![literal_value],
-        assignment.unwrap_or_default(),
-        scope,
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or_default(),
+        compilation_state.scope,
     )])
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::common::compilation_state;
     use syn;
 
     mod lit_expression {
         use super::*;
+        use compilation_state::CompilationState;
         use syn::{Lit, LitBool, LitByte, LitByteStr, LitChar, LitFloat, LitInt};
 
         use crate::{instruction::Instruction, translate::expression::parse_expression};
@@ -37,8 +42,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::Bool(parsed_lit_bool),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
@@ -58,8 +62,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::Byte(parsed_lit_byte),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
@@ -79,8 +82,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::ByteStr(parsed_lit_byte_str),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
@@ -100,8 +102,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::Char(parsed_lit_char),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
@@ -122,8 +123,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::Float(parsed_lit_float),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
@@ -144,8 +144,7 @@ mod tests {
                     attrs: Vec::new(),
                     lit: Lit::Int(parsed_lit_int),
                 }),
-                None,
-                0,
+                &mut CompilationState::new(),
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(

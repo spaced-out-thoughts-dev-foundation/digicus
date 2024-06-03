@@ -11,13 +11,17 @@ pub fn handle_unsafe_expression(_: &ExprUnsafe) -> Result<Vec<Instruction>, NotT
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprUnsafe;
 
     #[test]
     fn test_unsafe_expression() {
         let parsed_expr_unsafe: ExprUnsafe = syn::parse_str("unsafe { }").unwrap();
-        let result = parse_expression(&syn::Expr::Unsafe(parsed_expr_unsafe), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Unsafe(parsed_expr_unsafe),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

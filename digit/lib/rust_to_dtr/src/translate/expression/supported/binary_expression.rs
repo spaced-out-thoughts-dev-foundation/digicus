@@ -1,28 +1,25 @@
+use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::is_conditional_comparative_operator;
 use crate::translate::expression::parse_binary_op;
 use crate::translate::expression::parse_expression;
-
 use syn::ExprBinary;
 
 pub fn handle_binary_expression(
     expr_binary: &ExprBinary,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let left_hand_side_name = "BINARY_EXPRESSION_LEFT";
     let right_hand_side_name = "BINARY_EXPRESSION_RIGHT";
 
     let mut left_hand_side: Vec<Instruction> = parse_expression(
         &expr_binary.left,
-        Some(left_hand_side_name.to_string()),
-        scope,
+        &mut compilation_state.with_assignment(Some(left_hand_side_name.to_string())),
     )?;
     let right_hand_side: Vec<Instruction> = parse_expression(
         &expr_binary.right,
-        Some(right_hand_side_name.to_string()),
-        scope,
+        &mut compilation_state.with_assignment(Some(right_hand_side_name.to_string())),
     )?;
     let operator: String = parse_binary_op(&expr_binary.op)?;
 
@@ -33,10 +30,10 @@ pub fn handle_binary_expression(
                 operator,
                 left_hand_side_name.to_string(),
                 right_hand_side_name.to_string(),
-                format!("{}", scope + 1),
+                (compilation_state.scope + 1).to_string(),
             ],
             "".to_string(),
-            scope,
+            compilation_state.scope,
         )
     } else {
         Instruction::new(
@@ -46,8 +43,11 @@ pub fn handle_binary_expression(
                 right_hand_side_name.to_string(),
             ],
             // TODO: this is incorrect!
-            assignment.unwrap_or_default(),
-            scope,
+            compilation_state
+                .next_assignment
+                .clone()
+                .unwrap_or_default(),
+            compilation_state.scope,
         )
     };
 
@@ -60,6 +60,7 @@ pub fn handle_binary_expression(
 
 #[cfg(test)]
 mod tests {
+    use crate::common::compilation_state::CompilationState;
     use crate::instruction::Instruction;
     use crate::translate::expression::parse_expression;
     use syn::ExprBinary;
@@ -67,7 +68,10 @@ mod tests {
     #[test]
     fn test_binary_expression_simple_addition() {
         let parsed_expr_binary: ExprBinary = syn::parse_str("1 + 2").unwrap();
-        let result = parse_expression(&syn::Expr::Binary(parsed_expr_binary), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Binary(parsed_expr_binary),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,
@@ -100,7 +104,10 @@ mod tests {
     #[test]
     fn test_binary_expression_simple_subtraction_and_assignment() {
         let parsed_expr_binary: ExprBinary = syn::parse_str("foo -= 2").unwrap();
-        let result = parse_expression(&syn::Expr::Binary(parsed_expr_binary), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Binary(parsed_expr_binary),
+            &mut CompilationState::new(),
+        );
 
         let expected = Ok(vec![
             Instruction::new(

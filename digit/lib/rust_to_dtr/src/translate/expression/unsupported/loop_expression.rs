@@ -11,13 +11,17 @@ pub fn handle_loop_expression(_: &ExprLoop) -> Result<Vec<Instruction>, NotTrans
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprLoop;
 
     #[test]
     fn test_loop_expression() {
         let parsed_expr_loop: ExprLoop = syn::parse_str("loop { }").unwrap();
-        let result = parse_expression(&syn::Expr::Loop(parsed_expr_loop), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Loop(parsed_expr_loop),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

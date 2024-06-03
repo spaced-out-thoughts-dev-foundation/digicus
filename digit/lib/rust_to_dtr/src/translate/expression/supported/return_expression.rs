@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
@@ -5,8 +6,7 @@ use syn::ExprReturn;
 
 pub fn handle_return_expression(
     expr_return: &ExprReturn,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let return_expr_box = &expr_return.expr;
 
@@ -14,14 +14,19 @@ pub fn handle_return_expression(
         Some(return_expr) => {
             let return_label: &str = "RETURN_VALUE_LABEL";
 
-            let mut precedning_instructions =
-                parse_expression(return_expr, Some(return_label.to_string()), scope)?;
+            let mut precedning_instructions = parse_expression(
+                return_expr,
+                &mut compilation_state.with_assignment(Some(return_label.to_string())),
+            )?;
 
             let return_instruction = Instruction::new(
                 "return".to_string(),
                 vec![return_label.to_string()],
-                assignment.unwrap_or_default(),
-                scope,
+                compilation_state
+                    .next_assignment
+                    .clone()
+                    .unwrap_or_default(),
+                compilation_state.scope,
             );
 
             precedning_instructions.push(return_instruction);
@@ -37,6 +42,7 @@ pub fn handle_return_expression(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use syn::ExprReturn;
 
     // use crate::common::get_random_string;
@@ -47,7 +53,10 @@ mod tests {
         // mock.return_string("10");
 
         let parsed_expr_return: ExprReturn = syn::parse_str("return 1").unwrap();
-        let result = parse_expression(&syn::Expr::Return(parsed_expr_return), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Return(parsed_expr_return),
+            &mut CompilationState::new(),
+        );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
                 "assign".to_string(),
@@ -69,7 +78,10 @@ mod tests {
     #[test]
     fn test_return_expression_bool() {
         let parsed_expr_return: ExprReturn = syn::parse_str("return true").unwrap();
-        let result = parse_expression(&syn::Expr::Return(parsed_expr_return), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Return(parsed_expr_return),
+            &mut CompilationState::new(),
+        );
 
         let expected: Vec<Instruction> = vec![
             Instruction::new(
@@ -92,7 +104,10 @@ mod tests {
     #[test]
     fn test_return_expression_no_expr() {
         let parsed_expr_return: ExprReturn = syn::parse_str("return").unwrap();
-        let result = parse_expression(&syn::Expr::Return(parsed_expr_return), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Return(parsed_expr_return),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

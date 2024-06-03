@@ -1,3 +1,4 @@
+use crate::common::compilation_state::CompilationState;
 use crate::instruction::Instruction;
 use crate::optimize;
 use crate::translate;
@@ -61,7 +62,8 @@ fn parse_instructions(method: &syn::ImplItemFn) -> String {
     dtr_code.push_str("\t* Instructions:\n");
     dtr_code.push_str("\t\t$\n");
 
-    let block_instructions: Vec<Instruction> = translate::block::handle_block(&method.block, 0);
+    let block_instructions: Vec<Instruction> =
+        translate::block::handle_block(&method.block, &mut CompilationState::new());
     dtr_code.push_str(instructions_to_string(block_instructions.clone()).as_str());
 
     dtr_code.push_str("\n\t\t$\n");

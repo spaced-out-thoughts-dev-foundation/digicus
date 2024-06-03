@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
@@ -5,21 +6,22 @@ use crate::translate::pattern::handle_pattern;
 
 pub fn handle_let_expression(
     let_expr: syn::ExprLet,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let input_value_name_for_let = "INPUT_VALUE_NAME_FOR_LET";
     let mut preceding_instructions = parse_expression(
         &let_expr.expr,
-        Some(input_value_name_for_let.to_string()),
-        0,
+        &mut compilation_state.with_assignment(Some(input_value_name_for_let.to_string())),
     )?;
     let result = handle_pattern(*(let_expr.pat.clone()));
     let result_instruction: Instruction = Instruction::new(
         "assign".to_string(),
         vec![input_value_name_for_let.to_string()],
-        assignment.unwrap_or(result.unwrap_or_default()),
-        scope,
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or(result.unwrap_or_default()),
+        compilation_state.scope,
     );
 
     preceding_instructions.push(result_instruction);
@@ -29,6 +31,7 @@ pub fn handle_let_expression(
 
 #[cfg(test)]
 mod tests {
+    use crate::common::compilation_state::CompilationState;
     use crate::instruction::Instruction;
     use crate::translate::expression::parse_expression;
     use syn;
@@ -41,7 +44,10 @@ mod tests {
         #[test]
         fn test_let_expression_simple_x_equals_1() {
             let parsed_expr_let: ExprLet = syn::parse_str("let x = 1").unwrap();
-            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None, 0);
+            let result = parse_expression(
+                &syn::Expr::Let(parsed_expr_let),
+                &mut CompilationState::new(),
+            );
             let expected: Vec<Instruction> = vec![
                 Instruction::new(
                     "assign".to_string(),
@@ -63,7 +69,10 @@ mod tests {
         #[test]
         fn test_let_expression_less_simple_foo_equals_bar() {
             let parsed_expr_let: ExprLet = syn::parse_str("let foo = bar").unwrap();
-            let result = parse_expression(&syn::Expr::Let(parsed_expr_let), None, 0);
+            let result = parse_expression(
+                &syn::Expr::Let(parsed_expr_let),
+                &mut CompilationState::new(),
+            );
             let expected = vec![
                 Instruction::new(
                     "assign".to_string(),

@@ -1,3 +1,5 @@
+pub mod compilation_state;
+
 use crate::instruction::Instruction;
 use crate::translate::type_name::parse_path;
 use crate::{

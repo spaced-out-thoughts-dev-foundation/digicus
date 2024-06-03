@@ -11,13 +11,17 @@ pub fn handle_try_expression(_: &ExprTry) -> Result<Vec<Instruction>, NotTransla
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::common::compilation_state::CompilationState;
     use crate::translate::expression::parse_expression;
     use syn::ExprTry;
 
     #[test]
     fn test_try_expression() {
         let parsed_expr_try: ExprTry = syn::parse_str("expr?").unwrap();
-        let result = parse_expression(&syn::Expr::Try(parsed_expr_try), None, 0);
+        let result = parse_expression(
+            &syn::Expr::Try(parsed_expr_try),
+            &mut CompilationState::new(),
+        );
 
         assert_eq!(
             result,

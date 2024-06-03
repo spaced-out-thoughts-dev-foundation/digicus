@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::common::handle_macro;
 use crate::instruction::Instruction;
 use crate::{
@@ -7,8 +8,11 @@ use syn::ExprMacro;
 
 pub fn handle_macro_expression(
     expr: &ExprMacro,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    handle_macro(&expr.mac, assignment, scope)
+    handle_macro(
+        &expr.mac,
+        compilation_state.next_assignment.clone(),
+        compilation_state.scope,
+    )
 }

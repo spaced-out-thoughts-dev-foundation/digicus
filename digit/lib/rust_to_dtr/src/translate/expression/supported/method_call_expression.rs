@@ -1,3 +1,4 @@
+use crate::common::compilation_state;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::{
@@ -7,8 +8,7 @@ use syn::ExprMethodCall;
 
 pub fn handle_method_call_expression(
     expr: &ExprMethodCall,
-    assignment: Option<String>,
-    scope: u32,
+    compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut argument_names: Vec<String> = Vec::new();
     let mut index = 1;
@@ -16,11 +16,13 @@ pub fn handle_method_call_expression(
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
         let arg_name = format!("{}_METHOD_CALL_ARG", index);
-        let expressions_parsed: Vec<Instruction> =
-            match parse_expression(&arg, Some(arg_name.clone()), scope) {
-                Ok(expressions) => expressions,
-                Err(e) => panic!("Error parsing expression: {:?}", e),
-            };
+        let expressions_parsed: Vec<Instruction> = match parse_expression(
+            &arg,
+            &mut compilation_state.with_assignment(Some(arg_name.clone())),
+        ) {
+            Ok(expressions) => expressions,
+            Err(e) => panic!("Error parsing expression: {:?}", e),
+        };
 
         expressions.extend(expressions_parsed);
 
@@ -31,8 +33,7 @@ pub fn handle_method_call_expression(
 
     let mut receiver: Vec<Instruction> = parse_expression(
         &expr.receiver,
-        Some("METHOD_CALL_EXPRESSION".to_string()),
-        0,
+        &mut compilation_state.with_assignment(Some("METHOD_CALL_EXPRESSION".to_string())),
     )?;
 
     receiver.extend(expressions);
@@ -45,8 +46,11 @@ pub fn handle_method_call_expression(
     receiver.push(Instruction::new(
         "evaluate".to_string(),
         argument_names,
-        assignment.unwrap_or("METHOD_CALL_RESULT".to_string()),
-        scope,
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or("METHOD_CALL_RESULT".to_string()),
+        compilation_state.scope,
     ));
 
     Ok(receiver)
