@@ -8,7 +8,9 @@ pub fn handle_let_expression(
     let_expr: syn::ExprLet,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let input_value_name_for_let = "INPUT_VALUE_NAME_FOR_LET";
+    let global_uuid = compilation_state.global_uuid;
+    compilation_state.increment_global_uuid();
+    let input_value_name_for_let = format!("INPUT_VALUE_NAME_FOR_LET_{}", global_uuid);
     let mut preceding_instructions = parse_expression(
         &let_expr.expr,
         &mut compilation_state.with_assignment(Some(input_value_name_for_let.to_string())),
@@ -52,12 +54,12 @@ mod tests {
                 Instruction::new(
                     "assign".to_string(),
                     vec!["1".to_string()],
-                    "INPUT_VALUE_NAME_FOR_LET".to_string(),
+                    "INPUT_VALUE_NAME_FOR_LET_0".to_string(),
                     0,
                 ),
                 Instruction::new(
                     "assign".to_string(),
-                    vec!["INPUT_VALUE_NAME_FOR_LET".to_string()],
+                    vec!["INPUT_VALUE_NAME_FOR_LET_0".to_string()],
                     "x".to_string(),
                     0,
                 ),
@@ -77,12 +79,12 @@ mod tests {
                 Instruction::new(
                     "assign".to_string(),
                     vec!["bar".to_string()],
-                    "INPUT_VALUE_NAME_FOR_LET".to_string(),
+                    "INPUT_VALUE_NAME_FOR_LET_0".to_string(),
                     0,
                 ),
                 Instruction::new(
                     "assign".to_string(),
-                    vec!["INPUT_VALUE_NAME_FOR_LET".to_string()],
+                    vec!["INPUT_VALUE_NAME_FOR_LET_0".to_string()],
                     "foo".to_string(),
                     0,
                 ),

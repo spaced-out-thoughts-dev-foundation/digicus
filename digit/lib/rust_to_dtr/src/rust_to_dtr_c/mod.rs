@@ -14,7 +14,6 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
             syn::Item::Struct(item_struct) => {
                 // here we look at the attributes of the struct such as #[contract] or #[contractimpl]
                 item_struct.attrs.iter().for_each(|attr| {
-                    // dtr_code.push_str(&format!("{}\n", parse_path(attr.meta.path())));
                     if parse_path(attr.meta.path()) == "contract" {
                         dtr_code.push_str(&format!("[Contract]: {}\n\n", item_struct.ident));
                     } else if parse_path(attr.meta.path()) == "contracttype" {
@@ -26,7 +25,6 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                 let mut is_a_contract_impl = false;
                 if item_impl.attrs.len() > 0 {
                     item_impl.attrs.iter().for_each(|attr| {
-                        // dtr_code.push_str(&format!("{}\n", parse_path(attr.path)));
                         if parse_path(attr.meta.path()) == "contractimpl" {
                             is_a_contract_impl = true;
                         }

@@ -69,7 +69,7 @@ fn parse_expression(
             supported::paren_expression::handle_paren_expression(paren_expr, compilation_state)
         }
         syn::Expr::Path(path) => {
-            supported::path_expression::handle_path_expression(&path.path, compilation_state)
+            supported::path_expression::handle_path_expression(&path, compilation_state)
         }
         syn::Expr::Reference(reference_expr) => {
             supported::reference_expression::handle_reference_expression(
@@ -142,19 +142,6 @@ fn parse_expression(
         )),
     }
 }
-
-// fn parse_macros(mac: &syn::ExprMacro) -> String {
-//     let macro_itself: &syn::Macro = &mac.mac;
-
-//     let mut macro_str = String::new();
-
-//     // TODO: do all macros have a bang?
-//     macro_str.push_str(&format!("{}!", type_name::parse_path(&macro_itself.path)));
-
-//     macro_str.push_str(format!("{:?}", macro_itself.tokens).as_str());
-
-//     macro_str
-// }
 
 #[cfg(test)]
 mod tests {

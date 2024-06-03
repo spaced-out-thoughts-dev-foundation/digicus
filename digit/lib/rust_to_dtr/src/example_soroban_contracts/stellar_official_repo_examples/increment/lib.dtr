@@ -11,15 +11,14 @@ $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: u32, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
 { instruction: log_string, input: (env, "count: {}", count), scope: 0 }
 { instruction: add_and_assign, input: (count, 1), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, COUNTER, count), assign: METHOD_CALL_RESULT, scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3
-.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.extend_ttl, 50, 100), assign: METHOD_CALL_RESULT, scope: 0 }
 { instruction: Return, input: (count), scope: 0 }
 $
