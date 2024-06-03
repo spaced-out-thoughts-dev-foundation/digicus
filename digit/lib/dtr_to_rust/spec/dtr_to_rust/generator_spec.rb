@@ -12,7 +12,7 @@ RSpec.describe DTRToRust::Generator do
 
       expected = <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
+        use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
 
         #[contract]
         pub struct MyContract;
@@ -35,7 +35,7 @@ RSpec.describe DTRToRust::Generator do
 
       expected = <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
+        use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
 
         #[contract]
         pub struct MyContract;

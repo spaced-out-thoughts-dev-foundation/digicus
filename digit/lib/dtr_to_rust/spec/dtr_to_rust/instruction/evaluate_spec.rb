@@ -15,7 +15,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('CALL_EXPRESSION_RESULT = storage();')
+          expect(described_class.handle(instruction)).to eq('let mut CALL_EXPRESSION_RESULT = storage();')
         end
       end
 
@@ -29,7 +29,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('CALL_EXPRESSION_RESULT = instance("foo");')
+          expect(described_class.handle(instruction)).to eq('let mut CALL_EXPRESSION_RESULT = instance("foo");')
         end
       end
 
@@ -43,7 +43,21 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('CALL_EXPRESSION_RESULT = extend_ttl(50, 100);')
+          expect(described_class.handle(instruction)).to eq('let mut CALL_EXPRESSION_RESULT = extend_ttl(50, 100);')
+        end
+      end
+
+      context 'when no assign' do
+        # { instruction: evaluate, input: (storage), assign: nil, scope: 0 }
+        it 'returns the correct Rust code' do
+          instruction = {
+            instruction: 'evaluate',
+            inputs: ['storage'],
+            assign: nil,
+            scope: 0
+          }
+
+          expect(described_class.handle(instruction)).to eq('storage();')
         end
       end
     end
@@ -59,7 +73,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('METHOD_CALL_EXPRESSION = env.storage();')
+          expect(described_class.handle(instruction)).to eq('let mut METHOD_CALL_EXPRESSION = env.storage();')
         end
       end
 
@@ -73,7 +87,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('METHOD_CALL_EXPRESSION = METHOD_CALL_EXPRESSION.instance("foo");')
+          expect(described_class.handle(instruction)).to eq('let mut METHOD_CALL_EXPRESSION = METHOD_CALL_EXPRESSION.instance("foo");')
         end
       end
 
@@ -87,7 +101,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION.extend_ttl(50, 100);')
+          expect(described_class.handle(instruction)).to eq('let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION.extend_ttl(50, 100);')
         end
       end
     end

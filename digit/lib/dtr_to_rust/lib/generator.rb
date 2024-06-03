@@ -34,7 +34,7 @@ module DTRToRust
 
     def generate_contract_header
       # TODO: don't hardcode imports
-      @content += "#![no_std]\nuse soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};\n\n"
+      @content += "#![no_std]\nuse soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};\n\n"
     end
 
     def generate_contract_name
