@@ -6,12 +6,13 @@ use core::panic;
 pub fn handle_block(
     block: &syn::Block,
     compilation_state: &mut compilation_state::CompilationState,
+    hasOutput: bool,
 ) -> Vec<Instruction> {
     let mut index = 1;
     let total_block_stmts = block.stmts.len();
     let mut instructions_to_return: Vec<Instruction> = Vec::new();
     block.stmts.iter().for_each(|stmt| {
-        let assignment: Option<String> = if index == total_block_stmts {
+        let assignment: Option<String> = if index == total_block_stmts && hasOutput {
             Some("Thing_to_return".to_string())
         } else {
             None
@@ -25,7 +26,7 @@ pub fn handle_block(
                     instructions_to_return.push(instr.clone());
                 });
 
-                if index == total_block_stmts {
+                if index == total_block_stmts && hasOutput {
                     instructions_to_return.push(Instruction::new(
                         "Return".to_string(),
                         vec!["Thing_to_return".to_string()],

@@ -108,5 +108,5 @@ mod full_contract_tests {
 
     // test_contract!(stellar_official_repo_examples, eth_abi);
     // test_contract!(stellar_official_repo_examples, timelock);
-    // test_contract!(stellar_official_repo_examples, ttl);
+    test_contract!(stellar_official_repo_examples, ttl);
 }

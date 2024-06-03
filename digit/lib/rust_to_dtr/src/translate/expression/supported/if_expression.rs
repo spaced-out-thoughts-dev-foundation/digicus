@@ -14,7 +14,12 @@ pub fn handle_if_expression(
     let mut condition_instructions: Vec<Instruction> =
         parse_expression(&expr.cond, compilation_state)?;
 
-    let then_branch = handle_block(&expr.then_branch, &mut compilation_state.with_scope_jump(1));
+    // TODO: hasOutput is always true here. Incorrect.
+    let then_branch = handle_block(
+        &expr.then_branch,
+        &mut compilation_state.with_scope_jump(1),
+        true,
+    );
     let else_branch = match &expr.else_branch {
         Some(else_branch) => {
             condition_instructions.push(Instruction::from_compilation_state(

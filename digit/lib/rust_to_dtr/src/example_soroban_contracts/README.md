@@ -2,7 +2,7 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress [ 6/25 | 24% ]:
+Progress [ 6/25 | 28% ]:
 * [ ] Account
 * [ ] Alloc
 * [ ] Atomic Multiswap
@@ -25,7 +25,7 @@ Progress [ 6/25 | 24% ]:
 * [ ] Single Offer
 * [ ] Timelock
 * [ ] Token
-* [ ] TTL
+* [x] TTL
 * [ ] Upgradeable Contract
 * [ ] Workspace
 

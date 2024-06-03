@@ -12,11 +12,14 @@ pub fn parse_function_block(method: &syn::ImplItemFn) -> String {
 
     dtr_code.push_str(&parse_inputs(&method.clone()));
 
+    let mut hasOutput = false;
+
     if let syn::ReturnType::Type(_, ty) = &method.sig.output {
+        hasOutput = true;
         dtr_code.push_str(translate::parse_return_type(ty).as_str());
     }
 
-    dtr_code.push_str(&&parse_instructions(&method.clone()));
+    dtr_code.push_str(&&parse_instructions(&method.clone(), hasOutput));
 
     dtr_code
 }
@@ -56,14 +59,14 @@ fn parse_inputs(method: &syn::ImplItemFn) -> String {
     dtr_code
 }
 
-fn parse_instructions(method: &syn::ImplItemFn) -> String {
+fn parse_instructions(method: &syn::ImplItemFn, hasOutput: bool) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Instructions:\n");
     dtr_code.push_str("\t\t$\n");
 
     let block_instructions: Vec<Instruction> =
-        translate::block::handle_block(&method.block, &mut CompilationState::new());
+        translate::block::handle_block(&method.block, &mut CompilationState::new(), hasOutput);
     dtr_code.push_str(instructions_to_string(block_instructions.clone()).as_str());
 
     dtr_code.push_str("\n\t\t$\n");
