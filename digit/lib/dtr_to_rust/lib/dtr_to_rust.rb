@@ -13,4 +13,9 @@ module DTRToRust
     autoload :LogString, 'instruction/log_string'
     autoload :AddAndAssign, 'instruction/add_and_assign'
   end
+
+  # This module contains all the classes that handle common logic.
+  module Common
+    autoload :InputInterpreter, 'common/input_interpreter'
+  end
 end
