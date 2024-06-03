@@ -11,7 +11,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     let mut user_defined_types: Vec<syn::Item> = Vec::new();
     let mut state_str: String = String::new();
 
-    state_str.push_str("[State]:\n");
+    state_str.push_str("[State]:");
 
     // Extract information from the parsed AST
     let mut dtr_code = String::new();
@@ -60,13 +60,13 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
             syn::Item::Const(const_item) => {
                 let name = const_item.ident.to_string();
 
-                state_str.push_str(&format!("* [{}]:", name));
+                state_str.push_str(&format!("\n* [{}]", name));
                 state_str.push_str(&format!(
-                    "\t* Type: {}",
+                    "\n\t* Type: {}",
                     figure_out_type(&const_item.ty.clone())?
                 ));
                 // TODO: this is super hacky and won't always work
-                state_str.push_str(&format!("\t* Initial Value: \"{}\"", name));
+                state_str.push_str(&format!("\n\t* Initial Value: \"{}\"", name));
             }
             _ => {} // We're ignoring other types of items for simplicity
         }
@@ -82,8 +82,9 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
     dtr_code.push_str("\n:[User Defined Types]\n");
 
-    if state_str != "[State]:\n" {
+    if state_str != "[State]:" {
         dtr_code.push_str(&state_str);
+        dtr_code.push_str("\n");
     }
 
     Ok(dtr_code)
