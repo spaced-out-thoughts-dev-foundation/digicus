@@ -1,5 +1,8 @@
+use crate::common::compilation_state::CompilationState;
 use crate::errors;
+use crate::instruction;
 use crate::translate;
+use crate::translate::expression::parse_expression;
 use crate::translate::type_name::figure_out_type;
 use crate::translate::type_name::{self, parse_path};
 
@@ -50,7 +53,9 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
             }
             syn::Item::Enum(enum_item) => {
                 enum_item.attrs.iter().for_each(|attr| {
-                    if parse_path(attr.meta.path()) == "contracttype" {
+                    if parse_path(attr.meta.path()) == "contracttype"
+                        || parse_path(attr.meta.path()) == "contracterror"
+                    {
                         user_defined_types.push(item.clone());
                     }
                 });
@@ -63,8 +68,13 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     "\n\t* Type: {}",
                     figure_out_type(&const_item.ty.clone())?
                 ));
-                // TODO: this is super hacky and won't always work
-                state_str.push_str(&format!("\n\t* Initial Value: \"{}\"", name));
+                state_str.push_str(&format!(
+                    "\n\t* Initial Value: {}",
+                    extract_value_from_instruction(&parse_expression(
+                        &const_item.expr,
+                        &mut CompilationState::new()
+                    )?)
+                ));
             }
             _ => {} // We're ignoring other types of items for simplicity
         }
@@ -86,6 +96,10 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     }
 
     Ok(dtr_code)
+}
+
+fn extract_value_from_instruction(instructions: &Vec<instruction::Instruction>) -> String {
+    instructions[0].input[0].clone()
 }
 
 fn syn_item_to_user_defined_type(item: &syn::Item) -> String {
@@ -120,26 +134,11 @@ fn syn_item_struct_to_user_defined_type(item: &syn::ItemStruct) -> String {
 fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
     let mut dtr_code = String::new();
 
-    dtr_code.push_str(&format!("* ({})\n", item.ident));
+    dtr_code.push_str(&format!("\n* ({})\n", item.ident));
     dtr_code.push_str("{\n");
 
     item.variants.iter().for_each(|variant| {
-        dtr_code.push_str(&format!("\t* ({})\n", variant.ident));
-        dtr_code.push_str("\t{\n");
-
-        if let syn::Fields::Named(fields_named) = &variant.fields {
-            fields_named.named.iter().for_each(|field| {
-                if let syn::Type::Path(type_path) = &field.ty {
-                    dtr_code.push_str(&format!(
-                        "\t\t{}: {}\n",
-                        field.ident.as_ref().unwrap(),
-                        type_name::parse_path(&type_path.path)
-                    ));
-                }
-            });
-        }
-
-        dtr_code.push_str("\t}\n");
+        dtr_code.push_str(&format!("\t{}\n", variant.ident));
     });
 
     dtr_code.push_str("}\n");

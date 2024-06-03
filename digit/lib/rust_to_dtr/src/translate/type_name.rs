@@ -13,7 +13,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
                     Ok(val) => return Ok(format!("*const {}", val)),
                     Err(_) => {
                         return Err(NotTranslatableError::Custom(
-                            "Could not figure out type".to_string(),
+                            "Could not figure out type for const pointer".to_string(),
                         ))
                     }
                 }
@@ -22,7 +22,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
                     Ok(val) => return Ok(format!("*mut {}", val)),
                     Err(_) => {
                         return Err(NotTranslatableError::Custom(
-                            "Could not figure out type".to_string(),
+                            "Could not figure out type for non const pointer".to_string(),
                         ))
                     }
                 }
@@ -44,7 +44,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
                             Ok(val) => args.push(val),
                             Err(_) => {
                                 return Err(NotTranslatableError::Custom(
-                                    "Could not figure out type".to_string(),
+                                    "Could not figure out type for BareFn".to_string(),
                                 ));
                             }
                         }
@@ -58,7 +58,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
                     Ok(val) => fn_str.push_str(val.as_str()),
                     Err(_) => {
                         return Err(NotTranslatableError::Custom(
-                            "Could not figure out type".to_string(),
+                            "Could not figure out type for ReturnType".to_string(),
                         ))
                     }
                 }
@@ -87,7 +87,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
     match result_name {
         Ok(val) => map_name(&val),
         Err(_) => Err(NotTranslatableError::Custom(
-            "Could not figure out type".to_string(),
+            "Could not figure out type misc?".to_string(),
         )),
     }
 }
@@ -101,8 +101,8 @@ fn parse_angle_bracketed_generic_arguments(args: &syn::AngleBracketedGenericArgu
 
             match val {
                 Ok(val) => args_list.push(val),
-                Err(_) => {
-                    return "Could not figure out type".to_string();
+                Err(e) => {
+                    return "Could not figure out type for angle bracketed type".to_string();
                 }
             }
         }

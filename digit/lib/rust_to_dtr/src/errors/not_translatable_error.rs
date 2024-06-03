@@ -9,7 +9,11 @@ pub enum NotTranslatableError {
 // Implementing `std::fmt::Display` for user-friendly error messages
 impl fmt::Display for NotTranslatableError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Encountered non-translatable bits of Rust code.")
+        match self {
+            NotTranslatableError::Custom(ref message) => {
+                write!(f, "NotTranslatableError: {}", message)
+            }
+        }
     }
 }
 

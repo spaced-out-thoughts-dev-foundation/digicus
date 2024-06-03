@@ -39,3 +39,8 @@ impl IncrementContract {
         }
     }
 }
+
+// Issues:
+// 1. enum UDT is not parsed
+// 2. const Number not parsed correctly
+// 3. output type - unsure how to represent that

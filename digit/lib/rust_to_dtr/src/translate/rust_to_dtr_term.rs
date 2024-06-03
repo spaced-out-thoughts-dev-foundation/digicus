@@ -55,10 +55,12 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         ));
     }
 
+    // TODO: is this correct?
     if rust_name.contains("Result<") {
-        return Err(NotTranslatableError::Custom(
-            "Unable to translate Result type".to_string(),
-        ));
+        return Ok(rust_name.to_string());
+        // return Err(NotTranslatableError::Custom(
+        //     "Unable to translate Result type for result".to_string(),
+        // ));
     }
 
     match rust_name {

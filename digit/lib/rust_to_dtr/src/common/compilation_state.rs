@@ -38,4 +38,13 @@ impl CompilationState {
             next_assignment: assignment,
         }
     }
+
+    pub fn with_scope_jump(&self, scope_jump: u32) -> CompilationState {
+        CompilationState {
+            instructions: self.instructions.clone(),
+            scope: self.scope + scope_jump,
+            global_uuid: self.global_uuid,
+            next_assignment: self.next_assignment.clone(),
+        }
+    }
 }

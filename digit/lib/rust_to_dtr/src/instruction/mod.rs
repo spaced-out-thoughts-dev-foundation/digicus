@@ -1,3 +1,5 @@
+use crate::common::compilation_state::{self, CompilationState};
+
 #[derive(Debug, Clone)]
 pub struct Instruction {
     pub name: String,
@@ -13,6 +15,22 @@ impl Instruction {
             input,
             assign,
             scope,
+        }
+    }
+
+    pub fn from_compilation_state(
+        name: String,
+        input: Vec<String>,
+        compilation_state: &CompilationState,
+    ) -> Self {
+        Self {
+            name,
+            input,
+            assign: compilation_state
+                .next_assignment
+                .clone()
+                .unwrap_or("".to_string()),
+            scope: compilation_state.scope,
         }
     }
 
