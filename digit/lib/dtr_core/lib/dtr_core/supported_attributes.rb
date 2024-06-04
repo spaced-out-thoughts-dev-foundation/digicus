@@ -12,6 +12,8 @@ module DTRCore
     INSTRUCTION_CATEGORY_ENVIRONMENT = 'environment'
     INSTRUCTION_CATEGORY_METHODS = 'methods'
     INSTRUCTION_CATEGORY_OBJECTS = 'objects'
+    INSTRUCTION_CATEGORY_CONDITIONAL = 'conditional'
+    INSTRUCTION_CATEGORY_LOGICAL = 'logical'
     INSTRUCTION_CATEGORIES = [
       INSTRUCTION_CATEGORY_BASIC,
       INSTRUCTION_CATEGORY_STATE,
@@ -20,13 +22,16 @@ module DTRCore
       INSTRUCTION_CATEGORY_STRING,
       INSTRUCTION_CATEGORY_ENVIRONMENT,
       INSTRUCTION_CATEGORY_METHODS,
-      INSTRUCTION_CATEGORY_OBJECTS
+      INSTRUCTION_CATEGORY_OBJECTS,
+      INSTRUCTION_CATEGORY_CONDITIONAL,
+      INSTRUCTION_CATEGORY_LOGICAL
     ].freeze
     ## Instructions ##
     INSTRUCTIONS = [
       # basic operations
       { name: 'return', description: 'Return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
       { name: 'assign', description: 'Assign a value to a variable.', category: INSTRUCTION_CATEGORY_BASIC },
+      { name: 'panic', description: 'Exit, quickly, and loudly.', category: INSTRUCTION_CATEGORY_BASIC },
       # state operations
       { name: 'fetch_state', description: 'Fetch a value from the state.', category: INSTRUCTION_CATEGORY_STATE },
       { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
@@ -51,6 +56,12 @@ module DTRCore
       # object operations
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
       { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS }
+      # conditional operations
+      { name: 'conditional_jump', description: 'Jump to a label if first input is true.', category: INSTRUCTION_CATEGORY_CONDITIONAL }
+      { name: 'unconditional_jump', description: 'Jump to a no matter what.', category: INSTRUCTION_CATEGORY_CONDITIONAL }
+      # logical operations
+      { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL }
+      { name: 'or', description: 'Logical OR.', category: INSTRUCTION_CATEGORY_LOGICAL }
     ].freeze
 
     # Supported Types for DTR.
