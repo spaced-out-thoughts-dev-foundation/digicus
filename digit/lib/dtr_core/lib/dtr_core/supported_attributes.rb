@@ -40,6 +40,9 @@ module DTRCore
       { name: 'add_and_assign',
         description: 'Add two things of unknown types together and then assign to the first one.',
         category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'subtract', description: 'Subtract two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'divide', description: 'Divide two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'multiply', description: 'Multiply two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
       # numeric operations
       { name: 'add_numbers', description: 'Add two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       { name: 'subtract_numbers', description: 'Subtract two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
