@@ -109,6 +109,6 @@ mod full_contract_tests {
     test_contract!(stellar_official_repo_examples, increment);
     test_contract!(stellar_official_repo_examples, logging);
 
-    // test_contract!(stellar_official_repo_examples, timelock);
+    test_contract!(stellar_official_repo_examples, timelock);
     test_contract!(stellar_official_repo_examples, ttl);
 }

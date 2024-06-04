@@ -30,7 +30,6 @@ pub fn handle_binary_expression(
                 operator,
                 left_hand_side_name.to_string(),
                 right_hand_side_name.to_string(),
-                (compilation_state.scope + 1).to_string(),
             ],
             compilation_state
                 .next_assignment

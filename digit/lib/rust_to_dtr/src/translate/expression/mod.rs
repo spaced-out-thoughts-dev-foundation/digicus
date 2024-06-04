@@ -28,9 +28,6 @@ pub fn parse_expression(
         syn::Expr::Loop(loop_expr) => {
             unsupported::loop_expression::handle_loop_expression(loop_expr)
         }
-        syn::Expr::Match(match_expression) => {
-            unsupported::match_expression::handle_match_expression(match_expression)
-        }
         syn::Expr::Repeat(repeat_expr) => {
             unsupported::repeat_expression::handle_repeat_expression(repeat_expr)
         }
@@ -107,6 +104,11 @@ pub fn parse_expression(
             supported::if_expression::handle_if_expression(if_expr, compilation_state)
         }
         syn::Expr::Unary(unary_expr) => handle_unary_expression(unary_expr, compilation_state),
+        syn::Expr::Match(match_expression) => supported::match_expression::handle_match_expression(
+            match_expression,
+            compilation_state,
+        ),
+
         // NOT IMPLEMENTED //
         syn::Expr::Break(_) => Err(NotTranslatableError::Custom(
             "Break expression not supported".to_string(),

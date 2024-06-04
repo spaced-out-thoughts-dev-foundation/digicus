@@ -3,7 +3,6 @@ pub mod async_expression;
 pub mod await_expression;
 pub mod for_loop_expression;
 pub mod loop_expression;
-pub mod match_expression;
 pub mod repeat_expression;
 pub mod try_block_expression;
 pub mod try_expression;

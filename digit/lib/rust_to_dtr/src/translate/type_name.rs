@@ -81,6 +81,11 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
             trait_str.push_str(&bounds.join(" + "));
             return Ok(trait_str);
         }
+        syn::Type::Reference(ref_type) => {
+            let type_string = figure_out_type(&ref_type.elem);
+
+            return Ok(format!("&{}", type_string.unwrap()));
+        }
         _ => Ok(format!("idk")),
     };
 
