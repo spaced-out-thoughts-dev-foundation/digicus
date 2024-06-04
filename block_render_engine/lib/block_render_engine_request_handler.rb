@@ -61,10 +61,6 @@ class BlockRenderEngineRequestHandler
 
     
     {
-      received: {
-        content: content,
-        format: content_format,
-      },
       contract_name: @contract_name,
       contract_state: @contract_state,
       contract_functions: @contract_functions,
