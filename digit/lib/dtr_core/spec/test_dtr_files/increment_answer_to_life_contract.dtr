@@ -1,6 +1,6 @@
 [Contract]: IncrementAnswerToLifeContract
 
-[Functions]:
+[InternalFunctions]:
 -() [fourty_two_and_then_some]
 	* Inputs:
 	{ 
@@ -14,4 +14,4 @@
 			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
-:[Functions]
+:[InternalFunctions]

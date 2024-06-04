@@ -1,6 +1,6 @@
 [Contract]: ConditionalBranching
 
-[Functions]:
+[InternalFunctions]:
 -() [is_answer_to_life]
 	* Inputs:
 	{ 
@@ -14,4 +14,4 @@
 			{ instruction: return, input: ("yes"), scope: 1}
 			{ instruction: return, input: ("no"), scope: 2}
 		$
-:[Functions]
+:[InternalFunctions]

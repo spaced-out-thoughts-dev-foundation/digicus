@@ -11,7 +11,7 @@
     * Type: I256
     * Initial Value: -1234
 
-[Functions]:
+[InternalFunctions]:
   -() [hello]
       * Inputs:
         { 
@@ -30,4 +30,4 @@
         $
           { instruction: Return, assign: ReturnValue }
         $
-:[Functions]
+:[InternalFunctions]

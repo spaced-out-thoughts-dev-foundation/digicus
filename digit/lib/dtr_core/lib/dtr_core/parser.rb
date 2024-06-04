@@ -49,7 +49,7 @@ module DTRCore
     def function_section
       return @function_definitions if @function_definitions
 
-      function_section = first_match_for_content(/\[Functions\]:(?<all>.*):\[Functions\]/m)
+      function_section = first_match_for_content(/\[InternalFunctions\]:(?<all>.*):\[InternalFunctions\]/m)
 
       return nil if function_section.nil?
 

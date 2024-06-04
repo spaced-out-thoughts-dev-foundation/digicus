@@ -1,6 +1,6 @@
 [Contract]: HelloContract
 
-[Functions]:
+[InternalFunctions]:
   -() [hello]
       * Inputs:
         { 
@@ -12,4 +12,4 @@
           { instruction: Add_Strings, input: ("Hello", to), assign: HelloToResult }
           { instruction: Return, input: (HelloToResult) }
         $
-:[Functions]
+:[InternalFunctions]

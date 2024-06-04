@@ -24,7 +24,7 @@
   }
 :[User Defined Types]
 
-[Functions]:
+[InternalFunctions]:
   -() [hello]
       * Inputs:
         { 
@@ -43,4 +43,4 @@
         $
           { instruction: Return, assign: ReturnValue }
         $
-:[Functions]
+:[InternalFunctions]
