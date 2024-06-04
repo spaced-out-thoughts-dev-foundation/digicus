@@ -17,10 +17,10 @@ log!(&env, "count: {}", count);
 count += 1;
 let mut METHOD_CALL_EXPRESSION_3 = env.storage();
 let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION_2.set(&COUNTER, &count);
+METHOD_CALL_EXPRESSION_2.set(&COUNTER, &count);
 let mut METHOD_CALL_EXPRESSION_3 = env.storage();
 let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION_2.extend_ttl(50, 100);
+METHOD_CALL_EXPRESSION_2.extend_ttl(50, 100);
 count
     }
 }
