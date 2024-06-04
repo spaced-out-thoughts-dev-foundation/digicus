@@ -55,12 +55,12 @@ module DTRCore
         category: INSTRUCTION_CATEGORY_METHODS },
       # object operations
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
-      { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS }
+      { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS },
       # conditional operations
-      { name: 'conditional_jump', description: 'Jump to a label if first input is true.', category: INSTRUCTION_CATEGORY_CONDITIONAL }
-      { name: 'unconditional_jump', description: 'Jump to a no matter what.', category: INSTRUCTION_CATEGORY_CONDITIONAL }
+      { name: 'conditional_jump', description: 'Jump to a label if first input is true.', category: INSTRUCTION_CATEGORY_CONDITIONAL },
+      { name: 'unconditional_jump', description: 'Jump to a no matter what.', category: INSTRUCTION_CATEGORY_CONDITIONAL },
       # logical operations
-      { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL }
+      { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL },
       { name: 'or', description: 'Logical OR.', category: INSTRUCTION_CATEGORY_LOGICAL }
     ].freeze
 
