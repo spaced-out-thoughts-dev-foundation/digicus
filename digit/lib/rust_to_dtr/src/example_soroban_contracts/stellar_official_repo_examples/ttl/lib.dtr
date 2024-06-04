@@ -1,6 +1,6 @@
 [Contract]: TtlContract
 
-[Functions]:
+[InternalFunctions]:
 -() [setup]
 * Inputs:
 {
@@ -10,13 +10,13 @@ env: Env
 $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 0), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 0), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 1), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 1), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.temporary), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 2), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::MyKey, 2), scope: 0 }
 $
 -() [extend_persistent]
 * Inputs:
@@ -27,7 +27,7 @@ env: Env
 $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.persistent), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, DataKey::MyKey, 1000, 5000), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, DataKey::MyKey, 1000, 5000), scope: 0 }
 $
 -() [extend_instance]
 * Inputs:
@@ -38,7 +38,7 @@ env: Env
 $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.extend_ttl, 2000, 10000), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.extend_ttl, 2000, 10000), scope: 0 }
 $
 -() [extend_temporary]
 * Inputs:
@@ -49,9 +49,9 @@ env: Env
 $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.temporary), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, DataKey::MyKey, 3000, 7000), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, DataKey::MyKey, 3000, 7000), scope: 0 }
 $
-:[Functions]
+:[InternalFunctions]
 
 
 [User Defined Types]:

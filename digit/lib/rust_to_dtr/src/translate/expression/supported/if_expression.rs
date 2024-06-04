@@ -11,15 +11,30 @@ pub fn handle_if_expression(
     expr: &ExprIf,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let mut condition_instructions: Vec<Instruction> =
-        parse_expression(&expr.cond, compilation_state)?;
+    println!("entered handle_if_expression");
+    let mut condition_instructions: Vec<Instruction> = parse_expression(
+        &expr.cond,
+        &mut compilation_state.with_assignment(Some("CONDITIONAL_JUMP_ASSIGNMENT".to_string())),
+    )?;
 
-    // TODO: hasOutput is always true here. Incorrect.
-    let then_branch = handle_block(
-        &expr.then_branch,
-        &mut compilation_state.with_scope_jump(1),
-        true,
+    let conditional_jump_instruction = Instruction::new(
+        "conditional_jump".to_string(),
+        vec![
+            "CONDITIONAL_JUMP_ASSIGNMENT".to_string(),
+            (compilation_state.scope + 1).to_string(),
+        ],
+        compilation_state
+            .next_assignment
+            .clone()
+            .unwrap_or_default(),
+        compilation_state.scope,
     );
+
+    condition_instructions.push(conditional_jump_instruction);
+
+    println!("fetched condition_instructions");
+    let then_branch = handle_block(&expr.then_branch, &mut compilation_state.with_scope_jump(1));
+    println!("fetched then_branch");
     let else_branch = match &expr.else_branch {
         Some(else_branch) => {
             condition_instructions.push(Instruction::from_compilation_state(
@@ -37,6 +52,7 @@ pub fn handle_if_expression(
         }
         None => vec![],
     };
+    println!("fetched else_branch");
 
     condition_instructions.extend(then_branch);
     condition_instructions.extend(else_branch);

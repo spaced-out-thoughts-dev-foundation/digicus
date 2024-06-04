@@ -1,0 +1,30 @@
+[Contract]: ClaimableBalanceContract
+
+[InternalFunctions]:
+:[InternalFunctions]
+
+[User Defined Types]:
+* (DataKey)
+{
+Init
+Balance
+}
+
+* (TimeBoundKind)
+{
+Before
+After
+}
+* (TimeBound)
+{
+kind: TimeBoundKind
+timestamp: u64
+}
+* (ClaimableBalance)
+{
+token: Address
+amount: i128
+claimants: Vec<Address>
+time_bound: TimeBound
+}
+:[User Defined Types]

@@ -59,7 +59,7 @@ pub fn handle_method_call_expression(
         compilation_state
             .next_assignment
             .clone()
-            .unwrap_or("METHOD_CALL_RESULT".to_string()),
+            .unwrap_or("".to_string()),
         compilation_state.scope,
     ));
 

@@ -13,8 +13,7 @@ pub fn handle_block_expression(
     expr_block: &ExprBlock,
     compilation_state: &mut CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    // TODO: hasOutput is always true here. Incorrect.
-    Ok(handle_block(&expr_block.block, compilation_state, true))
+    Ok(handle_block(&expr_block.block, compilation_state))
 }
 
 pub fn parse_block_stmt(

@@ -1,5 +1,5 @@
 [Contract]: IncrementContract
-[Functions]:
+[InternalFunctions]:
 -() [increment]
 * Inputs:
 {
@@ -16,7 +16,7 @@ $
 { instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, STATE, state), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, STATE, state), scope: 0 }
 { instruction: field, input: (state, count), assign: Thing_to_return, scope: 0 }
 { instruction: Return, input: (Thing_to_return), scope: 0 }
 $
@@ -35,7 +35,7 @@ $
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 1_METHOD_CALL_ARG_0), assign: Thing_to_return, scope: 0 }
 { instruction: Return, input: (Thing_to_return), scope: 0 }
 $
-:[Functions]
+:[InternalFunctions]
 
 
 [User Defined Types]:

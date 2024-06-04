@@ -9,7 +9,7 @@ pub fn handle_lit_expression(
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     // TODO: fix this so it actually returns the right type
     // TODO: this is also super hacky for strings, please fix it
-    let literal_value: String = parse_lit(lit)?.replace("\"", "");
+    let literal_value: String = parse_lit(lit)?;
 
     Ok(vec![Instruction::new(
         "assign".to_string(),
@@ -86,7 +86,7 @@ mod tests {
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
                 "assign".to_string(),
-                vec!["hello".to_string()],
+                vec!["\"hello\"".to_string()],
                 "".to_string(),
                 0,
             )];

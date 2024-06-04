@@ -6,6 +6,7 @@ pub struct CompilationState {
     pub scope: u32,
     pub global_uuid: u32,
     pub next_assignment: Option<String>,
+    pub should_output: bool,
 }
 
 impl CompilationState {
@@ -15,6 +16,7 @@ impl CompilationState {
             scope: 0,
             global_uuid: 0,
             next_assignment: None,
+            should_output: false,
         }
     }
 
@@ -36,6 +38,7 @@ impl CompilationState {
             scope: self.scope,
             global_uuid: self.global_uuid,
             next_assignment: assignment,
+            should_output: self.should_output,
         }
     }
 
@@ -45,6 +48,7 @@ impl CompilationState {
             scope: self.scope + scope_jump,
             global_uuid: self.global_uuid,
             next_assignment: self.next_assignment.clone(),
+            should_output: self.should_output,
         }
     }
 }

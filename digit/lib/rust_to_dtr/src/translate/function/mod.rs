@@ -3,7 +3,7 @@ use crate::instruction::Instruction;
 use crate::optimize;
 use crate::translate;
 
-pub fn parse_function_block(method: &syn::ImplItemFn) -> String {
+pub fn parse_function_block(method: &syn::ItemFn) -> String {
     let mut dtr_code: String = "".to_string();
 
     let method_name = method.sig.ident.to_string();
@@ -24,7 +24,7 @@ pub fn parse_function_block(method: &syn::ImplItemFn) -> String {
     dtr_code
 }
 
-fn parse_inputs(method: &syn::ImplItemFn) -> String {
+fn parse_inputs(method: &syn::ItemFn) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Inputs:\n");
@@ -59,7 +59,7 @@ fn parse_inputs(method: &syn::ImplItemFn) -> String {
     dtr_code
 }
 
-fn parse_instructions(method: &syn::ImplItemFn, hasOutput: bool) -> String {
+fn parse_instructions(method: &syn::ItemFn, hasOutput: bool) -> String {
     let mut dtr_code: String = "".to_string();
 
     dtr_code.push_str("\t* Instructions:\n");

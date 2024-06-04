@@ -1,6 +1,6 @@
 [Contract]: AnswerToLifeContract
 
-[Functions]:
+[InternalFunctions]:
 -() [fourty_two]
 * Inputs:
 {
@@ -11,6 +11,6 @@ env: Env
 $
 { instruction: Return, input: (42), scope: 0 }
 $
-:[Functions]
+:[InternalFunctions]
 [User Defined Types]:
 :[User Defined Types]

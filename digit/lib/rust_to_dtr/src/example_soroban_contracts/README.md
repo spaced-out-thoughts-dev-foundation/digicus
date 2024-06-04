@@ -2,8 +2,8 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress [ 6/25 | 28% ]:
-* [ ] Account
+Progress [ 10/25 | 40% ]:
+* [x] Account
 * [ ] Alloc
 * [ ] Atomic Multiswap
 * [ ] Atomic Swap
@@ -13,7 +13,7 @@ Progress [ 6/25 | 28% ]:
 * [ ] Deep Contract Auth
 * [ ] Deployer
 * [x] Errors
-* [ ] Eth ABI
+* [x] Eth ABI
 * [x] Events
 * [ ] Fuzzing
 * [x] Hello World
@@ -23,7 +23,7 @@ Progress [ 6/25 | 28% ]:
 * [ ] Mint Lock
 * [ ] Simple Account
 * [ ] Single Offer
-* [ ] Timelock
+* [x] Timelock
 * [ ] Token
 * [x] TTL
 * [ ] Upgradeable Contract

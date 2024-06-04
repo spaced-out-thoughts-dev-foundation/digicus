@@ -1,3 +1,5 @@
+use supported::unary_expression::handle_unary_expression;
+
 use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
@@ -104,7 +106,7 @@ pub fn parse_expression(
         syn::Expr::If(if_expr) => {
             supported::if_expression::handle_if_expression(if_expr, compilation_state)
         }
-
+        syn::Expr::Unary(unary_expr) => handle_unary_expression(unary_expr, compilation_state),
         // NOT IMPLEMENTED //
         syn::Expr::Break(_) => Err(NotTranslatableError::Custom(
             "Break expression not supported".to_string(),
@@ -131,9 +133,7 @@ pub fn parse_expression(
         syn::Expr::Range(_) => Err(NotTranslatableError::Custom(
             "Range expression not supported".to_string(),
         )),
-        syn::Expr::Unary(_) => Err(NotTranslatableError::Custom(
-            "Unary expression not supported".to_string(),
-        )),
+
         _ => Err(NotTranslatableError::Custom(
             "Unknown expression".to_string(),
         )),

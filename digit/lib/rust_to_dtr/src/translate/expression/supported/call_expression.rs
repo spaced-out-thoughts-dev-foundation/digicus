@@ -52,7 +52,7 @@ pub fn handle_call_expression(
         compilation_state
             .next_assignment
             .clone()
-            .unwrap_or("CALL_EXPRESSION_RESULT".to_string()),
+            .unwrap_or("".to_string()),
         compilation_state.scope,
     ));
 
@@ -106,7 +106,7 @@ mod tests {
                     "2_CALL_EXPRESSION_ARG".to_string(),
                     "3_CALL_EXPRESSION_ARG".to_string(),
                 ],
-                "CALL_EXPRESSION_RESULT".to_string(),
+                "".to_string(),
                 0,
             ),
         ];
@@ -154,7 +154,7 @@ mod tests {
                     "2_CALL_EXPRESSION_ARG".to_string(),
                     "3_CALL_EXPRESSION_ARG".to_string(),
                 ],
-                "CALL_EXPRESSION_RESULT".to_string(),
+                "".to_string(),
                 0,
             ),
         ];
@@ -210,7 +210,7 @@ mod tests {
                     "CALL_EXPRESSION_FUNCTION_0".to_string(),
                     "1_CALL_EXPRESSION_ARG".to_string(),
                 ],
-                "CALL_EXPRESSION_RESULT".to_string(),
+                "".to_string(),
                 0,
             ),
         ];

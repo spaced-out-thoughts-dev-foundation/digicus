@@ -1,5 +1,5 @@
 [Contract]: IncrementContract
-[Functions]:
+[InternalFunctions]:
 -() [increment]
 * Inputs:
 {
@@ -16,13 +16,13 @@ $
 { instruction: add_and_assign, input: (count, 1), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, COUNTER, count), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, COUNTER, count), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.extend_ttl, 50, 100), assign: METHOD_CALL_RESULT, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.extend_ttl, 50, 100), scope: 0 }
 { instruction: Return, input: (count), scope: 0 }
 $
-:[Functions]
+:[InternalFunctions]
 
 
 [User Defined Types]:

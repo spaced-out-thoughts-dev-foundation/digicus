@@ -3,6 +3,7 @@ use crate::errors;
 use crate::instruction;
 use crate::translate;
 use crate::translate::expression::parse_expression;
+use crate::translate::function;
 use crate::translate::type_name::figure_out_type;
 use crate::translate::type_name::{self, parse_path};
 
@@ -11,6 +12,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     let parsed_ast = syn::parse_file(rust_code).unwrap();
     let mut user_defined_types: Vec<syn::Item> = Vec::new();
     let mut state_str: String = String::new();
+    let mut outside_of_contract_functions: Vec<syn::ItemFn> = Vec::new();
 
     state_str.push_str("[State]:");
 
@@ -42,14 +44,14 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     continue;
                 }
 
-                dtr_code.push_str("[Functions]:\n");
+                dtr_code.push_str("[InternalFunctions]:\n");
 
                 item_impl.items.iter().for_each(|item_impl_item| {
                     if let syn::ImplItem::Fn(method) = item_impl_item {
                         dtr_code.push_str(&translate::impl_block::parse_function_block(method));
                     }
                 });
-                dtr_code.push_str(":[Functions]\n");
+                dtr_code.push_str(":[InternalFunctions]\n");
             }
             syn::Item::Enum(enum_item) => {
                 enum_item.attrs.iter().for_each(|attr| {
@@ -76,6 +78,9 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     )?)
                 ));
             }
+            syn::Item::Fn(fn_item) => {
+                outside_of_contract_functions.push(fn_item.clone());
+            }
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
@@ -93,6 +98,16 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     if state_str != "[State]:" {
         dtr_code.push_str(&state_str);
         dtr_code.push_str("\n");
+    }
+
+    if outside_of_contract_functions.len() > 0 {
+        dtr_code.push_str("\n\n[ExternalFunctions]:\n");
+
+        outside_of_contract_functions.iter().for_each(|fn_item| {
+            dtr_code.push_str(&function::parse_function_block(fn_item));
+        });
+
+        dtr_code.push_str("\n:[ExternalFunctions]\n");
     }
 
     Ok(dtr_code)

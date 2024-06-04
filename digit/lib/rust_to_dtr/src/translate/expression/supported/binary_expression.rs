@@ -25,14 +25,17 @@ pub fn handle_binary_expression(
 
     let binary_instruction = if is_conditional_comparative_operator(&expr_binary.op) {
         Instruction::new(
-            "conditional_jump".to_string(),
+            "evaluate".to_string(),
             vec![
                 operator,
                 left_hand_side_name.to_string(),
                 right_hand_side_name.to_string(),
                 (compilation_state.scope + 1).to_string(),
             ],
-            "".to_string(),
+            compilation_state
+                .next_assignment
+                .clone()
+                .unwrap_or_default(),
             compilation_state.scope,
         )
     } else {

@@ -37,7 +37,7 @@ impl Instruction {
     pub fn as_str(&self) -> String {
         if self.assign == "" {
             return format!(
-                "{{ instruction: {}, input: ({:}), scope: {} }}",
+                "{{ instruction: {}, input: ({}), scope: {} }}",
                 self.name,
                 self.input.join(", "),
                 self.scope
@@ -45,7 +45,7 @@ impl Instruction {
         }
 
         format!(
-            "{{ instruction: {}, input: ({:}), assign: {}, scope: {} }}",
+            "{{ instruction: {}, input: ({}), assign: {}, scope: {} }}",
             self.name,
             self.input.join(", "),
             self.assign,

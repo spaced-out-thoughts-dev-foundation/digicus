@@ -1,5 +1,5 @@
 [Contract]: HelloContract
-[Functions]:
+[InternalFunctions]:
 -() [hello]
 * Inputs:
 {
@@ -12,7 +12,7 @@ $
 { instruction: create_list, input: (env, "Hello", to), assign: Thing_to_return, scope: 0 }
 { instruction: Return, input: (Thing_to_return), scope: 0 }
 $
-:[Functions]
+:[InternalFunctions]
 
 [User Defined Types]:
 :[User Defined Types]
