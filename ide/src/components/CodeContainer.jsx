@@ -9,7 +9,7 @@ const codeContainerBody = (originalText, filename) => {
   return (
       filename && originalText ? 
       <div style={{fontSize: '0.75em', overflow: 'auto'}}>
-        <SyntaxHighlighter language="rust" style={dracula}>
+        <SyntaxHighlighter language="rust" style={{...dracula, overflow: 'auto'}}>
           {originalText}
         </SyntaxHighlighter> </div> : ''
 

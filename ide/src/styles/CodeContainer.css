@@ -10,6 +10,8 @@
   height: 95%;
   width: 80%;
   font-size: 0.8em;
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 .code-container-div {

@@ -18,6 +18,10 @@ export function supportedInstructionToColor (supported_instruction) {
     return 'pink';
   } else if (supported_instruction.category === "objects") {
     return 'skyblue';
+  } else if (supported_instruction.category === "conditional") {
+    return 'green';
+  } else if (supported_instruction.category === "logical") {
+    return 'blue';
   } else {
     return 'white';
   }

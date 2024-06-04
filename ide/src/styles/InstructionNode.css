@@ -33,5 +33,7 @@
   text-align: left;
   font-size: 0.5em;
   border: black 1px solid;
-  text-align: center;
+  text-align: left;
+  overflow-x: auto;
+  width: 100%;
 }
