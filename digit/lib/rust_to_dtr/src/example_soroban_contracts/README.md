@@ -7,7 +7,7 @@ Progress [ 8/25 | 32% ]:
 * [ ] Alloc
 * [ ] Atomic Multiswap
 * [ ] Atomic Swap
-* [ ] Auth
+* [x] Auth
 * [ ] Cross Contract
 * [x] Custom Types
 * [ ] Deep Contract Auth
@@ -21,7 +21,7 @@ Progress [ 8/25 | 32% ]:
 * [ ] Liquidity Pool
 * [x] Logging
 * [ ] Mint Lock
-* [ ] Simple Account
+* [x] Simple Account
 * [ ] Single Offer
 * [x] Timelock
 * [ ] Token

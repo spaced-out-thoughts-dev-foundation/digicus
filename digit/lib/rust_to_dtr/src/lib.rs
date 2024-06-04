@@ -100,6 +100,8 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, answer_to_life);
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
+
+    test_contract!(stellar_official_repo_examples, auth);
     // test_contract!(stellar_official_repo_examples, account);
     test_contract!(stellar_official_repo_examples, custom_types);
     test_contract!(stellar_official_repo_examples, errors);
@@ -108,6 +110,7 @@ mod full_contract_tests {
     test_contract!(stellar_official_repo_examples, hello_world);
     test_contract!(stellar_official_repo_examples, increment);
     test_contract!(stellar_official_repo_examples, logging);
+    test_contract!(stellar_official_repo_examples, simple_account);
 
     test_contract!(stellar_official_repo_examples, timelock);
     test_contract!(stellar_official_repo_examples, ttl);

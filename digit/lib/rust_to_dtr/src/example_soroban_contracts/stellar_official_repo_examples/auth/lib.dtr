@@ -1,0 +1,36 @@
+[Contract]: IncrementContract
+
+[InternalFunctions]:
+-() [increment]
+* Inputs:
+{
+env: Env
+user: Address
+value: u32
+}
+* Output: u32
+* Instructions:
+$
+{ instruction: evaluate, input: (user.require_auth), scope: 0 }
+{ instruction: evaluate, input: (user.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (DataKey::Counter, 1_CALL_EXPRESSION_ARG), assign: key, scope: 0 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, key), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_or_default), assign: count, scope: 0 }
+{ instruction: add_and_assign, input: (count, value), scope: 0 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, key, count), scope: 0 }
+{ instruction: Return, input: (count), scope: 0 }
+$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (DataKey)
+{
+Counter
+}
+
+:[User Defined Types]
