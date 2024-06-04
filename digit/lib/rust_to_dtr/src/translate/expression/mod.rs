@@ -1,3 +1,4 @@
+use supported::cast_expression::handle_cast_expression;
 use supported::unary_expression::handle_unary_expression;
 
 use crate::common::compilation_state;
@@ -108,15 +109,13 @@ pub fn parse_expression(
             match_expression,
             compilation_state,
         ),
+        syn::Expr::Cast(cast_expr) => handle_cast_expression(cast_expr, compilation_state),
 
         // NOT IMPLEMENTED //
         syn::Expr::Break(_) => Err(NotTranslatableError::Custom(
             "Break expression not supported".to_string(),
         )),
 
-        syn::Expr::Cast(_) => Err(NotTranslatableError::Custom(
-            "Cast expression not supported".to_string(),
-        )),
         syn::Expr::Closure(_) => Err(NotTranslatableError::Custom(
             "Closure expression not supported".to_string(),
         )),
@@ -197,9 +196,9 @@ fn parse_binary_op(syn_bin_op: &syn::BinOp) -> Result<String, NotTranslatableErr
         syn::BinOp::Mul(_) => Ok("multiply".to_string()),
         syn::BinOp::Div(_) => Ok("divide".to_string()),
         syn::BinOp::Rem(_) => Ok("modulo".to_string()),
-        syn::BinOp::And(_)
-        | syn::BinOp::Or(_)
-        | syn::BinOp::BitXor(_)
+        syn::BinOp::And(_) => Ok("and".to_string()),
+        syn::BinOp::Or(_) => Ok("or".to_string()),
+        syn::BinOp::BitXor(_)
         | syn::BinOp::Shl(_)
         | syn::BinOp::Shr(_)
         | syn::BinOp::BitXorAssign(_)

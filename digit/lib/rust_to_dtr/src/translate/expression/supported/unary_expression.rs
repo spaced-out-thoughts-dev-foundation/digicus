@@ -10,7 +10,6 @@ pub fn handle_unary_expression(
     expr: &ExprUnary,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    println!("Entered handle_unary_expression");
     let global_uuid = compilation_state.global_uuid;
     compilation_state.increment_global_uuid();
 

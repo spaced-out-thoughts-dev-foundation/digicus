@@ -2,16 +2,16 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress [ 8/25 | 32% ]:
+Progress [ 14/26 | 54% ]:
 * [ ] Account
 * [ ] Alloc
 * [ ] Atomic Multiswap
-* [ ] Atomic Swap
+* [x] Atomic Swap
 * [x] Auth
 * [ ] Cross Contract
 * [x] Custom Types
 * [ ] Deep Contract Auth
-* [ ] Deployer
+* [x] Deployer (2x contracts here: Deployer Contract & Deployer Deployer)
 * [x] Errors
 * [ ] Eth ABI
 * [x] Events
@@ -22,7 +22,7 @@ Progress [ 8/25 | 32% ]:
 * [x] Logging
 * [ ] Mint Lock
 * [x] Simple Account
-* [ ] Single Offer
+* [x] Single Offer
 * [x] Timelock
 * [ ] Token
 * [x] TTL

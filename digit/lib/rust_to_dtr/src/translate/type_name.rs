@@ -1,6 +1,8 @@
 extern crate syn;
 
+use crate::common::compilation_state::CompilationState;
 use crate::errors::not_translatable_error::NotTranslatableError;
+use crate::translate::expression::parse_expression;
 use crate::translate::rust_to_dtr_term::map_name;
 
 pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
@@ -86,6 +88,25 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
 
             return Ok(format!("&{}", type_string.unwrap()));
         }
+        syn::Type::Tuple(tuple_type) => {
+            let mut tuple_str = String::new();
+            tuple_str.push_str("(");
+            let mut tuple_types: Vec<String> = Vec::new();
+            for elem in &tuple_type.elems {
+                let val = figure_out_type(elem);
+                match val {
+                    Ok(val) => tuple_types.push(val),
+                    Err(_) => {
+                        return Err(NotTranslatableError::Custom(
+                            "Could not figure out type for tuple".to_string(),
+                        ))
+                    }
+                }
+            }
+            tuple_str.push_str(&tuple_types.join(", "));
+            tuple_str.push_str(")");
+            return Ok(tuple_str);
+        }
         _ => Ok(format!("idk")),
     };
 
@@ -101,15 +122,25 @@ fn parse_angle_bracketed_generic_arguments(args: &syn::AngleBracketedGenericArgu
     let mut args_list: Vec<String> = Vec::new();
 
     for arg in &args.args {
-        if let syn::GenericArgument::Type(ty) = arg {
-            let val = figure_out_type(ty);
+        match arg {
+            syn::GenericArgument::Type(ty) => {
+                let val = figure_out_type(ty);
 
-            match val {
-                Ok(val) => args_list.push(val),
-                Err(e) => {
-                    return "Could not figure out type for angle bracketed type".to_string();
+                match val {
+                    Ok(val) => args_list.push(val),
+                    Err(_) => {
+                        return "Could not figure out type for angle bracketed type".to_string();
+                    }
                 }
             }
+            syn::GenericArgument::Const(constant) => {
+                // TODO: fix this hackery and put all of it in one place
+                let value = parse_expression(constant, &mut CompilationState::new()).unwrap()[0]
+                    .input[0]
+                    .clone();
+                args_list.push(format!("{}", value));
+            }
+            _ => {}
         }
     }
 

@@ -3,7 +3,6 @@ use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
 use crate::translate::expression::parse_expression;
 use crate::translate::pattern::handle_pattern;
-use crate::translate::type_name::parse_path;
 use syn::ExprMatch;
 
 pub fn handle_match_expression(

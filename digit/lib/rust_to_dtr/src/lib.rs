@@ -101,15 +101,19 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
 
+    test_contract!(stellar_official_repo_examples, atomic_swap);
     test_contract!(stellar_official_repo_examples, auth);
-    // test_contract!(stellar_official_repo_examples, account);
     test_contract!(stellar_official_repo_examples, custom_types);
+    test_contract!(stellar_official_repo_examples, deployer_contract);
+
+    test_contract!(stellar_official_repo_examples, deployer_deployer);
+
     test_contract!(stellar_official_repo_examples, errors);
-    // test_contract!(stellar_official_repo_examples, eth_abi);
     test_contract!(stellar_official_repo_examples, events);
     test_contract!(stellar_official_repo_examples, hello_world);
     test_contract!(stellar_official_repo_examples, increment);
     test_contract!(stellar_official_repo_examples, logging);
+    test_contract!(stellar_official_repo_examples, single_offer);
     test_contract!(stellar_official_repo_examples, simple_account);
 
     test_contract!(stellar_official_repo_examples, timelock);

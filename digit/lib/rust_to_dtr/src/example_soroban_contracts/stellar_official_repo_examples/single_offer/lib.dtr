@@ -1,0 +1,162 @@
+[Contract]: SingleOffer
+
+[InternalFunctions]:
+-() [create]
+* Inputs:
+{
+e: Env
+seller: Address
+sell_token: Address
+buy_token: Address
+sell_price: u32
+buy_price: u32
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.has, DataKey::Offer), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("offer is already created"), scope: 1 }
+{ instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+{ instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+{ instruction: or, input: (sell_price, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("zero price is not allowed"), scope: 1 }
+{ instruction: evaluate, input: (seller.require_auth), scope: 0 }
+{ instruction: assign, input: (seller), assign: seller, scope: 0 }
+{ instruction: assign, input: (sell_token), assign: sell_token, scope: 0 }
+{ instruction: assign, input: (buy_token), assign: buy_token, scope: 0 }
+{ instruction: assign, input: (sell_price), assign: sell_price, scope: 0 }
+{ instruction: assign, input: (buy_price), assign: buy_price, scope: 0 }
+{ instruction: initialize_udt, input: (Offer, seller, sell_token, buy_token, sell_price, buy_price), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (write_offer, e, 2_CALL_EXPRESSION_ARG), scope: 0 }
+$
+-() [trade]
+* Inputs:
+{
+e: Env
+buyer: Address
+buy_token_amount: i128
+min_sell_token_amount: i128
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (buyer.require_auth), scope: 0 }
+{ instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+{ instruction: field, input: (offer, sell_token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, e, 2_CALL_EXPRESSION_ARG), assign: sell_token_client, scope: 0 }
+{ instruction: field, input: (offer, buy_token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, e, 2_CALL_EXPRESSION_ARG), assign: buy_token_client, scope: 0 }
+{ instruction: field, input: (offer, sell_price), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (buy_token_amount.checked_mul, 1_METHOD_CALL_ARG_1), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_optimized), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+{ instruction: field, input: (offer, buy_price), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+{ instruction: divide, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: sell_token_amount, scope: 0 }
+{ instruction: evaluate, input: (less_than, sell_token_amount, min_sell_token_amount), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("price is too low"), scope: 1 }
+{ instruction: evaluate, input: (e.current_contract_address), assign: contract, scope: 0 }
+{ instruction: evaluate, input: (buy_token_client.transfer, buyer, contract, buy_token_amount), scope: 0 }
+{ instruction: evaluate, input: (sell_token_client.transfer, contract, buyer, sell_token_amount), scope: 0 }
+{ instruction: field, input: (offer, seller), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (buy_token_client.transfer, contract, 2_METHOD_CALL_ARG_1, buy_token_amount), scope: 0 }
+$
+-() [withdraw]
+* Inputs:
+{
+e: Env
+token: Address
+amount: i128
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+{ instruction: field, input: (offer, seller), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.require_auth), scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, e, token), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (e.current_contract_address), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
+{ instruction: field, input: (offer, seller), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, 1_METHOD_CALL_ARG_0, 2_METHOD_CALL_ARG_1, amount), scope: 0 }
+$
+-() [updt_price]
+* Inputs:
+{
+e: Env
+sell_price: u32
+buy_price: u32
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+{ instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+{ instruction: or, input: (sell_price, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("zero price is not allowed"), scope: 1 }
+{ instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+{ instruction: field, input: (offer, seller), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.require_auth), scope: 0 }
+{ instruction: field, input: (offer, sell_price), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }
+{ instruction: field, input: (offer, buy_price), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }
+{ instruction: evaluate, input: (write_offer, e, offer), scope: 0 }
+$
+-() [get_offer]
+* Inputs:
+{
+e: Env
+}
+* Output: Offer
+* Instructions:
+$
+{ instruction: evaluate, input: (load_offer, e), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
+$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (DataKey)
+{
+Offer
+}
+* (Offer)
+{
+seller: Address
+sell_token: Address
+buy_token: Address
+sell_price: u32
+buy_price: u32
+}
+
+:[User Defined Types]
+
+
+[ExternalFunctions]:
+-() [load_offer]
+* Inputs:
+{
+e: &Env
+}
+* Output: Offer
+* Instructions:
+$
+{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Offer), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
+$
+-() [write_offer]
+* Inputs:
+{
+e: &Env
+offer: &Offer
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Offer, offer), scope: 0 }
+$
+
+:[ExternalFunctions]

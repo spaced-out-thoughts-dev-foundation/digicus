@@ -2,6 +2,7 @@ pub mod assign_expression;
 pub mod binary_expression;
 pub mod block_expression;
 pub mod call_expression;
+pub mod cast_expression;
 pub mod field_expression;
 pub mod group_expression;
 pub mod if_expression;

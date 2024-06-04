@@ -1,4 +1,4 @@
-use crate::common::compilation_state::{self, CompilationState};
+use crate::common::compilation_state::CompilationState;
 
 #[derive(Debug, Clone)]
 pub struct Instruction {
