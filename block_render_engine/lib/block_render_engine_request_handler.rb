@@ -59,6 +59,8 @@ class BlockRenderEngineRequestHandler
 
     compile
 
+    puts "[Debug] contract_functions: #{@contract_functions}"
+
     
     {
       contract_name: @contract_name,
