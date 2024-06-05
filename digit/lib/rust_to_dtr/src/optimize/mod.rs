@@ -20,3 +20,17 @@ pub fn create_instruction(name: &str, input: Vec<&str>, assign: &str) -> Instruc
         0, // does not really matter here yet... but it might in the future
     )
 }
+
+pub fn create_instruction_with_scope(
+    name: &str,
+    input: Vec<&str>,
+    assign: &str,
+    scope: u32,
+) -> Instruction {
+    Instruction::new(
+        name.to_string(),
+        input.into_iter().map(|s| s.to_string()).collect(),
+        assign.to_string(),
+        scope, // does not really matter here yet... but it might in the future
+    )
+}

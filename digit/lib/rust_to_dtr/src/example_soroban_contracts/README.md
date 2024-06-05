@@ -2,13 +2,13 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress [ 14/26 | 54% ]:
+Progress [ 14/25 | 56% ]:
 * [ ] Account
 * [ ] Alloc
 * [ ] Atomic Multiswap
 * [x] Atomic Swap
 * [x] Auth
-* [ ] Cross Contract
+* [ ] Cross Contract (2x contracts here: Contract A & Contract B)
 * [x] Custom Types
 * [ ] Deep Contract Auth
 * [x] Deployer (2x contracts here: Deployer Contract & Deployer Deployer)
@@ -26,7 +26,7 @@ Progress [ 14/26 | 54% ]:
 * [x] Timelock
 * [ ] Token
 * [x] TTL
-* [ ] Upgradeable Contract
-* [ ] Workspace
+* [x] Upgradeable Contract (2x contracts here: Upgradable New & Upgradable Old)
+* [ ] Workspace (3x contracts here: Contract A & Contract A Interface & Contract B)
 
 We also will continue creating our own to push the limits of what this compiler (technically transpiler) can do.

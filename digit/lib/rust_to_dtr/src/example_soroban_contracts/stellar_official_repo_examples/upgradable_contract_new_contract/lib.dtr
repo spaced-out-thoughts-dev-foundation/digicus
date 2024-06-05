@@ -1,0 +1,74 @@
+[Contract]: UpgradeableContract
+
+[InternalFunctions]:
+-() [init]
+	* Inputs:
+	{
+		e: Env
+		admin: Address
+	}
+	* Output: Result<(), Error>
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.has, DataKey::Admin), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: evaluate, input: (Err, Error::AlreadyInitialized), assign: RETURN_VALUE_LABEL, scope: 1 }
+			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 1 }
+			{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Admin, admin), scope: 0 }
+			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
+-() [version]
+	* Inputs:
+	{
+	}
+	* Output: u32
+	* Instructions:
+		$
+			{ instruction: Return, input: (2), scope: 0 }
+		$
+-() [new_v2_fn]
+	* Inputs:
+	{
+	}
+	* Output: u32
+	* Instructions:
+		$
+			{ instruction: Return, input: (1010101), scope: 0 }
+		$
+-() [upgrade]
+	* Inputs:
+	{
+		e: Env
+		new_wasm_hash: BytesN<32>
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (e.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Admin), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: admin, scope: 0 }
+			{ instruction: evaluate, input: (admin.require_auth), scope: 0 }
+			{ instruction: evaluate, input: (e.deployer), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.update_current_contract_wasm, new_wasm_hash), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (DataKey)
+{
+	Admin
+}
+
+* (Error)
+{
+	AlreadyInitialized
+}
+
+:[User Defined Types]
