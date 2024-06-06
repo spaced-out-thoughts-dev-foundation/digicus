@@ -91,7 +91,7 @@ mod full_contract_tests {
             paste::item! {
                 #[test]
                 fn [< test_ $directory_name _ $contract_name >] () {
-                    assert_transpiled_code(&format!("src/example_soroban_contracts/{}/{}", stringify!($directory_name), stringify!($contract_name)));
+                    assert_transpiled_code(&format!("example_soroban_contracts/{}/{}", stringify!($directory_name), stringify!($contract_name)));
                 }
             }
         };

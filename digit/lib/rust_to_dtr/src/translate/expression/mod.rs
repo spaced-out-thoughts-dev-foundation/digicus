@@ -5,7 +5,6 @@ mod call_expression;
 mod cast_expression;
 mod field_expression;
 mod for_loop_expression;
-mod group_expression;
 mod if_expression;
 mod let_expression;
 mod lit_expression;
@@ -14,7 +13,6 @@ mod match_expression;
 mod method_call_expression;
 mod paren_expression;
 mod path_expression;
-mod range_expression;
 mod reference_expression;
 mod return_expression;
 mod struct_expression;
@@ -61,9 +59,6 @@ pub fn parse_expression(
         syn::Expr::Return(return_expr_expr) => {
             return_expression::handle_return_expression(return_expr_expr, compilation_state)
         }
-        syn::Expr::Group(group_expr) => {
-            group_expression::handle_group_expression(group_expr, compilation_state)
-        }
         syn::Expr::Field(field_expr) => {
             field_expression::handle_field_expression(field_expr, compilation_state)
         }
@@ -87,9 +82,6 @@ pub fn parse_expression(
         syn::Expr::Cast(cast_expr) => handle_cast_expression(cast_expr, compilation_state),
         syn::Expr::ForLoop(for_loop_expr) => {
             for_loop_expression::handle_for_loop_expression(for_loop_expr, compilation_state)
-        }
-        syn::Expr::Range(range_expr) => {
-            range_expression::handle_range_expression(range_expr, compilation_state)
         }
         syn::Expr::Macro(expr_macro) => {
             macro_expression::handle_macro_expression(expr_macro, compilation_state)

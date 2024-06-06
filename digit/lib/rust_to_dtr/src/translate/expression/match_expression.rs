@@ -53,3 +53,78 @@ pub fn handle_match_expression(
 
     Ok(thing_to_compare_against_instructions)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::instruction::Instruction;
+    use crate::{
+        common::compilation_state::CompilationState,
+        translate::expression::match_expression::handle_match_expression,
+    };
+    use syn::{parse_quote, ExprMatch};
+
+    #[test]
+    fn test_handle_match_expression() {
+        let mut compilation_state = CompilationState::new();
+        let expr: ExprMatch = parse_quote! { match Struct {
+            Struct::Variant1 => Struct::Variant1,
+            Struct::Variant2 => Struct::Variant2,
+        } };
+        let instructions = handle_match_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["Struct".to_string()],
+                    "Thing_to_compare_against".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "evaluate".to_string(),
+                    vec![
+                        "equal_to".to_string(),
+                        "Thing_to_compare_against".to_string(),
+                        "Struct::Variant1".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_CHECK_100".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "conditional_jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_CHECK_100".to_string(), "100".to_string()],
+                    "".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["Struct::Variant1".to_string()],
+                    "".to_string(),
+                    100
+                ),
+                Instruction::new(
+                    "evaluate".to_string(),
+                    vec![
+                        "equal_to".to_string(),
+                        "Thing_to_compare_against".to_string(),
+                        "Struct::Variant2".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_CHECK_200".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "conditional_jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_CHECK_200".to_string(), "200".to_string()],
+                    "".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["Struct::Variant2".to_string()],
+                    "".to_string(),
+                    200
+                )
+            ]
+        );
+    }
+}

@@ -36,3 +36,57 @@ fn determine_unary_operation(op: &syn::UnOp) -> String {
         _ => panic!("Unsupported unary operation"),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::common::compilation_state::CompilationState;
+    use crate::instruction::Instruction;
+    use crate::translate::expression::unary_expression::handle_unary_expression;
+    use syn::parse_quote;
+
+    #[test]
+    fn test_handle_unary_negation_expression() {
+        let mut compilation_state = CompilationState::new();
+        let expr = parse_quote! { !a };
+        let instructions = handle_unary_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["a".to_string()],
+                    "UNARY_ARGUMENT_0".to_string(),
+                    0
+                ),
+                Instruction::from_compilation_state(
+                    "evaluate".to_string(),
+                    vec!["!".to_string(), "UNARY_ARGUMENT_0".to_string()],
+                    &compilation_state
+                )
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_unary_minus_expression() {
+        let mut compilation_state = CompilationState::new();
+        let expr = parse_quote! { -a };
+        let instructions = handle_unary_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["a".to_string()],
+                    "UNARY_ARGUMENT_0".to_string(),
+                    0
+                ),
+                Instruction::from_compilation_state(
+                    "evaluate".to_string(),
+                    vec!["-".to_string(), "UNARY_ARGUMENT_0".to_string()],
+                    &compilation_state
+                )
+            ]
+        );
+    }
+}

@@ -38,3 +38,43 @@ pub fn handle_tuple_expression(
 
     Ok(instructions_to_return)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::instruction::Instruction;
+    use crate::{
+        common::compilation_state::CompilationState,
+        translate::expression::tuple_expression::handle_tuple_expression,
+    };
+    use syn::{parse_quote, ExprTuple};
+
+    #[test]
+    fn test_handle_tuple() {
+        let mut compilation_state = CompilationState::new();
+        let expr: ExprTuple = parse_quote! { (a, b) };
+        let instructions = handle_tuple_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["a".to_string()],
+                    "1_TUPLE_ARG".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["b".to_string()],
+                    "2_TUPLE_ARG".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "create_tuple".to_string(),
+                    vec!["1_TUPLE_ARG".to_string(), "2_TUPLE_ARG".to_string()],
+                    "TUPLE_RESULT".to_string(),
+                    0
+                )
+            ]
+        );
+    }
+}

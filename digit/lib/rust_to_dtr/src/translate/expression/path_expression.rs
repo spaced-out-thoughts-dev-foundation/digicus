@@ -20,3 +20,31 @@ pub fn handle_path_expression(
 
     Ok(result_instruction)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::common::compilation_state::CompilationState;
+    use crate::instruction::Instruction;
+    use crate::translate::expression::path_expression::handle_path_expression;
+    use syn::{parse_quote, ExprPath};
+
+    #[test]
+    fn test_handle_path_expression() {
+        let compilation_state = CompilationState::new();
+        let expr: ExprPath = parse_quote! { Struct };
+        let instructions = handle_path_expression(
+            &expr,
+            &mut compilation_state.with_assignment(Some("SomeAssignment".to_string())),
+        )
+        .unwrap();
+        assert_eq!(
+            instructions,
+            vec![Instruction::new(
+                "assign".to_string(),
+                vec!["Struct".to_string()],
+                "SomeAssignment".to_string(),
+                0
+            ),]
+        );
+    }
+}

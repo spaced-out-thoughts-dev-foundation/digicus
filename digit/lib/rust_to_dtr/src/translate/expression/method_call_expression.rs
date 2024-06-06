@@ -65,25 +65,3 @@ pub fn handle_method_call_expression(
 
     Ok(receiver)
 }
-
-// fn translate_env_method_call_expressions(method_name: &str) -> String {
-//     match method_name {
-//         "env.storage.instance.set" => "set_state".to_string(),
-//         "env.storage.instance.extend_ttl" => "extend_ttl".to_string(),
-//         "env.storage.instance.get" => "fetch_state".to_string(),
-//         _ => "TF I KNOW".to_string(),
-//     }
-// }
-
-// fn get_method_names(expr: &Expr) -> String {
-//     if let syn::Expr::MethodCall(expr_method_call) = expr {
-//         // Recursively handle the receiver
-//         let result: String = get_method_names(&expr_method_call.receiver);
-
-//         // Get the method name
-//         let method_name = expr_method_call.method.to_string();
-//         return format!("{}.{}", result, method_name);
-//     } else {
-//         return parse_expression(&expr, None).unwrap();
-//     }
-// }

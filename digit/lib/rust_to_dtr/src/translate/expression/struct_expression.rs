@@ -44,3 +44,43 @@ pub fn handle_struct_expression(
 
     Ok(instructions)
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::instruction::Instruction;
+    use crate::{
+        common::compilation_state::CompilationState,
+        translate::expression::struct_expression::handle_struct_expression,
+    };
+    use syn::{parse_quote, ExprStruct};
+
+    #[test]
+    fn test_handle_struct_expression() {
+        let mut compilation_state = CompilationState::new();
+        let expr: ExprStruct = parse_quote! { Struct { a: 1, b: 2 } };
+        let instructions = handle_struct_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["1".to_string()],
+                    "a".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "assign".to_string(),
+                    vec!["2".to_string()],
+                    "b".to_string(),
+                    0
+                ),
+                Instruction::new(
+                    "initialize_udt".to_string(),
+                    vec!["Struct".to_string(), "a".to_string(), "b".to_string()],
+                    "STRUCT_EXPRESSION_RESULT".to_string(),
+                    0
+                )
+            ]
+        );
+    }
+}
