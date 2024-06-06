@@ -94,6 +94,10 @@ module DTRToRust
       case type
       when 'String'
         'Symbol'
+      when 'Vec<String>'
+        'Vec<Symbol>'
+      when 'List<String>'
+        'Vec<Symbol>'
       else
         type
       end

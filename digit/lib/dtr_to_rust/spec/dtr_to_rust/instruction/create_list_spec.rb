@@ -23,7 +23,7 @@ describe DTRToRust::Instruction::CreateList do
         scope: 0
       }
 
-      expect(described_class.handle(instruction)).to eq('let some_list = vec![env, "thing_1", count];')
+      expect(described_class.handle(instruction)).to eq('let some_list = vec![env, symbol_short!("thing_1"), count];')
     end
   end
 end
