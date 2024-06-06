@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'dtr_core', '~> 0.5.3'
-gem 'dtr_to_rust', '~> 0.2.3'
+gem 'dtr_to_rust', '~> 0.2.7'
 gem 'ffi'
 
 group :test do

@@ -20,7 +20,7 @@ module DTRToRust
 
         if decorated_input[:type] == 'string'
           "symbol_short!(#{input})"
-        elsif decorated_input[:needs_reference]
+        elsif decorated_input[:needs_reference] && input == 'env'
           "&#{input}"
         else
           input

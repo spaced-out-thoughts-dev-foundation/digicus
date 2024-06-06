@@ -1,13 +1,13 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, log, Env, Symbol};
+use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
 
 #[contract]
-pub struct Contract;
+pub struct HelloContract;
 
 #[contractimpl]
-impl Contract {
-    pub fn hello(env: Env, value: Symbol) {
-        log!(&env, "Hello {}", value);
+impl HelloContract {
+    pub fn hello(env: Env, to: Symbol) -> Vec<Symbol> {
+        vec![&env, symbol_short!("Hello"), to]
     }
 }
 

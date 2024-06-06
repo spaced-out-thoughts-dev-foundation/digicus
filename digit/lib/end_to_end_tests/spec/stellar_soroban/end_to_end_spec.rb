@@ -8,6 +8,10 @@ RSpec.describe 'Contract Translation Rust --> DTR --> Rust' do
   let(:unofficial_directory) { "#{base_directory}/unofficial_digicus_examples" }
 
   context 'when official SDF Example' do
+    it 'translates the hello world contract' do
+      assert_translates_rust_to_dtr_and_back("#{official_directory}/hello_world/")
+    end
+
     it 'translates the increment contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/increment/")
     end
