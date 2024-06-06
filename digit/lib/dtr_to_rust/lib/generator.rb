@@ -59,8 +59,11 @@ module DTRToRust
 
     def generate_functions_each(functions)
       functions&.map do |function|
-        "\n    pub fn #{function.name}(#{generate_function_args(function)}) " \
-          "-> #{function.output} {\n#{generate_instructions_each(function.instructions)}\n    }\n"
+        return_string = "\n    pub fn #{function.name}(#{generate_function_args(function)}) "
+        return_string += "-> #{function.output}" if function.output
+        return_string += " {\n#{generate_instructions_each(function.instructions)}\n    }\n"
+
+        return_string
       end&.join("\n")
     end
 
