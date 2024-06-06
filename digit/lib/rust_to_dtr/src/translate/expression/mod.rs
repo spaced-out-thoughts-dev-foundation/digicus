@@ -1,6 +1,7 @@
 mod assign_expression;
 mod binary_expression;
 pub mod block_expression;
+mod break_expression;
 mod call_expression;
 mod cast_expression;
 mod field_expression;
@@ -89,6 +90,9 @@ pub fn parse_expression(
         }
         syn::Expr::Range(range_expr) => {
             range_expression::handle_create_range(range_expr, compilation_state)
+        }
+        syn::Expr::Break(break_expr) => {
+            break_expression::handle_break_expression(break_expr, compilation_state)
         }
 
         _ => Err(NotTranslatableError::Custom(

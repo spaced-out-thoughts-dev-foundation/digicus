@@ -45,7 +45,7 @@ mod full_contract_tests {
 
     // test_contract!(stellar_official_repo_examples, account);
     // test_contract!(stellar_official_repo_examples, alloc);
-    // test_contract!(stellar_official_repo_examples, atomic_multiswap);
+    test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
     test_contract!(stellar_official_repo_examples, atomic_swap);
     test_contract!(stellar_official_repo_examples, auth);
