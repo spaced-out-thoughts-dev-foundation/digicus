@@ -11,6 +11,10 @@ RSpec.describe 'Contract Translation Rust --> DTR --> Rust' do
     it 'translates the increment contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/increment/")
     end
+
+    it 'translates the logging contract' do
+      assert_translates_rust_to_dtr_and_back("#{official_directory}/logging/")
+    end
   end
 
   context 'when unofficial Digicus Example' do
