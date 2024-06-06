@@ -13,6 +13,7 @@ mod match_expression;
 mod method_call_expression;
 mod paren_expression;
 mod path_expression;
+mod range_expression;
 mod reference_expression;
 mod return_expression;
 mod struct_expression;
@@ -85,6 +86,9 @@ pub fn parse_expression(
         }
         syn::Expr::Macro(expr_macro) => {
             macro_expression::handle_macro_expression(expr_macro, compilation_state)
+        }
+        syn::Expr::Range(range_expr) => {
+            range_expression::handle_create_range(range_expr, compilation_state)
         }
 
         _ => Err(NotTranslatableError::Custom(

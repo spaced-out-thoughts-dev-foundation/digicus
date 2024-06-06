@@ -7,13 +7,14 @@
 	}
 	* Instructions:
 		$
-			{ instruction: label, input: (FOR_LOOP_COMPARISON_LABEL_0), scope: 0 }
-			{ instruction: equal_to, input: (Zero, AnswerToLife), assign: FOR_LOOP_COMPARISON_RESULT_0, scope: 0 }
-			{ instruction: conditional_goto, input: (FOR_LOOP_COMPARISON_RESULT_0, FOR_LOOP_EXIT_LABEL_0), scope: 0 }
-			{ instruction: add_and_assign, input: (Zero, 1), scope: 0 }
-			{ instruction: log_string, input: ("Counting: {}", Zero), scope: 0 }
-			{ instruction: unconditional_jump, input: (FOR_LOOP_COMPARISON_LABEL_0), scope: 0 }
-			{ instruction: label, input: (FOR_LOOP_EXIT_LABEL_0), scope: 0 }
+			{ instruction: create_range, input: (Zero, AnswerToLife), assign: i, scope: 0 }
+			{ instruction: label, input: (loop_0_top), scope: 0 }
+			{ instruction: end_of_iteration_check, input: (i), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
+			{ instruction: log_string, input: ("Counting: {}", i), scope: 0 }
+			{ instruction: increment, input: (i), scope: 0 }
+			{ instruction: goto, input: (loop_0_top), scope: 0 }
+			{ instruction: label, input: (loop_0_exit), scope: 0 }
 		$
 :[InternalFunctions]
 

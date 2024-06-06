@@ -1,0 +1,24 @@
+[Contract]: NonRangeForLoopContract
+
+[InternalFunctions]:
+-() [do_a_thing_for_each_element_in_vec]
+	* Inputs:
+	{
+		some_vec: List<String>
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (some_vec.iter), assign: some_thing_in_a_vec, scope: 0 }
+			{ instruction: label, input: (loop_0_top), scope: 0 }
+			{ instruction: end_of_iteration_check, input: (some_thing_in_a_vec), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
+			{ instruction: log_string, input: ("Doing a thing"), scope: 0 }
+			{ instruction: increment, input: (some_thing_in_a_vec), scope: 0 }
+			{ instruction: goto, input: (loop_0_top), scope: 0 }
+			{ instruction: label, input: (loop_0_exit), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+:[User Defined Types]
