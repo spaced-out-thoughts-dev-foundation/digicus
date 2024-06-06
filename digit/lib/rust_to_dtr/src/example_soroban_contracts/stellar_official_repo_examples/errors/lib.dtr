@@ -25,7 +25,6 @@ $
 { instruction: Return, input: (Thing_to_return), scope: 1 }
 { instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
 { instruction: Return, input: (Thing_to_return), scope: 100 }
-{ instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[InternalFunctions]
 

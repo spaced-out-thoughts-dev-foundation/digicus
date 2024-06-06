@@ -1,0 +1,29 @@
+[Contract]: CountZeroToAnswerToLife
+
+[InternalFunctions]:
+-() [count_zero_to_answer_to_life]
+	* Inputs:
+	{
+	}
+	* Instructions:
+		$
+			{ instruction: label, input: (FOR_LOOP_COMPARISON_LABEL_0), scope: 0 }
+			{ instruction: equal_to, input: (Zero, AnswerToLife), assign: FOR_LOOP_COMPARISON_RESULT_0, scope: 0 }
+			{ instruction: conditional_goto, input: (FOR_LOOP_COMPARISON_RESULT_0, FOR_LOOP_EXIT_LABEL_0), scope: 0 }
+			{ instruction: add_and_assign, input: (Zero, 1), scope: 0 }
+			{ instruction: log_string, input: ("Counting: {}", Zero), scope: 0 }
+			{ instruction: unconditional_jump, input: (FOR_LOOP_COMPARISON_LABEL_0), scope: 0 }
+			{ instruction: label, input: (FOR_LOOP_EXIT_LABEL_0), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+:[User Defined Types]
+[State]:
+* [Zero]
+	* Type: i32
+	* Initial Value: 0
+* [AnswerToLife]
+	* Type: i32
+	* Initial Value: 42

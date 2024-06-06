@@ -1,5 +1,5 @@
 use crate::Instruction;
-use std::{collections::HashMap, thread::scope};
+use std::collections::HashMap;
 
 pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     let instructions_sans_unused_assigns = remove_unused_assigns(instructions);
@@ -48,7 +48,7 @@ pub fn remove_unused_returns(instructions: Vec<Instruction>) -> Vec<Instruction>
                 return false;
             }
 
-            if (instruction.name == "return" || instruction.name == "Return") {
+            if instruction.name == "return" || instruction.name == "Return" {
                 scope_stack[last_element_index].1 = true;
             }
             return true;

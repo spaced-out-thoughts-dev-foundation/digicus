@@ -17,7 +17,7 @@ pub fn handle_block(
             } else {
                 None
             };
-        match translate::expression::supported::block_expression::parse_block_stmt(
+        match translate::expression::block_expression::parse_block_stmt(
             &stmt,
             &mut compilation_state.with_assignment(assignment),
         ) {

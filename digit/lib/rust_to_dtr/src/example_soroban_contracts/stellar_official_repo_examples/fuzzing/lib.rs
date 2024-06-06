@@ -149,5 +149,3 @@ impl ClaimableBalanceContract {
 fn is_initialized(env: &Env) -> bool {
     env.storage().persistent().has(&DataKey::Init)
 }
-
-mod proptest;
