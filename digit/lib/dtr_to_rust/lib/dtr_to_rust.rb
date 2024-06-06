@@ -7,11 +7,12 @@ module DTRToRust
 
   # This module contains all the classes that handle the different types of instructions.
   module Instruction
-    autoload :Handler, 'instruction/handler'
-    autoload :Evaluate, 'instruction/evaluate'
-    autoload :Return, 'instruction/return'
-    autoload :LogString, 'instruction/log_string'
     autoload :AddAndAssign, 'instruction/add_and_assign'
+    autoload :CreateList, 'instruction/create_list'
+    autoload :Evaluate, 'instruction/evaluate'
+    autoload :LogString, 'instruction/log_string'
+    autoload :Handler, 'instruction/handler'
+    autoload :Return, 'instruction/return'
   end
 
   # This module contains all the classes that handle common logic.

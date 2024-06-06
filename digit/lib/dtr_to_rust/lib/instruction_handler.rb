@@ -17,6 +17,8 @@ module DTRToRust
         Instruction::AddAndAssign.handle(@instruction)
       when 'evaluate'
         Instruction::Evaluate.handle(@instruction)
+      when 'create_list'
+        Instruction::CreateList.handle(@instruction)
       else
         raise "Unknown instruction type: #{@instruction[:instruction]}"
       end

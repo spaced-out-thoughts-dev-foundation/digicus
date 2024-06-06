@@ -70,18 +70,13 @@ module DTRToRust
     def generate_function_output(function)
       return '' if function.output.nil?
 
-      case function.output
-      when 'String'
-        "-> Symbol"
-      else
-        "-> #{function.output}"
-      end
+      "-> #{translate_type(function.output)}"
     end
 
     def generate_function_args(function)
       all_inputs = [] + function.inputs
 
-      all_inputs.map { |x| "#{x[:name]}: #{x[:type_name]}" }.join(', ')
+      all_inputs.map { |x| "#{x[:name]}: #{translate_type(x[:type_name])}" }.join(', ')
     end
 
     def generate_instructions_each(instructions)
@@ -93,6 +88,15 @@ module DTRToRust
     def generate_instruction(instruction)
       handler = InstructionHandler.new(instruction)
       handler.generate_rust
+    end
+
+    def translate_type(type)
+      case type
+      when 'String'
+        'Symbol'
+      else
+        type
+      end
     end
   end
 end
