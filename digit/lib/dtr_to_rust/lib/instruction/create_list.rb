@@ -16,8 +16,12 @@ module DTRToRust
       end
 
       def handle_input(input)
-        if (input.start_with?('"') && input[-1] == ('"'))
+        decorated_input = Common::InputInterpreter.interpret(input)
+
+        if decorated_input[:type] == 'string'
           "symbol_short!(#{input})"
+        elsif decorated_input[:needs_reference]
+          "&#{input}"
         else
           input
         end
