@@ -60,11 +60,22 @@ module DTRToRust
     def generate_functions_each(functions)
       functions&.map do |function|
         return_string = "\n    pub fn #{function.name}(#{generate_function_args(function)}) "
-        return_string += "-> #{function.output}" if function.output
+        return_string += generate_function_output(function)
         return_string += " {\n#{generate_instructions_each(function.instructions)}\n    }\n"
 
         return_string
       end&.join("\n")
+    end
+
+    def generate_function_output(function)
+      return '' if function.output.nil?
+
+      case function.output
+      when 'String'
+        "-> Symbol"
+      else
+        "-> #{function.output}"
+      end
     end
 
     def generate_function_args(function)
