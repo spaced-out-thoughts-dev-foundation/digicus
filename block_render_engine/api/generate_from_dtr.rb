@@ -22,11 +22,11 @@ Handler = Proc.new do |request, response|
 
     dtr_code = contract.to_s
 
-    puts "[DEBUG]: generated DTR code: #{dtr_code}"
+    puts "[DEBUG]: generated DTR code"
 
     rust_code = DTRToRust::DtrToRust::Generator.generate_from_string(dtr_code)
 
-    puts "[DEBUG]: generated Rust code: #{rust_code}"
+    puts "[DEBUG]: generated Rust code"
 
     response.status = 200
     response['Content-Type'] = 'text/text; charset=utf-8'
