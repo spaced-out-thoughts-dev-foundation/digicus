@@ -37,6 +37,20 @@ RSpec.describe DTRCore::Contract do
       expect(contract.state).to match_array(state_definitions)
       expect(contract.functions).to contain_exactly(hello_function, world_function)
     end
+
+    it 'parses the contract, then generates the contract, then parses the generated contract' do
+      contract = described_class.from_dtr('./spec/test_dtr_files/multi_function_with_state_and_name_contract.dtr')
+
+      expect(contract.name).to eq('MultiFunctionContract')
+      expect(contract.state).to match_array(state_definitions)
+      expect(contract.functions).to contain_exactly(hello_function, world_function)
+
+      generated_content = contract.to_s
+
+      generated_contract = described_class.from_dtr_raw(generated_content)
+
+      expect(generated_contract).to eq(contract)
+    end
   end
 
   context 'when passing content directly' do

@@ -39,5 +39,11 @@ module DTRCore
         type == other.type &&
         initial_value == other.initial_value
     end
+
+    def to_s
+      "  * [#{name}]\n    " \
+        "* Type: #{type}\n    " \
+        "* Initial Value: #{initial_value}"
+    end
   end
 end

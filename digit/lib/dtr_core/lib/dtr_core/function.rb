@@ -42,7 +42,50 @@ module DTRCore
         instructions == other.instructions
     end
 
+    def to_s
+      return_string = ''
+
+      return_string += name_to_s
+      return_string += inputs_to_s
+      return_string += output_to_s
+      return_string += instructions_to_s
+
+      return_string
+    end
+
     private
+
+    def name_to_s
+      "  -() [#{name}]\n"
+    end
+
+    def inputs_to_s
+      input_formatted = inputs.map { |x| "#{x[:name]}: #{x[:type_name]}" }.join("\n    ")
+      "    * Inputs:\n    {\n    #{input_formatted}\n    }\n"
+    end
+
+    def output_to_s
+      "    * Output: #{output}\n"
+    end
+
+    def instructions_to_s
+      return_string = ''
+
+      return_string += "    * Instructions:\n"
+      return_string += "      $\n"
+      @instructions.each do |x|
+        return_string += "        #{single_instruction_to_s(x)}\n"
+      end
+      return_string += "      $\n"
+
+      return_string
+    end
+
+    def single_instruction_to_s(ins)
+      "{ instruction: #{ins[:instruction]}," \
+        "input: (#{ins[:inputs]&.join(', ')}), " \
+        "assign: #{ins[:assign]}, scope: #{ins[:scope]} }\n"
+    end
 
     def format_function_inputs(inputs)
       return [] if inputs.nil?

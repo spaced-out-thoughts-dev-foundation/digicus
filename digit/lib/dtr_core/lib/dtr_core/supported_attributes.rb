@@ -40,9 +40,12 @@ module DTRCore
       { name: 'add_and_assign',
         description: 'Add two things of unknown types together and then assign to the first one.',
         category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'subtract', description: 'Subtract two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'divide', description: 'Divide two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'multiply', description: 'Multiply two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'subtract', description: 'Subtract two things of unknown types together.',
+        category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'divide', description: 'Divide two things of unknown types together.',
+        category: INSTRUCTION_CATEGORY_UNTYPED },
+      { name: 'multiply', description: 'Multiply two things of unknown types together.',
+        category: INSTRUCTION_CATEGORY_UNTYPED },
       # numeric operations
       { name: 'add_numbers', description: 'Add two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
       { name: 'subtract_numbers', description: 'Subtract two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
@@ -60,8 +63,10 @@ module DTRCore
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
       { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS },
       # conditional operations
-      { name: 'conditional_jump', description: 'Jump to a label if first input is true.', category: INSTRUCTION_CATEGORY_CONDITIONAL },
-      { name: 'unconditional_jump', description: 'Jump to a no matter what.', category: INSTRUCTION_CATEGORY_CONDITIONAL },
+      { name: 'conditional_jump', description: 'Jump to a label if first input is true.',
+        category: INSTRUCTION_CATEGORY_CONDITIONAL },
+      { name: 'unconditional_jump', description: 'Jump to a no matter what.',
+        category: INSTRUCTION_CATEGORY_CONDITIONAL },
       # logical operations
       { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL },
       { name: 'or', description: 'Logical OR.', category: INSTRUCTION_CATEGORY_LOGICAL }

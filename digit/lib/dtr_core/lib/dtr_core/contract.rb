@@ -30,5 +30,38 @@ module DTRCore
         functions == other.functions &&
         user_defined_types == other.user_defined_types
     end
+
+    def to_s
+      return_string = ''
+
+      return_string += name_to_s
+      return_string += "#{state_to_s}\n"
+      return_string += functions_to_s
+      return_string += user_defined_types_to_s
+
+      return_string
+    end
+
+    private
+
+    def name_to_s
+      "[Contract]: #{@name}\n\n"
+    end
+
+    def state_to_s
+      return '' if @state.nil?
+
+      "[State]:\n#{@state&.map(&:to_s)&.join("\n")}\n"
+    end
+
+    def functions_to_s
+      "[InternalFunctions]:\n#{@functions&.map(&:to_s)&.join("\n")}\n:[InternalFunctions]\n"
+    end
+
+    def user_defined_types_to_s
+      return "[UserDefinedTypes]::[UserDefinedTypes]\n" if @user_defined_types.nil?
+
+      "[UserDefinedTypes]:\n#{@user_defined_types&.map(&:to_s)&.join("\n")}\n:[UserDefinedTypes]\n"
+    end
   end
 end
