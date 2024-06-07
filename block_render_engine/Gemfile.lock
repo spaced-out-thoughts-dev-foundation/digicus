@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
-    dtr_core (0.5.4)
+    dtr_core (0.5.5)
     dtr_to_rust (0.2.9)
     fiddle (1.1.2)
     mustermann (3.0.0)
@@ -34,7 +34,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dtr_core (~> 0.5.4)
+  dtr_core (~> 0.5.5)
   dtr_to_rust (~> 0.2.9)
   fiddle (~> 1.0)
   puma
