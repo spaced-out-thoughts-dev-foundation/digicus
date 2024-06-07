@@ -53,7 +53,6 @@ mod tests {
     #[test]
     fn test_handle_repeat_expression() {
         let expr: syn::ExprRepeat = parse_quote! { [hello; 3] };
-        println!("{:?}", 10);
         let compilation_state = CompilationState::new();
         let instructions = handle_repeat_expression(
             &expr,
