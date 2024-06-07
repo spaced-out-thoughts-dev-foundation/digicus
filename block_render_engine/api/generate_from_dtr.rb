@@ -9,11 +9,11 @@ require 'json'
 def form_state(state)
   return [] if state.nil?
   state.map do |s|
-    {
-      name: s[:name],
-      type: s[:type],
-      initial_value: s[:initial_value]
-    }
+    DTRCore::State.new(
+      s["name"],
+      s["type"],
+      s["initial_value"]
+    )
   end
 end
 
@@ -21,23 +21,17 @@ def form_functions(functions)
   return [] if functions.nil?
 
   functions.map do |f|
-    {
-      name: f[:name],
-      instructions: f[:instructions],
-      inputs: f[:inputs]
-    }
+    DTRCore::Function.new(
+      f["name"],
+      f["inputs"],
+      f["outputs"],
+      f["instructions"],
+    )
   end
 end
 
 def form_user_defined_types(user_defined_types)
-  return [] if user_defined_types.nil?
-
-  user_defined_types.map do |t|
-    {
-      name: t[:name],
-      fields: t[:fields]
-    }
-  end
+  return []
 end
 
 Handler = Proc.new do |request, response|
