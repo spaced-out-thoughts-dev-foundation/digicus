@@ -14,7 +14,7 @@ describe DTRToRust::Instruction::Evaluate do
         }
 
         expect(described_class.handle(instruction))
-          .to eq('env.storage(&env, &foo);')
+          .to eq('    env.storage(&env, &foo);')
       end
     end
 
@@ -29,7 +29,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut CALL_EXPRESSION_RESULT = storage();')
+            .to eq('    let mut CALL_EXPRESSION_RESULT = storage();')
         end
       end
 
@@ -43,7 +43,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut CALL_EXPRESSION_RESULT = instance("foo");')
+            .to eq('    let mut CALL_EXPRESSION_RESULT = instance("foo");')
         end
       end
 
@@ -57,7 +57,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut CALL_EXPRESSION_RESULT = extend_ttl(50, 100);')
+            .to eq('    let mut CALL_EXPRESSION_RESULT = extend_ttl(50, 100);')
         end
       end
 
@@ -70,7 +70,7 @@ describe DTRToRust::Instruction::Evaluate do
             scope: 0
           }
 
-          expect(described_class.handle(instruction)).to eq('storage();')
+          expect(described_class.handle(instruction)).to eq('    storage();')
         end
       end
     end
@@ -86,7 +86,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut METHOD_CALL_EXPRESSION = env.storage();')
+            .to eq('    let mut METHOD_CALL_EXPRESSION = env.storage();')
         end
       end
 
@@ -100,7 +100,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut METHOD_CALL_EXPRESSION = METHOD_CALL_EXPRESSION.instance("foo");')
+            .to eq('    let mut METHOD_CALL_EXPRESSION = METHOD_CALL_EXPRESSION.instance("foo");')
         end
       end
 
@@ -114,7 +114,7 @@ describe DTRToRust::Instruction::Evaluate do
           }
 
           expect(described_class.handle(instruction))
-            .to eq('let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION.extend_ttl(50, 100);')
+            .to eq('    let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION.extend_ttl(50, 100);')
         end
       end
     end

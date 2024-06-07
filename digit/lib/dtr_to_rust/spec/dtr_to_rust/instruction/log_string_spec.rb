@@ -12,7 +12,7 @@ describe DTRToRust::Instruction::LogString do
         scope: 0
       }
 
-      expect(described_class.handle(instruction)).to eq('log!(&env, "count: {}", count);')
+      expect(described_class.handle(instruction)).to eq('    log!(&env, "count: {}", count);')
     end
   end
 end

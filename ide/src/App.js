@@ -11,7 +11,7 @@ import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 
 const App = () => {
-  const [contract, setContract] = useState({ contract: '', originalText: `` });
+  const [contract, setContract] = useState({ contract: '', originalText: ``, generatedText: `` });
   const [file, setFile] = useState(null);
   const [supportedInstructions, setSupportedInstructions] = useState([]);
   const [showCodeContainer, setShowCodeContainer] = useState(true);
@@ -73,7 +73,7 @@ const App = () => {
           .then(response => {
             return response.json()
           })
-          .then(json => setContract({ contract: json, originalText: json.generated_code }))
+          .then(json => setContract({ contract: json, originalText: reader.result, generatedText: json.generated_code }))
           .catch(error => console.error(error));
       },
       false,
@@ -107,7 +107,7 @@ const App = () => {
                       checked={showCodeContainer}
                       onChange={handleShowCodeContainer}
                     />
-                    Source code
+                    Original Source Code
                   </label>
                   <br></br>
                   <label>
@@ -116,7 +116,7 @@ const App = () => {
                       checked={showUserDefinedTypes}
                       onChange={handleShowUserDefinedTypes}
                     />
-                    User Defined Types
+                    Generated Source Code
                   </label>
                 </div>
               </div>
@@ -125,6 +125,7 @@ const App = () => {
               functions={contract?.contract?.contract_functions}
               filename={file?.name}
               originalText={contract?.originalText}
+              generatedText={contract?.generatedText}
               supportedInstructions={supportedInstructions}
               supportedInstructionToColor={supportedInstructionToColor}
               contractName={contract?.contract?.contract_name}

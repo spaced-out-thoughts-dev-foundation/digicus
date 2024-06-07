@@ -13,7 +13,7 @@ module DTRToRust
       end
 
       def spacing(scope)
-        '    ' * scope
+        '    ' * (scope + 1)
       end
 
       def form_rust_string(instruction_string, scope)

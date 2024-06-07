@@ -1,4 +1,4 @@
-.code-container{
+.code-container {
   align-items: center;
   background-color: #282a36;
   border: 2px solid black;
@@ -8,10 +8,9 @@
   flex: 1;
   flex-direction: column;
   height: 95%;
-  width: 80%;
+  width: 10%;
   font-size: 0.8em;
-  overflow-y: auto;
-  max-height: 100%;
+  overflow: auto;
 }
 
 .code-container-div {
@@ -19,5 +18,5 @@
   flex: 1;
   height: 100%;
   margin: 20px;
-  width: 100%;
+  width: 10%;
 }

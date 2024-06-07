@@ -95,7 +95,7 @@ function edges(function_data, function_number) {
     .map((_, index) => constructEdge(index, function_number));
 };
 
-function ContractContainer({ functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer, showUserDefinedTypes, userDefinedTypes }) {
+function ContractContainer({ functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText }) {
   return (
     <div className='contract-container-container'>
       <Box className='contract-container-box'>
@@ -117,8 +117,9 @@ function ContractContainer({ functions, supportedInstructions, supportedInstruct
         }
       </Box>
       <div className='code-container-div'>
-        {showCodeContainer ? <CodeContainer originalText={originalText} filename={filename} /> : ''}
-        {showUserDefinedTypes ? <UserDefinedTypesContainer userDefinedTypes={userDefinedTypes} /> : ''}
+        {showCodeContainer ? <CodeContainer originalText={originalText} filename={filename} originalSource={true} /> : ''}
+        {/* {showUserDefinedTypes ? <UserDefinedTypesContainer userDefinedTypes={userDefinedTypes} /> : ''} */}
+        {showUserDefinedTypes ? <CodeContainer originalText={generatedText} filename={filename} originalSource={false} /> : ''}
       </div>
     </div>
   );
