@@ -8,15 +8,17 @@ require 'json'
 
 def form_state(state)
   return [] if state.nil?
+  json_s = JSON.parse(s)
+
   state.map do |s|
-    puts "[DEBUG]: s name: #{s["name"]}"
-    puts "[DEBUG]: s type: #{s["type"]}"
-    puts "[DEBUG]: s initial_value: #{s["initial_value"]}"
+    puts "[DEBUG]: s name: #{json_s["name"]}"
+    puts "[DEBUG]: s type: #{json_s["type"]}"
+    puts "[DEBUG]: s initial_value: #{json_s["initial_value"]}"
 
     DTRCore::State.new(
-      s["name"],
-      s["type"],
-      s["initial_value"]
+      json_s["name"],
+      json_s["type"],
+      json_s["initial_value"]
     )
   end
 end
@@ -25,15 +27,16 @@ def form_functions(functions)
   return [] if functions.nil?
 
   functions.map do |f|
-    puts "[DEBUG]: f name: #{f["name"]}"
-    puts "[DEBUG]: f inputs: #{f["inputs"]}"
-    puts "[DEBUG]: f outputs: #{f["outputs"]}"
+    json_f = JSON.parse(f)
+    puts "[DEBUG]: f name: #{json_f["name"]}"
+    puts "[DEBUG]: f inputs: #{json_f["inputs"]}"
+    puts "[DEBUG]: f outputs: #{json_f["outputs"]}"
 
     DTRCore::Function.new(
-      f["name"],
-      f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
-      f["outputs"],
-      f["instructions"].map{ |i| i.transform_keys(&:to_sym) },
+      json_f["name"],
+      json_f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
+      json_f["outputs"],
+      json_f["instructions"].map{ |i| i.transform_keys(&:to_sym) },
     )
   end
 end
