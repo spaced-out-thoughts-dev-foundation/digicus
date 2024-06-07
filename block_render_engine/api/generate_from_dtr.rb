@@ -23,9 +23,9 @@ def form_functions(functions)
   functions.map do |f|
     DTRCore::Function.new(
       f["name"],
-      JSON.parse(f["inputs"]),
+      f["inputs"].map{ |i| JSON.parse(i) },
       f["outputs"],
-      JSON.parse(f["instructions"]),
+      f["instructions"].map{ |i| JSON.parse(i) },
     )
   end
 end
