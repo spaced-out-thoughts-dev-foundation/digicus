@@ -9,8 +9,6 @@ require 'json'
 Handler = Proc.new do |request, response|
   begin
 
-    puts "Request body: #{request.body}"
-
     contract = DTRCore::Contract.new(
       request.body.contract.contract_name,
       request.body.contract.contract_state,
