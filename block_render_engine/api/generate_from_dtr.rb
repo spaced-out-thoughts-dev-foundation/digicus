@@ -8,12 +8,12 @@ require 'json'
 
 Handler = Proc.new do |request, response|
   begin
-
+    puts "Received request to generate Rust code from DTR code"
     contract = DTRCore::Contract.new(
-      request.body.contract.contract_name,
-      request.body.contract.contract_state,
-      request.body.contract.contract_functions,
-      request.body.contract.contract_user_defined_types
+      request.body.contract_name,
+      request.body.contract_state,
+      request.body.contract_functions,
+      request.body.contract_user_defined_types
     )
 
     puts "[DEBUG]: formed contract"
