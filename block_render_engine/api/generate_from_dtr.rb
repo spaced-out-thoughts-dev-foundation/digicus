@@ -25,7 +25,7 @@ Handler = Proc.new do |request, response|
 
     dtr_code = contract.to_s
 
-    puts "[DEBUG]: generated DTR code"
+    puts "[DEBUG]: generated DTR code: #{dtr_code}"
 
     rust_code = DTRToRust::Generator.generate_from_string(dtr_code)
 
