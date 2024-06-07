@@ -65,6 +65,7 @@ module DTRCore
     end
 
     def output_to_s
+      return "" if output.nil?
       "    * Output: #{output}\n"
     end
 
