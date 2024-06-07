@@ -8,9 +8,9 @@ require 'json'
 
 def form_state(state)
   return [] if state.nil?
-  json_s = JSON.parse(s)
 
   state.map do |s|
+    json_s = JSON.parse(s)
     puts "[DEBUG]: s name: #{json_s["name"]}"
     puts "[DEBUG]: s type: #{json_s["type"]}"
     puts "[DEBUG]: s initial_value: #{json_s["initial_value"]}"
