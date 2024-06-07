@@ -8,9 +8,10 @@ pub struct ClosureAroundAnswerToLife;
 #[contractimpl]
 impl ClosureAroundAnswerToLife {
     pub fn closure_around_answer_to_life() -> u32 {
-        let add_closure = |a, b| a + b;
+        let x = 20;
+        let add_closure = |a, b| x + a + b;
 
-        add_closure(20, 22)
+        add_closure(1, 21)
     }
 }
 

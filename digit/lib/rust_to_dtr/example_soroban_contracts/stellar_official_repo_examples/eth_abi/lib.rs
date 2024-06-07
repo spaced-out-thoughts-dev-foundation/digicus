@@ -31,18 +31,16 @@ pub struct Contract;
 #[contractimpl]
 impl Contract {
     pub fn exec(e: &Env, input: Bytes) -> Result<Bytes, Error> {
-        // let mut input_buf = [0u8; 128];
-        // let mut input_slice = &mut input_buf[..input.len() as usize];
-        // input.copy_into_slice(&mut input_slice);
+        let mut input_buf = [0u8; 128];
+        let mut input_slice = &mut input_buf[..input.len() as usize];
+        input.copy_into_slice(&mut input_slice);
 
-        x.map_err(|y| y + 1)?;
-        // let output = Output {
-        //     a: input.a,
-        //     r: input.b + input.c,
-        // };
-        // let output_encoded = output.abi_encode();
-        // Ok(Bytes::from_slice(e, &output_encoded))
-
-        // 10
+        let input = Input::abi_decode(&input_slice, false).map_err(|_| Error::Decode)?;
+        let output = Output {
+            a: input.a,
+            r: input.b + input.c,
+        };
+        let output_encoded = output.abi_encode();
+        Ok(Bytes::from_slice(e, &output_encoded))
     }
 }

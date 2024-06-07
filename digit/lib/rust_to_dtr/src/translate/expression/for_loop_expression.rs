@@ -36,6 +36,8 @@ pub fn handle_for_loop_expression(
         exit_label.clone(),
         check_condition_assignment.clone(),
     ));
+
+    compilation_state.should_output = false;
     instructions.extend(get_execute_block(expr.clone(), compilation_state));
     instructions.extend(get_increment_value(iterator_variable.clone()));
     instructions.extend(get_back_to_top(

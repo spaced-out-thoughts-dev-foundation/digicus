@@ -27,6 +27,7 @@ pub fn handle_block(
                 });
 
                 if index == total_block_stmts && compilation_state.should_output {
+                    println!("Returning from block, {} - {}", index, total_block_stmts);
                     instructions_to_return.push(Instruction::new(
                         "Return".to_string(),
                         vec!["Thing_to_return".to_string()],

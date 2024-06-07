@@ -38,14 +38,14 @@ mod full_contract_tests {
     }
 
     test_contract!(digicus_unofficial_examples, answer_to_life);
-    // test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
+    test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
     test_contract!(digicus_unofficial_examples, count_zero_to_answer_to_life);
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
     test_contract!(digicus_unofficial_examples, non_range_for_loop);
 
     // test_contract!(stellar_official_repo_examples, account);
-    // test_contract!(stellar_official_repo_examples, alloc);
+    test_contract!(stellar_official_repo_examples, alloc);
     test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
     test_contract!(stellar_official_repo_examples, atomic_swap);

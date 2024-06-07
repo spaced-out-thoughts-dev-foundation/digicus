@@ -38,6 +38,7 @@ fn macro_path_to_instruction(path: String) -> String {
         "log" => "log_string".to_string(),
         "symbol_short" => "assign".to_string(),
         "panic" => "panic".to_string(),
+        "alloc::vec" => "create_list".to_string(),
         _ => "unknown_macro".to_string(),
     }
 }

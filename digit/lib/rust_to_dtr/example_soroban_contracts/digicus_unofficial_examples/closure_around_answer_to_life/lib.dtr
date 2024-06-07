@@ -8,10 +8,10 @@
 	* Output: u32
 	* Instructions:
 		$
-      { instruction: label, }
-			{ instruction: add, input: (a, b), assign: add_closure, scope: 0 }
-			{ instruction: closure, input: (a, b), assign: output, scope: 0 }
-			{ instruction: evaluate, input: (add_closure, 20, 22), assign: Thing_to_return, scope: 0 }
+			{ instruction: assign, input: (20), assign: x, scope: 0 }
+			{ instruction: add, input: (x, a), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, b), assign: add_closure, scope: 0 }
+			{ instruction: evaluate, input: (add_closure, 1, 21), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]

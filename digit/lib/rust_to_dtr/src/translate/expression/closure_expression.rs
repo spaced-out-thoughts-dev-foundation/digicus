@@ -22,12 +22,5 @@ pub fn handle_closure_expression(
 
     instructions.extend(parse_expression(&expr.body, compilation_state)?);
 
-    instructions.push(Instruction::new(
-        "closure".to_string(),
-        input_argument_names,
-        "output".to_string(),
-        0,
-    ));
-
     Ok(instructions)
 }
