@@ -28,6 +28,22 @@ const App = () => {
 
   const handleDeploy = () => {
     // this will then display a text file
+
+  };
+
+  const onUpdateFunctionName = (newTitle, oldTitle) => {
+    if (contract?.contract?.contract_functions == null) {
+      return;
+    }
+    contract.contract.contract_functions = contract.contract?.contract_functions.map((functionData) => {
+      let jsonifiedFunctionData = JSON.parse(functionData);
+
+      if (jsonifiedFunctionData['name'] === oldTitle) {
+        jsonifiedFunctionData['name'] = newTitle;
+      }
+      return JSON.stringify(jsonifiedFunctionData);
+    });
+
     fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
       {
         headers: {
@@ -47,22 +63,6 @@ const App = () => {
       })
       .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
       .catch(error => console.error(error));
-  };
-
-  const onUpdateFunctionName = (newTitle, oldTitle) => {
-    if (contract?.contract?.contract_functions == null) {
-      return;
-    }
-    contract.contract.contract_functions = contract.contract?.contract_functions.map((functionData) => {
-      let jsonifiedFunctionData = JSON.parse(functionData);
-
-      if (jsonifiedFunctionData['name'] === oldTitle) {
-        jsonifiedFunctionData['name'] = newTitle;
-      }
-      return JSON.stringify(jsonifiedFunctionData);
-    });
-
-    setContract({ ...contract });
   }
 
   const onUpdateContractName = (newTitle, _) => {
@@ -72,7 +72,25 @@ const App = () => {
 
     contract.contract.contract_name = newTitle;
 
-    setContract({ ...contract });
+    fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
+      {
+        headers: {
+          'Accept': 'text/text',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          contract_name: contract.contract.contract_name,
+          contract_state: contract.contract.contract_state,
+          contract_functions: contract.contract.contract_functions,
+          contract_user_defined_types: contract.contract.contract_user_defined_types
+        })
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
+      .catch(error => console.error(error));
   }
 
   const handleShowCodeContainer = () => {
