@@ -10,7 +10,7 @@ Handler = Proc.new do |request, response|
   begin
     puts "Received request to generate Rust code from DTR code"
     puts "[Debug]: contract_name: #{request.body['contract_name']}"
-    puts "[Debug]: contract_state: #{request.body.['contract_state']}"
+    puts "[Debug]: contract_state: #{request.body['contract_state']}"
     puts "[Debug]: contract_functions: #{request.body['contract_functions']}"
     puts "[Debug]: contract_user_defined_types: #{request.body['contract_user_defined_types']}"
 
