@@ -23,9 +23,9 @@ def form_functions(functions)
   functions.map do |f|
     DTRCore::Function.new(
       f["name"],
-      f["inputs"],
+      f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
       f["outputs"],
-      f["instructions"],
+      f["instructions"].map{ |i| i.transform_keys(&:to_sym) },
     )
   end
 end
