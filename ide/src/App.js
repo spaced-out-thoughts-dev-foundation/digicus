@@ -65,6 +65,16 @@ const App = () => {
     setContract({ ...contract });
   }
 
+  const onUpdateContractName = (newTitle, _) => {
+    if (contract?.contract?.contract_name == null) {
+      return;
+    }
+
+    contract.contract.contract_name = newTitle;
+
+    setContract({ ...contract });
+  }
+
   const handleShowCodeContainer = () => {
     setShowCodeContainer(!showCodeContainer);
     setShowUserDefinedTypes(!showUserDefinedTypes);
@@ -134,7 +144,7 @@ const App = () => {
           <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions} />
           <div className='top-level-third-level-container'>
             <div className='top-level-third-level-container-secondary-header-bar'>
-              <ContractHeader name={contract?.contract?.contract_name} />
+              <ContractHeader name={contract?.contract?.contract_name} onUpdateContractName={onUpdateContractName} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <FileUpload style={{ flex: 10 }} handleFileChange={handleFileChange} handleUpload={handleUpload} />
                 <div style={{ border: '1px solid black', borderRadius: '10px', margin: '10px' }}>
