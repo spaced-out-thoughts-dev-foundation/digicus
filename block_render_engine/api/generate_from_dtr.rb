@@ -6,19 +6,53 @@ require 'net/http'
 require 'uri'
 require 'json'
 
+def form_state(state)
+  state.map do |s|
+    {
+      name: s.name,
+      type: s.type,
+      initial_value: s.initial_value
+    }
+  end
+end
+
+def form_functions(functions)
+  functions.map do |f|
+    {
+      name: f.name,
+      instructions: f.instructions,
+      inputs: f.inputs
+    }
+  end
+end
+
+def form_user_defined_types(user_defined_types)
+  user_defined_types.map do |t|
+    {
+      name: t.name,
+      fields: t.fields
+    }
+  end
+end
+
 Handler = Proc.new do |request, response|
   begin
+    name = JSON.parse(request.body)['contract_name']
+    state = form_state(JSON.parse(request.body)['contract_state'])
+    functions = form_functions(JSON.parse(request.body)['contract_functions'])
+    user_defined_types = form_user_defined_types(JSON.parse(request.body)['contract_user_defined_types'])
+
     puts "Received request to generate Rust code from DTR code: #{request.body}"
-    puts "[Debug]: contract_name: #{JSON.parse(request.body)['contract_name']}"
-    puts "[Debug]: contract_state: #{JSON.parse(request.body)['contract_state']}"
-    puts "[Debug]: contract_functions: #{JSON.parse(request.body)['contract_functions']}"
-    puts "[Debug]: contract_user_defined_types: #{JSON.parse(request.body)['contract_user_defined_types']}"
+    puts "[Debug]: contract_name: #{name}"
+    puts "[Debug]: contract_state: #{state}"
+    puts "[Debug]: contract_functions: #{functions}"
+    puts "[Debug]: contract_user_defined_types: #{user_defined_types}"
 
     contract = DTRCore::Contract.new(
-      JSON.parse(request.body)['contract_name'],
-      JSON.parse(request.body)['contract_state'],
-      JSON.parse(request.body)['contract_functions'],
-      JSON.parse(request.body)['contract_user_defined_types']
+      name,
+      state,
+      functions,
+      user_defined_types
     )
 
     puts "[DEBUG]: formed contract"
