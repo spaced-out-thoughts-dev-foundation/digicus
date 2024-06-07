@@ -38,6 +38,7 @@ mod full_contract_tests {
     }
 
     test_contract!(digicus_unofficial_examples, answer_to_life);
+    // test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
     test_contract!(digicus_unofficial_examples, count_zero_to_answer_to_life);
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
@@ -61,7 +62,7 @@ mod full_contract_tests {
     // test_contract!(stellar_official_repo_examples, eth_abi);
 
     test_contract!(stellar_official_repo_examples, events);
-    // test_contract!(stellar_official_repo_examples, fuzzing);
+    test_contract!(stellar_official_repo_examples, fuzzing);
     test_contract!(stellar_official_repo_examples, hello_world);
     test_contract!(stellar_official_repo_examples, increment);
     // test_contract!(stellar_official_repo_examples, liquidity_pool);

@@ -1,0 +1,21 @@
+[Contract]: ClosureAroundAnswerToLife
+
+[InternalFunctions]:
+-() [closure_around_answer_to_life]
+	* Inputs:
+	{
+	}
+	* Output: u32
+	* Instructions:
+		$
+      { instruction: label, }
+			{ instruction: add, input: (a, b), assign: add_closure, scope: 0 }
+			{ instruction: closure, input: (a, b), assign: output, scope: 0 }
+			{ instruction: evaluate, input: (add_closure, 20, 22), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+:[User Defined Types]

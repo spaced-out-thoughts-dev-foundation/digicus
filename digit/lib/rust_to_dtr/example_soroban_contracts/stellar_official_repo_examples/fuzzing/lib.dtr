@@ -1,0 +1,156 @@
+[Contract]: ClaimableBalanceContract
+
+[InternalFunctions]:
+-() [deposit]
+* Inputs:
+{
+env: Env
+from: Address
+token: Address
+amount: i128
+claimants: List<Address>
+time_bound: TimeBound
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (claimants.is_empty), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("need more than 0 claimants"), scope: 1 }
+{ instruction: evaluate, input: (claimants.len), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+{ instruction: evaluate, input: (greater_than, BINARY_EXPRESSION_LEFT, 10), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("too many claimants"), scope: 1 }
+{ instruction: evaluate, input: (is_initialized, env), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("contract has been already initialized"), scope: 1 }
+{ instruction: evaluate, input: (from.require_auth), scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, env, token), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (env.current_contract_address), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, from, 2_METHOD_CALL_ARG_1, amount), scope: 0 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: assign, input: (token), assign: token, scope: 0 }
+{ instruction: assign, input: (amount), assign: amount, scope: 0 }
+{ instruction: assign, input: (time_bound), assign: time_bound, scope: 0 }
+{ instruction: assign, input: (claimants), assign: claimants, scope: 0 }
+{ instruction: initialize_udt, input: (ClaimableBalance, token, amount, time_bound, claimants), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Balance, 2_METHOD_CALL_ARG_1), scope: 0 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: create_tuple, input: (), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Init, 2_METHOD_CALL_ARG_1), scope: 0 }
+$
+-() [claim]
+* Inputs:
+{
+env: Env
+claimant: Address
+amount: i128
+}
+* Instructions:
+$
+{ instruction: evaluate, input: (claimant.require_auth), scope: 0 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Balance), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: claimable_balance, scope: 0 }
+{ instruction: field, input: (claimable_balance, time_bound), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (check_time_bound, env, 2_CALL_EXPRESSION_ARG), assign: UNARY_ARGUMENT_0, scope: 0 }
+{ instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("time predicate is not fulfilled"), scope: 1 }
+{ instruction: field, input: (claimable_balance, claimants), assign: claimants, scope: 0 }
+{ instruction: evaluate, input: (claimants.contains, claimant), assign: UNARY_ARGUMENT_0, scope: 0 }
+{ instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("claimant is not allowed to claim this balance"), scope: 1 }
+{ instruction: field, input: (claimable_balance, amount), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+{ instruction: evaluate, input: (greater_than, amount, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: panic, input: ("claimed amount greater than balance"), scope: 1 }
+{ instruction: field, input: (claimable_balance, token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, env, 2_CALL_EXPRESSION_ARG), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: evaluate, input: (env.current_contract_address), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, 1_METHOD_CALL_ARG_0, claimant, amount), scope: 0 }
+{ instruction: field, input: (claimable_balance, amount), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+{ instruction: subtract, input: (BINARY_EXPRESSION_LEFT, amount), assign: new_balance, scope: 0 }
+{ instruction: evaluate, input: (greater_than, new_balance, 0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+{ instruction: unconditional_jump, input: (100), scope: 0 }
+{ instruction: field, input: (claimable_balance, amount), assign: ASSIGN_EXPRESSION_LEFT, scope: 1 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 1 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Balance, claimable_balance), scope: 1 }
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 100 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.persistent), assign: METHOD_CALL_EXPRESSION_1, scope: 100 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.remove, DataKey::Balance), scope: 100 }
+$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (DataKey)
+{
+Init
+Balance
+}
+
+* (TimeBoundKind)
+{
+Before
+After
+}
+* (TimeBound)
+{
+kind: TimeBoundKind
+timestamp: u64
+}
+* (ClaimableBalance)
+{
+token: Address
+amount: i128
+claimants: Vec<Address>
+time_bound: TimeBound
+}
+
+:[User Defined Types]
+
+
+[ExternalFunctions]:
+-() [check_time_bound]
+* Inputs:
+{
+env: &Env
+time_bound: &TimeBound
+}
+* Output: Boolean
+* Instructions:
+$
+{ instruction: evaluate, input: (env.ledger), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.timestamp), assign: ledger_timestamp, scope: 0 }
+{ instruction: field, input: (time_bound, kind), assign: Thing_to_compare_against, scope: 0 }
+{ instruction: evaluate, input: (equal_to, Thing_to_compare_against, TimeBoundKind::Before), assign: CONDITIONAL_JUMP_CHECK_100, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_CHECK_100, 100), scope: 0 }
+{ instruction: field, input: (time_bound, timestamp), assign: BINARY_EXPRESSION_RIGHT, scope: 100 }
+{ instruction: evaluate, input: (less_than_or_equal_to, ledger_timestamp, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return, scope: 100 }
+{ instruction: evaluate, input: (equal_to, Thing_to_compare_against, TimeBoundKind::After), assign: CONDITIONAL_JUMP_CHECK_200, scope: 0 }
+{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_CHECK_200, 200), scope: 0 }
+{ instruction: field, input: (time_bound, timestamp), assign: BINARY_EXPRESSION_RIGHT, scope: 200 }
+{ instruction: evaluate, input: (greater_than_or_equal_to, ledger_timestamp, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return, scope: 200 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
+$
+-() [is_initialized]
+* Inputs:
+{
+env: &Env
+}
+* Output: Boolean
+* Instructions:
+$
+{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.persistent), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.has, DataKey::Init), assign: Thing_to_return, scope: 0 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
+$
+
+:[ExternalFunctions]

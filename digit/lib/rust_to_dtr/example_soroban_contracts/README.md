@@ -2,7 +2,7 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Progress [ 15/25 | 60% ]:
+Progress [ 16/25 | 64% ]:
 * [ ] Account
 * [ ] Alloc
 * [x] Atomic Multiswap
@@ -15,7 +15,7 @@ Progress [ 15/25 | 60% ]:
 * [x] Errors
 * [ ] Eth ABI
 * [x] Events
-* [ ] Fuzzing
+* [x] Fuzzing
 * [x] Hello World
 * [x] Increment
 * [ ] Liquidity Pool

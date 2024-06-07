@@ -1,12 +1,16 @@
+mod array_expression;
 mod assign_expression;
 mod binary_expression;
 pub mod block_expression;
 mod break_expression;
 mod call_expression;
 mod cast_expression;
+mod closure_expression;
 mod field_expression;
 mod for_loop_expression;
 mod if_expression;
+mod index_expression;
+mod infer_expression;
 mod let_expression;
 mod lit_expression;
 mod macro_expression;
@@ -16,15 +20,21 @@ mod paren_expression;
 mod path_expression;
 mod range_expression;
 mod reference_expression;
+mod repeat_expression;
 mod return_expression;
 mod struct_expression;
+mod try_block_expression;
+mod try_expression;
 mod tuple_expression;
 mod unary_expression;
 
 use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
+use array_expression::handle_array_expression;
 use cast_expression::handle_cast_expression;
+use index_expression::handle_index_expression;
+use repeat_expression::handle_repeat_expression;
 use unary_expression::handle_unary_expression;
 
 pub fn parse_expression(
@@ -94,6 +104,48 @@ pub fn parse_expression(
         syn::Expr::Break(break_expr) => {
             break_expression::handle_break_expression(break_expr, compilation_state)
         }
+        syn::Expr::Array(break_expr) => handle_array_expression(break_expr, compilation_state),
+        syn::Expr::Repeat(repeat_expr) => handle_repeat_expression(repeat_expr, compilation_state),
+        syn::Expr::Index(index_expr) => handle_index_expression(index_expr, compilation_state),
+        syn::Expr::Closure(closure_expr) => {
+            closure_expression::handle_closure_expression(closure_expr, compilation_state)
+        }
+        syn::Expr::Infer(infer_expr) => {
+            infer_expression::handle_infer_expression(infer_expr, compilation_state)
+        }
+        syn::Expr::Try(try_expr) => {
+            try_expression::handle_try_expression(try_expr, compilation_state)
+        }
+        syn::Expr::TryBlock(try_block_expr) => {
+            try_block_expression::handle_try_block_expression(try_block_expr, compilation_state)
+        }
+        syn::Expr::Continue(_) => Err(NotTranslatableError::Custom(
+            "Continue expression not supported".to_string(),
+        )),
+
+        syn::Expr::Group(_) => Err(NotTranslatableError::Custom(
+            "Group expression not supported".to_string(),
+        )),
+
+        syn::Expr::Yield(_) => Err(NotTranslatableError::Custom(
+            "Yield expression not supported".to_string(),
+        )),
+
+        syn::Expr::Verbatim(_) => Err(NotTranslatableError::Custom(
+            "Verbatim expression not supported".to_string(),
+        )),
+
+        syn::Expr::Unsafe(_) => Err(NotTranslatableError::Custom(
+            "Unsafe expression not supported".to_string(),
+        )),
+
+        syn::Expr::Const(_) => Err(NotTranslatableError::Custom(
+            "Const expression not supported".to_string(),
+        )),
+
+        syn::Expr::While(_) => Err(NotTranslatableError::Custom(
+            "While expression not supported".to_string(),
+        )),
 
         _ => Err(NotTranslatableError::Custom(
             "Unsupported expression".to_string(),

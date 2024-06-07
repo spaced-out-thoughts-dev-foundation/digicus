@@ -20,7 +20,7 @@ pub fn handle_pattern(pat: syn::Pat) -> Result<String, NotTranslatableError> {
         syn::Pat::TupleStruct(_) => Ok(format!("TupleStruct")),
         syn::Pat::Type(type_pat) => Ok(handle_pattern(*type_pat.pat)?),
         syn::Pat::Verbatim(_) => Ok(format!("Verbatim")),
-        syn::Pat::Wild(_) => Ok(format!("Wild")),
+        syn::Pat::Wild(_) => Ok(format!("any")),
         _ => Err(NotTranslatableError::Custom(
             "Unknown pattern in block pat".to_string(),
         )),
