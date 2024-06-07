@@ -11,7 +11,7 @@ import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 
 const App = () => {
-  const [contract, setContract] = useState({contract: '', originalText: ``});
+  const [contract, setContract] = useState({ contract: '', originalText: `` });
   const [file, setFile] = useState(null);
   const [supportedInstructions, setSupportedInstructions] = useState([]);
   const [showCodeContainer, setShowCodeContainer] = useState(true);
@@ -26,7 +26,7 @@ const App = () => {
       .catch(error => console.error(error));
   }, []);
 
-  const handleDeploy = () => {};
+  const handleDeploy = () => { };
 
   const handleShowCodeContainer = () => {
     setShowCodeContainer(!showCodeContainer);
@@ -62,82 +62,82 @@ const App = () => {
       () => {
         // this will then display a text file
         fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
-        {
-          headers: {
-            'Accept': 'text/text',
-            'Content-Type': 'application/json'
-          },
-          method: "POST",
-          body: JSON.stringify({format: determineFileFormat(file), content: reader.result})
-        })
-        .then(response => {
-          return response.json()
-        })
-        .then(json => setContract({ contract: json, originalText: reader.result}))
-        .catch(error => console.error(error));
+          {
+            headers: {
+              'Accept': 'text/text',
+              'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({ format: determineFileFormat(file), content: reader.result })
+          })
+          .then(response => {
+            return response.json()
+          })
+          .then(json => setContract({ contract: json, originalText: json.generated_code }))
+          .catch(error => console.error(error));
       },
       false,
     );
-  
+
     if (file) {
       reader.readAsText(file);
     };
   };
 
-    const handleFileChange = (event) => {
-      const selectedFile = event.target.files[0];
-      setFile(selectedFile);
-    };
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
 
-    return ( 
-      <div className='top-level-div-container'>
-        <AppBar position="static" className='top-app-bar'>
-          <TopHeaderBar/>
-          <div className='top-level-second-level-container'>
-            <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions}/>
-            <div className='top-level-third-level-container'>
-              <div className='top-level-third-level-container-secondary-header-bar'>
-                <ContractHeader name={contract?.contract?.contract_name}/>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <FileUpload style={{flex: 10}} handleFileChange={handleFileChange} handleUpload={handleUpload}/>
-                  <div style={{border: '1px solid black', borderRadius: '10px', margin: '10px'}}>
-                      <label>
-                        <input 
-                            type="checkbox" 
-                            checked={showCodeContainer} 
-                            onChange={handleShowCodeContainer} 
-                        />
-                        Source code
-                    </label>
-                    <br></br>
-                    <label>
-                        <input 
-                            type="checkbox" 
-                            checked={showUserDefinedTypes} 
-                            onChange={handleShowUserDefinedTypes} 
-                        />
-                        User Defined Types
-                    </label>
-                  </div>
+  return (
+    <div className='top-level-div-container'>
+      <AppBar position="static" className='top-app-bar'>
+        <TopHeaderBar />
+        <div className='top-level-second-level-container'>
+          <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions} />
+          <div className='top-level-third-level-container'>
+            <div className='top-level-third-level-container-secondary-header-bar'>
+              <ContractHeader name={contract?.contract?.contract_name} />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <FileUpload style={{ flex: 10 }} handleFileChange={handleFileChange} handleUpload={handleUpload} />
+                <div style={{ border: '1px solid black', borderRadius: '10px', margin: '10px' }}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={showCodeContainer}
+                      onChange={handleShowCodeContainer}
+                    />
+                    Source code
+                  </label>
+                  <br></br>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={showUserDefinedTypes}
+                      onChange={handleShowUserDefinedTypes}
+                    />
+                    User Defined Types
+                  </label>
                 </div>
               </div>
-              <ContractContainer 
-                functions={contract?.contract?.contract_functions}
-                filename={file?.name}
-                originalText={contract?.originalText}
-                supportedInstructions={supportedInstructions}
-                supportedInstructionToColor={supportedInstructionToColor}
-                contractName={contract?.contract?.contract_name}
-                showCodeContainer={showCodeContainer}
-                showUserDefinedTypes={showUserDefinedTypes}
-                userDefinedTypes={contract?.contract?.contract_user_defined_types}
-              />
             </div>
+            <ContractContainer
+              functions={contract?.contract?.contract_functions}
+              filename={file?.name}
+              originalText={contract?.originalText}
+              supportedInstructions={supportedInstructions}
+              supportedInstructionToColor={supportedInstructionToColor}
+              contractName={contract?.contract?.contract_name}
+              showCodeContainer={showCodeContainer}
+              showUserDefinedTypes={showUserDefinedTypes}
+              userDefinedTypes={contract?.contract?.contract_user_defined_types}
+            />
           </div>
-        </AppBar>
-        <SpeedInsights />
-        <Analytics />
-      </div>
-    )
+        </div>
+      </AppBar>
+      <SpeedInsights />
+      <Analytics />
+    </div>
+  )
 }
 export default App;
