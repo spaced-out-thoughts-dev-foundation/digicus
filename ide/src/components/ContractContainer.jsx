@@ -4,7 +4,7 @@ import ReactFlow, { Controls, MarkerType, MiniMap } from 'reactflow';
 import InstructionNode from './InstructionNode';
 import FunctionNode from './FunctionNode';
 import CodeContainer from './CodeContainer';
-import UserDefinedTypesContainer from './UserDefinedTypesContainer';
+// import UserDefinedTypesContainer from './UserDefinedTypesContainer';
 
 import ".././styles/ContractContainer.css";
 
@@ -36,7 +36,7 @@ function constructNode(instruction, index, function_number, instructionColor) {
   };
 };
 
-function nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number) {
+function nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number, onUpdateFunctionName) {
   let function_json_data = JSON.parse(function_data);
   let all_function_nodes = function_json_data.instructions
     .filter((instruction) => !!tryGetSupportedInstruction(instruction.instruction, supportedInstructions))
@@ -54,6 +54,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
     data: {
       functionName: function_json_data.name,
       functionInputs: function_json_data.inputs,
+      onUpdateFunctionName: (newTitle, oldTitle) => onUpdateFunctionName(newTitle, oldTitle)
     },
     position: { x: 250 * (function_number * 1.5), y: 0 },
     style: {
@@ -95,14 +96,17 @@ function edges(function_data, function_number) {
     .map((_, index) => constructEdge(index, function_number));
 };
 
-function ContractContainer({ functions, supportedInstructions, supportedInstructionToColor, originalText, filename, showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText }) {
+function ContractContainer({
+  functions, supportedInstructions, supportedInstructionToColor, originalText, filename,
+  showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText, onUpdateFunctionName
+}) {
   return (
     <div className='contract-container-container'>
       <Box className='contract-container-box'>
         {
           functions ?
             <ReactFlow
-              nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i)).flatMap(x => x)}
+              nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i, onUpdateFunctionName)).flatMap(x => x)}
               edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
               fitView={{ padding: 100 }}
               nodeTypes={nodeTypes}

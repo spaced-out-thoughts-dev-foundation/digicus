@@ -11,9 +11,6 @@ def form_state(state)
 
   state.map do |s|
     json_s = JSON.parse(s)
-    puts "[DEBUG]: s name: #{json_s["name"]}"
-    puts "[DEBUG]: s type: #{json_s["type"]}"
-    puts "[DEBUG]: s initial_value: #{json_s["initial_value"]}"
 
     DTRCore::State.new(
       json_s["name"],
@@ -28,9 +25,6 @@ def form_functions(functions)
 
   functions.map do |f|
     json_f = JSON.parse(f)
-    puts "[DEBUG]: f name: #{json_f["name"]}"
-    puts "[DEBUG]: f inputs: #{json_f["inputs"]}"
-    puts "[DEBUG]: f outputs: #{json_f["outputs"]}"
 
     DTRCore::Function.new(
       json_f["name"],
@@ -42,7 +36,15 @@ def form_functions(functions)
 end
 
 def form_user_defined_types(user_defined_types)
-  return []
+  return [] if user_defined_types.nil?
+
+  user_defined_types.map do |t|
+    json_t = JSON.parse(t)
+
+    DTRCore::UserDefinedType.new(
+      json_t["name"],
+      json_t["attributes"]
+    )
 end
 
 Handler = Proc.new do |request, response|

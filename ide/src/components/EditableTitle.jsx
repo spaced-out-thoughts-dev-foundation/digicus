@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const EditableTitle = ({ initial_title }) => {
+const EditableTitle = ({ initial_title, handleChangeTitle }) => {
   const [title, setTitle] = useState(initial_title);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -9,7 +9,11 @@ const EditableTitle = ({ initial_title }) => {
   };
 
   const handleInputChange = (e) => {
-    setTitle(e.target.value);
+    const newTitle = e.target.value;
+    const oldTitle = title;
+
+    handleChangeTitle(newTitle, oldTitle);
+    setTitle(newTitle);
   };
 
   const handleInputBlur = () => {
