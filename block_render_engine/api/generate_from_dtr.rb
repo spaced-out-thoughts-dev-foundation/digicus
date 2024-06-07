@@ -45,6 +45,7 @@ def form_user_defined_types(user_defined_types)
       json_t["name"],
       json_t["attributes"]
     )
+  end
 end
 
 Handler = Proc.new do |request, response|
