@@ -3,6 +3,7 @@ require 'fiddle/import'
 require 'net/http'
 require 'uri'
 require 'json'
+require 'dtr_to_rust'
 
 # require 'rust_to_dtr/version'
 
@@ -72,6 +73,7 @@ class BlockRenderEngineRequestHandler
       status: status,
       last_method_executed: @last_method_executed,
       transpiled_code: @transpiled_code,
+      generated_code: DTRToRust::Generator.generate_from_string(@transpiled_code),
     }.to_json
   end
 
