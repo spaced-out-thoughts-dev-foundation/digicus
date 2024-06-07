@@ -1,6 +1,6 @@
 // import BarChart from './BarChart'
 import React from 'react';
-import { Button, List, ListItem } from '@mui/material';
+import { Button, List, ListItem, Tooltip } from '@mui/material';
 import { supportedInstructionToColor } from '../common/InstructionNode';
 
 
@@ -17,7 +17,14 @@ function InstructionsAndActionsSideBar({ handleDeploy, supportedInstructions }) 
           {supportedInstructions?.map((supported_instruction_data, index) => (
             <ListItem key={index} className='instructions-menu-list-item' style={{ backgroundColor: supportedInstructionToColor(supported_instruction_data) }}>
               <Button className='instructions-menu-list-item-button'>
-                {<strong style={{ color: 'black', fontSize: '0.9em', marginRight: '0.5em', textShadow: '1px 1px 1px gray' }}>{supported_instruction_data.name}</strong>}{'(' + supported_instruction_data.category + ')'}
+                <Tooltip title={supported_instruction_data.description}>
+                  {
+                    <strong style={{ color: 'black', fontSize: '0.9em', marginRight: '0.5em', textShadow: '1px 1px 1px gray' }}>
+                      {supported_instruction_data.name}
+                    </strong>
+                  }
+                  {'(' + supported_instruction_data.category + ')'}
+                </Tooltip>
               </Button>
             </ListItem>
           ))}
@@ -28,7 +35,7 @@ function InstructionsAndActionsSideBar({ handleDeploy, supportedInstructions }) 
         <button style={{ width: '100%' }} onClick={handleDeploy}>Save</button>
       </div>
 
-    </div>
+    </div >
   );
 }
 export default InstructionsAndActionsSideBar;

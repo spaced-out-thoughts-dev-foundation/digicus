@@ -9,6 +9,7 @@ import { supportedInstructionToColor } from './common/InstructionNode';
 import FileUpload from './components/FileUpload';
 import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
+import { saveAs } from 'file-saver';
 
 const App = () => {
   const [contract, setContract] = useState({ contract: '', originalText: ``, generatedText: `` });
@@ -27,8 +28,8 @@ const App = () => {
   }, []);
 
   const handleDeploy = () => {
-    // this will then display a text file
-
+    var blob = new Blob([contract.generatedText], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, `${contract?.contract?.contract_name}_generated_contract.rs`);
   };
 
   const onUpdateFunctionName = (newTitle, oldTitle) => {

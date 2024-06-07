@@ -110,6 +110,9 @@ function ContractContainer({
               edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
               fitView={{ padding: 100 }}
               nodeTypes={nodeTypes}
+            // panOnScroll={false}
+            // zoomOnScroll={false}
+            // zoomOnPinch={true}
             >
               <Controls />
               <MiniMap

@@ -1,6 +1,6 @@
 {
   "name": "ide",
-  "version": "0.2.12-6.08.24",
+  "version": "0.2.13-6.08.24",
   "private": true,
   "proxy": "http://localhost:3000/",
   "dependencies": {
@@ -13,6 +13,7 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
     "d3": "^7.9.0",
+    "file-saver": "^2.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-syntax-highlighter": "^15.5.0",
