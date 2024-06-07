@@ -29,7 +29,7 @@ def form_functions(functions)
     DTRCore::Function.new(
       json_f["name"],
       json_f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
-      json_f["outputs"],
+      json_f["output"],
       json_f["instructions"].map{ |i| i.transform_keys(&:to_sym) },
     )
   end
