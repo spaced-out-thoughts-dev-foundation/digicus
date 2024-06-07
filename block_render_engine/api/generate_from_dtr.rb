@@ -27,7 +27,7 @@ Handler = Proc.new do |request, response|
 
     puts "[DEBUG]: generated DTR code"
 
-    rust_code = DTRToRust::DtrToRust::Generator.generate_from_string(dtr_code)
+    rust_code = DTRToRust::Generator.generate_from_string(dtr_code)
 
     puts "[DEBUG]: generated Rust code"
 
