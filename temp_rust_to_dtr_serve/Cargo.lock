@@ -1231,9 +1231,9 @@ dependencies = [
 
 [[package]]
 name = "rust_to_dtr"
-version = "0.7.0"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3c3838f06f347ed8ded327588119f808bb94826f101446cb85df6c227eeb140"
+checksum = "caea2f8ffd72415264309a70c7ecd1d9cdabf695e1f7da794801ea70b14ab740"
 dependencies = [
  "proc-macro2",
  "rand",
