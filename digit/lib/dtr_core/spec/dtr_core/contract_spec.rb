@@ -51,6 +51,20 @@ RSpec.describe DTRCore::Contract do
 
       expect(generated_contract).to eq(contract)
     end
+
+    it 'parses the contract, then generates the contract, then parses the generated contract, nearly empty contract' do
+      contract = described_class.from_dtr('./spec/test_dtr_files/contract_name_section_only.dtr')
+
+      expect(contract.name).to eq('CONTRACT_NAME')
+      expect(contract.state).to be_nil
+      expect(contract.functions).to be_nil
+
+      generated_content = contract.to_s
+
+      generated_contract = described_class.from_dtr_raw(generated_content)
+
+      expect(generated_contract).to eq(contract)
+    end
   end
 
   context 'when passing content directly' do

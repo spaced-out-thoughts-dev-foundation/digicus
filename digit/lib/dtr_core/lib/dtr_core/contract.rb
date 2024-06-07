@@ -55,11 +55,13 @@ module DTRCore
     end
 
     def functions_to_s
+      return '' if @state.nil?
+
       "[InternalFunctions]:\n#{@functions&.map(&:to_s)&.join("\n")}\n:[InternalFunctions]\n"
     end
 
     def user_defined_types_to_s
-      return "[UserDefinedTypes]::[UserDefinedTypes]\n" if @user_defined_types.nil?
+      return '' if @user_defined_types.nil?
 
       "[UserDefinedTypes]:\n#{@user_defined_types&.map(&:to_s)&.join("\n")}\n:[UserDefinedTypes]\n"
     end
