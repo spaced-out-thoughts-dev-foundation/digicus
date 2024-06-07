@@ -11,7 +11,7 @@ describe DTRToRust::Instruction::Return do
         assign: nil,
         scope: 0
       }
-      expect(described_class.handle(instruction)).to eq('    foo')
+      expect(described_class.handle(instruction)).to eq('        foo')
     end
   end
 end
