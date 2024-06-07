@@ -112,7 +112,7 @@ class BlockRenderEngineRequestHandler
           name: f.name,
           instructions: f.instructions,
           inputs: f&.inputs,
-          output: f.output
+          output: f&.output
         }.to_json
       end
       @contract_user_defined_types = contract.user_defined_types&.map do |t|
