@@ -9,6 +9,10 @@ require 'json'
 def form_state(state)
   return [] if state.nil?
   state.map do |s|
+    puts "[DEBUG]: s name: #{s["name"]}"
+    puts "[DEBUG]: s type: #{s["type"]}"
+    puts "[DEBUG]: s initial_value: #{s["initial_value"]}"
+
     DTRCore::State.new(
       s["name"],
       s["type"],
@@ -21,6 +25,10 @@ def form_functions(functions)
   return [] if functions.nil?
 
   functions.map do |f|
+    puts "[DEBUG]: f name: #{f["name"]}"
+    puts "[DEBUG]: f inputs: #{f["inputs"]}"
+    puts "[DEBUG]: f outputs: #{f["outputs"]}"
+
     DTRCore::Function.new(
       f["name"],
       f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
