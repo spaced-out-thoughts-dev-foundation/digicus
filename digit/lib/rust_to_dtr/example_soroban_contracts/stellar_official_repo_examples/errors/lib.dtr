@@ -22,17 +22,17 @@ $
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, COUNTER, count), scope: 1 }
 { instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
-{ instruction: Return, input: (Thing_to_return), scope: 1 }
 { instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
-{ instruction: Return, input: (Thing_to_return), scope: 100 }
+{ instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[InternalFunctions]
 
 [User Defined Types]:
 * (Error)
 {
-LimitReached
+LimitReached: ()
 }
+
 :[User Defined Types]
 [State]:
 * [COUNTER]

@@ -1,0 +1,24 @@
+[Contract]: InnerdsOfEnums
+
+[InternalFunctions]:
+-() [answer_to_life]
+	* Inputs:
+	{
+	}
+	* Output: u32
+	* Instructions:
+		$
+			{ instruction: Return, input: (42), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (StorageKey)
+{
+	Admin: ()
+	Minter: (Address, Address)
+	MinterStats: (Address, Address, u32, u32)
+}
+
+:[User Defined Types]

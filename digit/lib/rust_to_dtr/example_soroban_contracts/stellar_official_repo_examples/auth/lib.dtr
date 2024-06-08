@@ -30,7 +30,7 @@ $
 [User Defined Types]:
 * (DataKey)
 {
-Counter
+Counter: (Address)
 }
 
 :[User Defined Types]

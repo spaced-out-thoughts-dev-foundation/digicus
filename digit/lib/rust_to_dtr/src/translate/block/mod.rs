@@ -26,7 +26,10 @@ pub fn handle_block(
                     instructions_to_return.push(instr.clone());
                 });
 
-                if index == total_block_stmts && compilation_state.should_output {
+                if index == total_block_stmts
+                    && compilation_state.should_output
+                    && compilation_state.scope == 0
+                {
                     instructions_to_return.push(Instruction::new(
                         "Return".to_string(),
                         vec!["Thing_to_return".to_string()],

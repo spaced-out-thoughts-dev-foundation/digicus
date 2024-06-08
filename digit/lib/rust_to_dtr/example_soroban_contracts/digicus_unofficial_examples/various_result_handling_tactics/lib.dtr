@@ -1,0 +1,21 @@
+[Contract]: VariousResultHandlingTacticsContract
+
+[InternalFunctions]:
+-() [return_some_thing]
+	* Inputs:
+	{
+	}
+	* Output: i32
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (Some, 42), assign: some_thing, scope: 0 }
+			{ instruction: assign, input: (some_thing), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 0 }
+			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_0, 1), scope: 0 }
+			{ instruction: log_string, input: ("Doing a thing"), assign: Thing_to_return, scope: 1 }
+			{ instruction: Return, input: (some_thing), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+:[User Defined Types]

@@ -153,7 +153,32 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
     dtr_code.push_str("{\n");
 
     item.variants.iter().for_each(|variant| {
-        dtr_code.push_str(&format!("\t{}\n", variant.ident));
+        dtr_code.push_str(&format!("\t{}", variant.ident));
+
+        match &variant.fields {
+            syn::Fields::Named(fields_named) => {
+                let mut innerd_enum_types: Vec<String> = vec![];
+
+                // ASSUMPTION: here we ignore the name
+                fields_named.named.iter().for_each(|field| {
+                    innerd_enum_types.push(figure_out_type(&field.ty.clone()).unwrap_or_default());
+                });
+
+                dtr_code.push_str(format!(": ({})\n", innerd_enum_types.join(", ")).as_str());
+            }
+            syn::Fields::Unnamed(fields_unnamed) => {
+                let mut innerd_enum_types: Vec<String> = vec![];
+
+                fields_unnamed.unnamed.iter().for_each(|field| {
+                    innerd_enum_types.push(figure_out_type(&field.ty.clone()).unwrap_or_default());
+                });
+
+                dtr_code.push_str(format!(": ({})\n", innerd_enum_types.join(", ")).as_str());
+            }
+            syn::Fields::Unit => {
+                dtr_code.push_str(": ()\n");
+            }
+        }
     });
 
     dtr_code.push_str("}\n");

@@ -75,14 +75,14 @@ $
 [User Defined Types]:
 * (DataKey)
 {
-Init
-Balance
+Init: ()
+Balance: ()
 }
 
 * (TimeBoundKind)
 {
-Before
-After
+Before: ()
+After: ()
 }
 * (TimeBound)
 {

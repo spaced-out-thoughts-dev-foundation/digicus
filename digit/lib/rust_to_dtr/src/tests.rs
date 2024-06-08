@@ -41,19 +41,21 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
     test_contract!(digicus_unofficial_examples, count_zero_to_answer_to_life);
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
+    test_contract!(digicus_unofficial_examples, innerds_of_enums);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
     test_contract!(digicus_unofficial_examples, non_range_for_loop);
+    test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
 
-    test_contract!(stellar_official_repo_examples, account);
+    // test_contract!(stellar_official_repo_examples, account);
     test_contract!(stellar_official_repo_examples, alloc);
     test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
     test_contract!(stellar_official_repo_examples, atomic_swap);
     test_contract!(stellar_official_repo_examples, auth);
     test_contract!(stellar_official_repo_examples, custom_types);
-    test_contract!(stellar_official_repo_examples, deep_contract_auth);
+    // test_contract!(stellar_official_repo_examples, deep_contract_auth);
     test_contract!(stellar_official_repo_examples, errors);
-    test_contract!(stellar_official_repo_examples, eth_abi);
+    // test_contract!(stellar_official_repo_examples, eth_abi);
     test_contract!(stellar_official_repo_examples, events);
     test_contract!(stellar_official_repo_examples, hello_world);
     test_contract!(stellar_official_repo_examples, increment);

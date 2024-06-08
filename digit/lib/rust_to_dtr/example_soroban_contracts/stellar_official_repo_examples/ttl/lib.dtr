@@ -57,7 +57,7 @@ $
 [User Defined Types]:
 * (DataKey)
 {
-MyKey
+MyKey: ()
 }
 
 :[User Defined Types]

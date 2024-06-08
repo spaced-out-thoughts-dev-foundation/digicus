@@ -42,7 +42,7 @@ $
 [User Defined Types]:
 * (DataKey)
 {
-Owner
+Owner: ()
 }
 
 :[User Defined Types]

@@ -117,7 +117,7 @@ $
 [User Defined Types]:
 * (DataKey)
 {
-Offer
+Offer: ()
 }
 * (Offer)
 {
