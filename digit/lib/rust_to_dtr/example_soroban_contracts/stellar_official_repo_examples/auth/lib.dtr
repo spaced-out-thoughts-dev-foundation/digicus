@@ -12,8 +12,8 @@ value: u32
 * Instructions:
 $
 { instruction: evaluate, input: (user.require_auth), scope: 0 }
-{ instruction: evaluate, input: (user.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (DataKey::Counter, 1_CALL_EXPRESSION_ARG), assign: key, scope: 0 }
+{ instruction: evaluate, input: (user.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (DataKey::Counter, CALL_EXPRESSION_ARG_1), assign: key, scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, key), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }

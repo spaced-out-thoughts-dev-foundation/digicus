@@ -72,8 +72,8 @@
 			{ instruction: increment, input: (context), scope: 0 }
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
-			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
@@ -138,8 +138,8 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: field, input: (signature, public_key), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-			{ instruction: evaluate, input: (DataKey::Signer, 1_CALL_EXPRESSION_ARG), assign: 1_METHOD_CALL_ARG_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (DataKey::Signer, CALL_EXPRESSION_ARG_1), assign: 1_METHOD_CALL_ARG_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.has, 1_METHOD_CALL_ARG_2), assign: UNARY_ARGUMENT_1, scope: 0 }
 			{ instruction: evaluate, input: (!, UNARY_ARGUMENT_1), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
@@ -154,8 +154,8 @@
 			{ instruction: increment, input: (i), scope: 0 }
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
-			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 -() [verify_authorization_policy]
@@ -190,8 +190,8 @@
 			{ instruction: evaluate, input: (not_equal_to, BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: and, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 1 }
-			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: RETURN_VALUE_LABEL, scope: 1 }
+			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 1 }
+			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: RETURN_VALUE_LABEL, scope: 1 }
 			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 1 }
 			{ instruction: field, input: (contract_context, contract), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
@@ -202,8 +202,8 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 100 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 100 }
 			{ instruction: field, input: (contract_context, contract), assign: METHOD_CALL_EXPRESSION_2, scope: 100 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 100 }
-			{ instruction: evaluate, input: (DataKey::SpendLimit, 1_CALL_EXPRESSION_ARG), assign: 1_METHOD_CALL_ARG_1, scope: 100 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: CALL_EXPRESSION_ARG_1, scope: 100 }
+			{ instruction: evaluate, input: (DataKey::SpendLimit, CALL_EXPRESSION_ARG_1), assign: 1_METHOD_CALL_ARG_1, scope: 100 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, 1_METHOD_CALL_ARG_1), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 100 }
 			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_0, 101), assign: else_branch, scope: 100 }
 			{ instruction: unconditional_jump, input: (200), assign: else_branch, scope: 100 }
@@ -229,8 +229,8 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.clone), assign: 1_METHOD_CALL_ARG_0, scope: 1 }
 			{ instruction: subtract, input: (spend_left, spent), assign: 2_METHOD_CALL_ARG_1, scope: 1 }
 			{ instruction: evaluate, input: (spend_left_per_token.set, 1_METHOD_CALL_ARG_0, 2_METHOD_CALL_ARG_1), assign: Thing_to_return, scope: 1 }
-			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 

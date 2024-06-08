@@ -23,8 +23,8 @@
 			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: r, scope: 0 }
 			{ instruction: initialize_udt, input: (Output, a, r), assign: output, scope: 0 }
 			{ instruction: evaluate, input: (output.abi_encode), assign: output_encoded, scope: 0 }
-			{ instruction: evaluate, input: (Bytes::from_slice, e, output_encoded), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-			{ instruction: evaluate, input: (Bytes::from_slice, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: evaluate, input: (Bytes::from_slice, e, output_encoded), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (Bytes::from_slice, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]

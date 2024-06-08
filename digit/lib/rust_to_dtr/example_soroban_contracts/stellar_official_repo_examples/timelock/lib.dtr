@@ -50,8 +50,8 @@ $
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Balance), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: claimable_balance, scope: 0 }
-{ instruction: field, input: (claimable_balance, time_bound), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (check_time_bound, env, 2_CALL_EXPRESSION_ARG), assign: UNARY_ARGUMENT_0, scope: 0 }
+{ instruction: field, input: (claimable_balance, time_bound), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
+{ instruction: evaluate, input: (check_time_bound, env, CALL_EXPRESSION_ARG_2), assign: UNARY_ARGUMENT_0, scope: 0 }
 { instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 { instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 { instruction: panic, input: ("time predicate is not fulfilled"), scope: 1 }
@@ -60,8 +60,8 @@ $
 { instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 { instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 { instruction: panic, input: ("claimant is not allowed to claim this balance"), scope: 1 }
-{ instruction: field, input: (claimable_balance, token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (token::Client::new, env, 2_CALL_EXPRESSION_ARG), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+{ instruction: field, input: (claimable_balance, token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, env, CALL_EXPRESSION_ARG_2), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (env.current_contract_address), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
 { instruction: field, input: (claimable_balance, amount), assign: 3_METHOD_CALL_ARG_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, 1_METHOD_CALL_ARG_0, claimant, 3_METHOD_CALL_ARG_2), scope: 0 }

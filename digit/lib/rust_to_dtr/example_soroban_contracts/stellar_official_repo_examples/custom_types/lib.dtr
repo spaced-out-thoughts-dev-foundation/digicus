@@ -9,8 +9,8 @@ incr: u32
 * Output: u32
 * Instructions:
 $
-{ instruction: evaluate, input: (env.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (get_state, 1_CALL_EXPRESSION_ARG), assign: state, scope: 0 }
+{ instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+{ instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1), assign: state, scope: 0 }
 { instruction: field, input: (state, count), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 { instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, incr), scope: 0 }
 { instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }

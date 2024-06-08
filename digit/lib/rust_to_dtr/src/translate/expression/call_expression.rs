@@ -15,7 +15,7 @@ pub fn handle_call_expression(
 
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
-        let arg_name = format!("{}_CALL_EXPRESSION_ARG", index);
+        let arg_name = format!("CALL_EXPRESSION_ARG_{}", index);
         let expressions_parsed: Vec<Instruction> = match parse_expression(
             &arg,
             &mut compilation_state.with_assignment(Some(arg_name.clone())),
@@ -83,28 +83,28 @@ mod tests {
             Instruction::new(
                 "assign".to_string(),
                 vec!["bar".to_string()],
-                "1_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_1".to_string(),
                 0,
             ),
             Instruction::new(
                 "assign".to_string(),
                 vec!["baz".to_string()],
-                "2_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_2".to_string(),
                 0,
             ),
             Instruction::new(
                 "assign".to_string(),
                 vec!["10".to_string()],
-                "3_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_3".to_string(),
                 0,
             ),
             Instruction::new(
                 "evaluate".to_string(),
                 vec![
                     "CALL_EXPRESSION_FUNCTION_0".to_string(),
-                    "1_CALL_EXPRESSION_ARG".to_string(),
-                    "2_CALL_EXPRESSION_ARG".to_string(),
-                    "3_CALL_EXPRESSION_ARG".to_string(),
+                    "CALL_EXPRESSION_ARG_1".to_string(),
+                    "CALL_EXPRESSION_ARG_2".to_string(),
+                    "CALL_EXPRESSION_ARG_3".to_string(),
                 ],
                 "".to_string(),
                 0,
@@ -131,28 +131,28 @@ mod tests {
             Instruction::new(
                 "assign".to_string(),
                 vec!["bar".to_string()],
-                "1_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_1".to_string(),
                 0,
             ),
             Instruction::new(
                 "assign".to_string(),
                 vec!["baz".to_string()],
-                "2_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_2".to_string(),
                 0,
             ),
             Instruction::new(
                 "assign".to_string(),
                 vec!["10".to_string()],
-                "3_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_3".to_string(),
                 0,
             ),
             Instruction::new(
                 "evaluate".to_string(),
                 vec![
                     "CALL_EXPRESSION_FUNCTION_0".to_string(),
-                    "1_CALL_EXPRESSION_ARG".to_string(),
-                    "2_CALL_EXPRESSION_ARG".to_string(),
-                    "3_CALL_EXPRESSION_ARG".to_string(),
+                    "CALL_EXPRESSION_ARG_1".to_string(),
+                    "CALL_EXPRESSION_ARG_2".to_string(),
+                    "CALL_EXPRESSION_ARG_3".to_string(),
                 ],
                 "".to_string(),
                 0,
@@ -201,14 +201,14 @@ mod tests {
                     "count".to_string(),
                     "last_incr".to_string(),
                 ],
-                "1_CALL_EXPRESSION_ARG".to_string(),
+                "CALL_EXPRESSION_ARG_1".to_string(),
                 0,
             ),
             Instruction::new(
                 "evaluate".to_string(),
                 vec![
                     "CALL_EXPRESSION_FUNCTION_0".to_string(),
-                    "1_CALL_EXPRESSION_ARG".to_string(),
+                    "CALL_EXPRESSION_ARG_1".to_string(),
                 ],
                 "".to_string(),
                 0,

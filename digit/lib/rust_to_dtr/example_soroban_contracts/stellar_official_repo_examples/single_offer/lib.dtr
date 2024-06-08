@@ -29,8 +29,8 @@ $
 { instruction: assign, input: (buy_token), assign: buy_token, scope: 0 }
 { instruction: assign, input: (sell_price), assign: sell_price, scope: 0 }
 { instruction: assign, input: (buy_price), assign: buy_price, scope: 0 }
-{ instruction: initialize_udt, input: (Offer, seller, sell_token, buy_token, sell_price, buy_price), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (write_offer, e, 2_CALL_EXPRESSION_ARG), scope: 0 }
+{ instruction: initialize_udt, input: (Offer, seller, sell_token, buy_token, sell_price, buy_price), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
+{ instruction: evaluate, input: (write_offer, e, CALL_EXPRESSION_ARG_2), scope: 0 }
 $
 -() [trade]
 * Inputs:
@@ -44,10 +44,10 @@ min_sell_token_amount: i128
 $
 { instruction: evaluate, input: (buyer.require_auth), scope: 0 }
 { instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
-{ instruction: field, input: (offer, sell_token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (token::Client::new, e, 2_CALL_EXPRESSION_ARG), assign: sell_token_client, scope: 0 }
-{ instruction: field, input: (offer, buy_token), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
-{ instruction: evaluate, input: (token::Client::new, e, 2_CALL_EXPRESSION_ARG), assign: buy_token_client, scope: 0 }
+{ instruction: field, input: (offer, sell_token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, e, CALL_EXPRESSION_ARG_2), assign: sell_token_client, scope: 0 }
+{ instruction: field, input: (offer, buy_token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
+{ instruction: evaluate, input: (token::Client::new, e, CALL_EXPRESSION_ARG_2), assign: buy_token_client, scope: 0 }
 { instruction: field, input: (offer, sell_price), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
 { instruction: evaluate, input: (buy_token_amount.checked_mul, 1_METHOD_CALL_ARG_1), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_optimized), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
