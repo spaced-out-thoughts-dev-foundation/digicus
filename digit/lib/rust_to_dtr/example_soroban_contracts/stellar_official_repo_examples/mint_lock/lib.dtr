@@ -1,0 +1,177 @@
+[Contract]: Contract
+
+[InternalFunctions]:
+-() [set_admin]
+	* Inputs:
+	{
+		env: Env
+		new_admin: Address
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, StorageKey::Admin), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 0 }
+			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_0, 1), scope: 0 }
+			{ instruction: evaluate, input: (admin.require_auth), scope: 1 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, StorageKey::Admin, new_admin), scope: 0 }
+		$
+-() [admin]
+	* Inputs:
+	{
+		env: Env
+	}
+	* Output: Address
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, StorageKey::Admin), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
+-() [set_minter]
+	* Inputs:
+	{
+		env: Env
+		contract: Address
+		minter: Address
+		config: MinterConfig
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (admin, 1_CALL_EXPRESSION_ARG), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.require_auth), scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.persistent), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (StorageKey::Minter, contract, minter), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, 1_METHOD_CALL_ARG_0, config), scope: 0 }
+		$
+-() [minter]
+	* Inputs:
+	{
+		env: Env
+		contract: Address
+		minter: Address
+	}
+	* Output: Result<(MinterConfig, u32, MinterStats), Error>
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.persistent), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (contract.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (minter.clone), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (StorageKey::Minter, 1_CALL_EXPRESSION_ARG, 2_CALL_EXPRESSION_ARG), assign: 1_METHOD_CALL_ARG_2, scope: 0 }
+			{ instruction: evaluate, input: (minter.get, 1_METHOD_CALL_ARG_2), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.ok_or, Error::NotAuthorizedMinter), assign: config, scope: 0 }
+			{ instruction: evaluate, input: (env.ledger), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.sequence), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
+			{ instruction: field, input: (config, epoch_length), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
+			{ instruction: divide, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: epoch, scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.temporary), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (contract.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (minter.clone), assign: 2_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: field, input: (config, epoch_length), assign: 3_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (StorageKey::MinterStats, 1_CALL_EXPRESSION_ARG, 2_CALL_EXPRESSION_ARG, 3_CALL_EXPRESSION_ARG, epoch), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
+			{ instruction: evaluate, input: (minter.get, 1_METHOD_CALL_ARG_1), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_or_default), assign: stats, scope: 0 }
+			{ instruction: create_tuple, input: (config, epoch, stats), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
+-() [mint]
+	* Inputs:
+	{
+		env: Env
+		contract: Address
+		minter: Address
+		to: Address
+		amount: i128
+	}
+	* Output: Result<(), Error>
+	* Instructions:
+		$
+			{ instruction: create_tuple, input: (contract, to, amount), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
+			{ instruction: evaluate, input: (minter.require_auth_for_args, 1_METHOD_CALL_ARG_0), scope: 0 }
+			{ instruction: evaluate, input: (less_than, amount, 0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: evaluate, input: (Err, Error::NegativeAmount), assign: RETURN_VALUE_LABEL, scope: 1 }
+			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 1 }
+			{ instruction: evaluate, input: (env.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (admin, 1_CALL_EXPRESSION_ARG), assign: admin, scope: 0 }
+			{ instruction: evaluate, input: (not_equal_to, admin, minter), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.persistent), assign: METHOD_CALL_EXPRESSION_1, scope: 1 }
+			{ instruction: evaluate, input: (contract.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 1 }
+			{ instruction: evaluate, input: (minter.clone), assign: 2_CALL_EXPRESSION_ARG, scope: 1 }
+			{ instruction: evaluate, input: (StorageKey::Minter, 1_CALL_EXPRESSION_ARG, 2_CALL_EXPRESSION_ARG), assign: 1_METHOD_CALL_ARG_0, scope: 1 }
+			{ instruction: evaluate, input: (minter.get, 1_METHOD_CALL_ARG_0), assign: TupleStruct, scope: 1 }
+			{ instruction: evaluate, input: (env.ledger), assign: METHOD_CALL_EXPRESSION_0, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.sequence), assign: BINARY_EXPRESSION_LEFT, scope: 1 }
+			{ instruction: field, input: (config, epoch_length), assign: BINARY_EXPRESSION_RIGHT, scope: 1 }
+			{ instruction: divide, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: epoch, scope: 1 }
+			{ instruction: evaluate, input: (contract.clone), assign: 1_CALL_EXPRESSION_ARG, scope: 1 }
+			{ instruction: evaluate, input: (minter.clone), assign: 2_CALL_EXPRESSION_ARG, scope: 1 }
+			{ instruction: field, input: (config, epoch_length), assign: 3_CALL_EXPRESSION_ARG, scope: 1 }
+			{ instruction: evaluate, input: (StorageKey::MinterStats, 1_CALL_EXPRESSION_ARG, 2_CALL_EXPRESSION_ARG, 3_CALL_EXPRESSION_ARG, epoch), assign: minter_stats_key, scope: 1 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.temporary), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, minter_stats_key), assign: METHOD_CALL_EXPRESSION_0, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_or_default), assign: minter_stats, scope: 1 }
+			{ instruction: field, input: (minter_stats, consumed_limit), assign: BINARY_EXPRESSION_LEFT, scope: 1 }
+			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, amount), assign: consumed_limit, scope: 1 }
+			{ instruction: initialize_udt, input: (MinterStats, consumed_limit), assign: new_minter_stats, scope: 1 }
+			{ instruction: field, input: (new_minter_stats, consumed_limit), assign: BINARY_EXPRESSION_LEFT, scope: 1 }
+			{ instruction: field, input: (config, limit), assign: BINARY_EXPRESSION_RIGHT, scope: 1 }
+			{ instruction: evaluate, input: (greater_than, BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 1 }
+			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), scope: 1 }
+			{ instruction: evaluate, input: (Err, Error::DailyLimitInsufficient), assign: RETURN_VALUE_LABEL, scope: 2 }
+			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 2 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.temporary), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, minter_stats_key, new_minter_stats), scope: 1 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.temporary), assign: METHOD_CALL_EXPRESSION_3, scope: 1 }
+			{ instruction: field, input: (config, epoch_length), assign: BINARY_EXPRESSION_RIGHT, scope: 1 }
+			{ instruction: multiply, input: (epoch, BINARY_EXPRESSION_RIGHT), assign: 3_METHOD_CALL_ARG_2, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, minter_stats_key, 0, 3_METHOD_CALL_ARG_2), assign: Thing_to_return, scope: 1 }
+			{ instruction: evaluate, input: (MintClient::new, env, contract), assign: client, scope: 0 }
+			{ instruction: evaluate, input: (client.mint, to, amount), scope: 0 }
+			{ instruction: create_tuple, input: (), assign: 1_CALL_EXPRESSION_ARG, scope: 0 }
+			{ instruction: evaluate, input: (Ok, 1_CALL_EXPRESSION_ARG), assign: Thing_to_return, scope: 0 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (Error)
+{
+	NotAuthorizedMinter: ()
+	DailyLimitInsufficient: ()
+	NegativeAmount: ()
+}
+
+* (StorageKey)
+{
+	Admin: ()
+	Minter: (Address, Address)
+	MinterStats: (Address, Address, u32, u32)
+}
+* (MinterConfig)
+{
+	limit: i128
+	epoch_length: u32
+}
+* (MinterStats)
+{
+	consumed_limit: i128
+}
+
+:[User Defined Types]

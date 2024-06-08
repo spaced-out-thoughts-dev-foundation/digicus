@@ -1,0 +1,19 @@
+[Contract]: GetForceTypeAnswerToLife
+
+[InternalFunctions]:
+-() [fourty_two_and_then_some]
+	* Inputs:
+	{
+		env: Env
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.get, 42), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+:[User Defined Types]
