@@ -162,6 +162,14 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
     item.variants.iter().for_each(|variant| {
         dtr_code.push_str(&format!("\t{}", variant.ident));
 
+        let disc = match &variant.discriminant {
+            Some((_, expr)) => {
+                let instructions = parse_expression(&expr, &mut CompilationState::new()).unwrap();
+                instructions[0].input[0].clone()
+            }
+            None => "".to_string(),
+        };
+
         match &variant.fields {
             syn::Fields::Named(fields_named) => {
                 let mut innerd_enum_types: Vec<String> = vec![];
@@ -183,7 +191,11 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
                 dtr_code.push_str(format!(": ({})\n", innerd_enum_types.join(", ")).as_str());
             }
             syn::Fields::Unit => {
-                dtr_code.push_str(": ()\n");
+                if disc != "" {
+                    dtr_code.push_str(format!(" = {}\n", disc).as_str());
+                } else {
+                    dtr_code.push_str(": ()\n");
+                }
             }
         }
     });

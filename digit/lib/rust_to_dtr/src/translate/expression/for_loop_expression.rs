@@ -14,8 +14,7 @@ pub fn handle_for_loop_expression(
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut instructions = vec![];
 
-    let global_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    let global_uuid = compilation_state.get_global_uuid();
 
     let top_label = format!("loop_{}_top", global_uuid);
     let exit_label = format!("loop_{}_exit", global_uuid);

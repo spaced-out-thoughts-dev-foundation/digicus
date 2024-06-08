@@ -1,0 +1,26 @@
+[Contract]: AnswerToLifeContract
+
+[InternalFunctions]:
+-() [fourty_two]
+	* Inputs:
+	{
+		env: Env
+	}
+	* Output: u32
+	* Instructions:
+		$
+			{ instruction: Return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
+		$
+:[InternalFunctions]
+
+
+[User Defined Types]:
+* (SomeNumberedEnums)
+{
+	NotTheAnswerToLife = 0
+	CloserToTheAnswerToLife = 41
+	AnswerToLife = 42
+}
+
+:[User Defined Types]
+

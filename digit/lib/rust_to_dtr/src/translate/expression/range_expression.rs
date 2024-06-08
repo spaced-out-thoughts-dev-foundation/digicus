@@ -25,10 +25,8 @@ pub fn handle_create_range(
     let mut instructions: Vec<Instruction> = vec![];
     let mut inputs: Vec<String> = vec![];
 
-    let range_start: String = format!("RANGE_START_{}", compilation_state.global_uuid);
-    compilation_state.increment_global_uuid();
-    let range_end: String = format!("RANGE_END_{}", compilation_state.global_uuid);
-    compilation_state.increment_global_uuid();
+    let range_start: String = format!("RANGE_START_{}", compilation_state.get_global_uuid());
+    let range_end: String = format!("RANGE_END_{}", compilation_state.get_global_uuid());
 
     inputs.push(range_start.clone());
     let start = match expr.start.clone() {

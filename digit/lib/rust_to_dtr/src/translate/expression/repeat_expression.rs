@@ -11,12 +11,14 @@ pub fn handle_repeat_expression(
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut instructions: Vec<Instruction> = vec![];
-    let repeat_expression_name =
-        format!("REPEAT_EXPRESSION_VALUE_{}", compilation_state.global_uuid);
-    compilation_state.global_uuid += 1;
-    let repeat_expression_length =
-        format!("REPEAT_EXPRESSION_LENGTH_{}", compilation_state.global_uuid);
-    compilation_state.global_uuid += 1;
+    let repeat_expression_name = format!(
+        "REPEAT_EXPRESSION_VALUE_{}",
+        compilation_state.get_global_uuid()
+    );
+    let repeat_expression_length = format!(
+        "REPEAT_EXPRESSION_LENGTH_{}",
+        compilation_state.get_global_uuid()
+    );
 
     instructions.extend(parse_expression(
         &expr.expr,

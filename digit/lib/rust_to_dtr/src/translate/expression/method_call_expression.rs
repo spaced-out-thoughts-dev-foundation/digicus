@@ -15,8 +15,7 @@ pub fn handle_method_call_expression(
 
     let mut expressions: Vec<Instruction> = Vec::new();
     expr.args.iter().for_each(|arg| {
-        let unique_uuid = compilation_state.global_uuid;
-        compilation_state.increment_global_uuid();
+        let unique_uuid = compilation_state.get_global_uuid();
         let arg_name = format!("METHOD_CALL_ARG_{}_{}", index, unique_uuid);
         let expressions_parsed: Vec<Instruction> = match parse_expression(
             &arg,
@@ -33,8 +32,7 @@ pub fn handle_method_call_expression(
         index += 1;
     });
 
-    let unique_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    let unique_uuid = compilation_state.get_global_uuid();
     let mut receiver: Vec<Instruction> = parse_expression(
         &expr.receiver,
         &mut compilation_state.with_assignment(Some(

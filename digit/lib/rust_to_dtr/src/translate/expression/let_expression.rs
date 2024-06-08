@@ -8,8 +8,7 @@ pub fn handle_let_expression(
     let_expr: syn::ExprLet,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let global_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    let global_uuid = compilation_state.get_global_uuid();
     let input_value_name_for_let = format!("INPUT_VALUE_NAME_FOR_LET_{}", global_uuid);
     let mut preceding_instructions = parse_expression(
         &let_expr.expr,

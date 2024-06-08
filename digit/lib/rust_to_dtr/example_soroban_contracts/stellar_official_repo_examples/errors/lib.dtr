@@ -2,42 +2,44 @@
 
 [InternalFunctions]:
 -() [increment]
-* Inputs:
-{
-env: Env
-}
-* Output: Result<u32, Error>
-* Instructions:
-$
-{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
-{ instruction: log_string, input: (env, "count: {}", count), scope: 0 }
-{ instruction: add_and_assign, input: (count, 1), scope: 0 }
-{ instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), assign: Thing_to_return, scope: 0 }
-{ instruction: unconditional_jump, input: (100), assign: Thing_to_return, scope: 0 }
-{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 1 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, COUNTER, count), scope: 1 }
-{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
-{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
-{ instruction: Return, input: (Thing_to_return), scope: 0 }
-$
+	* Inputs:
+	{
+		env: Env
+	}
+	* Output: Result<u32, Error>
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
+			{ instruction: log_string, input: (env, "count: {}", count), scope: 0 }
+			{ instruction: add_and_assign, input: (count, 1), scope: 0 }
+			{ instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), assign: Thing_to_return, scope: 0 }
+			{ instruction: unconditional_jump, input: (100), assign: Thing_to_return, scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_9, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_9.instance), assign: METHOD_CALL_EXPRESSION_8, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_8.set, COUNTER, count), scope: 1 }
+			{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
+			{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
+			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+		$
 :[InternalFunctions]
+
 
 [User Defined Types]:
 * (Error)
 {
-LimitReached: ()
+	LimitReached = 1
 }
 
 :[User Defined Types]
 [State]:
 * [COUNTER]
-* Type: String
-* Initial Value: "COUNTER"
+	* Type: String
+	* Initial Value: "COUNTER"
 * [MAX]
-* Type: u32
-* Initial Value: 5
+	* Type: u32
+	* Initial Value: 5
+

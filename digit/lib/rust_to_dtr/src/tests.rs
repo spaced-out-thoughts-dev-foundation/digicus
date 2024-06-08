@@ -1,7 +1,15 @@
 #[cfg(test)]
 mod full_contract_tests {
-    use crate::rust_to_dtr_c::parse_to_dtr;
+    use crate::{
+        common::compilation_state::GLOBAL_UNIQUE_NUMBER_GENERATOR, rust_to_dtr_c::parse_to_dtr,
+    };
+    use rstest::rstest;
     use std::fs;
+
+    // Setup function to reset the global UUID generator
+    fn setup() {
+        GLOBAL_UNIQUE_NUMBER_GENERATOR.reset();
+    }
 
     fn read_file_content(file_path: &str) -> String {
         fs::read_to_string(file_path).expect("Something went wrong reading the file")
@@ -27,10 +35,13 @@ mod full_contract_tests {
     }
 
     macro_rules! test_contract {
+
         ($directory_name:ident, $contract_name:ident) => {
             paste::item! {
+                #[rstest]
                 #[test]
                 fn [< test_ $directory_name _ $contract_name >] () {
+                    setup();
                     assert_transpiled_code(&format!("example_soroban_contracts/{}/{}", stringify!($directory_name), stringify!($contract_name)));
                 }
             }
@@ -45,6 +56,10 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, innerds_of_enums);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
     test_contract!(digicus_unofficial_examples, non_range_for_loop);
+    test_contract!(
+        digicus_unofficial_examples,
+        numbered_enums_to_the_answer_of_life
+    );
     test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
 
     test_contract!(stellar_official_repo_examples, account);

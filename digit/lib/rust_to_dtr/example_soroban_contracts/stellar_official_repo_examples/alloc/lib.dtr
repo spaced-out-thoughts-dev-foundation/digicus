@@ -11,18 +11,18 @@
 	* Instructions:
 		$
 			{ instruction: create_list, input: (), assign: v1, scope: 0 }
-			{ instruction: create_range, input: (0, count), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
+			{ instruction: create_range, input: (0, count), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (v1.push, i), assign: METHOD_CALL_ARG_1_0, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.for_each, METHOD_CALL_ARG_1_0), scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.for_each, METHOD_CALL_ARG_1_0), scope: 0 }
 			{ instruction: assign, input: (0), assign: sum, scope: 0 }
 			{ instruction: assign, input: (v1), assign: i, scope: 0 }
-			{ instruction: label, input: (loop_0_top), scope: 0 }
+			{ instruction: label, input: (loop_6_top), scope: 0 }
 			{ instruction: end_of_iteration_check, input: (v1), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
+			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_6_exit), scope: 0 }
 			{ instruction: add_and_assign, input: (sum, i), scope: 0 }
 			{ instruction: increment, input: (v1), scope: 0 }
-			{ instruction: goto, input: (loop_0_top), scope: 0 }
-			{ instruction: label, input: (loop_0_exit), scope: 0 }
+			{ instruction: goto, input: (loop_6_top), scope: 0 }
+			{ instruction: label, input: (loop_6_exit), scope: 0 }
 			{ instruction: Return, input: (sum), scope: 0 }
 		$
 :[InternalFunctions]

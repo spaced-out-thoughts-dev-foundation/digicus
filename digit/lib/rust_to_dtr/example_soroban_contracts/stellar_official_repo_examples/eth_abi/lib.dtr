@@ -11,12 +11,12 @@
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (repeat, 0, 128), assign: input_buf, scope: 0 }
-			{ instruction: evaluate, input: (input.len), assign: RANGE_END_3, scope: 0 }
-			{ instruction: create_range, input: (0, RANGE_END_3), assign: index_name_1, scope: 0 }
-			{ instruction: index, input: (input_buf, index_name_1), assign: input_slice, scope: 0 }
+			{ instruction: evaluate, input: (input.len), assign: RANGE_END_5, scope: 0 }
+			{ instruction: create_range, input: (0, RANGE_END_5), assign: index_name_3, scope: 0 }
+			{ instruction: index, input: (input_buf, index_name_3), assign: input_slice, scope: 0 }
 			{ instruction: evaluate, input: (input.copy_into_slice, input_slice), scope: 0 }
-			{ instruction: evaluate, input: (Input::abi_decode, input_slice, false), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.map_err, Error::Decode), assign: input, scope: 0 }
+			{ instruction: evaluate, input: (Input::abi_decode, input_slice, false), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.map_err, Error::Decode), assign: input, scope: 0 }
 			{ instruction: field, input: (input, a), assign: a, scope: 0 }
 			{ instruction: field, input: (input, b), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 			{ instruction: field, input: (input, c), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
@@ -24,7 +24,7 @@
 			{ instruction: initialize_udt, input: (Output, a, r), assign: output, scope: 0 }
 			{ instruction: evaluate, input: (output.abi_encode), assign: output_encoded, scope: 0 }
 			{ instruction: evaluate, input: (Bytes::from_slice, e, output_encoded), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
-			{ instruction: evaluate, input: (Bytes::from_slice, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
+			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
@@ -33,7 +33,7 @@
 [User Defined Types]:
 * (Error)
 {
-	Decode: ()
+	Decode = 1
 }
 
 * (Solidity ABI Types)

@@ -11,8 +11,7 @@ pub fn handle_index_expression(
     expr: &ExprIndex,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let mut global_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    let mut global_uuid = compilation_state.get_global_uuid();
     let thing_being_index_name = format!("thing_being_indexed_{}", global_uuid);
 
     let mut instructions = parse_expression(
@@ -20,8 +19,7 @@ pub fn handle_index_expression(
         &mut compilation_state.with_assignment(Some(thing_being_index_name.clone())),
     )?;
 
-    global_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    global_uuid = compilation_state.get_global_uuid();
     let index_name = format!("index_name_{}", global_uuid);
 
     let index_instructions = parse_expression(
@@ -118,14 +116,14 @@ mod tests {
                 Instruction::new(
                     "assign".to_string(),
                     vec!["2".to_string()],
-                    "index_name_1".to_string(),
+                    "index_name_3".to_string(),
                     compilation_state.scope
                 ),
                 Instruction::new(
                     "index".to_string(),
                     vec![
                         "thing_being_indexed_0".to_string(),
-                        "index_name_1".to_string()
+                        "index_name_3".to_string()
                     ],
                     "final_indexed_thing".to_string(),
                     compilation_state.scope

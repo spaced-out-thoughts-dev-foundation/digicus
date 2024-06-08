@@ -31,8 +31,7 @@ pub fn handle_call_expression(
         index += 1;
     });
 
-    let unique_uuid = compilation_state.global_uuid;
-    compilation_state.increment_global_uuid();
+    let unique_uuid = compilation_state.get_global_uuid();
     let mut func: Vec<Instruction> = parse_expression(
         &expr.func,
         &mut compilation_state.with_assignment(Some(
