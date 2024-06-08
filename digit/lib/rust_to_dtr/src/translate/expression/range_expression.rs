@@ -30,6 +30,7 @@ pub fn handle_create_range(
     let range_end: String = format!("RANGE_END_{}", compilation_state.global_uuid);
     compilation_state.increment_global_uuid();
 
+    inputs.push(range_start.clone());
     let start = match expr.start.clone() {
         Some(start) => {
             let start_instructions = parse_expression(
@@ -37,13 +38,14 @@ pub fn handle_create_range(
                 &mut compilation_state.with_assignment(Some(range_start.clone())),
             )?;
 
-            inputs.push(range_start.clone());
-
             start_instructions
         }
-        None => Err(NotTranslatableError::Custom(
-            "Undefined start ranges are not supported".to_string(),
-        ))?,
+        // ASSUMPTION: if not set, this is 0
+        None => vec![Instruction::from_compilation_state(
+            "assign".to_string(),
+            vec!["0".to_string()],
+            &mut compilation_state.with_assignment(Some(range_start.clone())),
+        )],
     };
 
     let end = match expr.end.clone() {
@@ -58,7 +60,7 @@ pub fn handle_create_range(
             end_instructions
         }
         None => Err(NotTranslatableError::Custom(
-            "Undefined start ranges are not supported".to_string(),
+            "Undefined end of range is not supported".to_string(),
         ))?,
     };
 

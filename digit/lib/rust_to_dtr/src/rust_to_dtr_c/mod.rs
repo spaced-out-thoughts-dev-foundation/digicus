@@ -81,6 +81,12 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
             syn::Item::Fn(fn_item) => {
                 outside_of_contract_functions.push(fn_item.clone());
             }
+            syn::Item::Macro(item_macro) => {
+                // TODO: handle other macros, this is hacky but covers a few cases
+                if parse_path(&item_macro.mac.path).as_str() == "sol" {
+                    user_defined_types.push(item.clone());
+                }
+            }
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
@@ -121,6 +127,7 @@ fn syn_item_to_user_defined_type(item: &syn::Item) -> String {
     match item {
         syn::Item::Struct(item_struct) => syn_item_struct_to_user_defined_type(item_struct),
         syn::Item::Enum(item_enum) => syn_item_enum_to_user_defined_type(item_enum),
+        syn::Item::Macro(macro_item) => syn_item_macro_to_user_defined_type(macro_item),
         _ => "".to_string(),
     }
 }
@@ -179,6 +186,27 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
                 dtr_code.push_str(": ()\n");
             }
         }
+    });
+
+    dtr_code.push_str("}\n");
+
+    dtr_code
+}
+
+fn syn_item_macro_to_user_defined_type(item: &syn::ItemMacro) -> String {
+    let mut dtr_code = String::new();
+    let macro_name = item.mac.path.segments[0].ident.to_string();
+    let macro_title = if macro_name == "sol" {
+        "Solidity ABI Types".to_string()
+    } else {
+        macro_name
+    };
+
+    dtr_code.push_str(&format!("\n* ({})\n", macro_title));
+    dtr_code.push_str("{\n");
+
+    item.mac.tokens.to_string().lines().for_each(|line| {
+        dtr_code.push_str(&format!("\t{}\n", line));
     });
 
     dtr_code.push_str("}\n");

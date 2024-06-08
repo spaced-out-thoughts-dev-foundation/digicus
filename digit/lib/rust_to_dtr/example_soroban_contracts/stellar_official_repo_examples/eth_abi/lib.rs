@@ -3,9 +3,6 @@ extern crate alloc;
 use alloy_sol_types::{sol, SolValue};
 use soroban_sdk::{contract, contracterror, contractimpl, Bytes, Env};
 
-#[cfg(test)]
-mod test;
-
 #[contracterror]
 #[repr(u32)]
 #[derive(Clone, Copy, Eq, PartialEq)]
@@ -16,17 +13,17 @@ pub enum Error {
 #[contract]
 pub struct Contract;
 
-// sol! {
-//     struct Input {
-//         bytes32 a;
-//         uint256 b;
-//         uint256 c;
-//     }
-//     struct Output {
-//         bytes32 a;
-//         uint256 r;
-//     }
-// }
+sol! {
+    struct Input {
+        bytes32 a;
+        uint256 b;
+        uint256 c;
+    }
+    struct Output {
+        bytes32 a;
+        uint256 r;
+    }
+}
 
 #[contractimpl]
 impl Contract {

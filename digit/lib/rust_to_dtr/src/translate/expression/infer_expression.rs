@@ -10,5 +10,5 @@ pub fn handle_infer_expression(
     _compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     // TODO: seems this doesn't warrant an instruction? Is this correct?
-    panic!("Infer expression not implemented")
+    Ok(vec![])
 }
