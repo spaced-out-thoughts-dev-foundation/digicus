@@ -4,7 +4,7 @@ GEM
     ast (2.4.2)
     diff-lcs (1.5.1)
     dtr_core (0.5.3)
-    dtr_to_rust (0.2.7)
+    dtr_to_rust (0.2.9)
     ffi (1.16.3)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
@@ -64,7 +64,7 @@ PLATFORMS
 
 DEPENDENCIES
   dtr_core (~> 0.5.3)
-  dtr_to_rust (~> 0.2.7)
+  dtr_to_rust (~> 0.2.9)
   ffi
   rspec
   rubocop
