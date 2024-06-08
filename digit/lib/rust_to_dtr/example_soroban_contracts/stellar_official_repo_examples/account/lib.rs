@@ -228,5 +228,3 @@ fn verify_authorization_policy(
     }
     Ok(())
 }
-
-mod test;

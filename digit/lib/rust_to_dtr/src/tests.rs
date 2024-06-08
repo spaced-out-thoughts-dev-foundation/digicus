@@ -47,7 +47,7 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, non_range_for_loop);
     test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
 
-    // test_contract!(stellar_official_repo_examples, account);
+    test_contract!(stellar_official_repo_examples, account);
     test_contract!(stellar_official_repo_examples, alloc);
     test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
