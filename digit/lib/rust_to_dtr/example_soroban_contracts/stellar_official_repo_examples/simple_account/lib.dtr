@@ -33,8 +33,8 @@ $
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Owner), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: public_key, scope: 0 }
 { instruction: evaluate, input: (env.crypto), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (signature_payload.into), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.ed25519_verify, public_key, 2_METHOD_CALL_ARG_1, signature), scope: 0 }
+{ instruction: evaluate, input: (signature_payload.into), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.ed25519_verify, public_key, METHOD_CALL_ARG_2_1, signature), scope: 0 }
 $
 :[InternalFunctions]
 

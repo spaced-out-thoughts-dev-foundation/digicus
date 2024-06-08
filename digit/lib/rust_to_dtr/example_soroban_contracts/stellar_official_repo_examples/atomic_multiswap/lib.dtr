@@ -33,13 +33,13 @@
 			{ instruction: evaluate, input: (less_than_or_equal_to, BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: and, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: field, input: (acc_a, address), assign: 1_METHOD_CALL_ARG_3, scope: 1 }
-			{ instruction: field, input: (acc_b, address), assign: 2_METHOD_CALL_ARG_4, scope: 1 }
-			{ instruction: field, input: (acc_a, amount), assign: 5_METHOD_CALL_ARG_7, scope: 1 }
-			{ instruction: field, input: (acc_a, min_recv), assign: 6_METHOD_CALL_ARG_8, scope: 1 }
-			{ instruction: field, input: (acc_b, amount), assign: 7_METHOD_CALL_ARG_9, scope: 1 }
-			{ instruction: field, input: (acc_b, min_recv), assign: 8_METHOD_CALL_ARG_10, scope: 1 }
-			{ instruction: evaluate, input: (swap_client.try_swap, 1_METHOD_CALL_ARG_3, 2_METHOD_CALL_ARG_4, token_a, token_b, 5_METHOD_CALL_ARG_7, 6_METHOD_CALL_ARG_8, 7_METHOD_CALL_ARG_9, 8_METHOD_CALL_ARG_10), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
+			{ instruction: field, input: (acc_a, address), assign: METHOD_CALL_ARG_1_3, scope: 1 }
+			{ instruction: field, input: (acc_b, address), assign: METHOD_CALL_ARG_2_4, scope: 1 }
+			{ instruction: field, input: (acc_a, amount), assign: METHOD_CALL_ARG_5_7, scope: 1 }
+			{ instruction: field, input: (acc_a, min_recv), assign: METHOD_CALL_ARG_6_8, scope: 1 }
+			{ instruction: field, input: (acc_b, amount), assign: METHOD_CALL_ARG_7_9, scope: 1 }
+			{ instruction: field, input: (acc_b, min_recv), assign: METHOD_CALL_ARG_8_10, scope: 1 }
+			{ instruction: evaluate, input: (swap_client.try_swap, METHOD_CALL_ARG_1_3, METHOD_CALL_ARG_2_4, token_a, token_b, METHOD_CALL_ARG_5_7, METHOD_CALL_ARG_6_8, METHOD_CALL_ARG_7_9, METHOD_CALL_ARG_8_10), assign: METHOD_CALL_EXPRESSION_2, scope: 1 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.is_ok), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 1 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), scope: 1 }
 			{ instruction: evaluate, input: (swaps_b.remove, i), scope: 2 }

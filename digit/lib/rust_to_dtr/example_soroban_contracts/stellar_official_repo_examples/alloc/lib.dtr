@@ -12,8 +12,8 @@
 		$
 			{ instruction: create_list, input: (), assign: v1, scope: 0 }
 			{ instruction: create_range, input: (0, count), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: evaluate, input: (v1.push, i), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.for_each, 1_METHOD_CALL_ARG_0), scope: 0 }
+			{ instruction: evaluate, input: (v1.push, i), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.for_each, METHOD_CALL_ARG_1_0), scope: 0 }
 			{ instruction: assign, input: (0), assign: sum, scope: 0 }
 			{ instruction: assign, input: (v1), assign: i, scope: 0 }
 			{ instruction: label, input: (loop_0_top), scope: 0 }

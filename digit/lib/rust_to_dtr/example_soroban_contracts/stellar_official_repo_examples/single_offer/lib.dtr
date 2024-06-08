@@ -48,8 +48,8 @@ $
 { instruction: evaluate, input: (token::Client::new, e, CALL_EXPRESSION_ARG_2), assign: sell_token_client, scope: 0 }
 { instruction: field, input: (offer, buy_token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
 { instruction: evaluate, input: (token::Client::new, e, CALL_EXPRESSION_ARG_2), assign: buy_token_client, scope: 0 }
-{ instruction: field, input: (offer, sell_price), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (buy_token_amount.checked_mul, 1_METHOD_CALL_ARG_1), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+{ instruction: field, input: (offer, sell_price), assign: METHOD_CALL_ARG_1_1, scope: 0 }
+{ instruction: evaluate, input: (buy_token_amount.checked_mul, METHOD_CALL_ARG_1_1), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap_optimized), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 { instruction: field, input: (offer, buy_price), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 { instruction: divide, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: sell_token_amount, scope: 0 }
@@ -59,8 +59,8 @@ $
 { instruction: evaluate, input: (e.current_contract_address), assign: contract, scope: 0 }
 { instruction: evaluate, input: (buy_token_client.transfer, buyer, contract, buy_token_amount), scope: 0 }
 { instruction: evaluate, input: (sell_token_client.transfer, contract, buyer, sell_token_amount), scope: 0 }
-{ instruction: field, input: (offer, seller), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (buy_token_client.transfer, contract, 2_METHOD_CALL_ARG_1, buy_token_amount), scope: 0 }
+{ instruction: field, input: (offer, seller), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (buy_token_client.transfer, contract, METHOD_CALL_ARG_2_1, buy_token_amount), scope: 0 }
 $
 -() [withdraw]
 * Inputs:
@@ -75,9 +75,9 @@ $
 { instruction: field, input: (offer, seller), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.require_auth), scope: 0 }
 { instruction: evaluate, input: (token::Client::new, e, token), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (e.current_contract_address), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-{ instruction: field, input: (offer, seller), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, 1_METHOD_CALL_ARG_0, 2_METHOD_CALL_ARG_1, amount), scope: 0 }
+{ instruction: evaluate, input: (e.current_contract_address), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+{ instruction: field, input: (offer, seller), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, METHOD_CALL_ARG_1_0, METHOD_CALL_ARG_2_1, amount), scope: 0 }
 $
 -() [updt_price]
 * Inputs:

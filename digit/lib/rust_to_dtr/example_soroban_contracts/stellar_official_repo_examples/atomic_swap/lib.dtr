@@ -25,13 +25,13 @@ $
 { instruction: evaluate, input: (token_a.clone), assign: 1_TUPLE_ARG, scope: 0 }
 { instruction: evaluate, input: (token_b.clone), assign: 2_TUPLE_ARG, scope: 0 }
 { instruction: create_tuple, input: (1_TUPLE_ARG, 2_TUPLE_ARG, amount_a, min_b_for_a), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-{ instruction: evaluate, input: (a.require_auth_for_args, 1_METHOD_CALL_ARG_0), scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+{ instruction: evaluate, input: (a.require_auth_for_args, METHOD_CALL_ARG_1_0), scope: 0 }
 { instruction: evaluate, input: (token_b.clone), assign: 1_TUPLE_ARG, scope: 0 }
 { instruction: evaluate, input: (token_a.clone), assign: 2_TUPLE_ARG, scope: 0 }
 { instruction: create_tuple, input: (1_TUPLE_ARG, 2_TUPLE_ARG, amount_b, min_a_for_b), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-{ instruction: evaluate, input: (b.require_auth_for_args, 1_METHOD_CALL_ARG_0), scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+{ instruction: evaluate, input: (b.require_auth_for_args, METHOD_CALL_ARG_1_0), scope: 0 }
 { instruction: evaluate, input: (move_token, env, token_a, a, b, amount_a, min_a_for_b), scope: 0 }
 { instruction: evaluate, input: (move_token, env, token_b, b, a, amount_b, min_b_for_a), scope: 0 }
 $
@@ -59,8 +59,8 @@ $
 { instruction: evaluate, input: (env.current_contract_address), assign: contract_address, scope: 0 }
 { instruction: evaluate, input: (token.transfer, from, contract_address, max_spend_amount), scope: 0 }
 { instruction: evaluate, input: (token.transfer, contract_address, to, transfer_amount), scope: 0 }
-{ instruction: subtract, input: (max_spend_amount, transfer_amount), assign: 3_METHOD_CALL_ARG_2, scope: 0 }
-{ instruction: evaluate, input: (token.transfer, contract_address, from, 3_METHOD_CALL_ARG_2), scope: 0 }
+{ instruction: subtract, input: (max_spend_amount, transfer_amount), assign: METHOD_CALL_ARG_3_2, scope: 0 }
+{ instruction: evaluate, input: (token.transfer, contract_address, from, METHOD_CALL_ARG_3_2), scope: 0 }
 $
 
 :[ExternalFunctions]

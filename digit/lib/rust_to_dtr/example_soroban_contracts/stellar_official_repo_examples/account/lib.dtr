@@ -15,16 +15,16 @@
 			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (DataKey::Signer, signer), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
-			{ instruction: create_tuple, input: (), assign: 2_METHOD_CALL_ARG_2, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.set, 1_METHOD_CALL_ARG_1, 2_METHOD_CALL_ARG_2), scope: 0 }
+			{ instruction: evaluate, input: (DataKey::Signer, signer), assign: METHOD_CALL_ARG_1_1, scope: 0 }
+			{ instruction: create_tuple, input: (), assign: METHOD_CALL_ARG_2_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.set, METHOD_CALL_ARG_1_1, METHOD_CALL_ARG_2_2), scope: 0 }
 			{ instruction: increment, input: (signer), scope: 0 }
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-			{ instruction: evaluate, input: (signers.len), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-			{ instruction: evaluate, input: (signers.set, DataKey::SignerCnt, 2_METHOD_CALL_ARG_1), scope: 0 }
+			{ instruction: evaluate, input: (signers.len), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+			{ instruction: evaluate, input: (signers.set, DataKey::SignerCnt, METHOD_CALL_ARG_2_1), scope: 0 }
 		$
 -() [add_limit]
 	* Inputs:
@@ -39,8 +39,8 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.require_auth), scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-			{ instruction: evaluate, input: (DataKey::SpendLimit, token), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, 1_METHOD_CALL_ARG_0, limit), scope: 0 }
+			{ instruction: evaluate, input: (DataKey::SpendLimit, token), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, METHOD_CALL_ARG_1_0, limit), scope: 0 }
 		$
 :[InternalFunctions]
 [InternalFunctions]:
@@ -127,8 +127,8 @@
 			{ instruction: evaluate, input: (signatures.get_unchecked, i), assign: signature, scope: 0 }
 			{ instruction: evaluate, input: (greater_than, i, 0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: subtract, input: (i, 1), assign: 1_METHOD_CALL_ARG_1, scope: 1 }
-			{ instruction: evaluate, input: (signatures.get_unchecked, 1_METHOD_CALL_ARG_1), assign: prev_signature, scope: 1 }
+			{ instruction: subtract, input: (i, 1), assign: METHOD_CALL_ARG_1_1, scope: 1 }
+			{ instruction: evaluate, input: (signatures.get_unchecked, METHOD_CALL_ARG_1_1), assign: prev_signature, scope: 1 }
 			{ instruction: field, input: (prev_signature, public_key), assign: BINARY_EXPRESSION_LEFT, scope: 1 }
 			{ instruction: field, input: (signature, public_key), assign: BINARY_EXPRESSION_RIGHT, scope: 1 }
 			{ instruction: evaluate, input: (greater_than_or_equal_to, BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 1 }
@@ -139,18 +139,18 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: field, input: (signature, public_key), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
-			{ instruction: evaluate, input: (DataKey::Signer, CALL_EXPRESSION_ARG_1), assign: 1_METHOD_CALL_ARG_2, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.has, 1_METHOD_CALL_ARG_2), assign: UNARY_ARGUMENT_1, scope: 0 }
+			{ instruction: evaluate, input: (DataKey::Signer, CALL_EXPRESSION_ARG_1), assign: METHOD_CALL_ARG_1_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.has, METHOD_CALL_ARG_1_2), assign: UNARY_ARGUMENT_1, scope: 0 }
 			{ instruction: evaluate, input: (!, UNARY_ARGUMENT_1), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 			{ instruction: evaluate, input: (Err, AccError::UnknownSigner), assign: RETURN_VALUE_LABEL, scope: 1 }
 			{ instruction: return, input: (RETURN_VALUE_LABEL), scope: 1 }
 			{ instruction: evaluate, input: (env.crypto), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-			{ instruction: field, input: (signature, public_key), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
+			{ instruction: field, input: (signature, public_key), assign: METHOD_CALL_ARG_1_1, scope: 0 }
 			{ instruction: evaluate, input: (signature_payload.clone), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.into), assign: 2_METHOD_CALL_ARG_2, scope: 0 }
-			{ instruction: field, input: (signature, signature), assign: 3_METHOD_CALL_ARG_3, scope: 0 }
-			{ instruction: evaluate, input: (signature_payload.ed25519_verify, 1_METHOD_CALL_ARG_1, 2_METHOD_CALL_ARG_2, 3_METHOD_CALL_ARG_3), scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.into), assign: METHOD_CALL_ARG_2_2, scope: 0 }
+			{ instruction: field, input: (signature, signature), assign: METHOD_CALL_ARG_3_3, scope: 0 }
+			{ instruction: evaluate, input: (signature_payload.ed25519_verify, METHOD_CALL_ARG_1_1, METHOD_CALL_ARG_2_2, METHOD_CALL_ARG_3_3), scope: 0 }
 			{ instruction: increment, input: (i), scope: 0 }
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
@@ -194,8 +194,8 @@
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: RETURN_VALUE_LABEL, scope: 1 }
 			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 1 }
 			{ instruction: field, input: (contract_context, contract), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: 1_METHOD_CALL_ARG_1, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, 1_METHOD_CALL_ARG_1), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: METHOD_CALL_ARG_1_1, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, METHOD_CALL_ARG_1_1), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 0 }
 			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_0, 1), assign: spend_left, scope: 0 }
 			{ instruction: unconditional_jump, input: (100), assign: spend_left, scope: 0 }
 			{ instruction: evaluate, input: (Some, spend_left), assign: Thing_to_return, scope: 1 }
@@ -203,8 +203,8 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 100 }
 			{ instruction: field, input: (contract_context, contract), assign: METHOD_CALL_EXPRESSION_2, scope: 100 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.clone), assign: CALL_EXPRESSION_ARG_1, scope: 100 }
-			{ instruction: evaluate, input: (DataKey::SpendLimit, CALL_EXPRESSION_ARG_1), assign: 1_METHOD_CALL_ARG_1, scope: 100 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, 1_METHOD_CALL_ARG_1), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 100 }
+			{ instruction: evaluate, input: (DataKey::SpendLimit, CALL_EXPRESSION_ARG_1), assign: METHOD_CALL_ARG_1_1, scope: 100 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, METHOD_CALL_ARG_1_1), assign: INPUT_VALUE_NAME_FOR_LET_0, scope: 100 }
 			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_0, 101), assign: else_branch, scope: 100 }
 			{ instruction: unconditional_jump, input: (200), assign: else_branch, scope: 100 }
 			{ instruction: evaluate, input: (Some, limit_left), assign: Thing_to_return, scope: 101 }
@@ -226,9 +226,9 @@
 			{ instruction: evaluate, input: (Err, AccError::NotEnoughSigners), assign: RETURN_VALUE_LABEL, scope: 2 }
 			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 2 }
 			{ instruction: field, input: (contract_context, contract), assign: METHOD_CALL_EXPRESSION_1, scope: 1 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.clone), assign: 1_METHOD_CALL_ARG_0, scope: 1 }
-			{ instruction: subtract, input: (spend_left, spent), assign: 2_METHOD_CALL_ARG_1, scope: 1 }
-			{ instruction: evaluate, input: (spend_left_per_token.set, 1_METHOD_CALL_ARG_0, 2_METHOD_CALL_ARG_1), assign: Thing_to_return, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.clone), assign: METHOD_CALL_ARG_1_0, scope: 1 }
+			{ instruction: subtract, input: (spend_left, spent), assign: METHOD_CALL_ARG_2_1, scope: 1 }
+			{ instruction: evaluate, input: (spend_left_per_token.set, METHOD_CALL_ARG_1_0, METHOD_CALL_ARG_2_1), assign: Thing_to_return, scope: 1 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: Return, input: (Thing_to_return), scope: 0 }

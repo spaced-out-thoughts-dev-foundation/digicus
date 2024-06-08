@@ -22,20 +22,20 @@ $
 { instruction: panic, input: ("contract has been already initialized"), scope: 1 }
 { instruction: evaluate, input: (from.require_auth), scope: 0 }
 { instruction: evaluate, input: (token::Client::new, env, token), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (env.current_contract_address), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, from, 2_METHOD_CALL_ARG_1, amount), scope: 0 }
+{ instruction: evaluate, input: (env.current_contract_address), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, from, METHOD_CALL_ARG_2_1, amount), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: assign, input: (token), assign: token, scope: 0 }
 { instruction: assign, input: (amount), assign: amount, scope: 0 }
 { instruction: assign, input: (time_bound), assign: time_bound, scope: 0 }
 { instruction: assign, input: (claimants), assign: claimants, scope: 0 }
-{ instruction: initialize_udt, input: (ClaimableBalance, token, amount, time_bound, claimants), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Balance, 2_METHOD_CALL_ARG_1), scope: 0 }
+{ instruction: initialize_udt, input: (ClaimableBalance, token, amount, time_bound, claimants), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Balance, METHOD_CALL_ARG_2_1), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
-{ instruction: create_tuple, input: (), assign: 2_METHOD_CALL_ARG_1, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Init, 2_METHOD_CALL_ARG_1), scope: 0 }
+{ instruction: create_tuple, input: (), assign: METHOD_CALL_ARG_2_1, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Init, METHOD_CALL_ARG_2_1), scope: 0 }
 $
 -() [claim]
 * Inputs:
@@ -62,9 +62,9 @@ $
 { instruction: panic, input: ("claimant is not allowed to claim this balance"), scope: 1 }
 { instruction: field, input: (claimable_balance, token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
 { instruction: evaluate, input: (token::Client::new, env, CALL_EXPRESSION_ARG_2), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-{ instruction: evaluate, input: (env.current_contract_address), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-{ instruction: field, input: (claimable_balance, amount), assign: 3_METHOD_CALL_ARG_2, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, 1_METHOD_CALL_ARG_0, claimant, 3_METHOD_CALL_ARG_2), scope: 0 }
+{ instruction: evaluate, input: (env.current_contract_address), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+{ instruction: field, input: (claimable_balance, amount), assign: METHOD_CALL_ARG_3_2, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.transfer, METHOD_CALL_ARG_1_0, claimant, METHOD_CALL_ARG_3_2), scope: 0 }
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.remove, DataKey::Balance), scope: 0 }

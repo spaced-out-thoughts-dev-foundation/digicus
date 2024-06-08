@@ -17,7 +17,7 @@ pub fn handle_method_call_expression(
     expr.args.iter().for_each(|arg| {
         let unique_uuid = compilation_state.global_uuid;
         compilation_state.increment_global_uuid();
-        let arg_name = format!("{}_METHOD_CALL_ARG_{}", index, unique_uuid);
+        let arg_name = format!("METHOD_CALL_ARG_{}_{}", index, unique_uuid);
         let expressions_parsed: Vec<Instruction> = match parse_expression(
             &arg,
             &mut compilation_state.with_assignment(Some(arg_name.clone())),

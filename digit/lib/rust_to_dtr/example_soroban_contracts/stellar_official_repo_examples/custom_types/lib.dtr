@@ -31,8 +31,8 @@ $
 { instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 { instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, STATE), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-{ instruction: initialize_udt, input: (State, 0, 0), assign: 1_METHOD_CALL_ARG_0, scope: 0 }
-{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 1_METHOD_CALL_ARG_0), assign: Thing_to_return, scope: 0 }
+{ instruction: initialize_udt, input: (State, 0, 0), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, METHOD_CALL_ARG_1_0), assign: Thing_to_return, scope: 0 }
 { instruction: Return, input: (Thing_to_return), scope: 0 }
 $
 :[InternalFunctions]
