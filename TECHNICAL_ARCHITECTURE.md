@@ -18,7 +18,7 @@
 
 Heavily influenced by [Scratch](https://scratch.mit.edu/), Digicus is a novel, block-based, visual smart contract programming language consisting of a predefined set of *blocks* which users piece together to define Soroban smart contracts. 
 
-### [Overall Architecture](#Overall-Architecture)
+### [Initial Architecture - Stellar's Soroban](#Overall-Architecture)
 
 ![overall architecture](./technical_architecture_artifacts/overall_architecture.png)
 
@@ -30,7 +30,7 @@ In compiler terms, think of Digicus like the frontend language, DTR and Rust as 
 
 ### [Digit](#Digit)
 
-The Digicus compiler (*digit*) is a Ruby gem which provides transcompilation from block-based contracts to and from the Soroban SDKs. For starters, we'll be supporting the SDF maintained Rust SDK. 
+The Digicus compiler (*digit*) is a Ruby gem which provides transcompilation from block-based contracts to and from various blockchain programming languages/SDKs. For starters, we'll be supporting the SDF maintained Rust SDK. 
 
 Digit accomplishes this via the following pipelines (where `.dtr` stands for `digicus textural representation`):
 
@@ -113,7 +113,7 @@ We will provide a standard library of instructions. Much of this will be determi
 * [Rust SDK](https://github.com/stellar/rs-soroban-sdk/tree/main)
 * [AssemblyScript SDK](https://github.com/Soneso/as-soroban-sdk)
 
-**Instruction List (WIP - Just Started):**
+**Instruction List (WIP):**
 * AddSymbols
 * Return
 * FetchFromStorage
