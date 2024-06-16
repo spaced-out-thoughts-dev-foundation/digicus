@@ -124,4 +124,20 @@ RSpec.describe DTRCore::TypeValidator do
       end.to raise_error('Invalid initial value for Address: GABCD1234XYZ. Wrong type.')
     end
   end
+
+  context 'when type is Boolean' do
+    let(:type_validator) { described_class.new('Boolean', 'true') }
+
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!).to be true
+    end
+
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('Boolean', 'abc')
+
+      expect do
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for Boolean: abc. Wrong type.')
+    end
+  end
 end

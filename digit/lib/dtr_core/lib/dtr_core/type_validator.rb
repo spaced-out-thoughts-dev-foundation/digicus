@@ -18,6 +18,7 @@ module DTRCore
       return validate_integer! if %w[Integer BigInteger Float].include?(@type_name)
       return validate_string! if ['String'].include?(@type_name)
       return validate_address! if ['Address'].include?(@type_name)
+      return validate_boolean! if ['Boolean'].include?(@type_name)
 
       raise 'Missing Invalid Type Name.'
     end
@@ -43,6 +44,15 @@ module DTRCore
       end
 
       @initial_value.strip
+    end
+
+    def validate_boolean!
+      unless %w[true
+                false].include?(@initial_value)
+        raise "Invalid initial value for Boolean: #{@initial_value}. Wrong type."
+      end
+
+      @initial_value == 'true'
     end
 
     def validate_integer!
