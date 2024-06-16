@@ -14,24 +14,22 @@ pub fn handle_return_expression(
         Some(return_expr) => {
             let return_label: &str = "RETURN_VALUE_LABEL";
 
-            // let mut precedning_instructions = parse_expression(
-            //     return_expr,
-            //     &mut compilation_state.with_assignment(Some(return_label.to_string())),
-            // )?;
+            let mut precedning_instructions = parse_expression(
+                return_expr,
+                &mut compilation_state.with_assignment(Some(return_label.to_string())),
+            )?;
 
-            let mut precedning_instructions = parse_expression(return_expr, compilation_state)?;
+            let return_instruction = Instruction::new(
+                "return".to_string(),
+                vec![return_label.to_string()],
+                compilation_state
+                    .next_assignment
+                    .clone()
+                    .unwrap_or_default(),
+                compilation_state.scope,
+            );
 
-            // let return_instruction = Instruction::new(
-            //     "return".to_string(),
-            //     vec![return_label.to_string()],
-            //     compilation_state
-            //         .next_assignment
-            //         .clone()
-            //         .unwrap_or_default(),
-            //     compilation_state.scope,
-            // );
-
-            // precedning_instructions.push(return_instruction);
+            precedning_instructions.push(return_instruction);
 
             Ok(precedning_instructions)
         }
