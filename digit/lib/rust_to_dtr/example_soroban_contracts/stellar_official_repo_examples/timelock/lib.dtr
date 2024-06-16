@@ -16,10 +16,10 @@
 			{ instruction: evaluate, input: (claimants.len), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 			{ instruction: evaluate, input: (greater_than, BINARY_EXPRESSION_LEFT, 10), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: panic, input: ("too many claimants"), scope: 1 }
+			{ instruction: error_with_message, input: ("too many claimants"), scope: 1 }
 			{ instruction: evaluate, input: (is_initialized, env), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: panic, input: ("contract has been already initialized"), scope: 1 }
+			{ instruction: error_with_message, input: ("contract has been already initialized"), scope: 1 }
 			{ instruction: evaluate, input: (from.require_auth), scope: 0 }
 			{ instruction: evaluate, input: (token::Client::new, env, token), assign: METHOD_CALL_EXPRESSION_7, scope: 0 }
 			{ instruction: evaluate, input: (env.current_contract_address), assign: METHOD_CALL_ARG_2_4, scope: 0 }
@@ -54,12 +54,12 @@
 			{ instruction: evaluate, input: (check_time_bound, env, CALL_EXPRESSION_ARG_2), assign: UNARY_ARGUMENT_6, scope: 0 }
 			{ instruction: evaluate, input: (!, UNARY_ARGUMENT_6), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: panic, input: ("time predicate is not fulfilled"), scope: 1 }
+			{ instruction: error_with_message, input: ("time predicate is not fulfilled"), scope: 1 }
 			{ instruction: field, input: (claimable_balance, claimants), assign: claimants, scope: 0 }
 			{ instruction: evaluate, input: (claimants.contains, claimant), assign: UNARY_ARGUMENT_8, scope: 0 }
 			{ instruction: evaluate, input: (!, UNARY_ARGUMENT_8), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: panic, input: ("claimant is not allowed to claim this balance"), scope: 1 }
+			{ instruction: error_with_message, input: ("claimant is not allowed to claim this balance"), scope: 1 }
 			{ instruction: field, input: (claimable_balance, token), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
 			{ instruction: evaluate, input: (token::Client::new, env, CALL_EXPRESSION_ARG_2), assign: METHOD_CALL_EXPRESSION_15, scope: 0 }
 			{ instruction: evaluate, input: (env.current_contract_address), assign: METHOD_CALL_ARG_1_11, scope: 0 }
