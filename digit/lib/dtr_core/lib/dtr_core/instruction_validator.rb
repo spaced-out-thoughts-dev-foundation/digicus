@@ -29,9 +29,11 @@ module DTRCore
         validate_unconditional_jump_operation!
       when 'contract_address'
         validate_smart_contract_specific_operation!
-      when 'field', 'initialize_udt'
+      when 'create_dictionary', 'create_list', 'create_tuple',
+        'field', 'initialize_udt'
         validate_object_operation!
-      when 'add', 'subtract', 'multiply', 'divide'
+      when 'add', 'subtract', 'multiply', 'divide',
+        'add_and_assign', 'subtract_and_assign', 'multiply_and_assign', 'divide_and_assign'
         validate_binary_operation!
       else
         false
