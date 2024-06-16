@@ -38,7 +38,7 @@ module DTRCore
     end
 
     def to_s
-      "#{name} { #{attributes.map { |x| "#{x[:name]}: #{x[:type]}" }.join("\n")} }"
+      "\t* (#{name})\n\t{\n#{@attributes.map { |x| "\t\t#{x[:name]}: #{x[:type]}" }.join("\n")}\n\t}"
     end
 
     def ==(other)

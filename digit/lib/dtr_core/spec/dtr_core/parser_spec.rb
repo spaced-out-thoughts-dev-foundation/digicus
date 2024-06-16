@@ -60,7 +60,7 @@ RSpec.describe DTRCore::Parser do
 
         # empty contract so these optional sections are nil
         expect(parser.state_section).to be_nil
-        expect(parser.function_section).to be_nil
+        expect(parser.interface_section).to be_nil
       end
 
       it 'parses the name of the contract even when it is weird' do
@@ -70,7 +70,7 @@ RSpec.describe DTRCore::Parser do
 
         # empty contract so these optional sections are nil
         expect(parser.state_section).to be_nil
-        expect(parser.function_section).to be_nil
+        expect(parser.interface_section).to be_nil
       end
     end
 
@@ -80,22 +80,20 @@ RSpec.describe DTRCore::Parser do
 
         expect(parser.name_section).to eq('CONTRACT_NAME')
 
-        expect(parser.state_section).to contain_exactly(DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22))
+        expect(parser.state_section).to contain_exactly(DTRCore::State.new('STATE_DEFINITION_1', 'Integer', 22))
 
         # empty contract so these optional sections are nil
-        expect(parser.function_section).to be_nil
+        expect(parser.interface_section).to be_nil
       end
     end
 
     context 'when contract name and function sections are present' do
       let(:hello_function) do
         DTRCore::Function.new('hello', [
-                                { name: 'to', type_name: 'Symbol' }
-                              ], 'Symbol', [
-                                { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
-                                { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
+                                { name: 'to', type_name: 'String' }
+                              ], 'String', [
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
                               ])
       end
 
@@ -107,34 +105,32 @@ RSpec.describe DTRCore::Parser do
         # empty contract so these optional sections are nil
         expect(parser.state_section).to be_nil
 
-        expect(parser.function_section).to contain_exactly(hello_function)
+        expect(parser.interface_section).to contain_exactly(hello_function)
       end
     end
 
     context 'when contract name, state, and function sections are present' do
       let(:hello_function) do
         DTRCore::Function.new('hello', [
-                                { name: 'to', type_name: 'Symbol' },
-                                { name: 'from', type_name: 'I32' }
-                              ], 'Symbol', [
-                                { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
-                                { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
+                                { name: 'to', type_name: 'String' },
+                                { name: 'from', type_name: 'Integer' }
+                              ], 'String', [
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
                               ])
       end
 
       let(:world_function) do
-        DTRCore::Function.new('world', [], 'Symbol', [
-                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
+        DTRCore::Function.new('world', [], 'String', [
+                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
                               ])
       end
 
       let(:state_definitions) do
         [
-          DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
-          DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
-          DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
+          DTRCore::State.new('STATE_DEFINITION_1', 'Integer', 22),
+          DTRCore::State.new('STATE_DEFINITION_2', 'String', '"Hello World"'),
+          DTRCore::State.new('STATE_DEFINITION_3', 'BigInteger', -1234)
         ]
       end
 
@@ -143,7 +139,7 @@ RSpec.describe DTRCore::Parser do
 
         expect(parser.name_section).to eq('MultiFunctionContract')
         expect(parser.state_section).to match_array(state_definitions)
-        expect(parser.function_section).to contain_exactly(hello_function, world_function)
+        expect(parser.interface_section).to contain_exactly(hello_function, world_function)
       end
     end
 
@@ -151,8 +147,8 @@ RSpec.describe DTRCore::Parser do
       let(:user_defined_types) do
         [
           DTRCore::UserDefinedType.new('State', [
-                                         { name: 'count', type: 'u32' },
-                                         { name: 'last_incr', type: 'u32' }
+                                         { name: 'count', type: 'Integer' },
+                                         { name: 'last_incr', type: 'Integer' }
                                        ]),
           DTRCore::UserDefinedType.new('State_Two', [
                                          { name: 'name', type: 'String' }
@@ -168,42 +164,40 @@ RSpec.describe DTRCore::Parser do
 
         # empty contract so these optional sections are nil
         expect(parser.state_section).to be_nil
-        expect(parser.function_section).to be_nil
+        expect(parser.interface_section).to be_nil
       end
     end
 
     context 'when contract name, state, function, and user defined types sections are present' do
       let(:hello_function) do
         DTRCore::Function.new('hello', [
-                                { name: 'to', type_name: 'Symbol' },
+                                { name: 'to', type_name: 'String' },
                                 { name: 'from', type_name: 'State' }
                               ], 'State_Two', [
-                                { instruction: 'Add_Strings',
-                                  inputs: ['"Hello"', 'to'], assign: 'HelloToResult', scope: 0 },
-                                { instruction: 'Return',
-                                  inputs: ['HelloToResult'], assign: nil, scope: 0 }
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
                               ])
       end
 
       let(:world_function) do
-        DTRCore::Function.new('world', [], 'Symbol', [
-                                { instruction: 'Return', inputs: nil, assign: 'ReturnValue', scope: 0 }
+        DTRCore::Function.new('world', [], 'String', [
+                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
                               ])
       end
 
       let(:state_definitions) do
         [
-          DTRCore::State.new('STATE_DEFINITION_1', 'I32', 22),
-          DTRCore::State.new('STATE_DEFINITION_2', 'Symbol', 'Hello World'),
-          DTRCore::State.new('STATE_DEFINITION_3', 'I256', -1234)
+          DTRCore::State.new('STATE_DEFINITION_1', 'Integer', 22),
+          DTRCore::State.new('STATE_DEFINITION_2', 'String', '"Hello World"'),
+          DTRCore::State.new('STATE_DEFINITION_3', 'BigInteger', -1234)
         ]
       end
 
       let(:user_defined_types) do
         [
           DTRCore::UserDefinedType.new('State', [
-                                         { name: 'count', type: 'u32' },
-                                         { name: 'last_incr', type: 'u32' }
+                                         { name: 'count', type: 'Integer' },
+                                         { name: 'last_incr', type: 'Integer' }
                                        ]),
           DTRCore::UserDefinedType.new('State_Two', [
                                          { name: 'name', type: 'String' }
@@ -218,7 +212,7 @@ RSpec.describe DTRCore::Parser do
 
         expect(parser.name_section).to eq('MultiFunctionContract')
         expect(parser.state_section).to match_array(state_definitions)
-        expect(parser.function_section).to contain_exactly(hello_function, world_function)
+        expect(parser.interface_section).to contain_exactly(hello_function, world_function)
         expect(parser.user_defined_types_section).to match_array(user_defined_types)
       end
     end
@@ -226,14 +220,13 @@ RSpec.describe DTRCore::Parser do
     context 'when contract contains branching logic' do
       let(:is_answer_to_life_function) do
         DTRCore::Function.new('is_answer_to_life', [
-                                { name: 'numerical_question', type_name: 'u32' }
+                                { name: 'numerical_question', type_name: 'Integer' }
                               ], 'String', [
-                                { instruction: 'conditional_jump',
-                                  inputs: %w[equal_to 42 numerical_question 1], assign: nil, scope: 0 },
-                                { instruction: 'jump',
-                                  inputs: ['2'], assign: nil, scope: 0 },
-                                { instruction: 'return', inputs: ['"yes"'], assign: nil, scope: 1 },
-                                { instruction: 'return', inputs: ['"no"'], assign: nil, scope: 2 }
+                                DTRCore::Instruction.new('conditional_jump', %w[equal_to 42 numerical_question 1], nil,
+                                                         0),
+                                DTRCore::Instruction.new('unconditional_jump', %w[2], nil, 0),
+                                DTRCore::Instruction.new('return', ['"yes"'], nil, 1),
+                                DTRCore::Instruction.new('return', ['"no"'], nil, 2)
                               ])
       end
 
@@ -244,7 +237,7 @@ RSpec.describe DTRCore::Parser do
 
         expect(parser.name_section).to eq('ConditionalBranching')
         expect(parser.state_section).to be_nil
-        expect(parser.function_section).to contain_exactly(is_answer_to_life_function)
+        expect(parser.interface_section).to contain_exactly(is_answer_to_life_function)
       end
     end
   end

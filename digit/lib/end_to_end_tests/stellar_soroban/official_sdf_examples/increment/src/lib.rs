@@ -1,10 +1,10 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
 
+const COUNTER: Symbol = symbol_short!("COUNTER");
+
 #[contract]
 pub struct IncrementContract;
-
-const COUNTER: Symbol = symbol_short!("COUNTER");
 
 #[contractimpl]
 impl IncrementContract {

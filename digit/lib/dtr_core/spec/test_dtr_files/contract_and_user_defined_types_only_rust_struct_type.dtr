@@ -3,8 +3,8 @@
 [User Defined Types]:
   * (State)
   {
-    count: u32
-    last_incr: u32
+    count: Integer
+    last_incr: Integer
   }
   * (State_Two)
   {

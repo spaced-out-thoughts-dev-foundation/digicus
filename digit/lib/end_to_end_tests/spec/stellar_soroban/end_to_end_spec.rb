@@ -8,9 +8,9 @@ RSpec.describe 'Contract Translation Rust --> DTR --> Rust' do
   let(:unofficial_directory) { "#{base_directory}/unofficial_digicus_examples" }
 
   context 'when official SDF Example' do
-    # it 'translates the account contract' do
-    #   assert_translates_rust_to_dtr_and_back("#{official_directory}/account/")
-    # end
+    it 'translates the account contract' do
+      assert_translates_rust_to_dtr_and_back("#{official_directory}/account/")
+    end
 
     it 'translates the alloc contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/alloc/")
@@ -32,17 +32,13 @@ RSpec.describe 'Contract Translation Rust --> DTR --> Rust' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/custom_types/")
     end
 
-    # it 'translates the deep_contract_auth contract' do
-    #   assert_translates_rust_to_dtr_and_back("#{official_directory}/deep_contract_auth/")
-    # end
-
     it 'translates the errors contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/errors/")
     end
 
-    # it 'translates the eth_abi contract' do
-    #   assert_translates_rust_to_dtr_and_back("#{official_directory}/eth_abi/")
-    # end
+    it 'translates the eth_abi contract' do
+      assert_translates_rust_to_dtr_and_back("#{official_directory}/eth_abi/")
+    end
 
     it 'translates the events contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/events/")
@@ -60,9 +56,9 @@ RSpec.describe 'Contract Translation Rust --> DTR --> Rust' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/logging/")
     end
 
-    # it 'translates the mint_lock contract' do
-    #   assert_translates_rust_to_dtr_and_back("#{official_directory}/mint_lock/")
-    # end
+    it 'translates the mint_lock contract' do
+      assert_translates_rust_to_dtr_and_back("#{official_directory}/mint_lock/")
+    end
 
     it 'translates the simple_account contract' do
       assert_translates_rust_to_dtr_and_back("#{official_directory}/simple_account/")

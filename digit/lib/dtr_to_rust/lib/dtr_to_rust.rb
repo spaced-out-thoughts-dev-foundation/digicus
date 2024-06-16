@@ -10,8 +10,10 @@ module DTRToRust
     autoload :AddAndAssign, 'instruction/add_and_assign'
     autoload :CreateList, 'instruction/create_list'
     autoload :Evaluate, 'instruction/evaluate'
-    autoload :LogString, 'instruction/log_string'
+    autoload :Field, 'instruction/field'
     autoload :Handler, 'instruction/handler'
+    autoload :InitializeUDT, 'instruction/initialize_udt'
+    autoload :LogString, 'instruction/log_string'
     autoload :Return, 'instruction/return'
   end
 

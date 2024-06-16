@@ -1,6 +1,10 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
 
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DataKey {MyKey: ()}
+
 #[contract]
 pub struct TtlContract;
 

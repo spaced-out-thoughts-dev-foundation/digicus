@@ -13,31 +13,69 @@ module DTRCore
     end
 
     def validate_then_coerce_initial_value!
-      raise 'Missing Type Name.' if @type_name.nil?
-      raise 'Missing Initial Value.' if @initial_value.nil?
+      validate_input!
 
-      case @type_name
-      when 'I32', 'I64', 'I256', 'U32', 'U64', 'U256'
-        validate_numeric!
+      return validate_integer! if %w[Integer BigInteger Float].include?(@type_name)
+      return validate_string! if ['String'].include?(@type_name)
+      return validate_address! if ['Address'].include?(@type_name)
 
-      # TODO: check type
-      when 'Symbol', 'String'
-        strip_and_remove_quotes(@initial_value)
-      else
-        raise 'Missing Invalid Type Name.'
-      end
+      raise 'Missing Invalid Type Name.'
     end
 
     private
 
-    def validate_numeric!
-      raise 'Invalid initial value for type. Wrong type.' unless @initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/)
+    def validate_input!
+      raise 'Missing Type Name.' if @type_name.nil?
+      raise 'Missing Initial Value.' if @initial_value.nil?
+    end
+
+    # TODO: implement deeper validation for Address type
+    # TODO: confirm this works for non-Stellar addresses
+    def validate_address!
+      raise "Invalid initial value for Address: #{@initial_value}. Wrong type." unless @initial_value.length == 56
+
+      @initial_value
+    end
+
+    def validate_string!
+      unless @initial_value.is_a?(String) && @initial_value.match(/".*"/)
+        raise "Invalid initial value for String: #{@initial_value}. Wrong type."
+      end
+
+      @initial_value.strip
+    end
+
+    def validate_integer!
+      unless @initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/)
+        raise "Invalid initial value for #{@type_name}: #{@initial_value}. Wrong type."
+      end
 
       raise "Invalid initial value for type #{@type_name}. Out of range." unless @initial_value.to_i.between?(
         DTRCore::Number.const_get(:"MIN_#{@type_name}"), DTRCore::Number.const_get(:"MAX_#{@type_name}")
       )
 
-      @initial_value.to_i
+      handle_each_numeric_type!
+    end
+
+    def handle_each_numeric_type!
+      case @type_name
+      when 'Integer', 'BigInteger'
+        raise "Invalid initial value for #{@type_name}: #{@initial_value}. Wrong type." unless non_float_integer?
+
+        @initial_value.to_i
+      when 'Float'
+        raise "Invalid initial value for #{@type_name}: #{@initial_value}. Wrong type." unless floaty_float?
+
+        @initial_value.to_f
+      end
+    end
+
+    def non_float_integer?
+      @initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/) && !@initial_value.include?('.')
+    end
+
+    def floaty_float?
+      @initial_value =~ (/^[\-\.\d]\d*(\.?\d*)*/) && @initial_value.include?('.')
     end
   end
 end

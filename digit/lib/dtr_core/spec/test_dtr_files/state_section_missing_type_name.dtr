@@ -4,7 +4,8 @@
   * [STATE_DEFINITION_1]
     * Initial Value: 22
   * [STATE_DEFINITION_2]
-    * Type: Symbol
+    * Type: String
     * Initial Value: "Hello World"
   * [STATE_DEFINITION_3]
     * Initial Value: -1234
+:[State]

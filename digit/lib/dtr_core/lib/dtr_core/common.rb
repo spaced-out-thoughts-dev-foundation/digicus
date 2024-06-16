@@ -3,16 +3,18 @@
 module DTRCore
   # Common methods used by the DTRCore module.
   module Common
-    def strip_and_remove_quotes(str)
-      str.strip.gsub(/['"]/, '')
-    end
-
     def split_strip_select(some_list)
       some_list&.split("\n")&.map(&:strip)&.select { |x| x.length.positive? }
     end
 
-    def first_match_for_content(pattern)
-      content.match(pattern)&.captures&.first
+    def capture_section(pattern)
+      captures = content.match(pattern)&.captures
+
+      if content.scan(pattern).length > 1
+        raise 'Multiple captures found for a section.'
+      elsif captures
+        captures&.first
+      end
     end
 
     def clean_name(definition)

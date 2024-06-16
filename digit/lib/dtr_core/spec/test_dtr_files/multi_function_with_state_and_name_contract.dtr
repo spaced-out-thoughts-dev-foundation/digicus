@@ -2,32 +2,33 @@
 
 [State]:
   * [STATE_DEFINITION_1]
-    * Type: I32
+    * Type: Integer
     * Initial Value: 22
   * [STATE_DEFINITION_2]
-    * Type: Symbol
+    * Type: String
     * Initial Value: "Hello World"
   * [STATE_DEFINITION_3]
-    * Type: I256
+    * Type: BigInteger
     * Initial Value: -1234
+:[State]
 
-[InternalFunctions]:
+[Interface]:
   -() [hello]
       * Inputs:
         { 
-          to: Symbol
-          from: I32
+          to: String
+          from: Integer
         }
-      * Output: Symbol
+      * Output: String
       * Instructions:
         $
-          { instruction: Add_Strings, input: ("Hello", to), assign: HelloToResult }
-          { instruction: Return, input: (HelloToResult) }
+          { instruction: add, input: ("Hello", to), assign: HelloToResult }
+          { instruction: return, input: (HelloToResult) }
         $
 -() [world]
-      * Output: Symbol
+      * Output: String
       * Instructions:
         $
-          { instruction: Return, assign: ReturnValue }
+          { instruction: return, assign: ReturnValue }
         $
-:[InternalFunctions]
+:[Interface]

@@ -1,15 +1,15 @@
 [Contract]: HelloContract
 
-[InternalFunctions]:
+[Interface]:
   -() [hello]
       * Inputs:
         { 
-          to: Symbol
+          to: String
         }
-      * Output: Symbol
+      * Output: String
       * Instructions:
         $
-          { instruction: Add_Strings, input: ("Hello", to), assign: HelloToResult }
-          { instruction: Return, input: (HelloToResult) }
+          { instruction: add, input: ("Hello", to), assign: HelloToResult }
+          { instruction: return, input: (HelloToResult) }
         $
-:[InternalFunctions]
+:[Interface]

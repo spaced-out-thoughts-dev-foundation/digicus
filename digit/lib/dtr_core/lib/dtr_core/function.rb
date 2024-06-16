@@ -65,7 +65,8 @@ module DTRCore
     end
 
     def output_to_s
-      return "" if output.nil?
+      return '' if output.nil?
+
       "    * Output: #{output}\n"
     end
 
@@ -75,17 +76,11 @@ module DTRCore
       return_string += "    * Instructions:\n"
       return_string += "      $\n"
       @instructions.each do |x|
-        return_string += "        #{single_instruction_to_s(x)}\n"
+        return_string += "        #{x}\n"
       end
       return_string += "      $\n"
 
       return_string
-    end
-
-    def single_instruction_to_s(ins)
-      "{ instruction: #{ins[:instruction]}," \
-        "input: (#{ins[:inputs]&.join(', ')}), " \
-        "assign: #{ins[:assign]}, scope: #{ins[:scope]} }\n"
     end
 
     def format_function_inputs(inputs)
@@ -99,12 +94,16 @@ module DTRCore
     end
 
     def parse_function_instruction(instruction)
-      {
-        instruction: instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
-        inputs: parse_function_instruction_input(instruction),
-        assign: instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1],
-        scope: instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0
-      }
+      instruction = DTRCore::Instruction.new(
+        instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
+        parse_function_instruction_input(instruction),
+        instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1],
+        instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0
+      )
+
+      raise "Invalid instruction: #{instruction}" unless instruction.valid?
+
+      instruction
     end
 
     def parse_function_instruction_input(definition)

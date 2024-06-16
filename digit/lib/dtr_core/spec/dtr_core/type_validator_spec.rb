@@ -3,147 +3,125 @@
 require './spec/spec_helper'
 
 RSpec.describe DTRCore::TypeValidator do
-  context 'when the type is I32 and type too big' do
-    it 'raises an error' do
-      expect do
-        described_class.new('I32', (DTRCore::Number::MAX_I32 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I32. Out of range./)
+  context 'when input faulty' do
+    it 'raises error when type name is missing' do
+      type_validator = described_class.new(nil, '123')
+
+      expect { type_validator.validate_then_coerce_initial_value! }.to raise_error('Missing Type Name.')
+    end
+
+    it 'raises error when initial value is missing' do
+      type_validator = described_class.new('Integer', nil)
+
+      expect { type_validator.validate_then_coerce_initial_value! }.to raise_error('Missing Initial Value.')
     end
   end
 
-  context 'when the type is I32 and type too small' do
-    it 'raises an error' do
+  context 'when type is Integer' do
+    let(:type_validator) { described_class.new('Integer', '123') }
+
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!).to eq(123)
+    end
+
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('Integer', 'abc')
+
       expect do
-        described_class.new('I32', (DTRCore::Number::MIN_I32 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I32. Out of range./)
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for Integer: abc. Wrong type.')
+    end
+
+    it 'raises error when initial value is out of range' do
+      type_validator = described_class.new('Integer',
+                                           '99999999999999999999999999')
+
+      expect do
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for type Integer. Out of range.')
     end
   end
 
-  context 'when the type is I32 and type is not a number' do
-    it 'raises an error' do
+  context 'when type is BigInteger' do
+    let(:type_validator) { described_class.new('BigInteger', '123') }
+
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!).to eq(123)
+    end
+
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('BigInteger', 'abc')
+
       expect do
-        described_class.new('I32', 'Apple').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for BigInteger: abc. Wrong type.')
+    end
+
+    it 'raises error when initial value is out of range' do
+      type_validator = described_class.new('BigInteger',
+                                           (9**100_000).to_s)
+
+      expect do
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for type BigInteger. Out of range.')
     end
   end
 
-  context 'when the type is I64 and type too big' do
-    it 'raises an error' do
+  context 'when type is Float' do
+    let(:type_validator) { described_class.new('Float', '123.45') }
+
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!).to eq(123.45)
+    end
+
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('Float', 'abc')
+
       expect do
-        described_class.new('I64', (DTRCore::Number::MAX_I64 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I64. Out of range./)
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for Float: abc. Wrong type.')
+    end
+
+    it 'raises error when initial value is out of range' do
+      type_validator = described_class.new('Float',
+                                           "#{9**100_000}.#{9**1000}")
+
+      expect do
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for type Float. Out of range.')
     end
   end
 
-  context 'when the type is I64 and type too small' do
-    it 'raises an error' do
+  context 'when type is String' do
+    let(:type_validator) { described_class.new('String', '"abc"') }
+
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!).to eq '"abc"'
+    end
+
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('String', 'abc')
+
       expect do
-        described_class.new('I64', (DTRCore::Number::MIN_I64 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I64. Out of range./)
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for String: abc. Wrong type.')
     end
   end
 
-  context 'when the type is I64 and type is not a number' do
-    it 'raises an error' do
-      expect do
-        described_class.new('I64', 'Apple').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
-    end
-  end
+  context 'when type is Address' do
+    let(:type_validator) { described_class.new('Address', 'GCDXNQDQXROCXFPDJFE6CATCT2IF5VR3YJ2FQKZVM60BUC5MEGFSPBUJ') }
 
-  context 'when the type is I256 and type too big' do
-    it 'raises an error' do
-      expect do
-        described_class.new('I256', (DTRCore::Number::MAX_I256 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I256. Out of range./)
+    it 'validates and coerces initial value' do
+      expect(type_validator.validate_then_coerce_initial_value!)
+        .to eq 'GCDXNQDQXROCXFPDJFE6CATCT2IF5VR3YJ2FQKZVM60BUC5MEGFSPBUJ'
     end
-  end
 
-  context 'when the type is I256 and type too small' do
-    it 'raises an error' do
-      expect do
-        described_class.new('I256', (DTRCore::Number::MIN_I256 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type I256. Out of range./)
-    end
-  end
+    it 'raises error when initial value is invalid' do
+      type_validator = described_class.new('Address', 'GABCD1234XYZ')
 
-  context 'when the type is I256 and type is not a number' do
-    it 'raises an error' do
       expect do
-        described_class.new('I256', 'A 9223372036854775807').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
-    end
-  end
-
-  context 'when the type is U32 and type too big' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U32', (DTRCore::Number::MAX_U32 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U32. Out of range./)
-    end
-  end
-
-  context 'when the type is U32 and type too small' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U32', (DTRCore::Number::MIN_U32 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U32. Out of range./)
-    end
-  end
-
-  context 'when the type is U32 and type is not a number' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U32', 'Apple').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
-    end
-  end
-
-  context 'when the type is U64 and type too big' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U64', (DTRCore::Number::MAX_U64 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U64. Out of range./)
-    end
-  end
-
-  context 'when the type is U64 and type too small' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U64', (DTRCore::Number::MIN_U64 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U64. Out of range./)
-    end
-  end
-
-  context 'when the type is U64 and type is not a number' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U64', 'Apple').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
-    end
-  end
-
-  context 'when the type is U256 and type too big' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U256', (DTRCore::Number::MAX_U256 + 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U256. Out of range./)
-    end
-  end
-
-  context 'when the type is U256 and type too small' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U256', (DTRCore::Number::MIN_U256 - 1).to_s).validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type U256. Out of range./)
-    end
-  end
-
-  context 'when the type is U256 and type is not a number' do
-    it 'raises an error' do
-      expect do
-        described_class.new('U256', 'Apple').validate_then_coerce_initial_value!
-      end.to raise_error(/Invalid initial value for type. Wrong type./)
+        type_validator.validate_then_coerce_initial_value!
+      end.to raise_error('Invalid initial value for Address: GABCD1234XYZ. Wrong type.')
     end
   end
 end

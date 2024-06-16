@@ -2,10 +2,11 @@
 
 [State]:
   * [STATE_DEFINITION_1]
-    * Type: I32
+    * Type: Integer
     * Initial Value: 22
   * [STATE_DEFINITION_2]
-    * Type: Symbol
+    * Type: String
   * [STATE_DEFINITION_3]
-    * Type: I256
+    * Type: BigInteger
     * Initial Value: -1234
+:[State]

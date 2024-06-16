@@ -38,7 +38,6 @@ mod full_contract_tests {
 
         ($directory_name:ident, $contract_name:ident) => {
             paste::item! {
-                #[rstest]
                 #[test]
                 fn [< test_ $directory_name _ $contract_name >] () {
                     setup();
@@ -52,6 +51,8 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
     test_contract!(digicus_unofficial_examples, count_zero_to_answer_to_life);
     test_contract!(digicus_unofficial_examples, get_force_type_answer_to_life);
+    test_contract!(digicus_unofficial_examples, if_expression_assignment);
+
     test_contract!(digicus_unofficial_examples, increment_answer_to_life);
     test_contract!(digicus_unofficial_examples, innerds_of_enums);
     test_contract!(digicus_unofficial_examples, log_if_answer_to_life);
@@ -60,6 +61,7 @@ mod full_contract_tests {
         digicus_unofficial_examples,
         numbered_enums_to_the_answer_of_life
     );
+    test_contract!(digicus_unofficial_examples, simplest_nested_scoping);
     test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
 
     test_contract!(stellar_official_repo_examples, account);

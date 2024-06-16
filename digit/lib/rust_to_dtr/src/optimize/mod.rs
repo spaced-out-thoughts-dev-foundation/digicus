@@ -6,10 +6,14 @@ mod unreachable_return_elimination;
 
 pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     let phase_1_optimized = constant_propagation::apply(instructions);
-    let phase_2_optimized = dead_code_elimination::apply(phase_1_optimized);
-    let phase_3_optimized = unreachable_return_elimination::apply(phase_2_optimized);
+    // let phase_2_optimized = dead_code_elimination::apply(phase_1_optimized);
+    // let phase_3_optimized = unreachable_return_elimination::apply(phase_2_optimized);
 
-    phase_3_optimized
+    // phase_3_optimized
+
+    // instructions
+
+    phase_1_optimized
 }
 
 pub fn create_instruction(name: &str, input: Vec<&str>, assign: &str) -> Instruction {

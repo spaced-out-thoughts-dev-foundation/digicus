@@ -9,5 +9,7 @@ module DTRCore
   autoload :State, 'dtr_core/state'
   autoload :SupportedAttributes, 'dtr_core/supported_attributes'
   autoload :TypeValidator, 'dtr_core/type_validator'
+  autoload :InstructionValidator, 'dtr_core/instruction_validator'
+  autoload :Instruction, 'dtr_core/instruction'
   autoload :UserDefinedType, 'dtr_core/user_defined_type'
 end

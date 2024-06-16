@@ -13,8 +13,9 @@ module DTRToRust
       @content = ''
 
       generate_contract_header
-      generate_contract_name
+      generate_user_defined_types
       generate_state
+      generate_contract_name
       generate_functions
 
       @content
@@ -101,6 +102,18 @@ module DTRToRust
       else
         type
       end
+    end
+
+    def generate_user_defined_types
+      return if dtr_contract.user_defined_types.nil?
+
+      dtr_contract.user_defined_types.each do |udt|
+        @content += "#{derives}pub struct #{udt.name} {#{udt.attributes.map { |x| "#{x[:name]}: #{x[:type]}" }.join(', ')}}\n\n"
+      end
+    end
+
+    def derives
+      "#[contracttype]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
     end
   end
 end

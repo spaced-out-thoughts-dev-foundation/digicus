@@ -19,6 +19,10 @@ module DTRToRust
         Instruction::Evaluate.handle(@instruction)
       when 'create_list'
         Instruction::CreateList.handle(@instruction)
+      when 'field'
+        Instruction::Field.handle(@instruction)
+      when 'initialize_udt'
+        Instruction::InitializeUDT.handle(@instruction)
       else
         raise "Unknown instruction type: #{@instruction[:instruction]}"
       end

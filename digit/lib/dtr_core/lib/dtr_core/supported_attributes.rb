@@ -29,30 +29,18 @@ module DTRCore
     ## Instructions ##
     INSTRUCTIONS = [
       # basic operations
-      { name: 'return', description: 'Return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
+      { name: 'return', description: 'return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
       { name: 'assign', description: 'Assign a value to a variable.', category: INSTRUCTION_CATEGORY_BASIC },
       { name: 'panic', description: 'Exit, quickly, and loudly.', category: INSTRUCTION_CATEGORY_BASIC },
-      # state operations
-      { name: 'fetch_state', description: 'Fetch a value from the state.', category: INSTRUCTION_CATEGORY_STATE },
       { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
       # untyped operations
       { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'add_and_assign',
-        description: 'Add two things of unknown types together and then assign to the first one.',
-        category: INSTRUCTION_CATEGORY_UNTYPED },
       { name: 'subtract', description: 'Subtract two things of unknown types together.',
         category: INSTRUCTION_CATEGORY_UNTYPED },
       { name: 'divide', description: 'Divide two things of unknown types together.',
         category: INSTRUCTION_CATEGORY_UNTYPED },
       { name: 'multiply', description: 'Multiply two things of unknown types together.',
         category: INSTRUCTION_CATEGORY_UNTYPED },
-      # numeric operations
-      { name: 'add_numbers', description: 'Add two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
-      { name: 'subtract_numbers', description: 'Subtract two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
-      { name: 'multiply_numbers', description: 'Multiply two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
-      { name: 'divide_numbers', description: 'Divide two numbers.', category: INSTRUCTION_CATEGORY_NUMERIC },
-      # string operations
-      { name: 'add_strings', description: 'Concatenate two strings.', category: INSTRUCTION_CATEGORY_STRING },
       # environment operations
       { name: 'contract_address', description: 'Get the contract address.',
         category: INSTRUCTION_CATEGORY_ENVIRONMENT },
@@ -63,9 +51,9 @@ module DTRCore
       { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
       { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS },
       # conditional operations
-      { name: 'conditional_jump', description: 'Jump to a label if first input is true.',
+      { name: 'conditional_unconditional_jump', description: 'unconditional_jump to a label if first input is true.',
         category: INSTRUCTION_CATEGORY_CONDITIONAL },
-      { name: 'unconditional_jump', description: 'Jump to a no matter what.',
+      { name: 'unconditional_unconditional_jump', description: 'unconditional_jump to a no matter what.',
         category: INSTRUCTION_CATEGORY_CONDITIONAL },
       # logical operations
       { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL },
@@ -78,21 +66,21 @@ module DTRCore
       'address',
       'boolean',
       # string types
-      'symbol',
+      'String',
       # collection types
       'array',
       'map',
       # numeric types
       ## signed
-      'i32',
+      'Integer',
       'i64',
-      'i128',
-      'i256',
+      'BigInteger',
+      'BigInteger',
       ## unsigned
-      'u32',
-      'u64',
+      'Integer',
+      'Integer',
       'u128',
-      'u256'
+      'BigInteger'
     ].freeze
   end
 end

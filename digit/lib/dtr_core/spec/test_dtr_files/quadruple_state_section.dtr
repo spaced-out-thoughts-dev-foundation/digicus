@@ -6,8 +6,12 @@
     * Initial Value: 22
   * [STATE_DEFINITION_2]
     * Type: String
-    * Initial Value: "Hello World"
   * [STATE_DEFINITION_3]
-    * Type: StringThing
+    * Type: BigInteger
     * Initial Value: -1234
+:[State]
+
+[State]:
+  * [STATE_DEFINITION_2]
+    * Type: String
 :[State]

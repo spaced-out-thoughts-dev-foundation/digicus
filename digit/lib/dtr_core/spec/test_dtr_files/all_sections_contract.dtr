@@ -1,4 +1,4 @@
-[Contract]: MultiFunctionContract
+[Contract]: AllSectionsContract
 
 [State]:
   * [STATE_DEFINITION_1]
@@ -12,26 +12,14 @@
     * Initial Value: -1234
 :[State]
 
-[User Defined Types]:
-  * (State)
-  {
-    count: Integer
-    last_incr: Integer
-  }
-  * (State_Two)
-  {
-    name: String
-  }
-:[User Defined Types]
-
 [Interface]:
   -() [hello]
       * Inputs:
         { 
           to: String
-          from: State
+          from: Integer
         }
-      * Output: State_Two
+      * Output: String
       * Instructions:
         $
           { instruction: add, input: ("Hello", to), assign: HelloToResult }
@@ -44,3 +32,24 @@
           { instruction: return, assign: ReturnValue }
         $
 :[Interface]
+
+[Helpers]:
+-() [bar_helper]
+      * Output: String
+      * Instructions:
+        $
+          { instruction: return, assign: ReturnValue }
+        $
+:[Helpers]
+
+[User Defined Types]:
+  * (State)
+  {
+    count: Integer
+    last_incr: Integer
+  }
+  * (State_Two)
+  {
+    name: String
+  }
+:[User Defined Types]
