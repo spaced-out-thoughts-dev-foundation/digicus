@@ -17,7 +17,7 @@
 			{ instruction: add, input: (x, 10), assign: x, scope: 2 }
 			{ instruction: evaluate, input: (greater_than, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 2 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), scope: 2 }
-			{ instruction: log_string, input: ("Some input is greater than 15"), assign: Thing_to_return, scope: 3 }
+			{ instruction: print, input: ("Some input is greater than 15"), assign: Thing_to_return, scope: 3 }
 			{ instruction: evaluate, input: (equal_to, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 2 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), assign: RETURN_VALUE_LABEL, scope: 2 }
 			{ instruction: jump, input: (102), assign: RETURN_VALUE_LABEL, scope: 2 }

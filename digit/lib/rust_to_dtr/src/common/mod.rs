@@ -47,7 +47,7 @@ pub fn handle_macro(
 fn macro_path_to_instruction(path: String) -> String {
     match path.as_str() {
         "vec" => "create_list".to_string(),
-        "log" => "log_string".to_string(),
+        "log" => "print".to_string(),
         "symbol_short" => "assign".to_string(),
         "panic" => "error_with_message".to_string(),
         "alloc::vec" => "create_list".to_string(),

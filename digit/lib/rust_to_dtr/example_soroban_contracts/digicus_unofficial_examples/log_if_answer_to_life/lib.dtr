@@ -32,6 +32,6 @@ message: String
 }
 * Instructions:
 $
-	{ instruction: log_string, input: (env, message), scope: 0 }
+	{ instruction: print, input: (env, message), scope: 0 }
 $
 :[Helpers]

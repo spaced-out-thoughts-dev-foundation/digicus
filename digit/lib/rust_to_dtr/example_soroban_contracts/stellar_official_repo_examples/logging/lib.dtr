@@ -8,7 +8,7 @@ value: String
 }
 * Instructions:
 $
-{ instruction: log_string, input: (env, "Hello {}", value), scope: 0 }
+{ instruction: print, input: (env, "Hello {}", value), scope: 0 }
 $
 :[Interface]
 [User Defined Types]:
