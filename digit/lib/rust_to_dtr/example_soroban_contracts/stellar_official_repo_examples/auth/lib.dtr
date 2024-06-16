@@ -22,7 +22,7 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_11, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_11.persistent), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.set, key, count), scope: 0 }
-			{ instruction: Return, input: (count), scope: 0 }
+			{ instruction: return, input: (count), scope: 0 }
 		$
 :[InternalFunctions]
 

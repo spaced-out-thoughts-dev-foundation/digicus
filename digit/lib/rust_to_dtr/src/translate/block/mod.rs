@@ -31,7 +31,7 @@ pub fn handle_block(
                     && compilation_state.scope == 0
                 {
                     instructions_to_return.push(Instruction::new(
-                        "Return".to_string(),
+                        "return".to_string(),
                         vec!["Thing_to_return".to_string()],
                         "".to_string(),
                         compilation_state.scope,

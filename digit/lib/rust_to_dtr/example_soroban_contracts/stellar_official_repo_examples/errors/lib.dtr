@@ -23,7 +23,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_8.set, COUNTER, count), scope: 1 }
 			{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
 			{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
 

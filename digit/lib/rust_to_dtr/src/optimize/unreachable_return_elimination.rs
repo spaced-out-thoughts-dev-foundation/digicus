@@ -23,7 +23,7 @@ pub fn remove_unused_returns(instructions: Vec<Instruction>) -> Vec<Instruction>
             if scope_stack.is_empty() {
                 scope_stack.push((
                     instruction.scope,
-                    instruction.name == "return" || instruction.name == "Return",
+                    instruction.name == "return" || instruction.name == "return",
                 ));
                 return true;
             }
@@ -34,7 +34,7 @@ pub fn remove_unused_returns(instructions: Vec<Instruction>) -> Vec<Instruction>
                 if scope_stack[last_element_index].0 < instruction.scope {
                     scope_stack.push((
                         instruction.scope,
-                        instruction.name == "return" || instruction.name == "Return",
+                        instruction.name == "return" || instruction.name == "return",
                     ));
                     return true;
                 } else {
@@ -48,7 +48,7 @@ pub fn remove_unused_returns(instructions: Vec<Instruction>) -> Vec<Instruction>
                 return false;
             }
 
-            if instruction.name == "return" || instruction.name == "Return" {
+            if instruction.name == "return" || instruction.name == "return" {
                 scope_stack[last_element_index].1 = true;
             }
             return true;
@@ -226,7 +226,7 @@ mod tests {
     fn remove_multi_return_at_same_scope_lowercase_return_single_scope() {
         let unoptimized_instructions = vec![
             create_instruction("return", vec!["1"], ""),
-            create_instruction("Return", vec!["1", "b"], "a"),
+            create_instruction("return", vec!["1", "b"], "a"),
             create_instruction("return", vec!["a", "b"], "d"),
         ];
 
@@ -241,12 +241,12 @@ mod tests {
     #[test]
     fn remove_multi_return_at_same_scope_uppercase_return_single_scope() {
         let unoptimized_instructions = vec![
-            create_instruction("Return", vec!["1"], ""),
+            create_instruction("return", vec!["1"], ""),
             create_instruction("return", vec!["1", "b"], "a"),
-            create_instruction("Return", vec!["a", "b"], "d"),
+            create_instruction("return", vec!["a", "b"], "d"),
         ];
 
-        let expected_optimized_instructions = vec![create_instruction("Return", vec!["1"], "")];
+        let expected_optimized_instructions = vec![create_instruction("return", vec!["1"], "")];
 
         assert_eq!(
             remove_unused_returns(unoptimized_instructions),
@@ -257,17 +257,17 @@ mod tests {
     #[test]
     fn remove_multi_return_at_same_scope_uppercase_return_multi_scope() {
         let unoptimized_instructions = vec![
-            create_instruction_with_scope("Return", vec![], "a", 1),
+            create_instruction_with_scope("return", vec![], "a", 1),
             create_instruction_with_scope("return", vec![], "b", 2),
-            create_instruction_with_scope("Return", vec![], "c", 1),
-            create_instruction_with_scope("Return", vec![], "d", 2),
-            create_instruction_with_scope("Return", vec![], "e", 2),
+            create_instruction_with_scope("return", vec![], "c", 1),
+            create_instruction_with_scope("return", vec![], "d", 2),
+            create_instruction_with_scope("return", vec![], "e", 2),
         ];
 
         let expected_optimized_instructions = vec![
-            create_instruction_with_scope("Return", vec![], "a", 1),
+            create_instruction_with_scope("return", vec![], "a", 1),
             create_instruction_with_scope("return", vec![], "b", 2),
-            create_instruction_with_scope("Return", vec![], "d", 2),
+            create_instruction_with_scope("return", vec![], "d", 2),
         ];
 
         assert_eq!(

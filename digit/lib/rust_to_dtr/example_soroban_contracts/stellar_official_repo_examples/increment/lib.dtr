@@ -21,7 +21,7 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_14, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.instance), assign: METHOD_CALL_EXPRESSION_13, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.extend_ttl, 50, 100), scope: 0 }
-			{ instruction: Return, input: (count), scope: 0 }
+			{ instruction: return, input: (count), scope: 0 }
 		$
 :[InternalFunctions]
 

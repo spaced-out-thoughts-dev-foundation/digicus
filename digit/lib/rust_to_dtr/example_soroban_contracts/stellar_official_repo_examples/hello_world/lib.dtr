@@ -10,7 +10,7 @@ to: String
 * Instructions:
 $
 { instruction: create_list, input: (env, "Hello", to), assign: Thing_to_return, scope: 0 }
-{ instruction: Return, input: (Thing_to_return), scope: 0 }
+{ instruction: return, input: (Thing_to_return), scope: 0 }
 $
 :[InternalFunctions]
 

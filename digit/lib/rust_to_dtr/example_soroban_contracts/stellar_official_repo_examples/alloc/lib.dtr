@@ -23,7 +23,7 @@
 			{ instruction: increment, input: (v1), scope: 0 }
 			{ instruction: goto, input: (loop_6_top), scope: 0 }
 			{ instruction: label, input: (loop_6_exit), scope: 0 }
-			{ instruction: Return, input: (sum), scope: 0 }
+			{ instruction: return, input: (sum), scope: 0 }
 		$
 :[InternalFunctions]
 

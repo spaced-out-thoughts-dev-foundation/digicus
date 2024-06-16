@@ -12,7 +12,7 @@
 			{ instruction: assign, input: (some_thing), assign: INPUT_VALUE_NAME_FOR_LET_1, scope: 0 }
 			{ instruction: conditional_jump, input: (INPUT_VALUE_NAME_FOR_LET_1, 1), scope: 0 }
 			{ instruction: log_string, input: ("Doing a thing"), assign: Thing_to_return, scope: 1 }
-			{ instruction: Return, input: (some_thing), scope: 0 }
+			{ instruction: return, input: (some_thing), scope: 0 }
 		$
 :[InternalFunctions]
 

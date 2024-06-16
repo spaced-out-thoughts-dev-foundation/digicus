@@ -30,7 +30,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, StorageKey::Admin), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [set_minter]
 	* Inputs:
@@ -81,7 +81,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_11.unwrap_or_default), assign: stats, scope: 0 }
 			{ instruction: create_tuple, input: (config, epoch, stats), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [mint]
 	* Inputs:
@@ -145,7 +145,7 @@
 			{ instruction: evaluate, input: (client.mint, to, amount), scope: 0 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
 

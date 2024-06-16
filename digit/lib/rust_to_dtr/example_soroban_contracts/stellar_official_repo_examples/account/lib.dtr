@@ -74,7 +74,7 @@
 			{ instruction: label, input: (loop_9_exit), scope: 0 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
 
@@ -156,7 +156,7 @@
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [verify_authorization_policy]
 	* Inputs:
@@ -231,7 +231,7 @@
 			{ instruction: evaluate, input: (spend_left_per_token.set, METHOD_CALL_ARG_1_28, METHOD_CALL_ARG_2_30), assign: Thing_to_return, scope: 1 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 
 :[ExternalFunctions]

@@ -109,7 +109,7 @@
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (load_offer, e), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[InternalFunctions]
 
@@ -144,7 +144,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, DataKey::Offer), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [write_offer]
 	* Inputs:

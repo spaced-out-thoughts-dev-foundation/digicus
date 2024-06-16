@@ -121,7 +121,7 @@
 			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_CHECK_200, 200), scope: 0 }
 			{ instruction: field, input: (time_bound, timestamp), assign: BINARY_EXPRESSION_RIGHT, scope: 200 }
 			{ instruction: evaluate, input: (greater_than_or_equal_to, ledger_timestamp, BINARY_EXPRESSION_RIGHT), assign: Thing_to_return, scope: 200 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [is_initialized]
 	* Inputs:
@@ -134,7 +134,7 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.has, DataKey::Init), assign: Thing_to_return, scope: 0 }
-			{ instruction: Return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 
 :[ExternalFunctions]

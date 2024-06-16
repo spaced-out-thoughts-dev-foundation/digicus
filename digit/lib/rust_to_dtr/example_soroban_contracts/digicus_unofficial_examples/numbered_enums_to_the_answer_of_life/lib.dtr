@@ -9,7 +9,7 @@
 	* Output: u32
 	* Instructions:
 		$
-			{ instruction: Return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
+			{ instruction: return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
 		$
 :[InternalFunctions]
 
