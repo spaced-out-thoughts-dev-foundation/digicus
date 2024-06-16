@@ -19,7 +19,7 @@ module DTRCore
       return false unless scope_valid?
 
       case @instruction.instruction
-      when 'assign', 'evaluate'
+      when 'assign', 'evaluate', 'log_string'
         validate_basic_operation!
       when 'exit_with_message', 'return'
         validate_terminating_operation!
