@@ -21,7 +21,7 @@ Deliverable 1 Progress [ 17/17 | 100% ]:
 * [x] Timelock
 * [x] TTL
 
-Deliverable 3 Progress [ 0/8 | 0% ]:
+Deliverable 1 (More Challenging) Progress [ 0/8 | 0% ]:
 * [ ] Cross Contract (2x contracts here: Contract A & Contract B)
 * [ ] Deep Contract Auth
 * [ ] Deployer (2x contracts here: Deployer Contract & Deployer Deployer)

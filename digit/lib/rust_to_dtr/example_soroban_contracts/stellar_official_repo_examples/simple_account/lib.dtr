@@ -5,7 +5,7 @@
 	* Inputs:
 	{
 		env: Env
-		public_key: BytesN<32>
+		public_key: String
 	}
 	* Instructions:
 		$
@@ -22,8 +22,8 @@
 	* Inputs:
 	{
 		env: Env
-		signature_payload: BytesN<32>
-		signature: BytesN<64>
+		signature_payload: String
+		signature: String
 		_auth_context: List<Context>
 	}
 	* Instructions:

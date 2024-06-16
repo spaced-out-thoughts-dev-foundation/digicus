@@ -5,9 +5,9 @@
 	* Inputs:
 	{
 		env: Env
-		incr: u32
+		incr: Integer
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
@@ -41,8 +41,8 @@
 
 [User Defined Types]:* (State)
 {
-	count: u32
-	last_incr: u32
+	count: Integer
+	last_incr: Integer
 }
 
 :[User Defined Types]

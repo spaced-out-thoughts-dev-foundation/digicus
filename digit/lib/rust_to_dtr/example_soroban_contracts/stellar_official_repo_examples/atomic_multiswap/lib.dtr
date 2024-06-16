@@ -57,8 +57,8 @@
 [User Defined Types]:* (SwapSpec)
 {
 	address: Address
-	amount: i128
-	min_recv: i128
+	amount: BigInteger
+	min_recv: BigInteger
 }
 
 :[User Defined Types]

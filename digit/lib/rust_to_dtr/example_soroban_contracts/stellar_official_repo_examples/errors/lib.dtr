@@ -6,7 +6,7 @@
 	{
 		env: Env
 	}
-	* Output: Result<u32, Error>
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
@@ -40,6 +40,6 @@
 	* Type: String
 	* Initial Value: "COUNTER"
 * [MAX]
-	* Type: u32
+	* Type: Integer
 	* Initial Value: 5
 

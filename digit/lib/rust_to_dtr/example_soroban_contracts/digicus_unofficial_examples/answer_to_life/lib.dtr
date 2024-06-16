@@ -6,7 +6,7 @@
 {
 env: Env
 }
-* Output: u32
+* Output: Integer
 * Instructions:
 $
 { instruction: return, input: (42), scope: 0 }

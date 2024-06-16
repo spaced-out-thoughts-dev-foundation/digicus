@@ -5,9 +5,9 @@
 	* Inputs:
 	{
 		_env: Env
-		count: u32
+		count: Integer
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: create_list, input: (), assign: v1, scope: 0 }

@@ -1,6 +1,10 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
 
 pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
+    if rust_name.contains("BytesN<") {
+        return Ok("String".to_string());
+    }
+
     if rust_name.contains("Vec<") {
         return Ok(replace_vec_with_list(rust_name));
     }
@@ -9,8 +13,14 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         return Ok(replace_hashmap_with_map(rust_name));
     }
 
+    if rust_name.contains("Map<") {
+        return Ok(replace_map_with_map(rust_name));
+    }
+
     if rust_name.contains("HashSet<") {
-        return Ok(replace_hashset_with_set(rust_name));
+        return Err(NotTranslatableError::Custom(
+            "Unable to translate HashSet type".to_string(),
+        ));
     }
 
     if rust_name.contains("Arc<") {
@@ -55,12 +65,9 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         ));
     }
 
-    // TODO: is this correct?
+    // ASSUMPTION: we can return a tuple type here
     if rust_name.contains("Result<") {
-        return Ok(rust_name.to_string());
-        // return Err(NotTranslatableError::Custom(
-        //     "Unable to translate Result type for result".to_string(),
-        // ));
+        return Ok(replace_result(rust_name));
     }
 
     match rust_name {
@@ -69,13 +76,15 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         )),
         "String" => Ok("String".to_string()),
         "Symbol" => Ok("String".to_string()),
+        "Bytes" => Ok("String".to_string()),
         "bool" => Ok("Boolean".to_string()),
-        "char" => Ok("Character".to_string()),
         "f32" | "f64" => Ok("Float".to_string()),
-        "i8" | "i16" | "i32" | "i64 " => Ok(rust_name.to_string()),
-        "u8" | "u16" | "u32" | "u64 " => Ok(rust_name.to_string()),
-        "()" | "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref" | "RefCell"
-        | "Result" | "usize" => unable_to_translate_type_helper(rust_name),
+        // ASSUMPTION: if we aren't returning anything then don't return anything ¯\_(ツ)_/¯
+        "()" => Ok("".to_string()),
+        "u8" | "u16" | "u32" | "u64" | "i8" | "i16" | "i32" | "i64" => Ok("Integer".to_string()),
+        "u128" | "u256" | "i128" | "i256" => Ok("BigInteger".to_string()),
+        "char" | "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref"
+        | "RefCell" | "Result" | "usize" => unable_to_translate_type_helper(rust_name),
         // ASSUMPTION: these are custom type names
         _ => Ok(rust_name.to_string()),
     }
@@ -103,17 +112,64 @@ fn replace_hashmap_with_map(input: &str) -> String {
         let mut types = inner_types.split(","); // Split the types by comma
         let key_type = types.next().unwrap(); // Get the first type as the key type
         let value_type = types.next().unwrap(); // Get the second type as the value type
-        format!("Map<{}, {}>", key_type.trim(), value_type.trim()) // Format the new string with 'Map'
+        format!("Dictionary<{}, {}>", key_type.trim(), value_type.trim()) // Format the new string with 'Map'
     } else {
         input.to_string() // If the pattern doesn't match, return the input as is
     }
 }
 
-fn replace_hashset_with_set(input: &str) -> String {
-    if input.starts_with("HashSet<") && input.ends_with('>') {
-        let inner_type = &input[9..input.len() - 1]; // Extract the type inside the angle brackets
-        format!("Set<{}>", inner_type.trim()) // Format the new string with 'Set'
+fn replace_map_with_map(input: &str) -> String {
+    if input.starts_with("Map<") && input.ends_with('>') {
+        let inner_types = &input[4..input.len() - 1]; // Extract the types inside the angle brackets
+        let mut types = inner_types.split(","); // Split the types by comma
+        let key_type = types.next().unwrap(); // Get the first type as the key type
+        let value_type = types.next().unwrap(); // Get the second type as the value type
+        format!("Dictionary<{}, {}>", key_type.trim(), value_type.trim()) // Format the new string with 'Map'
     } else {
         input.to_string() // If the pattern doesn't match, return the input as is
     }
+}
+
+fn replace_result(input: &str) -> String {
+    if input.starts_with("Result<") && input.ends_with('>') {
+        let inner_types = &input[7..input.len() - 1]; // Extract the types inside the angle brackets
+        println!("inner_types: {}", inner_types);
+        let foobar = inner_types.replace("(", "").replace(")", "");
+        let types = foobar.split(","); // Split the types by comma
+
+        let mut types_to_return: Vec<String> = vec![];
+
+        for the_type in types {
+            let fixed_type = fix_result_type(the_type);
+
+            if fixed_type.trim() != "" {
+                types_to_return.push(fixed_type.trim().to_string());
+            }
+        }
+
+        if types_to_return.len() == 0 {
+            return "".to_string();
+        }
+
+        if types_to_return.len() == 1 {
+            return types_to_return[0].to_string();
+        }
+
+        format!("({})", types_to_return.join(", "))
+    } else {
+        input.to_string() // If the pattern doesn't match, return the input as is
+    }
+}
+
+fn fix_result_type(type_name: &str) -> String {
+    println!("type_name: {}", type_name);
+    if type_name == "()" {
+        return "".to_string();
+    }
+
+    if type_name.contains("Error") {
+        return "".to_string();
+    }
+
+    type_name.to_string()
 }

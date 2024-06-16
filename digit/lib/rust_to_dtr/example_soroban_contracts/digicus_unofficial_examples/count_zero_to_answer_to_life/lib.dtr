@@ -23,8 +23,8 @@
 :[User Defined Types]
 [State]:
 * [Zero]
-	* Type: i32
+	* Type: Integer
 	* Initial Value: 0
 * [AnswerToLife]
-	* Type: i32
+	* Type: Integer
 	* Initial Value: 42

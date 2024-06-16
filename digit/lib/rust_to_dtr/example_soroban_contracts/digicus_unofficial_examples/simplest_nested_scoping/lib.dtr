@@ -4,9 +4,9 @@
 -() [fourty_two_and_then_some]
 	* Inputs:
 	{
-		some_input: u32
+		some_input: Integer
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (greater_than, some_input, 10), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }

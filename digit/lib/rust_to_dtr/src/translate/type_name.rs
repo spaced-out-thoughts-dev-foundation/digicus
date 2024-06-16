@@ -86,7 +86,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
         syn::Type::Reference(ref_type) => {
             let type_string = figure_out_type(&ref_type.elem);
 
-            return Ok(format!("&{}", type_string.unwrap()));
+            return Ok(format!("&{}", map_name(&type_string.unwrap())?));
         }
         syn::Type::Tuple(tuple_type) => {
             let mut tuple_str = String::new();
@@ -95,7 +95,7 @@ pub fn figure_out_type(ty: &syn::Type) -> Result<String, NotTranslatableError> {
             for elem in &tuple_type.elems {
                 let val = figure_out_type(elem);
                 match val {
-                    Ok(val) => tuple_types.push(val),
+                    Ok(val) => tuple_types.push(map_name(&val)?),
                     Err(_) => {
                         return Err(NotTranslatableError::Custom(
                             "Could not figure out type for tuple".to_string(),
@@ -127,7 +127,7 @@ fn parse_angle_bracketed_generic_arguments(args: &syn::AngleBracketedGenericArgu
                 let val = figure_out_type(ty);
 
                 match val {
-                    Ok(val) => args_list.push(val),
+                    Ok(val) => args_list.push(map_name(&val).unwrap()),
                     Err(_) => {
                         return "Could not figure out type for angle bracketed type".to_string();
                     }
@@ -138,7 +138,7 @@ fn parse_angle_bracketed_generic_arguments(args: &syn::AngleBracketedGenericArgu
                 let value = parse_expression(constant, &mut CompilationState::new()).unwrap()[0]
                     .input[0]
                     .clone();
-                args_list.push(format!("{}", value));
+                args_list.push(format!("{}", map_name(&value).unwrap()));
             }
             _ => {}
         }
@@ -187,7 +187,7 @@ fn parse_path_segment(segment: &syn::PathSegment) -> String {
 fn format_segment_name(mut segment_name: String) -> String {
     segment_name = segment_name.replace("Self::", "");
 
-    segment_name
+    map_name(&segment_name).unwrap_or(segment_name)
 }
 
 #[cfg(test)]
@@ -197,7 +197,7 @@ mod tests {
     #[test]
     fn test_figure_out_type_primitive_i32() {
         let ty = syn::parse_str("i32").unwrap();
-        assert_eq!(super::figure_out_type(&ty), Ok("i32".to_string()));
+        assert_eq!(super::figure_out_type(&ty), Ok("Integer".to_string()));
     }
 
     #[test]
@@ -209,7 +209,12 @@ mod tests {
     #[test]
     fn test_figure_out_type_primitive_char() {
         let ty = syn::parse_str("char").unwrap();
-        assert_eq!(super::figure_out_type(&ty), Ok("Character".to_string()));
+        assert_eq!(
+            super::figure_out_type(&ty),
+            Err(NotTranslatableError::Custom(
+                "Unable to translate char".to_string()
+            ))
+        );
     }
 
     #[test]
@@ -229,20 +234,23 @@ mod tests {
 
         #[test]
         fn test_figure_out_type_vec_i32() {
-            let ty = syn::parse_str("Vec<i32>").unwrap();
-            assert_eq!(super::figure_out_type(&ty), Ok("List<i32>".to_string()));
+            let ty = syn::parse_str("Vec<Integer>").unwrap();
+            assert_eq!(super::figure_out_type(&ty), Ok("List<Integer>".to_string()));
         }
 
         #[test]
         fn test_figure_out_type_hash_map() {
             let ty = syn::parse_str("HashMap<i32, i32>").unwrap();
-            assert_eq!(super::figure_out_type(&ty), Ok("Map<i32, i32>".to_string()));
+            assert_eq!(
+                super::figure_out_type(&ty),
+                Ok("Dictionary<Integer, Integer>".to_string())
+            );
         }
     }
 
     #[test]
     fn test_figure_out_type_enum() {
-        let ty = syn::parse_str("Option<i32>").unwrap();
+        let ty = syn::parse_str("Option<Integer>").unwrap();
         assert_eq!(
             super::figure_out_type(&ty),
             Err(NotTranslatableError::Custom(
@@ -254,7 +262,10 @@ mod tests {
     #[test]
     fn test_figure_out_type_pointer() {
         let ty = syn::parse_str("*const i32").unwrap();
-        assert_eq!(super::figure_out_type(&ty), Ok("*const i32".to_string()));
+        assert_eq!(
+            super::figure_out_type(&ty),
+            Ok("*const Integer".to_string())
+        );
     }
 
     #[test]
@@ -262,7 +273,7 @@ mod tests {
         let ty = syn::parse_str("fn(i32) -> i32").unwrap();
         assert_eq!(
             super::figure_out_type(&ty),
-            Ok("fn(i32) -> i32".to_string())
+            Ok("fn(Integer) -> Integer".to_string())
         );
     }
 

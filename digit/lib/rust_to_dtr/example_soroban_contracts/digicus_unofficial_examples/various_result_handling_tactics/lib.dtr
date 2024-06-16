@@ -5,7 +5,7 @@
 	* Inputs:
 	{
 	}
-	* Output: i32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (Some, 42), assign: some_thing, scope: 0 }

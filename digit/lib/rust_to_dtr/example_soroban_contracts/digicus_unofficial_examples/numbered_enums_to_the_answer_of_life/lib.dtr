@@ -6,7 +6,7 @@
 	{
 		env: Env
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }

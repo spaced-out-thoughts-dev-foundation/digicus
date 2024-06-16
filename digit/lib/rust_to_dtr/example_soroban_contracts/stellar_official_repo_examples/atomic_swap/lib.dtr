@@ -9,10 +9,10 @@
 		b: Address
 		token_a: Address
 		token_b: Address
-		amount_a: i128
-		min_b_for_a: i128
-		amount_b: i128
-		min_a_for_b: i128
+		amount_a: BigInteger
+		min_b_for_a: BigInteger
+		amount_b: BigInteger
+		min_a_for_b: BigInteger
 	}
 	* Instructions:
 		$
@@ -50,8 +50,8 @@
 		token: &Address
 		from: &Address
 		to: &Address
-		max_spend_amount: i128
-		transfer_amount: i128
+		max_spend_amount: BigInteger
+		transfer_amount: BigInteger
 	}
 	* Instructions:
 		$

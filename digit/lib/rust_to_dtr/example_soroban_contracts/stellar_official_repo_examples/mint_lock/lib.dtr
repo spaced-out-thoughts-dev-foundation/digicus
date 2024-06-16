@@ -57,7 +57,7 @@
 		contract: Address
 		minter: Address
 	}
-	* Output: Result<(MinterConfig, u32, MinterStats), Error>
+	* Output: (MinterConfig, Integer, MinterStats)
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_7, scope: 0 }
@@ -90,9 +90,8 @@
 		contract: Address
 		minter: Address
 		to: Address
-		amount: i128
+		amount: BigInteger
 	}
-	* Output: Result<(), Error>
 	* Instructions:
 		$
 			{ instruction: create_tuple, input: (contract, to, amount), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
@@ -162,16 +161,16 @@
 {
 	Admin: ()
 	Minter: (Address, Address)
-	MinterStats: (Address, Address, u32, u32)
+	MinterStats: (Address, Address, Integer, Integer)
 }
 * (MinterConfig)
 {
-	limit: i128
-	epoch_length: u32
+	limit: BigInteger
+	epoch_length: Integer
 }
 * (MinterStats)
 {
-	consumed_limit: i128
+	consumed_limit: BigInteger
 }
 
 :[User Defined Types]

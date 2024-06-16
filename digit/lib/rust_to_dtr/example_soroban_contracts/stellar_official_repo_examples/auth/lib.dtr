@@ -6,9 +6,9 @@
 	{
 		env: Env
 		user: Address
-		value: u32
+		value: Integer
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (user.require_auth), scope: 0 }

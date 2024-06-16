@@ -7,7 +7,7 @@
 		env: Env
 		from: Address
 		token: Address
-		amount: i128
+		amount: BigInteger
 		claimants: List<Address>
 		time_bound: TimeBound
 	}
@@ -87,13 +87,13 @@
 * (TimeBound)
 {
 	kind: TimeBoundKind
-	timestamp: u64
+	timestamp: Integer
 }
 * (ClaimableBalance)
 {
 	token: Address
-	amount: i128
-	claimants: Vec<Address>
+	amount: BigInteger
+	claimants: List<Address>
 	time_bound: TimeBound
 }
 

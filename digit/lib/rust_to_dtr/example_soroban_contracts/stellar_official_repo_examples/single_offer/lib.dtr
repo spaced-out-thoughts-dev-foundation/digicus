@@ -8,8 +8,8 @@
 		seller: Address
 		sell_token: Address
 		buy_token: Address
-		sell_price: u32
-		buy_price: u32
+		sell_price: Integer
+		buy_price: Integer
 	}
 	* Instructions:
 		$
@@ -37,8 +37,8 @@
 	{
 		e: Env
 		buyer: Address
-		buy_token_amount: i128
-		min_sell_token_amount: i128
+		buy_token_amount: BigInteger
+		min_sell_token_amount: BigInteger
 	}
 	* Instructions:
 		$
@@ -67,7 +67,7 @@
 	{
 		e: Env
 		token: Address
-		amount: i128
+		amount: BigInteger
 	}
 	* Instructions:
 		$
@@ -83,8 +83,8 @@
 	* Inputs:
 	{
 		e: Env
-		sell_price: u32
-		buy_price: u32
+		sell_price: Integer
+		buy_price: Integer
 	}
 	* Instructions:
 		$
@@ -124,8 +124,8 @@
 	seller: Address
 	sell_token: Address
 	buy_token: Address
-	sell_price: u32
-	buy_price: u32
+	sell_price: Integer
+	buy_price: Integer
 }
 
 :[User Defined Types]

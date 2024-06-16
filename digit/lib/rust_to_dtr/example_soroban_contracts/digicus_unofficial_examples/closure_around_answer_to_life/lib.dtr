@@ -5,7 +5,7 @@
 	* Inputs:
 	{
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: assign, input: (20), assign: x, scope: 0 }

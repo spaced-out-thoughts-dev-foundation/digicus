@@ -4,6 +4,7 @@ use crate::instruction;
 use crate::translate;
 use crate::translate::expression::parse_expression;
 use crate::translate::function;
+use crate::translate::rust_to_dtr_term::map_name;
 use crate::translate::type_name::figure_out_type;
 use crate::translate::type_name::{self, parse_path};
 
@@ -68,7 +69,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                 state_str.push_str(&format!("\n* [{}]", name));
                 state_str.push_str(&format!(
                     "\n\t* Type: {}",
-                    figure_out_type(&const_item.ty.clone())?
+                    map_name(&figure_out_type(&const_item.ty.clone())?).unwrap()
                 ));
                 state_str.push_str(&format!(
                     "\n\t* Initial Value: {}",
@@ -143,7 +144,7 @@ fn syn_item_struct_to_user_defined_type(item: &syn::ItemStruct) -> String {
             dtr_code.push_str(&format!(
                 "\t{}: {}\n",
                 field.ident.as_ref().unwrap(),
-                type_name::parse_path(&type_path.path)
+                map_name(&type_name::parse_path(&type_path.path)).unwrap()
             ));
         }
     });
@@ -176,7 +177,9 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
 
                 // ASSUMPTION: here we ignore the name
                 fields_named.named.iter().for_each(|field| {
-                    innerd_enum_types.push(figure_out_type(&field.ty.clone()).unwrap_or_default());
+                    innerd_enum_types.push(
+                        map_name(&figure_out_type(&field.ty.clone()).unwrap_or_default()).unwrap(),
+                    );
                 });
 
                 dtr_code.push_str(format!(": ({})\n", innerd_enum_types.join(", ")).as_str());
@@ -185,7 +188,9 @@ fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
                 let mut innerd_enum_types: Vec<String> = vec![];
 
                 fields_unnamed.unnamed.iter().for_each(|field| {
-                    innerd_enum_types.push(figure_out_type(&field.ty.clone()).unwrap_or_default());
+                    innerd_enum_types.push(
+                        map_name(&figure_out_type(&field.ty.clone()).unwrap_or_default()).unwrap(),
+                    );
                 });
 
                 dtr_code.push_str(format!(": ({})\n", innerd_enum_types.join(", ")).as_str());

@@ -5,9 +5,9 @@
 	* Inputs:
 	{
 		e: &Env
-		input: Bytes
+		input: String
 	}
-	* Output: Result<Bytes, Error>
+	* Output: String
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (repeat, 0, 128), assign: input_buf, scope: 0 }

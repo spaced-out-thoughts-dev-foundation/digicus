@@ -5,7 +5,7 @@
 	* Inputs:
 	{
 	}
-	* Output: u32
+	* Output: Integer
 	* Instructions:
 		$
 			{ instruction: return, input: (42), scope: 0 }
@@ -18,7 +18,7 @@
 {
 	Admin: ()
 	Minter: (Address, Address)
-	MinterStats: (Address, Address, u32, u32)
+	MinterStats: (Address, Address, Integer, Integer)
 }
 
 :[User Defined Types]

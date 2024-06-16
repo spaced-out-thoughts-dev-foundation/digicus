@@ -5,7 +5,7 @@
 	* Inputs:
 	{
 		env: Env
-		signers: List<BytesN<32>>
+		signers: List<String>
 	}
 	* Instructions:
 		$
@@ -31,7 +31,7 @@
 	{
 		env: Env
 		token: Address
-		limit: i128
+		limit: BigInteger
 	}
 	* Instructions:
 		$
@@ -48,11 +48,10 @@
 	* Inputs:
 	{
 		env: Env
-		signature_payload: BytesN<32>
+		signature_payload: String
 		signatures: List<AccSignature>
 		auth_context: List<Context>
 	}
-	* Output: Result<(), AccError>
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (authenticate, env, signature_payload, signatures), scope: 0 }
@@ -81,14 +80,14 @@
 
 [User Defined Types]:* (AccSignature)
 {
-	public_key: BytesN<32>
-	signature: BytesN<64>
+	public_key: String
+	signature: String
 }
 
 * (DataKey)
 {
 	SignerCnt: ()
-	Signer: (BytesN<32>)
+	Signer: (String)
 	SpendLimit: (Address)
 }
 
@@ -113,10 +112,9 @@
 	* Inputs:
 	{
 		env: &Env
-		signature_payload: &BytesN<32>
+		signature_payload: &String
 		signatures: &List<AccSignature>
 	}
-	* Output: Result<(), AccError>
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (signatures.len), assign: RANGE_END_2, scope: 0 }
@@ -165,9 +163,8 @@
 		context: &Context
 		curr_contract: &Address
 		all_signed: Boolean
-		spend_left_per_token: &Map<Address, i128>
+		spend_left_per_token: &Dictionary<Address, BigInteger>
 	}
-	* Output: Result<(), AccError>
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (equal_to, context, TupleStruct), assign: CONDITIONAL_JUMP_CHECK_100, scope: 0 }
