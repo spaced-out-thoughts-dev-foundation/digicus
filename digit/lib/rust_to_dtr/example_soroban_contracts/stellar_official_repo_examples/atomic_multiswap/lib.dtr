@@ -45,10 +45,10 @@
 			{ instruction: evaluate, input: (swaps_b.remove, i), scope: 2 }
 			{ instruction: break, input: (), scope: 2 }
 			{ instruction: increment, input: (i), scope: 0 }
-			{ instruction: goto, input: (loop_3_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_3_top), scope: 0 }
 			{ instruction: label, input: (loop_3_exit), scope: 0 }
 			{ instruction: increment, input: (acc_a), scope: 0 }
-			{ instruction: goto, input: (loop_1_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_1_top), scope: 0 }
 			{ instruction: label, input: (loop_1_exit), scope: 0 }
 		$
 :[Interface]

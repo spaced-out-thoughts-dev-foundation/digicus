@@ -30,8 +30,8 @@ pub fn handle_index_expression(
     instructions.extend(index_instructions);
 
     instructions.push(Instruction::new(
-        "index".to_string(),
-        vec![thing_being_index_name, index_name],
+        "evaluate".to_string(),
+        vec!["index".to_string(), thing_being_index_name, index_name],
         compilation_state
             .next_assignment
             .clone()
@@ -68,8 +68,9 @@ mod tests {
                     compilation_state.scope
                 ),
                 Instruction::new(
-                    "index".to_string(),
+                    "evaluate".to_string(),
                     vec![
+                        "index".to_string(),
                         "thing_being_indexed_0".to_string(),
                         "index_name_1".to_string()
                     ],
@@ -105,8 +106,9 @@ mod tests {
                     compilation_state.scope
                 ),
                 Instruction::new(
-                    "index".to_string(),
+                    "evaluate".to_string(),
                     vec![
+                        "index".to_string(),
                         "thing_being_indexed_1".to_string(),
                         "index_name_2".to_string()
                     ],
@@ -120,8 +122,9 @@ mod tests {
                     compilation_state.scope
                 ),
                 Instruction::new(
-                    "index".to_string(),
+                    "evaluate".to_string(),
                     vec![
+                        "index".to_string(),
                         "thing_being_indexed_0".to_string(),
                         "index_name_3".to_string()
                     ],

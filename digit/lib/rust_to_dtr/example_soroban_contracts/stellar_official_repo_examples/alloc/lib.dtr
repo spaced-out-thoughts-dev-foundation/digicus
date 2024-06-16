@@ -21,7 +21,7 @@
 			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_6_exit), scope: 0 }
 			{ instruction: add_and_assign, input: (sum, i), scope: 0 }
 			{ instruction: increment, input: (v1), scope: 0 }
-			{ instruction: goto, input: (loop_6_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_6_top), scope: 0 }
 			{ instruction: label, input: (loop_6_exit), scope: 0 }
 			{ instruction: return, input: (sum), scope: 0 }
 		$

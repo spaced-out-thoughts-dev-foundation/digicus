@@ -13,7 +13,7 @@
 			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
 			{ instruction: log_string, input: ("Counting: {}", i), scope: 0 }
 			{ instruction: increment, input: (i), scope: 0 }
-			{ instruction: goto, input: (loop_0_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 		$
 :[Interface]

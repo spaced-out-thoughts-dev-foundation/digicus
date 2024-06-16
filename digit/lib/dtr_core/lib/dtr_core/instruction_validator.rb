@@ -25,11 +25,11 @@ module DTRCore
         validate_terminating_operation!
       when 'and', 'or'
         validate_logical_operation!
-      when 'conditional_jump', 'label', 'goto', 'unconditional_jump'
+      when 'conditional_goto', 'conditional_jump', 'end_of_iteration_check', 'label', 'unconditional_goto', 'unconditional_jump'
         validate_unconditional_jump_operation!
       when 'contract_address'
         validate_smart_contract_specific_operation!
-      when 'create_dictionary', 'create_list', 'create_tuple',
+      when 'create_dictionary', 'create_list', 'create_range', 'create_tuple',
         'field', 'initialize_udt'
         validate_object_operation!
       when 'add', 'subtract', 'multiply', 'divide',

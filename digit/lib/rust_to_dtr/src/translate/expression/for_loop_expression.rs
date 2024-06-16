@@ -102,7 +102,7 @@ fn get_execute_block(
 
 fn get_back_to_top(label: String, compilation_state: CompilationState) -> Vec<Instruction> {
     vec![Instruction::from_compilation_state(
-        "goto".to_string(),
+        "unconditional_goto".to_string(),
         vec![label.clone()],
         &mut compilation_state.clone(),
     )]

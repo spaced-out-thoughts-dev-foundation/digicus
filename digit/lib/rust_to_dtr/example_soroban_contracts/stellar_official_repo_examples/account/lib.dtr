@@ -19,7 +19,7 @@
 			{ instruction: create_tuple, input: (), assign: METHOD_CALL_ARG_2_4, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.set, METHOD_CALL_ARG_1_2, METHOD_CALL_ARG_2_4), scope: 0 }
 			{ instruction: increment, input: (signer), scope: 0 }
-			{ instruction: goto, input: (loop_0_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_12, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_12.instance), assign: METHOD_CALL_EXPRESSION_11, scope: 0 }
@@ -70,7 +70,7 @@
 			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_9_exit), scope: 0 }
 			{ instruction: evaluate, input: (verify_authorization_policy, env, context, curr_contract, all_signed, spend_left_per_token), scope: 0 }
 			{ instruction: increment, input: (context), scope: 0 }
-			{ instruction: goto, input: (loop_9_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_9_top), scope: 0 }
 			{ instruction: label, input: (loop_9_exit), scope: 0 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
@@ -152,7 +152,7 @@
 			{ instruction: field, input: (signature, signature), assign: METHOD_CALL_ARG_3_21, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_22.ed25519_verify, METHOD_CALL_ARG_1_17, METHOD_CALL_ARG_2_18, METHOD_CALL_ARG_3_21), scope: 0 }
 			{ instruction: increment, input: (i), scope: 0 }
-			{ instruction: goto, input: (loop_0_top), scope: 0 }
+			{ instruction: unconditional_goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 			{ instruction: create_tuple, input: (), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }

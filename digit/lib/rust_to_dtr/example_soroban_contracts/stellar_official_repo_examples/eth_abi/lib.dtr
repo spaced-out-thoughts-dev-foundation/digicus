@@ -13,7 +13,7 @@
 			{ instruction: evaluate, input: (repeat, 0, 128), assign: input_buf, scope: 0 }
 			{ instruction: evaluate, input: (input.len), assign: RANGE_END_5, scope: 0 }
 			{ instruction: create_range, input: (0, RANGE_END_5), assign: index_name_3, scope: 0 }
-			{ instruction: index, input: (input_buf, index_name_3), assign: input_slice, scope: 0 }
+			{ instruction: evaluate, input: (index, input_buf, index_name_3), assign: input_slice, scope: 0 }
 			{ instruction: evaluate, input: (input.copy_into_slice, input_slice), scope: 0 }
 			{ instruction: evaluate, input: (Input::abi_decode, input_slice, false), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.map_err, Error::Decode), assign: input, scope: 0 }
