@@ -1,6 +1,6 @@
 [Contract]: TtlContract
 
-[InternalFunctions]:
+[Interface]:
 -() [setup]
 	* Inputs:
 	{
@@ -51,7 +51,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.temporary), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.extend_ttl, DataKey::MyKey, 3000, 7000), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

@@ -1,6 +1,6 @@
 [Contract]: SimpleAccount
 
-[InternalFunctions]:
+[Interface]:
 -() [init]
 	* Inputs:
 	{
@@ -36,7 +36,7 @@
 			{ instruction: evaluate, input: (signature_payload.into), assign: METHOD_CALL_ARG_2_6, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_9.ed25519_verify, public_key, METHOD_CALL_ARG_2_6, signature), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

@@ -1,6 +1,6 @@
 [Contract]: IncrementContract
 
-[InternalFunctions]:
+[Interface]:
 -() [increment]
 	* Inputs:
 	{
@@ -22,7 +22,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.publish, METHOD_CALL_ARG_1_11, count), scope: 0 }
 			{ instruction: return, input: (count), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

@@ -3,7 +3,6 @@ mod full_contract_tests {
     use crate::{
         common::compilation_state::GLOBAL_UNIQUE_NUMBER_GENERATOR, rust_to_dtr_c::parse_to_dtr,
     };
-    use rstest::rstest;
     use std::fs;
 
     // Setup function to reset the global UUID generator

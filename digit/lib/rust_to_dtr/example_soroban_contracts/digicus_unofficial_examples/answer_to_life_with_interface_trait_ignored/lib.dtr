@@ -1,6 +1,6 @@
 [Contract]: AnswerToLifeContractWithInterfaceTraitIgnored
 
-[InternalFunctions]:
+[Interface]:
 -() [fourty_two]
 * Inputs:
 {
@@ -11,6 +11,6 @@ env: Env
 $
 { instruction: return, input: (42), scope: 0 }
 $
-:[InternalFunctions]
+:[Interface]
 [User Defined Types]:
 :[User Defined Types]

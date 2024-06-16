@@ -1,6 +1,6 @@
 [Contract]: NonRangeForLoopContract
 
-[InternalFunctions]:
+[Interface]:
 -() [do_a_thing_for_each_element_in_vec]
 	* Inputs:
 	{
@@ -17,7 +17,7 @@
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

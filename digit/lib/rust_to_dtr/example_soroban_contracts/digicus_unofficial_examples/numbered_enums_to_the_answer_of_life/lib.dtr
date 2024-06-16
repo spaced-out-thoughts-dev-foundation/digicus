@@ -1,6 +1,6 @@
 [Contract]: AnswerToLifeContract
 
-[InternalFunctions]:
+[Interface]:
 -() [fourty_two]
 	* Inputs:
 	{
@@ -11,7 +11,7 @@
 		$
 			{ instruction: return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

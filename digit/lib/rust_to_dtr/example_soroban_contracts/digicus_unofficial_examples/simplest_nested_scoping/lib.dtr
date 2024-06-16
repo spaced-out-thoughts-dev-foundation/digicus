@@ -1,6 +1,6 @@
 [Contract]: NestedScoping
 
-[InternalFunctions]:
+[Interface]:
 -() [fourty_two_and_then_some]
 	* Inputs:
 	{
@@ -25,7 +25,7 @@
 			{ instruction: add_and_assign, input: (some_input, 1), scope: 0 }
 			{ instruction: return, input: (some_input), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

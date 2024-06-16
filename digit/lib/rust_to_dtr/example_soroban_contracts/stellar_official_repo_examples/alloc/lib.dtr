@@ -1,6 +1,6 @@
 [Contract]: AllocContract
 
-[InternalFunctions]:
+[Interface]:
 -() [sum]
 	* Inputs:
 	{
@@ -25,7 +25,7 @@
 			{ instruction: label, input: (loop_6_exit), scope: 0 }
 			{ instruction: return, input: (sum), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

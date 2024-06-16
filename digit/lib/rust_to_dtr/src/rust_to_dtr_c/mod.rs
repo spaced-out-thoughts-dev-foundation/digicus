@@ -44,14 +44,14 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     continue;
                 }
 
-                dtr_code.push_str("[InternalFunctions]:\n");
+                dtr_code.push_str("[Interface]:\n");
 
                 item_impl.items.iter().for_each(|item_impl_item| {
                     if let syn::ImplItem::Fn(method) = item_impl_item {
                         dtr_code.push_str(&translate::impl_block::parse_function_block(method));
                     }
                 });
-                dtr_code.push_str(":[InternalFunctions]\n");
+                dtr_code.push_str(":[Interface]\n");
             }
             syn::Item::Enum(enum_item) => {
                 enum_item.attrs.iter().for_each(|attr| {
@@ -107,13 +107,13 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     }
 
     if outside_of_contract_functions.len() > 0 {
-        dtr_code.push_str("\n\n[ExternalFunctions]:\n");
+        dtr_code.push_str("\n\n[Helpers]:\n");
 
         outside_of_contract_functions.iter().for_each(|fn_item| {
             dtr_code.push_str(&function::parse_function_block(fn_item));
         });
 
-        dtr_code.push_str("\n:[ExternalFunctions]\n");
+        dtr_code.push_str("\n:[Helpers]\n");
     }
 
     Ok(dtr_code)

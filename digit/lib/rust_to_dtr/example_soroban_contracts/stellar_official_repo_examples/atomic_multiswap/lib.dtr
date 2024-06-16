@@ -1,6 +1,6 @@
 [Contract]: AtomicMultiSwapContract
 
-[InternalFunctions]:
+[Interface]:
 -() [multi_swap]
 	* Inputs:
 	{
@@ -51,7 +51,7 @@
 			{ instruction: goto, input: (loop_1_top), scope: 0 }
 			{ instruction: label, input: (loop_1_exit), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:* (SwapSpec)

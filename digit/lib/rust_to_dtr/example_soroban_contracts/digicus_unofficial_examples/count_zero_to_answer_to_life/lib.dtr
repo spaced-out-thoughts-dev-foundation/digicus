@@ -1,6 +1,6 @@
 [Contract]: CountZeroToAnswerToLife
 
-[InternalFunctions]:
+[Interface]:
 -() [count_zero_to_answer_to_life]
 	* Inputs:
 	{
@@ -16,7 +16,7 @@
 			{ instruction: goto, input: (loop_0_top), scope: 0 }
 			{ instruction: label, input: (loop_0_exit), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

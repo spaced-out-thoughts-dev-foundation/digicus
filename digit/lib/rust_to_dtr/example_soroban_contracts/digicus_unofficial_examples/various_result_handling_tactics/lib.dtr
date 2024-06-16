@@ -1,6 +1,6 @@
 [Contract]: VariousResultHandlingTacticsContract
 
-[InternalFunctions]:
+[Interface]:
 -() [return_some_thing]
 	* Inputs:
 	{
@@ -14,7 +14,7 @@
 			{ instruction: log_string, input: ("Doing a thing"), assign: Thing_to_return, scope: 1 }
 			{ instruction: return, input: (some_thing), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

@@ -1,6 +1,6 @@
 [Contract]: Contract
 
-[InternalFunctions]:
+[Interface]:
 -() [set_admin]
 	* Inputs:
 	{
@@ -147,7 +147,7 @@
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

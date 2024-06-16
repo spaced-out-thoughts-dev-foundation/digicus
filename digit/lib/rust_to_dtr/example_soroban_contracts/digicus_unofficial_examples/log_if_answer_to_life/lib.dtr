@@ -1,6 +1,6 @@
 [Contract]: LogIfAnswerToLife
 
-[InternalFunctions]:
+[Interface]:
 -() [fourty_two_and_then_some]
 * Inputs:
 {
@@ -14,7 +14,7 @@ $
 { instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 { instruction: evaluate, input: (log_to_env, env, "Yes, the answer to life is 42!"), scope: 1 }
 $
-:[InternalFunctions]
+:[Interface]
 
 [User Defined Types]:
 :[User Defined Types]
@@ -23,7 +23,7 @@ $
 	* Type: u32
 	* Initial Value: 42
 
-[ExternalFunctions]:
+[Helpers]:
 -() [log_to_env]
 * Inputs:
 {
@@ -34,4 +34,4 @@ message: String
 $
 	{ instruction: log_string, input: (env, message), scope: 0 }
 $
-:[ExternalFunctions]
+:[Helpers]

@@ -1,6 +1,6 @@
 [Contract]: InnerdsOfEnums
 
-[InternalFunctions]:
+[Interface]:
 -() [answer_to_life]
 	* Inputs:
 	{
@@ -10,7 +10,7 @@
 		$
 			{ instruction: return, input: (42), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:

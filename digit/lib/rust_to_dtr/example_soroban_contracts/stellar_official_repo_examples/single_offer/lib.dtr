@@ -1,6 +1,6 @@
 [Contract]: SingleOffer
 
-[InternalFunctions]:
+[Interface]:
 -() [create]
 	* Inputs:
 	{
@@ -111,7 +111,7 @@
 			{ instruction: evaluate, input: (load_offer, e), assign: Thing_to_return, scope: 0 }
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:
@@ -131,7 +131,7 @@
 :[User Defined Types]
 
 
-[ExternalFunctions]:
+[Helpers]:
 -() [load_offer]
 	* Inputs:
 	{
@@ -159,4 +159,4 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, DataKey::Offer, offer), scope: 0 }
 		$
 
-:[ExternalFunctions]
+:[Helpers]

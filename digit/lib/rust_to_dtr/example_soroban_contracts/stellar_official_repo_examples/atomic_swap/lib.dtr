@@ -1,6 +1,6 @@
 [Contract]: AtomicSwapContract
 
-[InternalFunctions]:
+[Interface]:
 -() [swap]
 	* Inputs:
 	{
@@ -35,14 +35,14 @@
 			{ instruction: evaluate, input: (move_token, env, token_a, a, b, amount_a, min_a_for_b), scope: 0 }
 			{ instruction: evaluate, input: (move_token, env, token_b, b, a, amount_b, min_b_for_a), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:
 :[User Defined Types]
 
 
-[ExternalFunctions]:
+[Helpers]:
 -() [move_token]
 	* Inputs:
 	{
@@ -63,5 +63,5 @@
 			{ instruction: evaluate, input: (token.transfer, contract_address, from, METHOD_CALL_ARG_3_12), scope: 0 }
 		$
 
-:[ExternalFunctions]
+:[Helpers]
 

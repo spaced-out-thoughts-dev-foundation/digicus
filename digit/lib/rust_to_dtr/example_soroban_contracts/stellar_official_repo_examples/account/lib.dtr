@@ -1,6 +1,6 @@
 [Contract]: AccountContract
 
-[InternalFunctions]:
+[Interface]:
 -() [init]
 	* Inputs:
 	{
@@ -42,8 +42,8 @@
 			{ instruction: evaluate, input: (DataKey::SpendLimit, token), assign: METHOD_CALL_ARG_1_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.set, METHOD_CALL_ARG_1_2, limit), scope: 0 }
 		$
-:[InternalFunctions]
-[InternalFunctions]:
+:[Interface]
+[Interface]:
 -() [__check_auth]
 	* Inputs:
 	{
@@ -76,7 +76,7 @@
 			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:* (AccSignature)
@@ -108,7 +108,7 @@
 	* Initial Value: "transfer"
 
 
-[ExternalFunctions]:
+[Helpers]:
 -() [authenticate]
 	* Inputs:
 	{
@@ -234,4 +234,4 @@
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 
-:[ExternalFunctions]
+:[Helpers]

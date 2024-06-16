@@ -1,6 +1,6 @@
 [Contract]: IncrementContract
 
-[InternalFunctions]:
+[Interface]:
 -() [increment]
 	* Inputs:
 	{
@@ -36,7 +36,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, METHOD_CALL_ARG_1_0), assign: Thing_to_return, scope: 0 }
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:* (State)

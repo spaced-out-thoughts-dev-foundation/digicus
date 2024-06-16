@@ -1,6 +1,6 @@
 [Contract]: ClaimableBalanceContract
 
-[InternalFunctions]:
+[Interface]:
 -() [deposit]
 	* Inputs:
 	{
@@ -69,7 +69,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_19.instance), assign: METHOD_CALL_EXPRESSION_18, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_18.remove, DataKey::Balance), scope: 0 }
 		$
-:[InternalFunctions]
+:[Interface]
 
 
 [User Defined Types]:
@@ -100,7 +100,7 @@
 :[User Defined Types]
 
 
-[ExternalFunctions]:
+[Helpers]:
 -() [check_time_bound]
 	* Inputs:
 	{
@@ -137,4 +137,4 @@
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 
-:[ExternalFunctions]
+:[Helpers]

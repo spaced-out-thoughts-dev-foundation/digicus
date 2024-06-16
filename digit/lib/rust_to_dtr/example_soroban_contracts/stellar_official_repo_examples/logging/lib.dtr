@@ -1,5 +1,5 @@
 [Contract]: Contract
-[InternalFunctions]:
+[Interface]:
 -() [hello]
 * Inputs:
 {
@@ -10,6 +10,6 @@ value: String
 $
 { instruction: log_string, input: (env, "Hello {}", value), scope: 0 }
 $
-:[InternalFunctions]
+:[Interface]
 [User Defined Types]:
 :[User Defined Types]
