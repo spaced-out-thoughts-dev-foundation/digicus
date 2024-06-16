@@ -222,9 +222,9 @@ RSpec.describe DTRCore::Parser do
         DTRCore::Function.new('is_answer_to_life', [
                                 { name: 'numerical_question', type_name: 'Integer' }
                               ], 'String', [
-                                DTRCore::Instruction.new('conditional_jump', %w[equal_to 42 numerical_question 1], nil,
+                                DTRCore::Instruction.new('jump', %w[equal_to 42 numerical_question 1], nil,
                                                          0),
-                                DTRCore::Instruction.new('unconditional_jump', %w[2], nil, 0),
+                                DTRCore::Instruction.new('jump', %w[2], nil, 0),
                                 DTRCore::Instruction.new('return', ['"yes"'], nil, 1),
                                 DTRCore::Instruction.new('return', ['"no"'], nil, 2)
                               ])

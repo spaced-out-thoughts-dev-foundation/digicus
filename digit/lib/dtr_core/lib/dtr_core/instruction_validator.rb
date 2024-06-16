@@ -19,22 +19,17 @@ module DTRCore
       return false unless scope_valid?
 
       case @instruction.instruction
-      when 'assign', 'evaluate', 'log_string'
+      when 'assign', 'evaluate', 'print'
         validate_basic_operation!
       when 'exit_with_message', 'return'
         validate_terminating_operation!
       when 'and', 'or'
         validate_logical_operation!
-      when 'conditional_goto', 'conditional_jump', 'end_of_iteration_check', 'label',
-        'unconditional_goto', 'unconditional_jump'
-        validate_unconditional_jump_operation!
-      when 'contract_address'
-        validate_smart_contract_specific_operation!
-      when 'create_dictionary', 'create_list', 'create_range', 'create_tuple',
-        'field', 'initialize_udt'
+      when 'goto', 'jump', 'end_of_iteration_check', 'label'
+        validate_control_flow_operation!
+      when 'field', 'instantiate_object'
         validate_object_operation!
-      when 'add', 'subtract', 'multiply', 'divide',
-        'add_and_assign', 'subtract_and_assign', 'multiply_and_assign', 'divide_and_assign'
+      when 'add', 'subtract', 'multiply', 'divide'
         validate_binary_operation!
       else
         false
@@ -67,11 +62,7 @@ module DTRCore
       @instruction.inputs&.length == 2
     end
 
-    def validate_unconditional_jump_operation!
-      true
-    end
-
-    def validate_smart_contract_specific_operation!
+    def validate_control_flow_operation!
       true
     end
 

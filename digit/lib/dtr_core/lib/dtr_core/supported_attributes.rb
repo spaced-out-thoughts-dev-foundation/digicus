@@ -1,86 +1,81 @@
 # frozen_string_literal: true
 
+# rubocop:disable Layout/LineLength
 module DTRCore
   module SupportedAttributes
     # Supported Instructions for DTR.
     ## Instruction Categories ##
     INSTRUCTION_CATEGORY_BASIC = 'basic'
-    INSTRUCTION_CATEGORY_STATE = 'state'
-    INSTRUCTION_CATEGORY_UNTYPED = 'untyped'
-    INSTRUCTION_CATEGORY_NUMERIC = 'numeric'
-    INSTRUCTION_CATEGORY_STRING = 'string'
-    INSTRUCTION_CATEGORY_ENVIRONMENT = 'environment'
-    INSTRUCTION_CATEGORY_METHODS = 'methods'
-    INSTRUCTION_CATEGORY_OBJECTS = 'objects'
-    INSTRUCTION_CATEGORY_CONDITIONAL = 'conditional'
+    INSTRUCTION_CATEGORY_BINARY = 'binary'
+    INSTRUCTION_CATEGORY_CONTROL_FLOW = 'control_flow'
+    INSTRUCTION_CATEGORY_TERMINATING = 'terminating'
     INSTRUCTION_CATEGORY_LOGICAL = 'logical'
+    INSTRUCTION_CATEGORY_OBJECT = 'object'
     INSTRUCTION_CATEGORIES = [
       INSTRUCTION_CATEGORY_BASIC,
-      INSTRUCTION_CATEGORY_STATE,
-      INSTRUCTION_CATEGORY_UNTYPED,
-      INSTRUCTION_CATEGORY_NUMERIC,
-      INSTRUCTION_CATEGORY_STRING,
-      INSTRUCTION_CATEGORY_ENVIRONMENT,
-      INSTRUCTION_CATEGORY_METHODS,
-      INSTRUCTION_CATEGORY_OBJECTS,
-      INSTRUCTION_CATEGORY_CONDITIONAL,
-      INSTRUCTION_CATEGORY_LOGICAL
+      INSTRUCTION_CATEGORY_BINARY,
+      INSTRUCTION_CATEGORY_CONTROL_FLOW,
+      INSTRUCTION_CATEGORY_TERMINATING,
+      INSTRUCTION_CATEGORY_LOGICAL,
+      INSTRUCTION_CATEGORY_OBJECT
     ].freeze
     ## Instructions ##
     INSTRUCTIONS = [
-      # basic operations
-      { name: 'return', description: 'return a value from a function.', category: INSTRUCTION_CATEGORY_BASIC },
-      { name: 'assign', description: 'Assign a value to a variable.', category: INSTRUCTION_CATEGORY_BASIC },
-      { name: 'panic', description: 'Exit, quickly, and loudly.', category: INSTRUCTION_CATEGORY_BASIC },
-      { name: 'save_state', description: 'Save a value to the state.', category: INSTRUCTION_CATEGORY_STATE },
-      # untyped operations
-      { name: 'add', description: 'Add two things of unknown types together.', category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'subtract', description: 'Subtract two things of unknown types together.',
-        category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'divide', description: 'Divide two things of unknown types together.',
-        category: INSTRUCTION_CATEGORY_UNTYPED },
-      { name: 'multiply', description: 'Multiply two things of unknown types together.',
-        category: INSTRUCTION_CATEGORY_UNTYPED },
-      # environment operations
-      { name: 'contract_address', description: 'Get the contract address.',
-        category: INSTRUCTION_CATEGORY_ENVIRONMENT },
-      # method operations
-      { name: 'evaluate', description: 'Evaluate a method. Method name is the first input and arguments follow',
-        category: INSTRUCTION_CATEGORY_METHODS },
-      # object operations
-      { name: 'field', description: 'Reference an object field.', category: INSTRUCTION_CATEGORY_OBJECTS },
-      { name: 'initialize_udt', description: 'Instantiate UDT object.', category: INSTRUCTION_CATEGORY_OBJECTS },
-      # conditional operations
-      { name: 'conditional_unconditional_jump', description: 'unconditional_jump to a label if first input is true.',
-        category: INSTRUCTION_CATEGORY_CONDITIONAL },
-      { name: 'unconditional_unconditional_jump', description: 'unconditional_jump to a no matter what.',
-        category: INSTRUCTION_CATEGORY_CONDITIONAL },
-      # logical operations
-      { name: 'and', description: 'Logical AND.', category: INSTRUCTION_CATEGORY_LOGICAL },
-      { name: 'or', description: 'Logical OR.', category: INSTRUCTION_CATEGORY_LOGICAL }
+      { name: 'assign', description: 'given some input value, assign to ASSIGN_NAME',
+        category: INSTRUCTION_CATEGORY_BASIC },
+      { name: 'evaluate',
+        description: 'given a method name and 0 or more inputs, execute method. At this time, evaluate is a fairly loose catch-all for not explicitly defined operations', category: INSTRUCTION_CATEGORY_BASIC },
+      { name: 'print', description: 'given some value, print it to standard out',
+        category: INSTRUCTION_CATEGORY_BASIC },
+
+      { name: 'exit_with_message', description: 'immediately end execution, returning message',
+        category: INSTRUCTION_CATEGORY_TERMINATING },
+      { name: 'return', description: 'return from function with input value',
+        category: INSTRUCTION_CATEGORY_TERMINATING },
+
+      { name: 'and', description: 'lassign to ASSIGN_NAME result of “and-ing” two values',
+        category: INSTRUCTION_CATEGORY_LOGICAL },
+      { name: 'or', description: 'assign to ASSIGN_NAME result of “or-ing” two values',
+        category: INSTRUCTION_CATEGORY_LOGICAL },
+
+      { name: 'goto',
+        description: 'conditional if two inputs. In this case, first input is the condition to evaluate. If that is true, or there is only one input, move in code to the first input (a label name)', category: INSTRUCTION_CATEGORY_CONTROL_FLOW },
+      { name: 'jump',
+        description: 'conditional if two inputs. In this case, first input is the condition to evaluate. If that is true, or there is only one input, jump to scope level', category: INSTRUCTION_CATEGORY_CONTROL_FLOW },
+      { name: 'end_of_iteration_check',
+        description: 'check on input to see if at end of iteration. Return result to ASSIGN_NAME', category: INSTRUCTION_CATEGORY_CONTROL_FLOW },
+      { name: 'label', description: 'a named location within the instruction set for a given function',
+        category: INSTRUCTION_CATEGORY_CONTROL_FLOW },
+
+      { name: 'field', description: 'access a field on an object and assign result to ASSIGN_NAME',
+        category: INSTRUCTION_CATEGORY_OBJECT },
+      { name: 'instantiate_object',
+        description: 'initialize an object by first passing in the type of object and the passing in each initial values for its fields. Supported types here include: Dictionary, List, Range, Tuple, and UDT. For UDTs, the second input is the name of the UDT.', category: INSTRUCTION_CATEGORY_OBJECT },
+
+      { name: 'add', description: 'assign to ASSIGN_NAME result of adding two value',
+        category: INSTRUCTION_CATEGORY_BINARY },
+      { name: 'subtract', description: 'assign to ASSIGN_NAME result of subtracting two value',
+        category: INSTRUCTION_CATEGORY_BINARY },
+      { name: 'multiply', description: 'assign to ASSIGN_NAME result of multiplying two value',
+        category: INSTRUCTION_CATEGORY_BINARY },
+      { name: 'divide', description: 'assign to ASSIGN_NAME result of dividing two value',
+        category: INSTRUCTION_CATEGORY_BINARY }
     ].freeze
 
     # Supported Types for DTR.
-    TYPES = [
-      # basic types
-      'address',
-      'boolean',
-      # string types
-      'String',
-      # collection types
-      'array',
-      'map',
-      # numeric types
-      ## signed
-      'Integer',
-      'i64',
-      'BigInteger',
-      'BigInteger',
-      ## unsigned
-      'Integer',
-      'Integer',
-      'u128',
-      'BigInteger'
+    TYPES = %w[
+      Dictionary
+      List
+      Range
+      Tuple
+      UDT
+      Address
+      BigInteger
+      Boolean
+      Float
+      Integer
+      String
     ].freeze
   end
 end
+# rubocop:enable Layout/LineLength
