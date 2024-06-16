@@ -26,8 +26,10 @@ pub fn handle_tuple_expression(
         index += 1;
     });
 
+    arguments.insert(0, "Tuple".to_string());
+
     instructions_to_return.push(Instruction::new(
-        "create_tuple".to_string(),
+        "instantiate_object".to_string(),
         arguments,
         compilation_state
             .next_assignment
@@ -69,8 +71,12 @@ mod tests {
                     0
                 ),
                 Instruction::new(
-                    "create_tuple".to_string(),
-                    vec!["1_TUPLE_ARG".to_string(), "2_TUPLE_ARG".to_string()],
+                    "instantiate_object".to_string(),
+                    vec![
+                        "Tuple".to_string(),
+                        "1_TUPLE_ARG".to_string(),
+                        "2_TUPLE_ARG".to_string()
+                    ],
                     "TUPLE_RESULT".to_string(),
                     0
                 )

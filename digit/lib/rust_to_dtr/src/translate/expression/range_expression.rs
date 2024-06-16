@@ -65,8 +65,10 @@ pub fn handle_create_range(
     instructions.extend(start);
     instructions.extend(end);
 
+    inputs.insert(0, "Range".to_string());
+
     instructions.push(Instruction::from_compilation_state(
-        "create_range".to_string(),
+        "instantiate_object".to_string(),
         inputs,
         compilation_state,
     ));
@@ -101,8 +103,12 @@ mod test {
                 &compilation_state.with_assignment(Some("RANGE_END_1".to_string())),
             ),
             Instruction::from_compilation_state(
-                "create_range".to_string(),
-                vec!["RANGE_START_0".to_string(), "RANGE_END_1".to_string()],
+                "instantiate_object".to_string(),
+                vec![
+                    "Range".to_string(),
+                    "RANGE_START_0".to_string(),
+                    "RANGE_END_1".to_string(),
+                ],
                 &compilation_state,
             ),
         ];

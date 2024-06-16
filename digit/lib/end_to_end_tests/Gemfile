@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'dtr_core', '~> 0.5.3'
+gem 'dtr_core', '~> 0.6.0'
 gem 'dtr_to_rust', path: '../dtr_to_rust'
 gem 'ffi'
 

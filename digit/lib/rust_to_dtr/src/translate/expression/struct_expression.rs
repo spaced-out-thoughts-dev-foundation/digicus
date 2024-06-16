@@ -31,9 +31,10 @@ pub fn handle_struct_expression(
     });
 
     field_names.insert(0, path_value.clone());
+    field_names.insert(0, "UDT".to_string());
 
     instructions.push(Instruction::new(
-        "initialize_udt".to_string(),
+        "instantiate_object".to_string(),
         field_names,
         compilation_state
             .next_assignment
@@ -75,8 +76,13 @@ mod tests {
                     0
                 ),
                 Instruction::new(
-                    "initialize_udt".to_string(),
-                    vec!["Struct".to_string(), "a".to_string(), "b".to_string()],
+                    "instantiate_object".to_string(),
+                    vec![
+                        "UDT".to_string(),
+                        "Struct".to_string(),
+                        "a".to_string(),
+                        "b".to_string()
+                    ],
                     "STRUCT_EXPRESSION_RESULT".to_string(),
                     0
                 )

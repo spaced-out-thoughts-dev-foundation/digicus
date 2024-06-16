@@ -23,9 +23,21 @@ pub fn handle_macro(
     scope: u32,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let macro_path = parse_path(&mac.path);
+    let instruction_operation = macro_path_to_instruction(macro_path.clone());
+
+    if instruction_operation == "create_list" {
+        let mut inputs = macro_tokens_to_inputs(mac.tokens.clone());
+        inputs.insert(0, "List".to_string());
+        return Ok(vec![Instruction::new(
+            "instantiate_object".to_string(),
+            inputs,
+            assignment.unwrap_or("".to_string()),
+            scope,
+        )]);
+    }
 
     Ok(vec![Instruction::new(
-        macro_path_to_instruction(macro_path.clone()),
+        instruction_operation,
         macro_tokens_to_inputs(mac.tokens.clone()),
         assignment.unwrap_or("".to_string()),
         scope,

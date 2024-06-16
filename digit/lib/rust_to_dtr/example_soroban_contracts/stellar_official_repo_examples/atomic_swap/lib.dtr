@@ -17,19 +17,19 @@
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (less_than, amount_b, min_b_for_a), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 			{ instruction: error_with_message, input: ("not enough token B for token A"), scope: 1 }
 			{ instruction: evaluate, input: (less_than, amount_a, min_a_for_b), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 			{ instruction: error_with_message, input: ("not enough token A for token B"), scope: 1 }
 			{ instruction: evaluate, input: (token_a.clone), assign: 1_TUPLE_ARG, scope: 0 }
 			{ instruction: evaluate, input: (token_b.clone), assign: 2_TUPLE_ARG, scope: 0 }
-			{ instruction: create_tuple, input: (1_TUPLE_ARG, 2_TUPLE_ARG, amount_a, min_b_for_a), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: instantiate_object, input: (Tuple, 1_TUPLE_ARG, 2_TUPLE_ARG, amount_a, min_b_for_a), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.into_val, env), assign: METHOD_CALL_ARG_1_0, scope: 0 }
 			{ instruction: evaluate, input: (a.require_auth_for_args, METHOD_CALL_ARG_1_0), scope: 0 }
 			{ instruction: evaluate, input: (token_b.clone), assign: 1_TUPLE_ARG, scope: 0 }
 			{ instruction: evaluate, input: (token_a.clone), assign: 2_TUPLE_ARG, scope: 0 }
-			{ instruction: create_tuple, input: (1_TUPLE_ARG, 2_TUPLE_ARG, amount_b, min_a_for_b), assign: METHOD_CALL_EXPRESSION_8, scope: 0 }
+			{ instruction: instantiate_object, input: (Tuple, 1_TUPLE_ARG, 2_TUPLE_ARG, amount_b, min_a_for_b), assign: METHOD_CALL_EXPRESSION_8, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_8.into_val, env), assign: METHOD_CALL_ARG_1_6, scope: 0 }
 			{ instruction: evaluate, input: (b.require_auth_for_args, METHOD_CALL_ARG_1_6), scope: 0 }
 			{ instruction: evaluate, input: (move_token, env, token_a, a, b, amount_a, min_a_for_b), scope: 0 }

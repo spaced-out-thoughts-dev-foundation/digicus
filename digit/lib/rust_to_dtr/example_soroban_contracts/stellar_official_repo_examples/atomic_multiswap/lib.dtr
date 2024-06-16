@@ -17,12 +17,12 @@
 			{ instruction: evaluate, input: (swaps_a.iter), assign: acc_a, scope: 0 }
 			{ instruction: label, input: (loop_1_top), scope: 0 }
 			{ instruction: end_of_iteration_check, input: (acc_a), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_1_exit), scope: 0 }
+			{ instruction: goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_1_exit), scope: 0 }
 			{ instruction: evaluate, input: (swaps_b.len), assign: RANGE_END_5, scope: 0 }
-			{ instruction: create_range, input: (0, RANGE_END_5), assign: i, scope: 0 }
+			{ instruction: instantiate_object, input: (Range, 0, RANGE_END_5), assign: i, scope: 0 }
 			{ instruction: label, input: (loop_3_top), scope: 0 }
 			{ instruction: end_of_iteration_check, input: (i), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_3_exit), scope: 0 }
+			{ instruction: goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_3_exit), scope: 0 }
 			{ instruction: evaluate, input: (swaps_b.get, i), assign: METHOD_CALL_EXPRESSION_7, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_7.unwrap), assign: acc_b, scope: 0 }
 			{ instruction: field, input: (acc_a, amount), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
@@ -32,7 +32,7 @@
 			{ instruction: field, input: (acc_b, amount), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: evaluate, input: (less_than_or_equal_to, BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: and, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 			{ instruction: field, input: (acc_a, address), assign: METHOD_CALL_ARG_1_11, scope: 1 }
 			{ instruction: field, input: (acc_b, address), assign: METHOD_CALL_ARG_2_12, scope: 1 }
 			{ instruction: field, input: (acc_a, amount), assign: METHOD_CALL_ARG_5_15, scope: 1 }
@@ -41,14 +41,14 @@
 			{ instruction: field, input: (acc_b, min_recv), assign: METHOD_CALL_ARG_8_18, scope: 1 }
 			{ instruction: evaluate, input: (swap_client.try_swap, METHOD_CALL_ARG_1_11, METHOD_CALL_ARG_2_12, token_a, token_b, METHOD_CALL_ARG_5_15, METHOD_CALL_ARG_6_16, METHOD_CALL_ARG_7_17, METHOD_CALL_ARG_8_18), assign: METHOD_CALL_EXPRESSION_10, scope: 1 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.is_ok), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 1 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), scope: 1 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), scope: 1 }
 			{ instruction: evaluate, input: (swaps_b.remove, i), scope: 2 }
 			{ instruction: break, input: (), scope: 2 }
 			{ instruction: increment, input: (i), scope: 0 }
-			{ instruction: unconditional_goto, input: (loop_3_top), scope: 0 }
+			{ instruction: goto, input: (loop_3_top), scope: 0 }
 			{ instruction: label, input: (loop_3_exit), scope: 0 }
 			{ instruction: increment, input: (acc_a), scope: 0 }
-			{ instruction: unconditional_goto, input: (loop_1_top), scope: 0 }
+			{ instruction: goto, input: (loop_1_top), scope: 0 }
 			{ instruction: label, input: (loop_1_exit), scope: 0 }
 		$
 :[Interface]

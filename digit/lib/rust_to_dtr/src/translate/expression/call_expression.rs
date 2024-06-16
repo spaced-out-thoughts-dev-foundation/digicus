@@ -194,8 +194,9 @@ mod tests {
                 0,
             ),
             Instruction::new(
-                "initialize_udt".to_string(),
+                "instantiate_object".to_string(),
                 vec![
+                    "UDT".to_string(),
                     "State".to_string(),
                     "count".to_string(),
                     "last_incr".to_string(),

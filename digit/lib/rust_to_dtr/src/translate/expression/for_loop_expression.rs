@@ -77,7 +77,7 @@ fn get_if_condition_false_jump_to_exit_label(
     check_condition_assignment: String,
 ) -> Vec<Instruction> {
     vec![Instruction::new(
-        "conditional_goto".to_string(),
+        "goto".to_string(),
         vec![check_condition_assignment.clone(), exit_label.clone()],
         "".to_string(),
         0,
@@ -102,7 +102,7 @@ fn get_execute_block(
 
 fn get_back_to_top(label: String, compilation_state: CompilationState) -> Vec<Instruction> {
     vec![Instruction::from_compilation_state(
-        "unconditional_goto".to_string(),
+        "goto".to_string(),
         vec![label.clone()],
         &mut compilation_state.clone(),
     )]

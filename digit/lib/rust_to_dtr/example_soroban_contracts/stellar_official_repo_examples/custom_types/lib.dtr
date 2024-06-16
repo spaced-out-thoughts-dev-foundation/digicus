@@ -13,7 +13,7 @@
 			{ instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1), assign: state, scope: 0 }
 			{ instruction: field, input: (state, count), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
-			{ instruction: add_and_assign, input: (BINARY_EXPRESSION_LEFT, incr), scope: 0 }
+			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, incr), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 			{ instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_5, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.instance), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
@@ -32,7 +32,7 @@
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, STATE), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: initialize_udt, input: (State, 0, 0), assign: METHOD_CALL_ARG_1_0, scope: 0 }
+			{ instruction: instantiate_object, input: (UDT, State, 0, 0), assign: METHOD_CALL_ARG_1_0, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, METHOD_CALL_ARG_1_0), assign: Thing_to_return, scope: 0 }
 			{ instruction: return, input: (Thing_to_return), scope: 0 }
 		$

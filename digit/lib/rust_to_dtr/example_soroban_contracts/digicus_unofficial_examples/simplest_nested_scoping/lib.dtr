@@ -10,19 +10,19 @@
 	* Instructions:
 		$
 			{ instruction: evaluate, input: (greater_than, some_input, 10), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
 			{ instruction: evaluate, input: (greater_than, some_input, 15), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 1 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), assign: Thing_to_return, scope: 1 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 2), assign: Thing_to_return, scope: 1 }
 			{ instruction: assign, input: (5), assign: x, scope: 2 }
-			{ instruction: add_and_assign, input: (x, 10), scope: 2 }
+			{ instruction: add, input: (x, 10), assign: x, scope: 2 }
 			{ instruction: evaluate, input: (greater_than, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 2 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), scope: 2 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), scope: 2 }
 			{ instruction: log_string, input: ("Some input is greater than 15"), assign: Thing_to_return, scope: 3 }
 			{ instruction: evaluate, input: (equal_to, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 2 }
-			{ instruction: conditional_jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), assign: RETURN_VALUE_LABEL, scope: 2 }
-			{ instruction: unconditional_jump, input: (102), assign: RETURN_VALUE_LABEL, scope: 2 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 3), assign: RETURN_VALUE_LABEL, scope: 2 }
+			{ instruction: jump, input: (102), assign: RETURN_VALUE_LABEL, scope: 2 }
 			{ instruction: return, input: (RETURN_VALUE_LABEL), assign: Thing_to_return, scope: 2 }
-			{ instruction: add_and_assign, input: (some_input, 1), scope: 0 }
+			{ instruction: add, input: (some_input, 1), assign: some_input, scope: 0 }
 			{ instruction: return, input: (some_input), scope: 0 }
 		$
 :[Interface]

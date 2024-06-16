@@ -14,7 +14,7 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
 			{ instruction: log_string, input: (env, "count: {}", count), scope: 0 }
-			{ instruction: add_and_assign, input: (count, 1), scope: 0 }
+			{ instruction: add, input: (count, 1), assign: count, scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_9, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_9.instance), assign: METHOD_CALL_EXPRESSION_8, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_8.set, COUNTER, count), scope: 0 }

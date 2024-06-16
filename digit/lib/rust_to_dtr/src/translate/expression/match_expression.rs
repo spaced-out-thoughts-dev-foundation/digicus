@@ -32,7 +32,7 @@ pub fn handle_match_expression(
         ));
 
         thing_to_compare_against_instructions.push(Instruction::new(
-            format!("conditional_jump"),
+            format!("jump"),
             vec![
                 format!("CONDITIONAL_JUMP_CHECK_{}", new_scope),
                 (new_scope.to_string()),
@@ -91,7 +91,7 @@ mod tests {
                     0
                 ),
                 Instruction::new(
-                    "conditional_jump".to_string(),
+                    "jump".to_string(),
                     vec!["CONDITIONAL_JUMP_CHECK_100".to_string(), "100".to_string()],
                     "".to_string(),
                     0
@@ -113,7 +113,7 @@ mod tests {
                     0
                 ),
                 Instruction::new(
-                    "conditional_jump".to_string(),
+                    "jump".to_string(),
                     vec!["CONDITIONAL_JUMP_CHECK_200".to_string(), "200".to_string()],
                     "".to_string(),
                     0

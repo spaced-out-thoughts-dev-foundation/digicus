@@ -17,7 +17,7 @@ pub fn handle_if_expression(
     )?;
 
     let conditional_jump_instruction = Instruction::new(
-        "conditional_jump".to_string(),
+        "jump".to_string(),
         vec![
             "CONDITIONAL_JUMP_ASSIGNMENT".to_string(),
             (compilation_state.scope + 1).to_string(),
@@ -35,7 +35,7 @@ pub fn handle_if_expression(
     let else_branch = match &expr.else_branch {
         Some(else_branch) => {
             condition_instructions.push(Instruction::from_compilation_state(
-                "unconditional_jump".to_string(),
+                "jump".to_string(),
                 vec![format!("{}", compilation_state.scope + 100)],
                 &compilation_state,
             ));
