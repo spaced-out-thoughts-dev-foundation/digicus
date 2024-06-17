@@ -69,7 +69,11 @@ mod full_contract_tests {
 
     test_contract!(stellar_official_repo_examples, atomic_swap);
     test_contract!(stellar_official_repo_examples, auth);
+    test_contract!(stellar_official_repo_examples, cross_contract_a);
+    test_contract!(stellar_official_repo_examples, cross_contract_b);
     test_contract!(stellar_official_repo_examples, custom_types);
+    test_contract!(stellar_official_repo_examples, deployer_contract);
+    test_contract!(stellar_official_repo_examples, deployer_deployer);
     test_contract!(stellar_official_repo_examples, errors);
     test_contract!(stellar_official_repo_examples, eth_abi);
     test_contract!(stellar_official_repo_examples, events);

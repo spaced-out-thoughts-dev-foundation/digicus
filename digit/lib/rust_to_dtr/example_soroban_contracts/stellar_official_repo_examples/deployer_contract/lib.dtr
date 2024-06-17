@@ -1,0 +1,34 @@
+[Contract]: Contract
+
+[Interface]:
+-() [init]
+	* Inputs:
+	{
+		env: Env
+		value: Integer
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.set, KEY, value), scope: 0 }
+		$
+-() [value]
+	* Inputs:
+	{
+		env: Env
+	}
+	* Output: Integer
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.instance), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.get, KEY), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+:[Interface]
+[State]:
+* [KEY]
+	* Type: String
+	* Initial Value: "value"

@@ -1,0 +1,19 @@
+[Contract]: ContractB
+
+[Interface]:
+-() [add_with]
+	* Inputs:
+	{
+		env: Env
+		contract: Address
+		x: Integer
+		y: Integer
+	}
+	* Output: Integer
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (contract_a::Client::new, env, contract), assign: client, scope: 0 }
+			{ instruction: evaluate, input: (client.add, x, y), assign: Thing_to_return, scope: 0 }
+			{ instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+:[Interface]
