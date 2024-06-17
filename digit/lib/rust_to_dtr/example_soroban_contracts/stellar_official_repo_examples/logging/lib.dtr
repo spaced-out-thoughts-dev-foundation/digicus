@@ -11,5 +11,3 @@ $
 { instruction: print, input: (env, "Hello {}", value), scope: 0 }
 $
 :[Interface]
-[User Defined Types]:
-:[User Defined Types]

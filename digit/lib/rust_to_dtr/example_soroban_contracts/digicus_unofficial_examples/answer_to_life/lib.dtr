@@ -12,5 +12,3 @@ $
 { instruction: return, input: (42), scope: 0 }
 $
 :[Interface]
-[User Defined Types]:
-:[User Defined Types]

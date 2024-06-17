@@ -89,4 +89,11 @@ mod full_contract_tests {
         stellar_official_repo_examples,
         upgradable_contract_old_contract
     );
+
+    test_contract!(stellar_official_repo_examples, workspace_contract_a);
+    test_contract!(
+        stellar_official_repo_examples,
+        workspace_contract_a_interface
+    );
+    test_contract!(stellar_official_repo_examples, workspace_contract_b);
 }

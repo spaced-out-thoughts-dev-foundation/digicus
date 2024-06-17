@@ -94,13 +94,15 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
     // optimize::optimize(instructions);
 
-    dtr_code.push_str("\n\n[User Defined Types]:");
+    if user_defined_types.len() > 0 {
+        dtr_code.push_str("\n\n[User Defined Types]:");
 
-    user_defined_types.iter().for_each(|item| {
-        dtr_code.push_str(&syn_item_to_user_defined_type(item));
-    });
+        user_defined_types.iter().for_each(|item| {
+            dtr_code.push_str(&syn_item_to_user_defined_type(item));
+        });
 
-    dtr_code.push_str("\n:[User Defined Types]\n");
+        dtr_code.push_str("\n:[User Defined Types]\n");
+    }
 
     if state_str != "[State]:" {
         dtr_code.push_str(&state_str);

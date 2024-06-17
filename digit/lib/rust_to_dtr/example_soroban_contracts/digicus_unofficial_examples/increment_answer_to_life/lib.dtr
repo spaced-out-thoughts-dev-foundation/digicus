@@ -14,5 +14,3 @@ $
 { instruction: return, input: (Thing_to_return), scope: 0 }
 $
 :[Interface]
-[User Defined Types]:
-:[User Defined Types]
