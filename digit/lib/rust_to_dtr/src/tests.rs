@@ -81,4 +81,12 @@ mod full_contract_tests {
     test_contract!(stellar_official_repo_examples, single_offer);
     test_contract!(stellar_official_repo_examples, timelock);
     test_contract!(stellar_official_repo_examples, ttl);
+    test_contract!(
+        stellar_official_repo_examples,
+        upgradable_contract_new_contract
+    );
+    test_contract!(
+        stellar_official_repo_examples,
+        upgradable_contract_old_contract
+    );
 }
