@@ -2,10 +2,10 @@
 
 module DTRToRust
   module Instruction
-    # This class is responsible for generating Rust code for the LogString instruction.
-    class LogString < Handler
+    # This class handles the error_with_message instruction.
+    class ErrorWithMessage < Handler
       def handle
-        form_rust_string("log!(#{inputs_to_rust_string(@instruction[:inputs])});", @instruction[:scope])
+        form_rust_string("panic! #{inputs_to_rust_string(@instruction.inputs)};", @instruction.scope)
       end
 
       private

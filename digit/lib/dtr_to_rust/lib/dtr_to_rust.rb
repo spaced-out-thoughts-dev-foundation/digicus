@@ -7,18 +7,32 @@ module DTRToRust
 
   # This module contains all the classes that handle the different types of instructions.
   module Instruction
-    autoload :AddAndAssign, 'instruction/add_and_assign'
-    autoload :CreateList, 'instruction/create_list'
     autoload :Evaluate, 'instruction/evaluate'
     autoload :Field, 'instruction/field'
     autoload :Handler, 'instruction/handler'
-    autoload :InitializeUDT, 'instruction/initialize_udt'
-    autoload :LogString, 'instruction/log_string'
+    autoload :Print, 'instruction/print'
     autoload :Return, 'instruction/return'
+    autoload :InstantiateObject, 'instruction/instantiate_object'
+    autoload :Add, 'instruction/add'
+    autoload :Subtract, 'instruction/subtract'
+    autoload :Multiply, 'instruction/multiply'
+    autoload :Divide, 'instruction/divide'
+    autoload :Assign, 'instruction/assign'
+    autoload :Jump, 'instruction/jump'
+    autoload :Goto, 'instruction/goto'
+    autoload :ErrorWithMessage, 'instruction/error_with_message'
+    autoload :And, 'instruction/and'
+    autoload :Or, 'instruction/or'
+    autoload :Label, 'instruction/label'
   end
 
   # This module contains all the classes that handle common logic.
   module Common
     autoload :InputInterpreter, 'common/input_interpreter'
+  end
+
+  # This module contains all the classes that handle optimization.
+  module Optimization
+    autoload :ChainedInvocationAssignmentReduction, 'optimization/chained_invocation_assignment_reduction'
   end
 end
