@@ -12,28 +12,28 @@ module DTRToRust
         raise "Unknown instruction type: #{@instruction.instruction}"
       end
 
-      EXPRESSION_FOOBAR[@instruction.instruction.strip].call(@instruction)
+      EXPRESSION_FOOBAR[@instruction.instruction.strip].send(:handle, @instruction)
     end
 
     private
 
     EXPRESSION_FOOBAR = {
-      'assign' => Instruction::Assign.handle,
-      'jump' => Instruction::Jump.handle,
-      'goto' => Instruction::Goto.handle,
-      'error_with_message' => Instruction::ErrorWithMessage.handle,
-      'and' => Instruction::And.handle,
-      'or' => Instruction::Or.handle,
-      'label' => Instruction::Label.handle,
-      'add' => Instruction::Add.handle,
-      'subtract' => Instruction::Subtract.handle,
-      'multiply' => Instruction::Multiply.handle,
-      'divide' => Instruction::Divide.handle,
-      'instantiate_object' => Instruction::InstantiateObject.handle,
-      'print' => Instruction::Print.handle,
-      'return' => Instruction::Return.handle,
-      'evaluate' => Instruction::Evaluate.handle,
-      'field' => Instruction::Field.handle
+      'assign' => Instruction::Assign,
+      'jump' => Instruction::Jump,
+      'goto' => Instruction::Goto,
+      'exit_with_message' => Instruction::ExitWithMessage,
+      'and' => Instruction::And,
+      'or' => Instruction::Or,
+      'label' => Instruction::Label,
+      'add' => Instruction::Add,
+      'subtract' => Instruction::Subtract,
+      'multiply' => Instruction::Multiply,
+      'divide' => Instruction::Divide,
+      'instantiate_object' => Instruction::InstantiateObject,
+      'print' => Instruction::Print,
+      'return' => Instruction::Return,
+      'evaluate' => Instruction::Evaluate,
+      'field' => Instruction::Field
     }.freeze
 
     def handle_empty_instruction

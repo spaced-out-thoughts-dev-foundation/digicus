@@ -20,7 +20,7 @@ module DTRToRust
     autoload :Assign, 'instruction/assign'
     autoload :Jump, 'instruction/jump'
     autoload :Goto, 'instruction/goto'
-    autoload :ErrorWithMessage, 'instruction/error_with_message'
+    autoload :ExitWithMessage, 'instruction/exit_with_message'
     autoload :And, 'instruction/and'
     autoload :Or, 'instruction/or'
     autoload :Label, 'instruction/label'
@@ -29,10 +29,17 @@ module DTRToRust
   # This module contains all the classes that handle common logic.
   module Common
     autoload :InputInterpreter, 'common/input_interpreter'
+    autoload :ReferenceAppender, 'common/reference_appender'
+    autoload :TypeTranslator, 'common/type_translator'
   end
 
   # This module contains all the classes that handle optimization.
   module Optimization
     autoload :ChainedInvocationAssignmentReduction, 'optimization/chained_invocation_assignment_reduction'
+  end
+
+  # This module contains all the classes that handle user defined types.
+  module UserDefinedTypes
+    autoload :Handler, 'user_defined_types/handler'
   end
 end

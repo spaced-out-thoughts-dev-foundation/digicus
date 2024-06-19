@@ -10,7 +10,9 @@ module DTRToRust
         assignment = @instruction.assign
 
         assignment_rust = "let mut #{assignment} = "
-        body_rust = "#{ref_appender(evaluated_method_name)}(#{inputs_to_rust_string(inputs)});"
+        # TODO: make this less hacky evaluated_method_name.end_with?('set')
+        body_rust = "#{Common::ReferenceAppender.call(evaluated_method_name)}(#{inputs_to_rust_string(inputs,
+                                                                                                      evaluated_method_name.end_with?('set'))});"
         rust_string = "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
 
         form_rust_string(rust_string, @instruction.scope)
@@ -18,53 +20,8 @@ module DTRToRust
 
       private
 
-      def inputs_to_rust_string(inputs)
-        inputs.map { |input| ref_appender(input) }.join(', ')
-      end
-
-      def ref_appender(input)
-        decorated_input = Common::InputInterpreter.interpret(input)
-
-        # HACK: is likely chain of method calls
-        # ex:  env.storage().instance().get(COUNTER).unwrap_or(0);
-        #      --> env.storage().instance().get(&COUNTER).unwrap_or(0);
-        if decorated_input[:type] != 'number' &&
-           decorated_input[:value].include?('.') &&
-           decorated_input[:value].include?('()')
-          more_complex_ref_appender(decorated_input)
-        elsif decorated_input[:needs_reference]
-          "&#{decorated_input[:value]}"
-        else
-          decorated_input[:value]
-        end
-      end
-
-      def more_complex_ref_appender(decorated_input)
-        decorated_input[:value].split('.').map do |x|
-          if call_with_input?(input)
-            matches = x.scan(/\((.*?)\)/)
-            things = matches
-                     .flatten
-                     .filter(&method(:not_empty_string?))
-                     .map(&method(:wild_stuff))
-                     .join(', ')
-            "#{x.split('(')[0]}(#{things})"
-          else
-            x
-          end
-        end.join('.')
-      end
-
-      def not_empty_string?(input)
-        input != ''
-      end
-
-      def wild_stuff(input)
-        input.split(',').map { |x| ref_appender(x.strip) }.join(', ')
-      end
-
-      def call_with_input?(input)
-        input.include?('(') && input.end_with?(')') && !input.end_with?('()')
+      def inputs_to_rust_string(inputs, ref_nums)
+        inputs.map { |input| Common::ReferenceAppender.call(input, ref_nums:) }.join(', ')
       end
     end
   end

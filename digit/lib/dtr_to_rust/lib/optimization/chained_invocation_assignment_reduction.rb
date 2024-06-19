@@ -10,6 +10,7 @@ module DTRToRust
         @optimized_instructions = []
         @memoize_assigns = {}
         @to_remove = {}
+        @last_was_eavluate = nil
       end
 
       def apply
@@ -46,7 +47,24 @@ module DTRToRust
       end
 
       def clear_memoize?
-        @cur_instruction.instruction != 'evaluate'
+        if @last_was_eavluate.nil?
+          @last_was_eavluate = @cur_instruction.instruction == 'evaluate'
+          return false
+        end
+
+        if @cur_instruction.instruction == 'evaluate'
+          if @last_was_eavluate
+            false
+          else
+            @last_was_eavluate = true
+            true
+          end
+        elsif @last_was_eavluate
+          @last_was_eavluate = false
+          true
+        else
+          false
+        end
       end
 
       def apply_to_instruction_input(input)

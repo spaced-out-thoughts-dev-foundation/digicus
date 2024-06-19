@@ -12,12 +12,13 @@ module DTRToRust
     def generate
       @content = ''
 
-      generate_contract_header
       generate_user_defined_types
       generate_state
       generate_contract_name
       generate_interface
       generate_helpers
+
+      generate_contract_header
 
       @content
     end
@@ -35,8 +36,30 @@ module DTRToRust
     attr_reader :dtr_contract
 
     def generate_contract_header
+      imports_super_set = %w[
+        contract
+        contractimpl
+        contracttype
+        symbol_short
+        vec
+        Env
+        Symbol
+        Vec
+        log
+      ]
+
+      used_imports = []
+
+      @content.split.each do |word|
+        imports_super_set.each do |import|
+          used_imports << import if word.include?(import)
+        end
+      end
+
+      used_imports.uniq!
+
       # TODO: don't hardcode imports
-      @content += "#![no_std]\nuse soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};\n\n"
+      @content = "#![no_std]\nuse soroban_sdk::{#{used_imports.join(', ')}};\n\n" + @content
     end
 
     def generate_contract_name
@@ -65,7 +88,8 @@ module DTRToRust
 
     def generate_functions_each(functions)
       functions&.map do |function|
-        optimized_instructions = ChainedInvocationAssignmentReduction.apply(function.instructions)
+        optimized_instructions =
+          Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
 
         return_string = "\n    pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
@@ -78,13 +102,13 @@ module DTRToRust
     def generate_function_output(function)
       return '' if function.output.nil?
 
-      "-> #{translate_type(function.output)}"
+      "-> #{Common::TypeTranslator.translate_type(function.output)}"
     end
 
     def generate_function_args(function)
       all_inputs = [] + function.inputs
 
-      all_inputs.map { |x| "#{x[:name]}: #{translate_type(x[:type_name])}" }.join(', ')
+      all_inputs.map { |x| "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type_name])}" }.join(', ')
     end
 
     def generate_instructions_each(instructions)
@@ -98,30 +122,12 @@ module DTRToRust
       handler.generate_rust
     end
 
-    def translate_type(type)
-      # TODO: fix this, it is incorrect
-      type
-        .gsub('List<', 'Vec<')
-        .gsub('Dictionary<', 'HashMap<')
-        .gsub('Integer', 'i64')
-        .gsub('BigInteger', 'i256')
-        .gsub('String', 'Symbol')
-        .gsub('Boolean', 'bool')
-        .gsub('Float', 'f64')
-    end
-
     def generate_user_defined_types
       return if dtr_contract.user_defined_types.nil?
 
       dtr_contract.user_defined_types.each do |udt|
-        @content += "#{derives}pub struct #{udt.name} {#{udt.attributes.map do |x|
-                                                           "#{x[:name]}: #{x[:type]}"
-                                                         end.join(', ')}}\n\n"
+        @content += DTRToRust::UserDefinedTypes::Handler.generate(udt)
       end
-    end
-
-    def derives
-      "#[contracttype]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
     end
   end
 end
