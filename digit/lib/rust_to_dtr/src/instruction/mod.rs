@@ -35,7 +35,7 @@ impl Instruction {
     }
 
     pub fn as_str(&self) -> String {
-        if self.assign == "" {
+        if self.assign.trim() == "" {
             return format!(
                 "{{ instruction: {}, input: ({}), scope: {} }}",
                 self.name,

@@ -60,12 +60,12 @@
 
 
 [User Defined Types]:
-* (DataKey)
+* (DataKey_ENUM)
 {
 	Admin: ()
 }
 
-* (Error)
+* (Error_ENUM)
 {
 	AlreadyInitialized = 1
 }

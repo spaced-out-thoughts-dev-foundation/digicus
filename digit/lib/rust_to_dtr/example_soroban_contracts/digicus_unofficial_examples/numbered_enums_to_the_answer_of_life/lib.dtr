@@ -15,7 +15,7 @@
 
 
 [User Defined Types]:
-* (SomeNumberedEnums)
+* (SomeNumberedEnums_ENUM)
 {
 	NotTheAnswerToLife = 0
 	CloserToTheAnswerToLife = 41

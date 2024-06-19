@@ -21,6 +21,7 @@ $
 * [ANSWER_TO_LIFE]
 	* Type: Integer
 	* Initial Value: 42
+:[State]
 
 [Helpers]:
 -() [log_to_env]

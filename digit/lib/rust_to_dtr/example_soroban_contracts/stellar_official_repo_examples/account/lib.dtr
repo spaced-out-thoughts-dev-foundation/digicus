@@ -78,20 +78,21 @@
 :[Interface]
 
 
-[User Defined Types]:* (AccSignature)
+[User Defined Types]:
+* (AccSignature_STRUCT)
 {
 	public_key: String
 	signature: String
 }
 
-* (DataKey)
+* (DataKey_ENUM)
 {
 	SignerCnt: ()
 	Signer: (String)
 	SpendLimit: (Address)
 }
 
-* (AccError)
+* (AccError_ENUM)
 {
 	NotEnoughSigners = 1
 	NegativeAmount = 2
@@ -105,7 +106,7 @@
 * [TRANSFER_FN]
 	* Type: String
 	* Initial Value: "transfer"
-
+:[State]
 
 [Helpers]:
 -() [authenticate]

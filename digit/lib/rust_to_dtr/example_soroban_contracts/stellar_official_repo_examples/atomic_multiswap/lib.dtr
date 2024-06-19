@@ -54,7 +54,8 @@
 :[Interface]
 
 
-[User Defined Types]:* (SwapSpec)
+[User Defined Types]:
+* (SwapSpec_STRUCT)
 {
 	address: Address
 	amount: BigInteger

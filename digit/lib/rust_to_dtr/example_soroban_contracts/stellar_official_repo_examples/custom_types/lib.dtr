@@ -39,7 +39,8 @@
 :[Interface]
 
 
-[User Defined Types]:* (State)
+[User Defined Types]:
+* (State_STRUCT)
 {
 	count: Integer
 	last_incr: Integer
@@ -50,4 +51,4 @@
 * [STATE]
 	* Type: String
 	* Initial Value: "STATE"
-
+:[State]

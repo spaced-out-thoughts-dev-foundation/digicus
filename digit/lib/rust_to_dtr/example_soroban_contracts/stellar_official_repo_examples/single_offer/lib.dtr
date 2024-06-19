@@ -17,12 +17,12 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.instance), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.has, DataKey::Offer), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: error_with_message, input: ("offer is already created"), scope: 1 }
+			{ instruction: exit_with_message, input: ("offer is already created"), scope: 1 }
 			{ instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
 			{ instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: or, input: (sell_price, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: error_with_message, input: ("zero price is not allowed"), scope: 1 }
+			{ instruction: exit_with_message, input: ("zero price is not allowed"), scope: 1 }
 			{ instruction: evaluate, input: (seller.require_auth), scope: 0 }
 			{ instruction: assign, input: (seller), assign: seller, scope: 0 }
 			{ instruction: assign, input: (sell_token), assign: sell_token, scope: 0 }
@@ -55,7 +55,7 @@
 			{ instruction: divide, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: sell_token_amount, scope: 0 }
 			{ instruction: evaluate, input: (less_than, sell_token_amount, min_sell_token_amount), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: error_with_message, input: ("price is too low"), scope: 1 }
+			{ instruction: exit_with_message, input: ("price is too low"), scope: 1 }
 			{ instruction: evaluate, input: (e.current_contract_address), assign: contract, scope: 0 }
 			{ instruction: evaluate, input: (buy_token_client.transfer, buyer, contract, buy_token_amount), scope: 0 }
 			{ instruction: evaluate, input: (sell_token_client.transfer, contract, buyer, sell_token_amount), scope: 0 }
@@ -92,7 +92,7 @@
 			{ instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
 			{ instruction: or, input: (sell_price, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
 			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: error_with_message, input: ("zero price is not allowed"), scope: 1 }
+			{ instruction: exit_with_message, input: ("zero price is not allowed"), scope: 1 }
 			{ instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
 			{ instruction: field, input: (offer, seller), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.require_auth), scope: 0 }
@@ -115,11 +115,11 @@
 
 
 [User Defined Types]:
-* (DataKey)
+* (DataKey_ENUM)
 {
 	Offer: ()
 }
-* (Offer)
+* (Offer_STRUCT)
 {
 	seller: Address
 	sell_token: Address

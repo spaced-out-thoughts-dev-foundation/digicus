@@ -55,7 +55,7 @@
 
 
 [User Defined Types]:
-* (DataKey)
+* (DataKey_ENUM)
 {
 	MyKey: ()
 }

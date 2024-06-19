@@ -29,7 +29,7 @@
 
 
 [User Defined Types]:
-* (Error)
+* (Error_ENUM)
 {
 	LimitReached = 1
 }
@@ -42,4 +42,4 @@
 * [MAX]
 	* Type: Integer
 	* Initial Value: 5
-
+:[State]

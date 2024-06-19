@@ -150,25 +150,25 @@
 
 
 [User Defined Types]:
-* (Error)
+* (Error_ENUM)
 {
 	NotAuthorizedMinter = 1
 	DailyLimitInsufficient = 2
 	NegativeAmount = 3
 }
 
-* (StorageKey)
+* (StorageKey_ENUM)
 {
 	Admin: ()
 	Minter: (Address, Address)
 	MinterStats: (Address, Address, Integer, Integer)
 }
-* (MinterConfig)
+* (MinterConfig_STRUCT)
 {
 	limit: BigInteger
 	epoch_length: Integer
 }
-* (MinterStats)
+* (MinterStats_STRUCT)
 {
 	consumed_limit: BigInteger
 }

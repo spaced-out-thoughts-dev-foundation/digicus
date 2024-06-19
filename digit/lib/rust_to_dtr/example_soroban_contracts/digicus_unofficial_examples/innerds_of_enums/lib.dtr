@@ -14,7 +14,7 @@
 
 
 [User Defined Types]:
-* (StorageKey)
+* (StorageKey_ENUM)
 {
 	Admin: ()
 	Minter: (Address, Address)

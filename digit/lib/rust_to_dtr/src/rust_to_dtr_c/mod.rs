@@ -106,7 +106,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
 
     if state_str != "[State]:" {
         dtr_code.push_str(&state_str);
-        dtr_code.push_str("\n");
+        dtr_code.push_str("\n:[State]\n");
     }
 
     if outside_of_contract_functions.len() > 0 {
@@ -138,7 +138,7 @@ fn syn_item_to_user_defined_type(item: &syn::Item) -> String {
 fn syn_item_struct_to_user_defined_type(item: &syn::ItemStruct) -> String {
     let mut dtr_code = String::new();
 
-    dtr_code.push_str(&format!("* ({})\n", item.ident));
+    dtr_code.push_str(&format!("* ({}_STRUCT)\n", item.ident));
     dtr_code.push_str("{\n");
 
     item.fields.iter().for_each(|field| {
@@ -159,7 +159,7 @@ fn syn_item_struct_to_user_defined_type(item: &syn::ItemStruct) -> String {
 fn syn_item_enum_to_user_defined_type(item: &syn::ItemEnum) -> String {
     let mut dtr_code = String::new();
 
-    dtr_code.push_str(&format!("\n* ({})\n", item.ident));
+    dtr_code.push_str(&format!("\n* ({}_ENUM)\n", item.ident));
     dtr_code.push_str("{\n");
 
     item.variants.iter().for_each(|variant| {

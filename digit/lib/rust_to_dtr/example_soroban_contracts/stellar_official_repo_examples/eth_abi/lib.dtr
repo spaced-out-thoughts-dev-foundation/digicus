@@ -31,7 +31,7 @@
 
 
 [User Defined Types]:
-* (Error)
+* (Error_ENUM)
 {
 	Decode = 1
 }
