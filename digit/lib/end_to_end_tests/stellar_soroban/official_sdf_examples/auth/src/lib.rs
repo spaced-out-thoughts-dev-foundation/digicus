@@ -1,27 +1,24 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
+use soroban_sdk::{contract, contracttype, contractimpl, Env};
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DataKey {Counter: (Address)}
+pub enum DataKey {
+    Counter,
+}
 
 #[contract]
 pub struct IncrementContract;
 
+
 #[contractimpl]
 impl IncrementContract {
-    pub fn increment(env: Env, user: Address, value: u32) -> u32 {
-        user.require_auth();
-        let mut CALL_EXPRESSION_ARG_1 = user.clone();
-        let mut key = DataKey::Counter(&CALL_EXPRESSION_ARG_1);
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.persistent();
-        let mut METHOD_CALL_EXPRESSION_0 = METHOD_CALL_EXPRESSION_2.get(&key);
-        let mut count = METHOD_CALL_EXPRESSION_0.unwrap_or_default();
-        count += value;
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.persistent();
-        METHOD_CALL_EXPRESSION_2.set(&key, &count);
+    pub fn increment(env: Env, user: Address, value: i64) -> i64 {
+        &user.require_auth();
+        let mut key = &DataKey::Counter(user.clone());
+        let mut count = env.storage().persistent().get(&key).unwrap_or_default();
+        count = count + value;
+        env.storage().persistent().set(&key, &count);
         count
     }
 }

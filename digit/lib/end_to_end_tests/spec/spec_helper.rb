@@ -131,8 +131,10 @@ end
 
 def assert_translates_rust_to_dtr_and_back(dir)
   dtr_code = rust_to_dtr(File.read("#{dir}/src/original.rs"))
+  # puts "DTR code: #{dtr_code}"
   rust_string = DTRToRust::Generator.generate_from_string(dtr_code)
   rust_string += "\n\nmod test;\n"
+  # puts "\n\nRust code: #{rust_string}"
   File.write("#{dir}/src/lib.rs", rust_string)
 
   expect(run_cargo_test_in_dir(dir)).to be true

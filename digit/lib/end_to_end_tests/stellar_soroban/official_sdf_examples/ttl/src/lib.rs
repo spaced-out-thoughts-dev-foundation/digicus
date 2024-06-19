@@ -1,46 +1,37 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
+use soroban_sdk::{contract, contracttype, contractimpl, Env};
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct DataKey {MyKey: ()}
+pub enum DataKey {
+    MyKey,
+}
 
 #[contract]
 pub struct TtlContract;
 
+
 #[contractimpl]
 impl TtlContract {
     pub fn setup(env: Env)  {
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.persistent();
-        METHOD_CALL_EXPRESSION_2.set(&DataKey::MyKey, 0);
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-        METHOD_CALL_EXPRESSION_2.set(&DataKey::MyKey, 1);
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.temporary();
-        METHOD_CALL_EXPRESSION_2.set(&DataKey::MyKey, 2);
+        env.storage().persistent().set(&DataKey::MyKey, &0);
+        env.storage().instance().set(&DataKey::MyKey, &1);
+        env.storage().temporary().set(&DataKey::MyKey, &2);
     }
 
 
     pub fn extend_persistent(env: Env)  {
-        let mut METHOD_CALL_EXPRESSION_4 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_3 = METHOD_CALL_EXPRESSION_4.persistent();
-        METHOD_CALL_EXPRESSION_3.extend_ttl(&DataKey::MyKey, 1000, 5000);
+        env.storage().persistent().extend_ttl(&DataKey::MyKey, 1000, 5000);
     }
 
 
     pub fn extend_instance(env: Env)  {
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-        METHOD_CALL_EXPRESSION_2.extend_ttl(2000, 10000);
+        env.storage().instance().extend_ttl(2000, 10000);
     }
 
 
     pub fn extend_temporary(env: Env)  {
-        let mut METHOD_CALL_EXPRESSION_4 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_3 = METHOD_CALL_EXPRESSION_4.temporary();
-        METHOD_CALL_EXPRESSION_3.extend_ttl(&DataKey::MyKey, 3000, 7000);
+        env.storage().temporary().extend_ttl(&DataKey::MyKey, 3000, 7000);
     }
 }
 

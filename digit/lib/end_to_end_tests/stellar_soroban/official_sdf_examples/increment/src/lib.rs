@@ -1,26 +1,20 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec, log};
+use soroban_sdk::{Symbol, symbol_short, contract, contractimpl, Env, log};
 
 const COUNTER: Symbol = symbol_short!("COUNTER");
 
 #[contract]
 pub struct IncrementContract;
 
+
 #[contractimpl]
 impl IncrementContract {
-    pub fn increment(env: Env) -> u32 {
-        let mut METHOD_CALL_EXPRESSION_4 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_3 = METHOD_CALL_EXPRESSION_4.instance();
-        let mut METHOD_CALL_EXPRESSION_1 = METHOD_CALL_EXPRESSION_3.get(&COUNTER);
-        let mut count = METHOD_CALL_EXPRESSION_1.unwrap_or(0);
+    pub fn increment(env: Env) -> i64 {
+        let mut count = env.storage().instance().get(&COUNTER).unwrap_or(0);
         log!(&env, "count: {}", count);
-        count += 1;
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-        METHOD_CALL_EXPRESSION_2.set(&COUNTER, &count);
-        let mut METHOD_CALL_EXPRESSION_3 = env.storage();
-        let mut METHOD_CALL_EXPRESSION_2 = METHOD_CALL_EXPRESSION_3.instance();
-        METHOD_CALL_EXPRESSION_2.extend_ttl(50, 100);
+        count = count + 1;
+        env.storage().instance().set(&COUNTER, &count);
+        env.storage().instance().extend_ttl(50, 100);
         count
     }
 }

@@ -1,4 +1,9 @@
 PATH
+  remote: ../dtr_core
+  specs:
+    dtr_core (0.6.2)
+
+PATH
   remote: ../dtr_to_rust
   specs:
     dtr_to_rust (0.2.10)
@@ -8,7 +13,6 @@ GEM
   specs:
     ast (2.4.2)
     diff-lcs (1.5.1)
-    dtr_core (0.6.0)
     ffi (1.16.3)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
@@ -67,7 +71,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dtr_core (~> 0.6.0)
+  dtr_core!
   dtr_to_rust!
   ffi
   rspec
