@@ -79,21 +79,23 @@ module DTRToRust
     end
 
     def generate_interface
-      @content += "#{generate_functions_each(dtr_contract.helpers)}\n"
-    end
-
-    def generate_helpers
       @content += "#[contractimpl]\nimpl #{dtr_contract.name} {#{generate_functions_each(dtr_contract.interface)}}\n"
     end
 
+    def generate_helpers
+      @content += "#{generate_functions_each(dtr_contract.helpers)}\n"
+    end
+
     def generate_functions_each(functions)
+      function_names = functions&.map(&:name)
+
       functions&.map do |function|
         optimized_instructions =
           Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
 
         return_string = "\n    pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
-        return_string += " {\n#{generate_instructions_each(optimized_instructions)}\n    }\n"
+        return_string += " {\n#{generate_instructions_each(optimized_instructions, function_names)}\n    }\n"
 
         return_string
       end&.join("\n")
@@ -111,14 +113,32 @@ module DTRToRust
       all_inputs.map { |x| "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type_name])}" }.join(', ')
     end
 
-    def generate_instructions_each(instructions)
+    def generate_instructions_each(instructions, function_names)
+      last_scope = nil
       instructions.map do |instruction|
-        generate_instruction(instruction)
+        content = ''
+        if last_scope.nil?
+          last_scope = instruction.scope
+        elsif last_scope != instruction.scope
+          content += form_rust_string("}\n", instruction.scope) if last_scope > instruction.scope
+          last_scope = instruction.scope
+        end
+        content += generate_instruction(instruction, function_names)
+
+        content
       end.join("\n")
     end
 
-    def generate_instruction(instruction)
-      handler = InstructionHandler.new(instruction)
+    def form_rust_string(instruction_string, scope)
+      "#{spacing(scope)}#{instruction_string}"
+    end
+
+    def spacing(scope)
+      '        ' * (scope + 1)
+    end
+
+    def generate_instruction(instruction, function_names)
+      handler = InstructionHandler.new(instruction, function_names, dtr_contract.user_defined_types || [])
       handler.generate_rust
     end
 

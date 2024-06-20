@@ -26,10 +26,7 @@ module DTRToRust
       def self.more_complex_ref_appender(_input, decorated_input)
         decorated_input[:value].split('.').map do |x|
           x = x.strip
-          puts "looking at: #{x} - #{call_with_input?(x.strip)}"
           if call_with_input?(x)
-            puts "\n\n DEBUG"
-            puts "x: #{x}"
             matches = x.scan(/\((.*?)\)/)
             things = matches
                      .flatten
