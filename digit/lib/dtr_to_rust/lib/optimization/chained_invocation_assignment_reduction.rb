@@ -16,6 +16,12 @@ module DTRToRust
       def apply
         @instructions.each_with_index do |instruction, index|
           @cur_instruction = instruction
+
+          if skip_instruction?
+            @optimized_instructions << @cur_instruction
+            next
+          end
+
           apply_to_instruction(index)
         end
         actually_optimized_instructions = []
@@ -26,6 +32,10 @@ module DTRToRust
         actually_optimized_instructions
       end
 
+      def skip_instruction?
+        @cur_instruction.instruction == 'instantiate_object'
+      end
+
       def self.apply(instructions)
         new(instructions).apply
       end
@@ -33,8 +43,8 @@ module DTRToRust
       def apply_to_instruction(index)
         @optimized_inputs = []
 
-        @cur_instruction.inputs.each do |input|
-          apply_to_instruction_input(input)
+        @cur_instruction&.inputs&.each do |input|
+          apply_to_instruction_input(@cur_instruction, input)
         end
         @optimized_instructions << DTRCore::Instruction.new(@cur_instruction.instruction, @optimized_inputs,
                                                             @cur_instruction&.assign, @cur_instruction.scope)
@@ -67,13 +77,15 @@ module DTRToRust
         end
       end
 
-      def apply_to_instruction_input(input)
+      def apply_to_instruction_input(_instruction, input)
         done_a_thing = false
         @memoize_assigns.each do |key, value|
           next unless do_a_thing?(input, key, input.split('.')[0])
 
-          input = input.gsub(key, "#{value[:inputs][0]}(#{value[:inputs][1..].join(', ')})")
-          @optimized_inputs << input
+          # input = input.gsub(key, "#{value[:inputs][0]}(#{value[:inputs][1..].join(', ')})")
+
+          input = input.gsub(key, "#{evaluate_input(key, value)}")
+          @optimized_inputs << input # evaluate_input(key, value)
           done_a_thing = true
           @to_remove[value[:index]] = true
           next
@@ -82,13 +94,19 @@ module DTRToRust
         @optimized_inputs << input unless done_a_thing
       end
 
+      def evaluate_input(_key, input)
+        InstructionHandler.new(DTRCore::Instruction.new('evaluate', input[:inputs], nil, 0), [], [],
+                               false).generate_rust.strip.gsub(';', '')
+      end
+
       def do_a_thing?(input, key, input_beginning)
         input &&
           key &&
           input_beginning == key &&
           !(input.start_with?('"') &&
           input.end_with?('"')) &&
-          @cur_instruction.instruction == 'evaluate'
+          @cur_instruction.instruction == 'evaluate' &&
+          !['equal_to', '!'].include?(@cur_instruction)
       end
     end
   end

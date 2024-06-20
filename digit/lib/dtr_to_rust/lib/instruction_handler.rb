@@ -3,10 +3,11 @@
 module DTRToRust
   # This class is responsible for generating Rust code for a single instruction.
   class InstructionHandler
-    def initialize(instruction, function_names, user_defined_types)
+    def initialize(instruction, function_names, user_defined_types, is_helper)
       @instruction = instruction
       @function_names = function_names
       @user_defined_types = user_defined_types
+      @is_helper = is_helper
     end
 
     def generate_rust
@@ -15,7 +16,7 @@ module DTRToRust
       end
 
       EXPRESSION_FOOBAR[@instruction.instruction.strip].send(:handle, @instruction, @function_names,
-                                                             @user_defined_types)
+                                                             @user_defined_types, @is_helper)
     end
 
     private

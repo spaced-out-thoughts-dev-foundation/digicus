@@ -7,7 +7,7 @@ describe DTRToRust::Instruction::Assign do
     let(:instruction) { DTRCore::Instruction.new('assign', ['5'], 'x', 0) }
 
     it 'returns the correct string' do
-      expect(described_class.handle(instruction)).to eq('        let mut x = 5;')
+      expect(described_class.handle(instruction, [], [], false)).to eq('        let mut x = 5;')
     end
   end
 end

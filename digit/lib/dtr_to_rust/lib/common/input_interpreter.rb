@@ -17,6 +17,8 @@ module DTRToRust
           number_return(@input)
         elsif string?(@input)
           string_return(@input)
+        elsif boolean?(@input)
+          boolean_return(@input)
         else
           variable_return(@input)
         end
@@ -57,6 +59,15 @@ module DTRToRust
 
         # Check if the string matches the pattern
         !!(str =~ decimal_pattern)
+      end
+
+      ## Boolean ##
+      def boolean?(input)
+        input.is_a?(TrueClass) || input.is_a?(FalseClass) || input&.match?(/true|false/)
+      end
+
+      def boolean_return(_input)
+        { value: @input, type: 'boolean', needs_reference: false }
       end
     end
   end

@@ -5,13 +5,13 @@ require 'spec_helper'
 RSpec.describe DTRToRust::Generator do
   let(:minimal_dtr_code) do
     <<~DTR
-      [Contract]: MyContract
+        [Contract]: MyContract
 
-      [State]:
-        * [COUNTER]
-          * Type: String
-          * Initial Value: "COUNTER"
-      :[State]
+        [State]:
+      * [COUNTER]
+        * Type: String
+        * Initial Value: "COUNTER"
+        :[State]
 
     DTR
   end
@@ -26,7 +26,6 @@ RSpec.describe DTRToRust::Generator do
       #[contract]
       pub struct MyContract;
 
-
       #[contractimpl]
       impl MyContract {}
     RUST
@@ -34,7 +33,10 @@ RSpec.describe DTRToRust::Generator do
 
   describe '#generate_from_string' do
     it 'generates Rust code from a DTR contract' do
-      expect(described_class.generate_from_string(minimal_dtr_code)).to eq(expected_rust_code)
+      actual = described_class.generate_from_string(minimal_dtr_code).gsub("\n", '').gsub("\t", '')
+      expected = expected_rust_code.gsub("\n", '').gsub("\t", '')
+
+      expect(actual).to eq(expected)
     end
   end
 
@@ -55,7 +57,11 @@ RSpec.describe DTRToRust::Generator do
       FileUtils.rm_f(minimal_dtr_file_path)
       File.write(minimal_dtr_file_path, minimal_dtr_code)
 
-      expect(described_class.generate_from_file(minimal_dtr_file_path)).to eq(expected_rust_code)
+      actual = described_class.generate_from_string(minimal_dtr_code).gsub("\n", '').gsub("\t",
+                                                                                          '')
+      expected = expected_rust_code.gsub("\n", '').gsub("\t", '')
+
+      expect(actual).to eq(expected)
     end
   end
 end

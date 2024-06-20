@@ -20,9 +20,13 @@ module DTRToRust
       end
 
       def generate_struct
-        "#{derives}pub struct #{@user_defined_type.name.gsub('_STRUCT', '')} {#{@user_defined_type.attributes.map do |x|
-                                                                                  "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type])}"
-                                                                                end.join(', ')}}\n\n"
+        "#{derives}pub struct #{@user_defined_type.name.gsub('_STRUCT', '')} {\n#{generate_struct_attributes}\n}\n\n"
+      end
+
+      def generate_struct_attributes
+        @user_defined_type.attributes.map do |x|
+          "    pub #{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type])},"
+        end.join("\n")
       end
 
       def generate_enum
@@ -32,7 +36,7 @@ module DTRToRust
       def generate_enum_attributes
         @user_defined_type.attributes.map do |x|
           "    #{x[:name]},"
-        end.join('\n')
+        end.join("\n")
       end
 
       def derives

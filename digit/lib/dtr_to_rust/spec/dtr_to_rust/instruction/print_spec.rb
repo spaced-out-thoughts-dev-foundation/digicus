@@ -7,7 +7,7 @@ describe DTRToRust::Instruction::Print do
     it 'returns the correct Rust code' do
       instruction = DTRCore::Instruction.new('print', ['env', '"count: {}"', 'count'], nil, 0)
 
-      expect(described_class.handle(instruction)).to eq('        log!(&env, "count: {}", count);')
+      expect(described_class.handle(instruction, [], [], false)).to eq('        log!(&env, "count: {}", count);')
     end
   end
 end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 Gem::Specification.new do |spec|
-  spec.name          = 'dtr_to_rust'
-  spec.version       = '0.2.10'
+  spec.name = 'dtr_to_rust'
+  spec.version = '0.3.0'
   spec.authors = ['Rob Durst']
-  spec.email         = ['me@robdurst.com']
+  spec.email = ['me@robdurst.com']
   spec.summary       = 'Rust to DTR translator (Digicus Textual Representation).'
   spec.description   = 'Rust to DTR translator (Digicus Textual Representation).'
   spec.homepage      = 'https://spaced-out-thoughts-dev-foundation.github.io/digicus/'
@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   # spec.add_development_dependency "rspec", "~> 3.0"
 
   # Specify the files to be included in the gem
-  spec.files         = Dir.glob(File.join('lib', '**', '*.rb'))
+  spec.files = Dir.glob(File.join('lib', '**', '*.rb'))
 
   # Specify the main file to be loaded when the gem is required
   # spec.require_paths = ["lib/contract.rb"]

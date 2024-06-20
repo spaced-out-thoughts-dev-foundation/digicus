@@ -72,6 +72,8 @@ module DTRToRust
       dtr_contract.state.each do |state_value|
         if state_value.type == 'String'
           @content += "const #{state_value.name}: Symbol = symbol_short!(#{state_value.initial_value});\n"
+        else
+          @content += "const #{state_value.name}: #{Common::TypeTranslator.translate_type(state_value.type)} = #{state_value.initial_value};\n"
         end
       end
 
@@ -79,23 +81,34 @@ module DTRToRust
     end
 
     def generate_interface
-      @content += "#[contractimpl]\nimpl #{dtr_contract.name} {#{generate_functions_each(dtr_contract.interface)}}\n"
+      @content += "#[contractimpl]\nimpl #{dtr_contract.name} {#{generate_functions_each(dtr_contract.interface,
+                                                                                         false)}}\n"
     end
 
     def generate_helpers
-      @content += "#{generate_functions_each(dtr_contract.helpers)}\n"
+      @content += "#{generate_functions_each(dtr_contract.helpers, true)}\n"
     end
 
-    def generate_functions_each(functions)
+    def generate_functions_each(functions, is_helper)
       function_names = functions&.map(&:name)
 
       functions&.map do |function|
+        @last_scope = nil
         optimized_instructions =
           Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
 
-        return_string = "\n    pub fn #{function.name}(#{generate_function_args(function)}) "
+        return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
-        return_string += " {\n#{generate_instructions_each(optimized_instructions, function_names)}\n    }\n"
+        return_string += " {\n#{generate_instructions_each(optimized_instructions, function_names,
+                                                           is_helper)}"
+        unless @last_scope.nil?
+          while @last_scope.positive?
+            return_string += "\n#{form_rust_string('}', @last_scope,
+                                                   is_helper)}"
+            @last_scope -= 1
+          end
+        end
+        return_string += "\n#{is_helper ? '' : '    '}}\n"
 
         return_string
       end&.join("\n")
@@ -113,32 +126,31 @@ module DTRToRust
       all_inputs.map { |x| "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type_name])}" }.join(', ')
     end
 
-    def generate_instructions_each(instructions, function_names)
-      last_scope = nil
+    def generate_instructions_each(instructions, function_names, is_helper)
       instructions.map do |instruction|
         content = ''
-        if last_scope.nil?
-          last_scope = instruction.scope
-        elsif last_scope != instruction.scope
-          content += form_rust_string("}\n", instruction.scope) if last_scope > instruction.scope
-          last_scope = instruction.scope
+        if @last_scope.nil?
+          @last_scope = instruction.scope
+        elsif @last_scope != instruction.scope
+          content += form_rust_string("}\n", instruction.scope, is_helper) if @last_scope > instruction.scope
+          @last_scope = instruction.scope
         end
-        content += generate_instruction(instruction, function_names)
+        content += generate_instruction(instruction, function_names, is_helper)
 
         content
       end.join("\n")
     end
 
-    def form_rust_string(instruction_string, scope)
-      "#{spacing(scope)}#{instruction_string}"
+    def form_rust_string(instruction_string, scope, is_helper)
+      "#{spacing(scope, is_helper)}#{instruction_string}"
     end
 
-    def spacing(scope)
-      '        ' * (scope + 1)
+    def spacing(scope, is_helper)
+      '    ' * (is_helper ? 0 : scope + 1)
     end
 
-    def generate_instruction(instruction, function_names)
-      handler = InstructionHandler.new(instruction, function_names, dtr_contract.user_defined_types || [])
+    def generate_instruction(instruction, function_names, is_helper)
+      handler = InstructionHandler.new(instruction, function_names, dtr_contract.user_defined_types || [], is_helper)
       handler.generate_rust
     end
 
