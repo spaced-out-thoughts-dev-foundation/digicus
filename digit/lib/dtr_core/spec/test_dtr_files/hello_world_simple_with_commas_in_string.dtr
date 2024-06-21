@@ -1,0 +1,15 @@
+[Contract]: HelloContract
+
+[Interface]:
+  -() [hello]
+      * Inputs:
+        { 
+          to: Symbol
+        }
+      * Output: Symbol
+      * Instructions:
+        $
+          { instruction: add, input: ("Hello, world, how are you?,", to), assign: Thing_to_return }
+          { instruction: return, input: (Thing_to_return) }
+        $
+:[Interface]

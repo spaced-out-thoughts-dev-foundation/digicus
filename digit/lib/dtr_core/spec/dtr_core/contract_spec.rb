@@ -189,4 +189,24 @@ RSpec.describe DTRCore::Contract do
       )
     end
   end
+
+  context 'when inputs are strings with commas' do
+    it 'parses the contract name and function sections' do
+      expected_function =   DTRCore::Function.new(
+        'hello',
+        [{ name: 'to', type_name: 'Symbol' }],
+        'Symbol',
+        [
+          DTRCore::Instruction.new('add', ['"Hello, world, how are you?,"', 'to'], 'Thing_to_return', 0),
+          DTRCore::Instruction.new('return', ['Thing_to_return'], nil, 0)
+        ]
+      )
+      content = File.read('./spec/test_dtr_files/hello_world_simple_with_commas_in_string.dtr')
+      contract = described_class.from_dtr_raw(content)
+      expect(contract.name).to eq('HelloContract')
+      expect(contract.interface).to contain_exactly(
+        expected_function
+      )
+    end
+  end
 end
