@@ -100,3 +100,7 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 end
+
+def ins(instruction, inputs, assign, scope)
+  DTRCore::Instruction.new(instruction, inputs, assign, scope)
+end

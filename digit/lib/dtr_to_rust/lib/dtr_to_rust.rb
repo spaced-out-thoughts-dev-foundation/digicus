@@ -42,4 +42,9 @@ module DTRToRust
   module UserDefinedTypes
     autoload :Handler, 'user_defined_types/handler'
   end
+
+  # This module contains all the classes that handle the aggregation of instructions.
+  module Aggregator
+    autoload :ScopeBlockAggregator, 'aggregator/scope_block_aggregator'
+  end
 end
