@@ -110,7 +110,7 @@ class BlockRenderEngineRequestHandler
       @contract_functions = contract.interface&.map do |f|
         { 
           name: f.name,
-          instructions: f.instructions,
+          instructions: f.instructions.map { |i| i.to_json },
           inputs: f&.inputs,
           output: f&.output
         }.to_json

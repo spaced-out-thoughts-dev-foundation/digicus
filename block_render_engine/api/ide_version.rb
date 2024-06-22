@@ -7,6 +7,6 @@ Handler = proc do |_request, response|
   response.body = {
     dtr_core: Gem.loaded_specs['dtr_core'].version,
     dtr_to_rust: Gem.loaded_specs['dtr_to_rust'].version,
-    block_render_engine: '0.7.0'
+    block_render_engine: '0.7.2'
   }.to_json
 end
