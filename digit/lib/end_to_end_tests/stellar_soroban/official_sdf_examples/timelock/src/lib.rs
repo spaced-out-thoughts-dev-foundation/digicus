@@ -4,22 +4,32 @@ use soroban_sdk::{contract, contracttype, Vec, Env, contractimpl};
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum DataKey {
-    Init,\n    Balance,
+    Init,
+    Balance,
 }
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum TimeBoundKind {
-    Before,\n    After,
+    Before,
+    After,
 }
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct TimeBound {kind: TimeBoundKind, timestamp: i64}
+pub struct TimeBound {
+    pub kind: TimeBoundKind,
+    pub timestamp: i64,
+}
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ClaimableBalance {token: Address, amount: Bigi64, claimants: Vec<Address>, time_bound: TimeBound}
+pub struct ClaimableBalance {
+    pub token: Address,
+    pub amount: i128,
+    pub claimants: Vec<Address>,
+    pub time_bound: TimeBound,
+}
 
 #[contract]
 pub struct ClaimableBalanceContract;
@@ -28,11 +38,13 @@ pub struct ClaimableBalanceContract;
     pub fn check_time_bound(env: &Env, time_bound: &TimeBound) -> bool {
         let mut ledger_timestamp = env.ledger().timestamp();
         let mut CONDITIONAL_JUMP_CHECK_100 = &equal_to(&time_bound(kind), &TimeBoundKind::Before);
-
+        if CONDITIONAL_JUMP_CHECK_100 {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         let mut Thing_to_return = &less_than_or_equal_to(&ledger_timestamp, &time_bound(timestamp));
+        }
         let mut CONDITIONAL_JUMP_CHECK_200 = &equal_to(&Thing_to_compare_against, &TimeBoundKind::After);
-
+        if CONDITIONAL_JUMP_CHECK_200 {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         let mut Thing_to_return = &greater_than_or_equal_to(&ledger_timestamp, &time_bound(timestamp));
+        }
         Thing_to_return
     }
 
@@ -44,13 +56,15 @@ pub struct ClaimableBalanceContract;
 
 #[contractimpl]
 impl ClaimableBalanceContract {
-    pub fn deposit(env: Env, from: Address, token: Address, amount: Bigi64, claimants: Vec<Address>, time_bound: TimeBound)  {
+    pub fn deposit(env: Env, from: Address, token: Address, amount: i128, claimants: Vec<Address>, time_bound: TimeBound)  {
         let mut CONDITIONAL_JUMP_ASSIGNMENT = &greater_than(claimants.len(), 10);
-
+        if CONDITIONAL_JUMP_ASSIGNMENT {
                 panic! "too many claimants";
+        }
         let mut CONDITIONAL_JUMP_ASSIGNMENT = &is_initialized(&env);
-
+        if CONDITIONAL_JUMP_ASSIGNMENT {
                 panic! "contract has been already initialized";
+        }
         &from.require_auth();
         let mut METHOD_CALL_EXPRESSION_7 = &token::Client::new(&env, &token);
         &METHOD_CALL_EXPRESSION_7.transfer(&from, env.current_contract_address(), &amount);
@@ -68,11 +82,13 @@ impl ClaimableBalanceContract {
         &claimant.require_auth();
         let mut claimable_balance = env.storage().instance().get(&DataKey::Balance).unwrap();
         let mut CONDITIONAL_JUMP_ASSIGNMENT = &!(&check_time_bound(env, claimable_balance(time_bound)));
-
+        if CONDITIONAL_JUMP_ASSIGNMENT {
                 panic! "time predicate is not fulfilled";
+        }
         let mut CONDITIONAL_JUMP_ASSIGNMENT = &!(claimable_balance(&claimants).contains(&claimant));
-
+        if CONDITIONAL_JUMP_ASSIGNMENT {
                 panic! "claimant is not allowed to claim this balance";
+        }
         let mut METHOD_CALL_EXPRESSION_15 = &token::Client::new(&env, &claimable_balance(token));
         &METHOD_CALL_EXPRESSION_15.transfer(env.current_contract_address(), &claimant, &claimable_balance(amount));
         env.storage().instance().remove(&DataKey::Balance);
