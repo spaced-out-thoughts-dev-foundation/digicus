@@ -93,7 +93,6 @@ module DTRToRust
       function_names = functions&.map(&:name)
 
       functions&.map do |function|
-        @last_scope = nil
         optimized_instructions =
           Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
 
@@ -101,17 +100,18 @@ module DTRToRust
 
         puts "\n[DEBUG] instruction_blocks"
         instruction_blocks.each do |block|
-          puts block
+          puts "[#{block[:decorated_value]} | #{block[:scope]}] #{block[:block].map(&:instruction).join(', ')}"
         end
 
         return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
         return_string += " {\n#{generate_instructions_for_blocks(instruction_blocks, function_names,
                                                                  is_helper)}"
-        unless @last_scope.nil?
+
+        if @last_scope.positive?
           while @last_scope.positive?
-            return_string += "\n#{form_rust_string('}', @last_scope,
-                                                   is_helper)}"
+            return_string += "\n" + form_rust_string('}', @last_scope,
+                                                     is_helper)
             @last_scope -= 1
           end
         end
@@ -137,13 +137,17 @@ module DTRToRust
       instruction_blocks.map do |block|
         spacing_scope = block[:decorated_value]
         content = ''
-        if @last_scope.nil?
-          @last_scope = spacing_scope
-        elsif @last_scope != spacing_scope
-          content += form_rust_string("}\n", @last_scope, is_helper) if @last_scope > spacing_scope
-          @last_scope = spacing_scope
+        puts "\n[SCOPE]: last_scope: #{@last_scope}, spacing_scope: #{spacing_scope}"
+
+        if @last_scope > spacing_scope
+          while @last_scope > spacing_scope
+            content += form_rust_string("}\n", @last_scope, is_helper)
+            @last_scope -= 1
+          end
         end
+        @last_scope = spacing_scope
         content += generate_instructions_each(block[:block], spacing_scope, function_names, is_helper)
+        puts "\n[SCOPE]: last_scope: #{@last_scope}, spacing_scope: #{spacing_scope}"
 
         content
       end.join("\n")
