@@ -107,7 +107,7 @@ class BlockRenderEngineRequestHandler
           initial_value: s.initial_value
         }.to_json
       end
-      @contract_functions = contract.functions&.map do |f|
+      @contract_functions = contract.interface&.map do |f|
         { 
           name: f.name,
           instructions: f.instructions,
