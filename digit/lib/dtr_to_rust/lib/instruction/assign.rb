@@ -5,7 +5,7 @@ module DTRToRust
     # This class handles the assign instruction.
     class Assign < Handler
       def handle
-        form_rust_string("let mut #{@instruction.assign} = #{@instruction.inputs[0]};", @instruction.scope)
+        form_rust_string("let mut #{@instruction.assign} = #{@instruction.inputs[0]};")
       end
     end
   end

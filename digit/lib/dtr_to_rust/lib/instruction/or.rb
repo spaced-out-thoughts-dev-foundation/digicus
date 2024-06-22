@@ -12,7 +12,7 @@ module DTRToRust
         body_rust = "#{inputs[0]} || #{inputs[1]};"
         rust_string = "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
 
-        form_rust_string(rust_string, @instruction.scope)
+        form_rust_string(rust_string)
       end
     end
   end

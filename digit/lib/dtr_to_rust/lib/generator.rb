@@ -97,10 +97,17 @@ module DTRToRust
         optimized_instructions =
           Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
 
+        instruction_blocks = Aggregator::ScopeBlockAggregator.aggregate(optimized_instructions)
+
+        puts "\n[DEBUG] instruction_blocks"
+        instruction_blocks.each do |block|
+          puts block
+        end
+
         return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
-        return_string += " {\n#{generate_instructions_each(optimized_instructions, function_names,
-                                                           is_helper)}"
+        return_string += " {\n#{generate_instructions_for_blocks(instruction_blocks, function_names,
+                                                                 is_helper)}"
         unless @last_scope.nil?
           while @last_scope.positive?
             return_string += "\n#{form_rust_string('}', @last_scope,
@@ -126,16 +133,26 @@ module DTRToRust
       all_inputs.map { |x| "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type_name])}" }.join(', ')
     end
 
-    def generate_instructions_each(instructions, function_names, is_helper)
-      instructions.map do |instruction|
+    def generate_instructions_for_blocks(instruction_blocks, function_names, is_helper)
+      instruction_blocks.map do |block|
+        spacing_scope = block[:decorated_value]
         content = ''
         if @last_scope.nil?
-          @last_scope = instruction.scope
-        elsif @last_scope != instruction.scope
-          content += form_rust_string("}\n", instruction.scope, is_helper) if @last_scope > instruction.scope
-          @last_scope = instruction.scope
+          @last_scope = spacing_scope
+        elsif @last_scope != spacing_scope
+          content += form_rust_string("}\n", @last_scope, is_helper) if @last_scope > spacing_scope
+          @last_scope = spacing_scope
         end
-        content += generate_instruction(instruction, function_names, is_helper)
+        content += generate_instructions_each(block[:block], spacing_scope, function_names, is_helper)
+
+        content
+      end.join("\n")
+    end
+
+    def generate_instructions_each(instructions, spacing_scope, function_names, is_helper)
+      instructions.map do |instruction|
+        content = ''
+        content += generate_instruction(instruction, spacing_scope, function_names, is_helper)
 
         content
       end.join("\n")
@@ -149,8 +166,9 @@ module DTRToRust
       '    ' * (is_helper ? 0 : scope + 1)
     end
 
-    def generate_instruction(instruction, function_names, is_helper)
-      handler = InstructionHandler.new(instruction, function_names, dtr_contract.user_defined_types || [], is_helper)
+    def generate_instruction(instruction, spacing_scope, function_names, is_helper)
+      handler = InstructionHandler.new(instruction, spacing_scope, function_names,
+                                       dtr_contract.user_defined_types || [], is_helper)
       handler.generate_rust
     end
 

@@ -18,8 +18,7 @@ module DTRToRust
       private
 
       def handle_list
-        form_rust_string("let mut #{@instruction.assign} = vec![#{inputs_to_rust_string(@instruction.inputs[1..])}];",
-                         @instruction.scope)
+        form_rust_string("let mut #{@instruction.assign} = vec![#{inputs_to_rust_string(@instruction.inputs[1..])}];")
       end
 
       def udt_name_fix(udt)
@@ -37,7 +36,7 @@ module DTRToRust
         udt = "#{@instruction.inputs[1]}{"
         inputs = inputs_to_rust_string(@instruction.inputs[2..], udt_found[0].attributes.map { |x| x[:name] })
         end_ = '};'
-        form_rust_string("#{assignment}#{udt}#{inputs}#{end_}", @instruction.scope)
+        form_rust_string("#{assignment}#{udt}#{inputs}#{end_}")
       end
 
       def inputs_to_rust_string(inputs, udt_type_names)

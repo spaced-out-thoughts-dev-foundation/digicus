@@ -7,7 +7,7 @@ describe DTRToRust::Instruction::Or do
     let(:instruction) { DTRCore::Instruction.new('and', %w[foo bar], 'LOGICAL_RESULT', 0) }
 
     it 'returns the correct string' do
-      expect(described_class.handle(instruction, [], [], false)).to eq('        let LOGICAL_RESULT = foo || bar;')
+      expect(described_class.handle(instruction, 0, [], [], false)).to eq('        let LOGICAL_RESULT = foo || bar;')
     end
   end
 end

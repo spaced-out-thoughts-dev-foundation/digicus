@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DTRToRust
   module Aggregator
     # Aggregates instructions into scope blocks
@@ -50,22 +52,19 @@ module DTRToRust
             current_scope = scope_block.first.scope
             current_scope_decorated_value = 0
             scope_memoize[current_scope] = current_scope_decorated_value
-            { block: scope_block, scope: current_scope, decorated_value: current_scope_decorated_value }
           elsif scope_memoize[scope_block.first.scope]
             current_scope = scope_block.first.scope
             current_scope_decorated_value = scope_memoize[current_scope]
-            { block: scope_block, scope: current_scope, decorated_value: current_scope_decorated_value }
           elsif current_scope < scope_block.first.scope
             current_scope = scope_block.first.scope
             current_scope_decorated_value += 1
             scope_memoize[current_scope] = current_scope_decorated_value
-            { block: scope_block, scope: current_scope, decorated_value: current_scope_decorated_value }
           else
             current_scope = scope_block.first.scope
             current_scope_decorated_value -= 1
             scope_memoize[current_scope] = current_scope_decorated_value
-            { block: scope_block, scope: current_scope, decorated_value: current_scope_decorated_value }
           end
+          { block: scope_block, scope: current_scope, decorated_value: current_scope_decorated_value }
         end
       end
     end

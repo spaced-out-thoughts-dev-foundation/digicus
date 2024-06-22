@@ -5,7 +5,7 @@ module DTRToRust
     # This class is responsible for generating Rust code for the LogString instruction.
     class Print < Handler
       def handle
-        form_rust_string("log!(#{inputs_to_rust_string(@instruction.inputs)});", @instruction.scope)
+        form_rust_string("log!(#{inputs_to_rust_string(@instruction.inputs)});")
       end
 
       private

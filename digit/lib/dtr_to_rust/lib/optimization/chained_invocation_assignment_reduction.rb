@@ -84,7 +84,7 @@ module DTRToRust
 
           # input = input.gsub(key, "#{value[:inputs][0]}(#{value[:inputs][1..].join(', ')})")
 
-          input = input.gsub(key, "#{evaluate_input(key, value)}")
+          input = input.gsub(key, evaluate_input(key, value).to_s)
           @optimized_inputs << input # evaluate_input(key, value)
           done_a_thing = true
           @to_remove[value[:index]] = true
@@ -95,7 +95,7 @@ module DTRToRust
       end
 
       def evaluate_input(_key, input)
-        InstructionHandler.new(DTRCore::Instruction.new('evaluate', input[:inputs], nil, 0), [], [],
+        InstructionHandler.new(DTRCore::Instruction.new('evaluate', input[:inputs], nil, 0), 0, [], [],
                                false).generate_rust.strip.gsub(';', '')
       end
 

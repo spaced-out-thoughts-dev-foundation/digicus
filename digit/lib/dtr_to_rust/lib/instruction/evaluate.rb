@@ -6,7 +6,7 @@ module DTRToRust
     class Evaluate < Handler
       def handle
         rust_string = handle_keyword_method_invocation
-        form_rust_string(rust_string, @instruction.scope)
+        form_rust_string(rust_string)
       end
 
       private
