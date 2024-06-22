@@ -3,12 +3,11 @@ import Box from '@mui/material/Box';
 
 import ".././styles/CodeContainer.css";
 
-function UserDefinedTypesContainer({userDefinedTypes}) {
+function UserDefinedTypesContainer({ userDefinedTypes }) {
   return (
-    console.log("UserDefinedTypesContainer userDefinedTypes: ", userDefinedTypes),
     <Box className="code-container">
       <h2>User Defined Types</h2>
-     { userDefinedTypes ?
+      {userDefinedTypes ?
         userDefinedTypes?.map((userDefinedType, index) => {
           return (
             <div key={index}>
@@ -26,7 +25,7 @@ function UserDefinedTypesContainer({userDefinedTypes}) {
             </div>
           )
         })
-      : ''}
+        : ''}
     </Box>
   )
 }

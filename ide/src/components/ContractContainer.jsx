@@ -38,7 +38,9 @@ function constructNode(instruction, index, function_number, instructionColor) {
 
 function nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number, onUpdateFunctionName) {
   let function_json_data = JSON.parse(function_data);
+  console.log("function_json_data", function_json_data)
   let all_function_nodes = function_json_data.instructions
+    .map((instruction) => JSON.parse(instruction))
     .filter((instruction) => !!tryGetSupportedInstruction(instruction.instruction, supportedInstructions))
     .map((instruction, index) => {
       return constructNode(
