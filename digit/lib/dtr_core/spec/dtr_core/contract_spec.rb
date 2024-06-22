@@ -209,4 +209,53 @@ RSpec.describe DTRCore::Contract do
       )
     end
   end
+
+  context 'when parsing log_if_answer_to_life contract' do
+    let(:contract_name) { 'LogIfAnswerToLife' }
+    let(:interface) do
+      [
+        DTRCore::Function.new(
+          'fourty_two_and_then_some',
+          [{ name: 'env', type_name: 'Env' },
+           { name: 'possibly_the_answer_to_life', type_name: 'Integer' }],
+          nil,
+          [
+            DTRCore::Instruction.new('evaluate', %w[equal_to possibly_the_answer_to_life ANSWER_TO_LIFE],
+                                     'UNARY_ARGUMENT_0', 0),
+            DTRCore::Instruction.new('evaluate', ['!', 'UNARY_ARGUMENT_0'], 'CONDITIONAL_JUMP_ASSIGNMENT', 0),
+            DTRCore::Instruction.new('jump', %w[CONDITIONAL_JUMP_ASSIGNMENT 1], nil, 0),
+            DTRCore::Instruction.new('evaluate', ['log_to_env', 'env', '"Yes, the answer to life is 42!"'], nil, 1)
+          ]
+        )
+      ]
+    end
+    let(:state) do
+      [
+        DTRCore::State.new('ANSWER_TO_LIFE', 'Integer', 42)
+      ]
+    end
+    let(:helpers) do
+      [
+        DTRCore::Function.new(
+          'log_to_env',
+          [{ name: 'env', type_name: 'Env' },
+           { name: 'message', type_name: 'String' }],
+          nil,
+          [
+            DTRCore::Instruction.new('print', %w[env message], nil, 0)
+          ]
+        )
+      ]
+    end
+
+    it 'parses each section' do
+      content = File.read('./spec/test_dtr_files/log_if_answer_to_life.dtr')
+      contract = described_class.from_dtr_raw(content)
+
+      expect(contract.name).to eq(contract_name)
+      expect(contract.interface).to match_array(interface)
+      expect(contract.state).to match_array(state)
+      expect(contract.helpers).to match_array(helpers)
+    end
+  end
 end

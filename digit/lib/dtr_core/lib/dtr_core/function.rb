@@ -129,6 +129,8 @@ module DTRCore
           inputs_to_return.push(cur_word)
           cur_word = ''
           in_string = false
+        elsif char == ' ' && cur_word.empty?
+          next
         else
           cur_word += char
         end

@@ -20,9 +20,18 @@ module DTRCore
     end
 
     def to_s
-      "{ instruction: #{instruction}," \
+      "{ instruction: #{instruction}, " \
         "input: (#{inputs&.join(', ')}), " \
         "assign: #{assign}, scope: #{scope} }"
+    end
+
+    def to_json(*_args)
+      {
+        instruction:,
+        inputs:,
+        assign:,
+        scope:
+      }.to_json
     end
 
     def valid?
