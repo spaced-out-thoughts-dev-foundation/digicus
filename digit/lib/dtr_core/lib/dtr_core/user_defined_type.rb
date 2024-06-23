@@ -28,9 +28,15 @@ module DTRCore
     end
 
     def self.transform_attributes(capture_attribute_definition)
-      capture_attribute_definition&.map { |x| x.split(':') }
-                                  &.filter { |x| x.length > 1 }
-                                  &.map { |x| { name: x[0].strip, type: x[1].strip } }
+      capture_attribute_definition&.map do |x|
+        splitted = x.split(':')
+        next { name: splitted[0].strip, type: splitted[1].strip } if splitted.length > 1
+
+        splitted = x.split('=')
+        next { name: splitted[0].strip, value: splitted[1].strip } if splitted.length > 1
+
+        nil
+      end&.compact
     end
 
     def self.capture_name(definition)

@@ -31,6 +31,8 @@ module DTRCore
         validate_object_operation!
       when 'add', 'subtract', 'multiply', 'divide'
         validate_binary_operation!
+      when 'increment'
+        true
       else
         false
       end

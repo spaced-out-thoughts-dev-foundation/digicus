@@ -258,4 +258,38 @@ RSpec.describe DTRCore::Contract do
       expect(contract.helpers).to match_array(helpers)
     end
   end
+
+  context 'when UDT with numbered enum' do
+    it 'parses each section' do
+      content = File.read('./spec/test_dtr_files/contract_name_section_with_numbered_enum.dtr')
+      contract = described_class.from_dtr_raw(content)
+
+      expect(contract.name).to eq('CONTRACT_NAME')
+      expect(contract.user_defined_types).to eq(
+        [
+          DTRCore::UserDefinedType.new('Error_ENUM', [
+                                         { name: 'LimitReached', value: '1' }
+                                       ])
+        ]
+      )
+    end
+  end
+
+  context 'when UDT with enum variants' do
+    it 'parses each section' do
+      content = File.read('./spec/test_dtr_files/contract_name_section_with_enum_variants.dtr')
+      contract = described_class.from_dtr_raw(content)
+
+      expect(contract.name).to eq('CONTRACT_NAME')
+      expect(contract.user_defined_types).to eq(
+        [
+          DTRCore::UserDefinedType.new('DataKey_ENUM', [
+                                         { name: 'Counter', type: '(Address)' },
+                                         { name: 'Counter2', type: '(Address, BigInteger)' },
+                                         { name: 'Counter3', type: '()' }
+                                       ])
+        ]
+      )
+    end
+  end
 end

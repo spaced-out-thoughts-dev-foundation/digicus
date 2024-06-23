@@ -1,0 +1,8 @@
+[Contract]: CONTRACT_NAME
+
+[User Defined Types]:
+* (Error_ENUM)
+{
+  LimitReached = 1
+}
+:[User Defined Types]

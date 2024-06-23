@@ -1,0 +1,10 @@
+[Contract]: CONTRACT_NAME
+
+[User Defined Types]:
+* (DataKey_ENUM)
+{
+	Counter: (Address)
+	Counter2: (Address, BigInteger)
+	Counter3: ()
+}
+:[User Defined Types]
