@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# rubocop:disable RSpec/DescribeClass
 RSpec.describe 'Instruction Combinations' do
   context 'when method invocation chain' do
     let(:minimal_dtr_code) do
@@ -26,7 +27,7 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl};
+        use soroban_sdk::{contract, contractimpl, auth::Context, IntoVal};
 
         #[contract]
         pub struct MyContract;
@@ -93,7 +94,7 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
 
         const ANSWER_TO_LIFE: i64 = 42;
 
@@ -120,11 +121,6 @@ RSpec.describe 'Instruction Combinations' do
     it 'returns the optimized instructions' do
       actual = DTRToRust::Generator.generate_from_string(minimal_dtr_code).gsub("\n", '').gsub("\t", '').gsub(' ', '')
       expected = expected_rust_code.gsub("\n", '').gsub("\t", '').gsub(' ', '')
-
-      puts 'actual'
-      puts DTRToRust::Generator.generate_from_string(minimal_dtr_code)
-      puts '\nexpected'
-      puts expected_rust_code
 
       expect(actual).to eq(expected)
     end
@@ -177,7 +173,7 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
 
         const ANSWER_TO_LIFE: i64 = 42;
 
@@ -206,11 +202,6 @@ RSpec.describe 'Instruction Combinations' do
     it 'returns the optimized instructions' do
       actual = DTRToRust::Generator.generate_from_string(minimal_dtr_code).gsub("\n", '').gsub("\t", '').gsub(' ', '')
       expected = expected_rust_code.gsub("\n", '').gsub("\t", '').gsub(' ', '')
-
-      puts 'actual'
-      puts DTRToRust::Generator.generate_from_string(minimal_dtr_code)
-      puts '\nexpected'
-      puts expected_rust_code
 
       expect(actual).to eq(expected)
     end
@@ -270,7 +261,7 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
 
         const ANSWER_TO_LIFE: i64 = 42;
 
@@ -311,12 +302,8 @@ RSpec.describe 'Instruction Combinations' do
       actual = DTRToRust::Generator.generate_from_string(minimal_dtr_code).gsub("\n", '').gsub("\t", '').gsub(' ', '')
       expected = expected_rust_code.gsub("\n", '').gsub("\t", '').gsub(' ', '')
 
-      puts 'actual'
-      puts DTRToRust::Generator.generate_from_string(minimal_dtr_code)
-      puts '\nexpected'
-      puts expected_rust_code
-
       expect(actual).to eq(expected)
     end
   end
 end
+# rubocop:enable RSpec/DescribeClass

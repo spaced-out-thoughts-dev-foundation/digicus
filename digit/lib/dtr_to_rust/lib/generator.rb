@@ -37,15 +37,19 @@ module DTRToRust
 
     def generate_contract_header
       imports_super_set = %w[
+        Address
+        BytesN
         contract
         contractimpl
         contracttype
+        contracterror
         symbol_short
         vec
         Env
         Symbol
         Vec
         log
+        token
       ]
 
       used_imports = []
@@ -57,6 +61,10 @@ module DTRToRust
       end
 
       used_imports.uniq!
+
+      # TODO: unsure how to check this one
+      used_imports << 'auth::Context'
+      used_imports << 'IntoVal'
 
       # TODO: don't hardcode imports
       @content = "#![no_std]\nuse soroban_sdk::{#{used_imports.join(', ')}};\n\n" + @content
@@ -93,15 +101,9 @@ module DTRToRust
       function_names = functions&.map(&:name)
 
       functions&.map do |function|
-        optimized_instructions =
-          Optimization::ChainedInvocationAssignmentReduction.apply(function.instructions)
+        optimized_instructions = optimize_instructions(function.instructions)
 
         instruction_blocks = Aggregator::ScopeBlockAggregator.aggregate(optimized_instructions)
-
-        puts "\n[DEBUG] instruction_blocks"
-        instruction_blocks.each do |block|
-          puts "[#{block[:decorated_value]} | #{block[:scope]}] #{block[:block].map(&:instruction).join(', ')}"
-        end
 
         return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
@@ -121,6 +123,12 @@ module DTRToRust
       end&.join("\n")
     end
 
+    def optimize_instructions(instructions)
+      stage1_optimized = Optimization::FieldToAssignmentConversion.apply(instructions)
+      stage2_optimized = Optimization::BinaryXToSelfAssignmentReduction.apply(stage1_optimized)
+      Optimization::ChainedInvocationAssignmentReduction.apply(stage2_optimized)
+    end
+
     def generate_function_output(function)
       return '' if function.output.nil?
 
@@ -137,9 +145,7 @@ module DTRToRust
       instruction_blocks.map do |block|
         spacing_scope = block[:decorated_value]
         content = ''
-        puts "\n[SCOPE]: last_scope: #{@last_scope}, spacing_scope: #{spacing_scope}"
-
-        if @last_scope > spacing_scope
+        if @last_scope && @last_scope > spacing_scope
           while @last_scope > spacing_scope
             content += form_rust_string("}\n", @last_scope, is_helper)
             @last_scope -= 1
@@ -147,7 +153,6 @@ module DTRToRust
         end
         @last_scope = spacing_scope
         content += generate_instructions_each(block[:block], spacing_scope, function_names, is_helper)
-        puts "\n[SCOPE]: last_scope: #{@last_scope}, spacing_scope: #{spacing_scope}"
 
         content
       end.join("\n")

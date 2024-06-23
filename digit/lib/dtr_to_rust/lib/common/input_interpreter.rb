@@ -32,7 +32,7 @@ module DTRToRust
       end
 
       def variable_return(_input)
-        { value: @input, type: 'variable', needs_reference: true }
+        { value: @input, type: 'variable', needs_reference: !@input.start_with?('&') }
       end
 
       ## String ##

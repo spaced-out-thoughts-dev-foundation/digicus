@@ -5,7 +5,7 @@ module DTRToRust
     # This class handles the exit_with_message instruction.
     class ExitWithMessage < Handler
       def handle
-        form_rust_string("panic! #{inputs_to_rust_string(@instruction.inputs)};")
+        form_rust_string("panic!(#{inputs_to_rust_string(@instruction.inputs)});")
       end
 
       private

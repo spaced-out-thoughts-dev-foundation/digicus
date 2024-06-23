@@ -50,6 +50,10 @@ module DTRToRust
                                                             @cur_instruction&.assign, @cur_instruction.scope)
 
         @memoize_assigns = {} unless clear_memoize?
+        return unless @cur_instruction.assign && @cur_instruction.assign == @cur_instruction.assign.upcase && !%w[
+          add subtract multiply divide
+        ].include?(@cur_instruction.instruction)
+
         @memoize_assigns[@cur_instruction.assign] = {
           inputs: @optimized_inputs,
           index:
@@ -79,6 +83,7 @@ module DTRToRust
 
       def apply_to_instruction_input(_instruction, input)
         done_a_thing = false
+        memoize_assigns_to_clear = []
         @memoize_assigns.each do |key, value|
           next unless do_a_thing?(input, key, input.split('.')[0])
 
@@ -88,10 +93,15 @@ module DTRToRust
           @optimized_inputs << input # evaluate_input(key, value)
           done_a_thing = true
           @to_remove[value[:index]] = true
+          memoize_assigns_to_clear << key
           next
         end
 
         @optimized_inputs << input unless done_a_thing
+
+        memoize_assigns_to_clear.each do |key|
+          @memoize_assigns.delete(key)
+        end
       end
 
       def evaluate_input(_key, input)

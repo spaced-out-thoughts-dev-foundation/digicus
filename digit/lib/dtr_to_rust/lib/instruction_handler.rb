@@ -38,7 +38,9 @@ module DTRToRust
       'print' => Instruction::Print,
       'return' => Instruction::Return,
       'evaluate' => Instruction::Evaluate,
-      'field' => Instruction::Field
+      'field' => Instruction::Field,
+      'end_of_iteration_check' => Instruction::EndOfIterationCheck,
+      'increment' => Instruction::Increment
     }.freeze
 
     def handle_empty_instruction

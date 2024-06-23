@@ -35,12 +35,31 @@ module DTRToRust
 
       def generate_enum_attributes
         @user_defined_type.attributes.map do |x|
-          "    #{x[:name]},"
+          if x[:value]
+            "    #{x[:name]} = #{x[:value]},"
+          elsif x[:type] && x[:type] != '()'
+            "    #{x[:name]}(#{Common::TypeTranslator.translate_type(x[:type])}),"
+          else
+            "    #{x[:name]},"
+          end
         end.join("\n")
       end
 
       def derives
-        "#[contracttype]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
+        base = if error? && enum?
+                 "#[contracterror]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
+               else
+                 "#[contracttype]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
+               end
+
+        base += "#[repr(u32)]\n" if numbered_enum?
+
+        base
+      end
+
+      # TODO: fix this terrible hack
+      def error?
+        @user_defined_type.name.start_with? 'Error'
       end
 
       def struct?
@@ -49,6 +68,10 @@ module DTRToRust
 
       def enum?
         @user_defined_type.name.end_with? '_ENUM'
+      end
+
+      def numbered_enum?
+        enum? && @user_defined_type.attributes.all? { |x| x[:value] }
       end
     end
   end

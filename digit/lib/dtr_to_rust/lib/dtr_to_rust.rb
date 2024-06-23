@@ -24,6 +24,8 @@ module DTRToRust
     autoload :And, 'instruction/and'
     autoload :Or, 'instruction/or'
     autoload :Label, 'instruction/label'
+    autoload :EndOfIterationCheck, 'instruction/end_of_iteration_check'
+    autoload :Increment, 'instruction/increment'
   end
 
   # This module contains all the classes that handle common logic.
@@ -36,6 +38,8 @@ module DTRToRust
   # This module contains all the classes that handle optimization.
   module Optimization
     autoload :ChainedInvocationAssignmentReduction, 'optimization/chained_invocation_assignment_reduction'
+    autoload :FieldToAssignmentConversion, 'optimization/field_to_assignment_conversion'
+    autoload :BinaryXToSelfAssignmentReduction, 'optimization/binary_x_to_self_assignment_reduction'
   end
 
   # This module contains all the classes that handle user defined types.

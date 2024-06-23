@@ -10,6 +10,8 @@ module DTRToRust
           handle_list
         when 'UDT'
           handle_udt
+        when 'Tuple'
+          form_rust_string("let mut #{@instruction.assign} = (#{normalish_inputs});")
         else
           raise "Unknown object type: #{@instruction.inputs[0]}"
         end
@@ -18,7 +20,13 @@ module DTRToRust
       private
 
       def handle_list
-        form_rust_string("let mut #{@instruction.assign} = vec![#{inputs_to_rust_string(@instruction.inputs[1..])}];")
+        form_rust_string("let mut #{@instruction.assign} = vec![#{normalish_inputs}];")
+      end
+
+      def normalish_inputs
+        @instruction.inputs[1..].map do |x|
+          foobar(x)
+        end.join(', ')
       end
 
       def udt_name_fix(udt)
@@ -48,16 +56,20 @@ module DTRToRust
         inputs_to_return.join(', ')
       end
 
-      def handle_input(input, udt_type_name)
+      def foobar(input)
         decorated_input = Common::InputInterpreter.interpret(input)
 
-        value = if decorated_input[:type] == 'string'
-                  "symbol_short!(#{input})"
-                elsif decorated_input[:needs_reference] && input == 'env'
-                  "&#{input}"
-                else
-                  input
-                end
+        if decorated_input[:type] == 'string'
+          "symbol_short!(#{input})"
+        elsif decorated_input[:needs_reference] && input == 'env'
+          "&#{input}"
+        else
+          input
+        end
+      end
+
+      def handle_input(input, udt_type_name)
+        value = foobar(input)
 
         "#{udt_type_name}: #{value}"
       end

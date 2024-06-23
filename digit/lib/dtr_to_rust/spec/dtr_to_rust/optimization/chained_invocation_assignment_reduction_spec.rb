@@ -16,9 +16,9 @@ RSpec.describe DTRToRust::Optimization::ChainedInvocationAssignmentReduction do
       context 'when the instructions have no inputs' do
         let(:instructions) do
           [
-            ins('evaluate', %w[size], 'b', 0),
-            ins('evaluate', ['b.length'], 'c', 0),
-            ins('evaluate', ['c.foobar'], 'd', 0)
+            ins('evaluate', %w[size], 'BB', 0),
+            ins('evaluate', ['BB.length'], 'CC', 0),
+            ins('evaluate', ['CC.foobar'], 'd', 0)
           ]
         end
 
@@ -32,9 +32,9 @@ RSpec.describe DTRToRust::Optimization::ChainedInvocationAssignmentReduction do
       context 'when the instructions have inputs' do
         let(:instructions) do
           [
-            ins('evaluate', %w[size 10], 'b', 0),
-            ins('evaluate', ['b.length', '10', '20', '30'], 'c', 0),
-            ins('evaluate', ['c.foobar'], 'd', 0)
+            ins('evaluate', %w[size 10], 'BB', 0),
+            ins('evaluate', ['BB.length', '10', '20', '30'], 'CC', 0),
+            ins('evaluate', ['CC.foobar'], 'd', 0)
           ]
         end
 
