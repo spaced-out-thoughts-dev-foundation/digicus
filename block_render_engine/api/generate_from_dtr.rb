@@ -34,7 +34,7 @@ def form_functions(functions)
         ins = JSON.parse(i)
         DTRCore::Instruction.new(
           ins["instruction"],
-          ins["inputs"],
+          ins["input"],
           ins["output"],
           ins["scope"]
         )
