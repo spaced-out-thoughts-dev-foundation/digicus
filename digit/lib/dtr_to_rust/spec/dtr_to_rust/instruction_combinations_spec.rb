@@ -104,7 +104,7 @@ RSpec.describe 'Instruction Combinations' do
         #[contractimpl]
         impl LogIfAnswerToLife {
             pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64) {
-              let CONDITIONAL_JUMP_ASSIGNMENT = !(&possibly_the_answer_to_life == &ANSWER_TO_LIFE);
+              let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
               if CONDITIONAL_JUMP_ASSIGNMENT {
                 log_to_env(&env, "Yes, the answer to life is 42!");
               }
@@ -183,7 +183,7 @@ RSpec.describe 'Instruction Combinations' do
         #[contractimpl]
         impl LogIfAnswerToLife {
             pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64) {
-              let CONDITIONAL_JUMP_ASSIGNMENT = !(&possibly_the_answer_to_life == &ANSWER_TO_LIFE);
+              let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
               if CONDITIONAL_JUMP_ASSIGNMENT {
                 log_to_env(&env, "Yes, the answer to life is 42!");
               } else {
@@ -271,7 +271,7 @@ RSpec.describe 'Instruction Combinations' do
         #[contractimpl]
         impl LogIfAnswerToLife {
             pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64)  {
-                let CONDITIONAL_JUMP_ASSIGNMENT = !(&possibly_the_answer_to_life == &ANSWER_TO_LIFE);
+                let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
                 if CONDITIONAL_JUMP_ASSIGNMENT {
                     let CONDITIONAL_JUMP_ASSIGNMENT = !(UNARY_ARGUMENT_0);
                     if CONDITIONAL_JUMP_ASSIGNMENT {

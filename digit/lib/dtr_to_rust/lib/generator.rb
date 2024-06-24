@@ -107,8 +107,12 @@ module DTRToRust
 
         return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
-        return_string += " {\n#{generate_instructions_for_blocks(instruction_blocks, function_names,
-                                                                 is_helper)}"
+        return_string += " {\n"
+        if function.output
+          return_string += "        let Thing_to_return: #{Common::TypeTranslator.translate_type(function.output)};\n"
+        end
+        return_string += "#{generate_instructions_for_blocks(instruction_blocks, function_names,
+                                                             is_helper)}"
 
         if @last_scope.positive?
           while @last_scope.positive?

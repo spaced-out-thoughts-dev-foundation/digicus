@@ -14,13 +14,19 @@ module DTRToRust
       def handle_keyword_method_invocation
         case @instruction.inputs[0]
         when 'equal_to'
-          handle_equal_to
+          handle_binary('==')
         when '!'
           handle_unary_negation
         when 'less_than'
-          handle_less_than
+          handle_binary('<')
         when 'less_than_or_equal_to'
-          handle_less_than_or_equal_to
+          handle_binary('<=')
+        when 'greater_than'
+          handle_binary('>')
+        when 'greater_than_or_equal_to'
+          handle_binary('>=')
+        when 'not_equal_to'
+          handle_binary('!=')
         else
           handle_non_keyword_method_invocation
         end
@@ -35,44 +41,22 @@ module DTRToRust
         # TODO: make this less hacky evaluated_method_name.end_with?('set')
         body_rust = "#{invocation_name(evaluated_method_name)}(#{inputs_to_rust_string(inputs,
                                                                                        append_ref_to_num?, try_append_ref_to_var?)});"
-        "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
+        "#{if assignment.nil?
+             ''
+           else
+             assignment == 'Thing_to_return' ? assignment + ' = ' : assignment_rust
+           end}#{body_rust}"
       end
 
-      def handle_equal_to
+      def handle_binary(operation)
         inputs = @instruction.inputs[1..]
         @instruction.inputs[0]
         assignment = @instruction.assign
 
         assignment_rust = "let #{assignment} = "
-        lhs = Common::ReferenceAppender.call(inputs[0])
-        rhs = Common::ReferenceAppender.call(inputs[1])
-        body_rust = "#{lhs} == #{rhs};"
-
-        "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
-      end
-
-      def handle_less_than
-        inputs = @instruction.inputs[1..]
-        @instruction.inputs[0]
-        assignment = @instruction.assign
-
-        assignment_rust = "let #{assignment} = "
-        lhs = Common::ReferenceAppender.call(inputs[0])
-        rhs = Common::ReferenceAppender.call(inputs[1])
-        body_rust = "#{lhs} < #{rhs};"
-
-        "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
-      end
-
-      def handle_less_than_or_equal_to
-        inputs = @instruction.inputs[1..]
-        @instruction.inputs[0]
-        assignment = @instruction.assign
-
-        assignment_rust = "let #{assignment} = "
-        lhs = Common::ReferenceAppender.call(inputs[0])
-        rhs = Common::ReferenceAppender.call(inputs[1])
-        body_rust = "#{lhs} <= #{rhs};"
+        lhs = inputs[0]
+        rhs = inputs[1]
+        body_rust = "#{lhs} #{operation} #{rhs};"
 
         "#{assignment.nil? ? '' : assignment_rust}#{body_rust}"
       end
@@ -94,7 +78,11 @@ module DTRToRust
 
       def try_append_ref_to_var?
         # SO HACKY - Refs are hard man
-        !(@instruction.inputs[0].end_with?('unwrap_or') || @instruction.inputs[0].end_with?('publish'))
+        !(@instruction.inputs[0].end_with?('unwrap_or') ||
+        @instruction.inputs[0].end_with?('publish') ||
+        @instruction.inputs[0].end_with?('Err') ||
+        @instruction.inputs[0].end_with?('Ok')
+         )
       end
 
       def invocation_name(evaluated_method_name)

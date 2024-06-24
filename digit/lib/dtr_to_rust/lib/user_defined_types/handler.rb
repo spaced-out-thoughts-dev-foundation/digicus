@@ -37,6 +37,17 @@ module DTRToRust
         @user_defined_type.attributes.map do |x|
           if x[:value]
             "    #{x[:name]} = #{x[:value]},"
+          elsif x[:type] && x[:type].start_with?('(') && x[:type].end_with?(')')
+            inner_types = x[:type].gsub('(', '').gsub(')', '').split(',').map do |x|
+              Common::TypeTranslator.translate_type(x)
+            end
+            if inner_types.size == 0 || x[:type] == '()'
+              "    #{x[:name]},"
+            else
+              "    #{x[:name]}(#{inner_types.join(', ')}),"
+            end
+          elsif x[:type] && x[:type].match(/\d+/)
+            "    #{x[:name]} = #{x[:type]},"
           elsif x[:type] && x[:type] != '()'
             "    #{x[:name]}(#{Common::TypeTranslator.translate_type(x[:type])}),"
           else
@@ -47,7 +58,7 @@ module DTRToRust
 
       def derives
         base = if error? && enum?
-                 "#[contracterror]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
+                 "#[contracterror]\n#[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]\n"
                else
                  "#[contracttype]\n#[derive(Clone, Debug, Eq, PartialEq)]\n"
                end
