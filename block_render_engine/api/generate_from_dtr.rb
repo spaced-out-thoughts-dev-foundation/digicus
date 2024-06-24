@@ -30,7 +30,14 @@ def form_functions(functions)
       json_f["name"],
       json_f["inputs"].map{ |i| i.transform_keys(&:to_sym) },
       json_f["output"],
-      json_f["instructions"].map{ |i| i.transform_keys(&:to_sym) },
+      json_f["instructions"].map do|i| 
+        ins = JSON.parse(i)
+        DTRCore::Instruction.new(
+          ins["instruction"],
+          ins["inputs"],
+          ins["output"],
+          ins["scope"]
+      end
     )
   end
 end
