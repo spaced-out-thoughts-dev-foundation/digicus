@@ -37,6 +37,7 @@ def form_functions(functions)
           ins["inputs"],
           ins["output"],
           ins["scope"]
+        )
       end
     )
   end
