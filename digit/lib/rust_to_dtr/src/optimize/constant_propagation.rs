@@ -5,50 +5,88 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     let mut instruction_hash_table: HashMap<String, Vec<String>> = HashMap::new();
     let mut optimized_instructions: Vec<Instruction> = Vec::new();
 
-    instructions.clone().into_iter().for_each(|instruction| {
-        if instruction.name == "assign" {
-            instruction_hash_table.insert(instruction.assign.clone(), instruction.input.clone());
-        }
+    instructions
+        .clone()
+        .into_iter()
+        .for_each(|mut instruction| {
+            let mut keys_to_remove: HashMap<String, bool> = HashMap::new();
 
-        let mut new_inputs: Vec<String> = Vec::new();
-        instruction.input.clone().into_iter().for_each(|input| {
-            if instruction_hash_table.contains_key(&input) {
-                new_inputs.extend(instruction_hash_table.get(&input).unwrap().clone());
-            } else {
-                let splitted_input_string: Vec<&str> = input.split('.').collect();
+            let mut new_inputs: Vec<String> = Vec::new();
+            instruction.input.clone().into_iter().for_each(|input| {
+                if instruction_hash_table.contains_key(&input) {
+                    keys_to_remove.insert(input.clone(), true);
+                    new_inputs.extend(instruction_hash_table.get(&input).unwrap().clone());
+                } else {
+                    let splitted_input_string: Vec<&str> = input.split('.').collect();
 
-                if splitted_input_string.len() > 0 {
-                    let base_object = splitted_input_string[0];
-                    if instruction_hash_table.contains_key(base_object) {
-                        let mut new_input =
-                            instruction_hash_table.get(base_object).unwrap().clone();
-                        new_input.push(splitted_input_string[1].to_string());
-                        new_inputs.push(new_input.join("."));
+                    if splitted_input_string.len() > 0 {
+                        let base_object = splitted_input_string[0];
+                        if instruction_hash_table.contains_key(base_object) {
+                            keys_to_remove.insert(input.clone(), true);
+                            let mut new_input =
+                                instruction_hash_table.get(base_object).unwrap().clone();
+                            new_input.push(splitted_input_string[1].to_string());
+                            new_inputs.push(new_input.join("."));
+                        } else {
+                            new_inputs.push(input);
+                        }
                     } else {
                         new_inputs.push(input);
                     }
-                } else {
-                    new_inputs.push(input);
+                }
+            });
+
+            let new_assign = if (instruction.assign != ""
+                && instruction.assign.to_uppercase() == instruction.assign)
+                && instruction_hash_table.contains_key(&instruction.assign)
+            {
+                keys_to_remove.insert(instruction.assign.clone(), true);
+                // TODO: make sure this is correct
+                instruction_hash_table
+                    .get(&instruction.assign)
+                    .unwrap()
+                    .join(".")
+            } else {
+                instruction.assign.clone()
+            };
+
+            // rewrite fields as assigns
+            if instruction.name == "field" {
+                new_inputs = vec![new_inputs.join(".")];
+
+                instruction = Instruction::new(
+                    "assign".to_string(),
+                    new_inputs.clone(),
+                    new_assign.clone(),
+                    instruction.scope,
+                );
+            }
+
+            keys_to_remove.into_iter().for_each(|(key, _)| {
+                instruction_hash_table.remove(&key);
+            });
+
+            if instruction.name == "assign" {
+                instruction_hash_table
+                    .insert(instruction.assign.clone(), instruction.input.clone());
+            }
+
+            if instruction.name != "assign" {
+                // if you had an assign but then you have an instruction that re-assigns (not in an assign instruction), remove the assign
+                if instruction_hash_table.contains_key(&instruction.assign) {
+                    instruction_hash_table.remove_entry(&instruction.assign);
                 }
             }
+
+            let optimized_instruction = Instruction::new(
+                instruction.name.clone(),
+                new_inputs,
+                new_assign.clone(),
+                instruction.scope,
+            );
+
+            optimized_instructions.push(optimized_instruction);
         });
-
-        if instruction.name != "assign" {
-            // if you had an assign but then you have an instruction that re-assigns (not in an assign instruction), remove the assign
-            if instruction_hash_table.contains_key(&instruction.assign) {
-                instruction_hash_table.remove_entry(&instruction.assign);
-            }
-        }
-
-        let optimized_instruction = Instruction::new(
-            instruction.name.clone(),
-            new_inputs,
-            instruction.assign.clone(),
-            instruction.scope,
-        );
-
-        optimized_instructions.push(optimized_instruction);
-    });
 
     optimized_instructions
 }
@@ -139,7 +177,7 @@ mod tests {
             create_instruction("assign", vec!["5"], "b"),
             create_instruction("add", vec!["1", "5"], "c"),
             create_instruction("assign", vec!["7"], "b"),
-            create_instruction("add", vec!["1", "7"], "d"),
+            create_instruction("add", vec!["a", "7"], "d"),
         ];
 
         assert_eq!(
@@ -159,7 +197,7 @@ mod tests {
         let expected_optimized_instructions = vec![
             create_instruction("assign", vec!["1"], "a"),
             create_instruction("add", vec!["1", "b"], "c"),
-            create_instruction("add", vec!["c", "1"], "d"),
+            create_instruction("add", vec!["c", "a"], "d"),
         ];
 
         assert_eq!(
@@ -180,7 +218,7 @@ mod tests {
         let expected_optimized_instructions = vec![
             create_instruction("assign", vec!["1"], "a"),
             create_instruction("add", vec!["1", "b"], "c"),
-            create_instruction("evaluate", vec!["5", "1"], "a"),
+            create_instruction("evaluate", vec!["5", "a"], "a"),
             create_instruction("add", vec!["a", "b"], "d"),
         ];
 

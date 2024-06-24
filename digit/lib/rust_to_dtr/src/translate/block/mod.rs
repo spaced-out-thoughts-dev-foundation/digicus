@@ -10,6 +10,7 @@ pub fn handle_block(
     let mut index = 1;
     let total_block_stmts = block.stmts.len();
     let mut instructions_to_return: Vec<Instruction> = Vec::new();
+
     block.stmts.iter().for_each(|stmt| {
         let assignment: Option<String> =
             if index == total_block_stmts && compilation_state.should_output {

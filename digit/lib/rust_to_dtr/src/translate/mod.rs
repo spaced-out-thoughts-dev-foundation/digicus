@@ -14,7 +14,6 @@ pub mod type_name;
 pub fn parse_return_type(ty: &syn::Type) -> String {
     match type_name::figure_out_type(ty) {
         Ok(val) => {
-            println!("mapped_val: {:?}", map_name(&val));
             let mapped_val = map_name(&val).unwrap();
             if mapped_val != "" {
                 return format!("\t* Output: {}\n", mapped_val);

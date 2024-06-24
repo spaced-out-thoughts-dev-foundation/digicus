@@ -4,7 +4,15 @@ use std::collections::HashMap;
 pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
     let instructions_sans_unused_assigns = remove_unused_assigns(instructions);
 
-    remove_unused_returns(instructions_sans_unused_assigns)
+    let filtered_instructions: Vec<Instruction> = instructions_sans_unused_assigns
+        .clone()
+        .into_iter()
+        .filter(|instruction| {
+            !(instruction.input.len() == 1 && instruction.assign == instruction.input[0])
+        })
+        .collect();
+
+    remove_unused_returns(filtered_instructions)
 }
 
 #[derive(Debug)]
@@ -70,7 +78,7 @@ pub fn remove_unused_assigns(instructions: Vec<Instruction>) -> Vec<Instruction>
         .for_each(|(index, instruction)| {
             tagged_instructions.insert(index, get_rid_off);
 
-            if instruction.name == "assign" {
+            if instruction.name == "assign" && !instruction.assign.contains(".") {
                 let assigned_value = instruction.assign.as_str();
 
                 if assign_hash.contains_key(assigned_value) {

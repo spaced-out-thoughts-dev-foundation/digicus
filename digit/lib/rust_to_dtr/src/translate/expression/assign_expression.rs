@@ -25,15 +25,12 @@ pub fn handle_assign_expression(
 
     let binary_instruction = Instruction::new(
         "assign".to_string(),
-        vec![
-            left_hand_side_name.to_string(),
-            right_hand_side_name.to_string(),
-        ],
+        vec![right_hand_side_name.to_string()],
         // TODO: this is incorrect!
         compilation_state
             .next_assignment
             .clone()
-            .unwrap_or_default(),
+            .unwrap_or(left_hand_side_name.to_string()),
         compilation_state.scope,
     );
 
@@ -43,3 +40,5 @@ pub fn handle_assign_expression(
 
     Ok(left_hand_side)
 }
+
+// TODO: add tests

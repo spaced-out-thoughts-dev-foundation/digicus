@@ -12,14 +12,12 @@
 		$
 			{ instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
 			{ instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1), assign: state, scope: 0 }
-			{ instruction: field, input: (state, count), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
-			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, incr), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
-			{ instruction: field, input: (state, last_incr), assign: ASSIGN_EXPRESSION_LEFT, scope: 0 }
+			{ instruction: add, input: (state.count, incr), assign: state.count, scope: 0 }
+			{ instruction: assign, input: (incr), assign: state.last_incr, scope: 0 }
 			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_5, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.instance), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.set, STATE, state), scope: 0 }
-			{ instruction: field, input: (state, count), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ instruction: return, input: (state.count), scope: 0 }
 		$
 -() [get_state]
 	* Inputs:
@@ -39,8 +37,7 @@
 :[Interface]
 
 
-[User Defined Types]:
-* (State_STRUCT)
+[User Defined Types]:* (State_STRUCT)
 {
 	count: Integer
 	last_incr: Integer

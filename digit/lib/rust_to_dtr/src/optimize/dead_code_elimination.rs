@@ -27,7 +27,10 @@ pub fn remove_unused_assigns(instructions: Vec<Instruction>) -> Vec<Instruction>
         .for_each(|(index, instruction)| {
             tagged_instructions.insert(index, get_rid_off);
 
-            if instruction.name == "assign" {
+            if instruction.name == "assign"
+                && instruction.assign != ""
+                && instruction.assign.to_uppercase() == instruction.assign
+            {
                 let assigned_value = instruction.assign.as_str();
 
                 if assign_hash.contains_key(assigned_value) {
@@ -111,18 +114,18 @@ mod tests {
     #[test]
     fn remove_unused_assigns_removes_unused_assigns_simple() {
         let unoptimized_instructions = vec![
-            create_instruction("assign", vec!["1"], "a"),
-            create_instruction("assign", vec!["2"], "b"),
-            create_instruction("add", vec!["5", "3"], "c"),
-            create_instruction("add", vec!["c", "a"], "d"),
-            create_instruction("add", vec!["c", "10"], "e"),
+            create_instruction("assign", vec!["1"], "AA"),
+            create_instruction("assign", vec!["2"], "BB"),
+            create_instruction("add", vec!["5", "3"], "CC"),
+            create_instruction("add", vec!["CC", "AA"], "DD"),
+            create_instruction("add", vec!["CC", "10"], "EE"),
         ];
 
         let expected_optimized_instructions = vec![
-            create_instruction("assign", vec!["1"], "a"),
-            create_instruction("add", vec!["5", "3"], "c"),
-            create_instruction("add", vec!["c", "a"], "d"),
-            create_instruction("add", vec!["c", "10"], "e"),
+            create_instruction("assign", vec!["1"], "AA"),
+            create_instruction("add", vec!["5", "3"], "CC"),
+            create_instruction("add", vec!["CC", "AA"], "DD"),
+            create_instruction("add", vec!["CC", "10"], "EE"),
         ];
 
         assert_eq!(
@@ -134,24 +137,24 @@ mod tests {
     #[test]
     fn remove_unused_assigns_removes_unused_assigns_complex() {
         let unoptimized_instructions = vec![
-            create_instruction("assign", vec!["1"], "a"),
-            create_instruction("assign", vec!["2"], "b"),
-            create_instruction("add", vec!["5", "3"], "c"),
-            create_instruction("assign", vec!["11"], "a"),
-            create_instruction("add", vec!["c", "a"], "d"),
-            create_instruction("assign", vec!["10"], "a"),
-            create_instruction("add", vec!["c", "10"], "e"),
-            create_instruction("assign", vec!["d"], "f"),
-            create_instruction("add", vec!["f", "e"], "g"),
+            create_instruction("assign", vec!["1"], "AA"),
+            create_instruction("assign", vec!["2"], "BB"),
+            create_instruction("add", vec!["5", "3"], "CC"),
+            create_instruction("assign", vec!["11"], "AA"),
+            create_instruction("add", vec!["CC", "AA"], "DD"),
+            create_instruction("assign", vec!["10"], "AA"),
+            create_instruction("add", vec!["CC", "10"], "EE"),
+            create_instruction("assign", vec!["DD"], "FF"),
+            create_instruction("add", vec!["FF", "EE"], "GG"),
         ];
 
         let expected_optimized_instructions = vec![
-            create_instruction("add", vec!["5", "3"], "c"),
-            create_instruction("assign", vec!["11"], "a"),
-            create_instruction("add", vec!["c", "a"], "d"),
-            create_instruction("add", vec!["c", "10"], "e"),
-            create_instruction("assign", vec!["d"], "f"),
-            create_instruction("add", vec!["f", "e"], "g"),
+            create_instruction("add", vec!["5", "3"], "CC"),
+            create_instruction("assign", vec!["11"], "AA"),
+            create_instruction("add", vec!["CC", "AA"], "DD"),
+            create_instruction("add", vec!["CC", "10"], "EE"),
+            create_instruction("assign", vec!["DD"], "FF"),
+            create_instruction("add", vec!["FF", "EE"], "GG"),
         ];
 
         assert_eq!(
@@ -163,14 +166,14 @@ mod tests {
     #[test]
     fn remove_unused_assigns_due_to_eval_after() {
         let unoptimized_instructions = vec![
-            create_instruction("assign", vec!["1"], "a"),
-            create_instruction("evaluate", vec!["1", "b"], "a"),
-            create_instruction("add", vec!["a", "b"], "d"),
+            create_instruction("assign", vec!["1"], "AA"),
+            create_instruction("evaluate", vec!["1", "BB"], "AA"),
+            create_instruction("add", vec!["AA", "BB"], "DD"),
         ];
 
         let expected_optimized_instructions = vec![
-            create_instruction("evaluate", vec!["1", "b"], "a"),
-            create_instruction("add", vec!["a", "b"], "d"),
+            create_instruction("evaluate", vec!["1", "BB"], "AA"),
+            create_instruction("add", vec!["AA", "BB"], "DD"),
         ];
 
         assert_eq!(

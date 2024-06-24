@@ -15,7 +15,7 @@ pub fn handle_tuple_expression(
     let mut index = 1;
     let mut arguments: Vec<String> = Vec::new();
     expr.elems.iter().for_each(|arg| {
-        let arg_name = format!("{}_TUPLE_ARG", index);
+        let arg_name = format!("TUPLE_ARG_{}", index);
 
         arguments.push(arg_name.clone());
 
@@ -61,21 +61,21 @@ mod tests {
                 Instruction::new(
                     "assign".to_string(),
                     vec!["a".to_string()],
-                    "1_TUPLE_ARG".to_string(),
+                    "TUPLE_ARG_1".to_string(),
                     0
                 ),
                 Instruction::new(
                     "assign".to_string(),
                     vec!["b".to_string()],
-                    "2_TUPLE_ARG".to_string(),
+                    "TUPLE_ARG_2".to_string(),
                     0
                 ),
                 Instruction::new(
                     "instantiate_object".to_string(),
                     vec![
                         "Tuple".to_string(),
-                        "1_TUPLE_ARG".to_string(),
-                        "2_TUPLE_ARG".to_string()
+                        "TUPLE_ARG_1".to_string(),
+                        "TUPLE_ARG_2".to_string()
                     ],
                     "TUPLE_RESULT".to_string(),
                     0

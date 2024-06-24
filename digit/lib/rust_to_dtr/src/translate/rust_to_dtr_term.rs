@@ -1,8 +1,12 @@
 use crate::errors::not_translatable_error::NotTranslatableError;
 
 pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
-    if rust_name.contains("BytesN<") {
-        return Ok("String".to_string());
+    if rust_name.contains("BytesN<32>") {
+        return Ok("ByteStringSmall".to_string());
+    }
+
+    if rust_name.contains("BytesN<64>") {
+        return Ok("ByteStringLarge".to_string());
     }
 
     if rust_name.contains("Vec<") {
@@ -133,43 +137,21 @@ fn replace_map_with_map(input: &str) -> String {
 fn replace_result(input: &str) -> String {
     if input.starts_with("Result<") && input.ends_with('>') {
         let inner_types = &input[7..input.len() - 1]; // Extract the types inside the angle brackets
-        println!("inner_types: {}", inner_types);
-        let foobar = inner_types.replace("(", "").replace(")", "");
-        let types = foobar.split(","); // Split the types by comma
+        let types: Vec<String> = inner_types
+            .split(",")
+            .map(|s| s.trim().to_string())
+            .collect(); // Split the types by comma and trim them
 
-        let mut types_to_return: Vec<String> = vec![];
-
-        for the_type in types {
-            let fixed_type = fix_result_type(the_type);
-
-            if fixed_type.trim() != "" {
-                types_to_return.push(fixed_type.trim().to_string());
-            }
-        }
-
-        if types_to_return.len() == 0 {
+        if types.len() == 0 {
             return "".to_string();
         }
 
-        if types_to_return.len() == 1 {
-            return types_to_return[0].to_string();
+        if types.len() == 1 {
+            return types[0].to_string();
         }
 
-        format!("({})", types_to_return.join(", "))
+        format!("Result<{}>", types.join(", "))
     } else {
         input.to_string() // If the pattern doesn't match, return the input as is
     }
-}
-
-fn fix_result_type(type_name: &str) -> String {
-    println!("type_name: {}", type_name);
-    if type_name == "()" {
-        return "".to_string();
-    }
-
-    if type_name.contains("Error") {
-        return "".to_string();
-    }
-
-    type_name.to_string()
 }
