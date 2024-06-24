@@ -36,7 +36,7 @@ def form_functions(functions)
         DTRCore::Instruction.new(
           ins["instruction"],
           ins["inputs"],
-          ins["output"],
+          ins["assign"],
           ins["scope"]
         )
       end
