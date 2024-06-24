@@ -32,9 +32,10 @@ def form_functions(functions)
       json_f["output"],
       json_f["instructions"].map do|i| 
         ins = JSON.parse(i)
+        puts "\n[DEBUG]: ins: #{ins}\n"
         DTRCore::Instruction.new(
           ins["instruction"],
-          ins["input"],
+          ins["inputs"],
           ins["output"],
           ins["scope"]
         )
