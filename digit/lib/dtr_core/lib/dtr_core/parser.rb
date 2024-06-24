@@ -41,8 +41,6 @@ module DTRCore
                           .split(/\n\s*\*\s*\[/).map { |x| "[#{x.strip}" }
                           .map { |definition| DTRCore::State.from_definition(definition) }
 
-      raise 'Empty state section.' if state_definitions.empty?
-
       @state_section ||= state_definitions
     end
 
@@ -58,8 +56,6 @@ module DTRCore
       end
 
       function_definitions.reject! { |x| x.name.nil? }
-
-      raise 'Empty interface section.' if function_definitions.empty?
 
       @interface_section ||= function_definitions
     end
@@ -92,8 +88,6 @@ module DTRCore
       end
 
       function_definitions.reject! { |x| x.name.nil? }
-
-      raise 'Empty helpers section.' if function_definitions.empty?
 
       @helpers_section ||= function_definitions
     end

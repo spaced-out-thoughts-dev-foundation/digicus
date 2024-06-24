@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 ruby '~> 3.2'
 
-gem 'dtr_core', '~> 0.8.0'
-gem 'dtr_to_rust', '~> 0.8.0'
+gem 'dtr_core', '~> 0.8.1'
+gem 'dtr_to_rust', '~> 0.8.1'
 gem 'fiddle', '~> 1.0'
 gem 'puma'
 gem 'rackup'

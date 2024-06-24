@@ -268,7 +268,7 @@ RSpec.describe DTRCore::Contract do
       expect(contract.user_defined_types).to eq(
         [
           DTRCore::UserDefinedType.new('Error_ENUM', [
-                                         { name: 'LimitReached', value: '1' }
+                                         { name: 'LimitReached', type: '1' }
                                        ])
         ]
       )

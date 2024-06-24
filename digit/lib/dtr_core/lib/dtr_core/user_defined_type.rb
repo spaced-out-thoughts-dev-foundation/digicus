@@ -33,7 +33,7 @@ module DTRCore
         next { name: splitted[0].strip, type: splitted[1].strip } if splitted.length > 1
 
         splitted = x.split('=')
-        next { name: splitted[0].strip, value: splitted[1].strip } if splitted.length > 1
+        next { name: splitted[0].strip, type: splitted[1].strip } if splitted.length > 1
 
         nil
       end&.compact

@@ -18,14 +18,6 @@ RSpec.describe DTRCore::Parser do
       end
     end
 
-    context 'when state section is empty' do
-      it 'raises an error' do
-        expect do
-          described_class.new('./spec/test_dtr_files/state_section_no_definitions_empty_error.dtr').state_section
-        end.to raise_error(/Empty state section./)
-      end
-    end
-
     context 'when state section includes a definition with missing type' do
       it 'raises an error' do
         expect do
