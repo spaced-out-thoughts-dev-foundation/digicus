@@ -65,7 +65,8 @@ Handler = Proc.new do |request, response|
       name,
       state,
       functions,
-      user_defined_types
+      user_defined_types,
+      []
     )
 
     puts "[DEBUG]: formed contract"
