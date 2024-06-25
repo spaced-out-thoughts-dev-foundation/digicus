@@ -10,6 +10,7 @@ import FileUpload from './components/FileUpload';
 import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 import { saveAs } from 'file-saver';
+import EmailForm from './components/EmailForm';
 
 const App = () => {
   const [contract, setContract] = useState({ contract: '', originalText: ``, generatedText: `` });
@@ -190,10 +191,10 @@ const App = () => {
       <AppBar position="static" className='top-app-bar'>
         <TopHeaderBar />
         <div className='top-level-second-level-container'>
-          <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions} />
+          {/* <InstructionsAndActionsSideBar handleDeploy={handleDeploy} supportedInstructions={supportedInstructions} /> */}
           <div className='top-level-third-level-container'>
-            <div className='top-level-third-level-container-secondary-header-bar'>
-              <ContractHeader name={contract?.contract?.contract_name} onUpdateContractName={onUpdateContractName} />
+            {/* <div className='top-level-third-level-container-secondary-header-bar'> */}
+            {/* <ContractHeader name={contract?.contract?.contract_name} onUpdateContractName={onUpdateContractName} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <FileUpload style={{ flex: 10 }} handleFileChange={handleFileChange} handleUpload={handleUpload} />
                 <div style={{ border: '1px solid black', borderRadius: '10px', margin: '10px' }}>
@@ -215,9 +216,21 @@ const App = () => {
                     Generated Source Code
                   </label>
                 </div>
+              </div> */}
+            {/* </div> */}
+            <div style={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+              <div style={{ backgroundColor: 'blue', padding: '10px', fontSize: '1.5em', borderRadius: '10px' }}>
+                <h3>Thank you for your interest in Digicus! <br />We're undergoing a facelift in preparation for our initial launch. <br />In the meantime...</h3>
+                <EmailForm />
               </div>
             </div>
-            <ContractContainer
+
+            {/* <ContractContainer
               functions={contract?.contract?.contract_functions}
               filename={file?.name}
               originalText={contract?.originalText}
@@ -230,7 +243,7 @@ const App = () => {
               userDefinedTypes={contract?.contract?.contract_user_defined_types}
               onUpdateFunctionName={onUpdateFunctionName}
               onUpdateInputName={onUpdateInputName}
-            />
+            /> */}
           </div>
         </div>
       </AppBar>
