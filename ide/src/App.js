@@ -94,6 +94,36 @@ const App = () => {
       .catch(error => console.error(error));
   }
 
+  const onUpdateInputName = (newTitle, oldTitle, instruction, input_index, function_number, instruction_index) => {
+    let jsonifiedFunctionData = JSON.parse(contract.contract.contract_functions[function_number]);
+    let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
+
+    jsonifiedInstructionData.inputs[input_index] = newTitle;
+    jsonifiedFunctionData.instructions[instruction_index - 1] = JSON.stringify(jsonifiedInstructionData);
+
+    contract.contract.contract_functions[function_number] = JSON.stringify(jsonifiedFunctionData);
+
+    fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
+      {
+        headers: {
+          'Accept': 'text/text',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          contract_name: contract.contract.contract_name,
+          contract_state: contract.contract.contract_state,
+          contract_functions: contract.contract.contract_functions,
+          contract_user_defined_types: contract.contract.contract_user_defined_types
+        })
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
+      .catch(error => console.error(error));
+  };
+
   const handleShowCodeContainer = () => {
     setShowCodeContainer(!showCodeContainer);
     setShowUserDefinedTypes(!showUserDefinedTypes);
@@ -199,6 +229,7 @@ const App = () => {
               showUserDefinedTypes={showUserDefinedTypes}
               userDefinedTypes={contract?.contract?.contract_user_defined_types}
               onUpdateFunctionName={onUpdateFunctionName}
+              onUpdateInputName={onUpdateInputName}
             />
           </div>
         </div>

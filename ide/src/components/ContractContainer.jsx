@@ -21,22 +21,23 @@ function tryGetSupportedInstruction(instructionName, supportedInstructions) {
   return supportedInstructions.filter(x => x.name.toUpperCase() === instructionName.toUpperCase());
 };
 
-function constructNode(instruction, index, function_number, instructionColor) {
+function constructNode(instruction, index, function_number, instructionColor, onUpdateInputName) {
   return {
     id: `${index}|${function_number}`,
     data: {
       color: instructionColor,
       id: `${index}|${function_number}`,
       instruction: instruction,
-      label: `${instruction.instruction.toUpperCase()} ${instruction.inputs ? `(${instruction.inputs.join(',')})` : ''}`
+      label: `${instruction.instruction.toUpperCase()} ${instruction.inputs ? `(${instruction.inputs.join(',')})` : ''}`,
+      onUpdateInputName: (oldTitle, newTitle, instruction_index) => onUpdateInputName(oldTitle, newTitle, instruction, instruction_index, function_number, index)
     },
-    position: { x: 0 * (function_number), y: index === 1 ? 150 : 50 + 100 * (index) },
+    position: { x: 0 * (function_number), y: index === 1 ? 150 : 50 + 200 * (index) },
     type: 'instructionNode',
     parentId: `f-${function_number}`
   };
 };
 
-function nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number, onUpdateFunctionName) {
+function nodes(function_data, supportedInstructions, supportedInstructionToColor, function_number, onUpdateFunctionName, onUpdateInputName) {
   let function_json_data = JSON.parse(function_data);
   console.log("function_json_data", function_json_data)
   let all_function_nodes = function_json_data.instructions
@@ -47,7 +48,8 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         instruction,
         index + 1,
         function_number,
-        determineInstructionColor(instruction.instruction, supportedInstructions, supportedInstructionToColor)
+        determineInstructionColor(instruction.instruction, supportedInstructions, supportedInstructionToColor),
+        onUpdateInputName
       );
     })
 
@@ -64,7 +66,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
       fontSize: '1em',
       borderRadius: 10,
       width: 300,
-      height: 100 * (function_json_data.instructions.length + 1) + 25,
+      height: 200 * (function_json_data.instructions.length + 1) + 25,
       marginLeft: '-50px',
       backgroundColor: 'rgba(255, 255, 0, 0.15)',
       textShadow: '0.5px 0.5px 0.5px black',
@@ -100,7 +102,7 @@ function edges(function_data, function_number) {
 
 function ContractContainer({
   functions, supportedInstructions, supportedInstructionToColor, originalText, filename,
-  showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText, onUpdateFunctionName
+  showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText, onUpdateFunctionName, onUpdateInputName
 }) {
   return (
     <div className='contract-container-container'>
@@ -108,7 +110,7 @@ function ContractContainer({
         {
           functions ?
             <ReactFlow
-              nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i, onUpdateFunctionName)).flatMap(x => x)}
+              nodes={functions.map((f, i) => nodes(f, supportedInstructions, supportedInstructionToColor, i, onUpdateFunctionName, onUpdateInputName)).flatMap(x => x)}
               edges={functions.map((f, i) => edges(f, i)).flatMap(x => x)}
               fitView={{ padding: 100 }}
               nodeTypes={nodeTypes}

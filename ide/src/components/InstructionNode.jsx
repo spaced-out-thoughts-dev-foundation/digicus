@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { Handle, Position } from 'reactflow';
 import Paper from '@mui/material/Paper';
 import '.././styles/InstructionNode.css';
+import EditableTitle from './EditableTitle';
 
 export default memo(({ data, isConnectable }) => {
   return (
@@ -13,7 +14,10 @@ export default memo(({ data, isConnectable }) => {
             <div style={{ display: 'Flex', justifyContent: 'center' }}>
               <h2 style={{ flex: 1, justifyContent: 'center', display: 'Flex', alignContent: 'center', alignItems: 'center' }}>{data.instruction.instruction}</h2>
               <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: '1em', justifyContent: 'center' }}>
-                {data.instruction.inputs.map(x => <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{x}<br /></div>)}
+                {
+                  data.instruction.inputs.map((x, input_index) => <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
+                    <EditableTitle initial_title={x} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, input_index)} />}<br /></div>)
+                }
               </div>
             </div>
           </Paper>
