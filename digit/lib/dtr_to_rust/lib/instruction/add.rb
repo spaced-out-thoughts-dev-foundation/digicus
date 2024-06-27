@@ -5,7 +5,11 @@ module DTRToRust
     # This class handles the add instruction.
     class Add < Handler
       def handle
-        form_rust_string("#{@instruction.assign} = #{@instruction.inputs[0]} + #{@instruction.inputs[1]};")
+        if @assignment_name_to_scope_map[@instruction.assign] || @instruction.assign.include?('.')
+          form_rust_string("#{@instruction.assign} = #{@instruction.inputs[0]} + #{@instruction.inputs[1]};")
+        else
+          form_rust_string("let mut #{@instruction.assign} = #{@instruction.inputs[0]} + #{@instruction.inputs[1]};")
+        end
       end
     end
   end

@@ -3,12 +3,15 @@
 module DTRToRust
   # This class is responsible for generating Rust code for a single instruction.
   class InstructionHandler
-    def initialize(instruction, spacing_scope, function_names, user_defined_types, is_helper)
+    def initialize(instruction, spacing_scope, function_names, user_defined_types, is_helper,
+                   assignment_name_to_scope_map, function_inputs)
       @instruction = instruction
       @spacing_scope = spacing_scope
       @function_names = function_names
       @user_defined_types = user_defined_types
       @is_helper = is_helper
+      @assignment_name_to_scope_map = assignment_name_to_scope_map
+      @function_inputs = function_inputs
     end
 
     def generate_rust
@@ -17,7 +20,7 @@ module DTRToRust
       end
 
       EXPRESSION_FOOBAR[@instruction.instruction.strip].send(:handle, @instruction, @spacing_scope, @function_names,
-                                                             @user_defined_types, @is_helper)
+                                                             @user_defined_types, @is_helper, @assignment_name_to_scope_map, @function_inputs)
     end
 
     private

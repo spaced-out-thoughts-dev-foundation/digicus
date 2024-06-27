@@ -106,7 +106,7 @@ module DTRToRust
 
       def evaluate_input(_key, input)
         InstructionHandler.new(DTRCore::Instruction.new('evaluate', input[:inputs], nil, 0), 0, [], [],
-                               false).generate_rust.strip.gsub(';', '')
+                               false, [], {}).generate_rust.strip.gsub(';', '')
       end
 
       def do_a_thing?(input, key, input_beginning)

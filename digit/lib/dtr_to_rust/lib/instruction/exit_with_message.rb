@@ -11,7 +11,7 @@ module DTRToRust
       private
 
       def inputs_to_rust_string(inputs)
-        inputs.map { |input| Common::ReferenceAppender.call(input) }.join(', ')
+        inputs.map { |input| Common::ReferenceAppender.call(input, function_inputs: @function_inputs) }.join(', ')
       end
     end
   end

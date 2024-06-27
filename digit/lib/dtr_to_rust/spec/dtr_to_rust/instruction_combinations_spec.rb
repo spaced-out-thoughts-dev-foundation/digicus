@@ -27,7 +27,7 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, auth::Context, IntoVal};
+        use soroban_sdk::{contract, contractimpl, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
         #[contract]
         pub struct MyContract;
@@ -94,16 +94,16 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
-        const ANSWER_TO_LIFE: i64 = 42;
+        const ANSWER_TO_LIFE: i128 = 42;
 
         #[contract]
         pub struct LogIfAnswerToLife;
 
         #[contractimpl]
         impl LogIfAnswerToLife {
-            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64) {
+            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i128) {
               let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
               if CONDITIONAL_JUMP_ASSIGNMENT {
                 log_to_env(&env, "Yes, the answer to life is 42!");
@@ -173,16 +173,16 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
-        const ANSWER_TO_LIFE: i64 = 42;
+        const ANSWER_TO_LIFE: i128 = 42;
 
         #[contract]
         pub struct LogIfAnswerToLife;
 
         #[contractimpl]
         impl LogIfAnswerToLife {
-            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64) {
+            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i128) {
               let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
               if CONDITIONAL_JUMP_ASSIGNMENT {
                 log_to_env(&env, "Yes, the answer to life is 42!");
@@ -261,16 +261,16 @@ RSpec.describe 'Instruction Combinations' do
     let(:expected_rust_code) do
       <<~RUST
         #![no_std]
-        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal};
+        use soroban_sdk::{contract, contractimpl, Env, log, Symbol, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
-        const ANSWER_TO_LIFE: i64 = 42;
+        const ANSWER_TO_LIFE: i128 = 42;
 
         #[contract]
         pub struct LogIfAnswerToLife;
 
         #[contractimpl]
         impl LogIfAnswerToLife {
-            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i64)  {
+            pub fn fourty_two_and_then_some(env: Env, possibly_the_answer_to_life: i128)  {
                 let CONDITIONAL_JUMP_ASSIGNMENT = !(possibly_the_answer_to_life == ANSWER_TO_LIFE);
                 if CONDITIONAL_JUMP_ASSIGNMENT {
                     let CONDITIONAL_JUMP_ASSIGNMENT = !(UNARY_ARGUMENT_0);

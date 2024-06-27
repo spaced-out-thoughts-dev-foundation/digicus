@@ -10,7 +10,7 @@ module DTRToRust
           .gsub('List<', 'Vec<')
           .gsub('Dictionary<', 'HashMap<')
           .gsub('BigInteger', 'i128')
-          .gsub('Integer', 'i64')
+          .gsub('Integer', 'i128')
           .gsub('ByteStringSmall', 'BytesN<32>')
           .gsub('ByteStringLarge', 'BytesN<64>')
           .gsub('String', 'Symbol')

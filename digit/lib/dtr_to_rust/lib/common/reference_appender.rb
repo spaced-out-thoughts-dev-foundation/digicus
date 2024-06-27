@@ -4,7 +4,7 @@ module DTRToRust
   module Common
     # This module appends references to variables.
     module ReferenceAppender
-      def self.call(input, ref_nums: false)
+      def self.call(input, ref_nums: false, function_inputs: {})
         # Hack to get tests to pass
         return '&signature_payload.into()' if input == 'signature_payload.into()'
 
@@ -15,10 +15,13 @@ module DTRToRust
         #      --> env.storage().instance().get(&COUNTER).unwrap_or(0);
         if decorated_input[:type] != 'number' &&
            decorated_input[:value].include?('.') &&
-           decorated_input[:value].include?('(') && decorated_input[:value].include?(')')
-          more_complex_ref_appender(input, decorated_input)
+           decorated_input[:value].include?('(') && decorated_input[:value].include?(')') &&
+           # TERRIBLE HACK
+           !decorated_input[:value].include?('address()')
+          more_complex_ref_appender(input, decorated_input, function_inputs)
         elsif decorated_input[:needs_reference]
-          "&#{decorated_input[:value]}"
+          input_has_ref = function_inputs[decorated_input[:value]] && function_inputs[decorated_input[:value]][:input_has_ref]
+          "#{input_has_ref ? '' : '&'}#{decorated_input[:value]}"
         elsif decorated_input[:type] == 'number'
           ref_nums ? "&#{decorated_input[:value]}" : decorated_input[:value]
         else
@@ -26,7 +29,7 @@ module DTRToRust
         end
       end
 
-      def self.more_complex_ref_appender(_input, decorated_input)
+      def self.more_complex_ref_appender(_input, decorated_input, function_inputs)
         decorated_input[:value].split('.').map do |x|
           x = x.strip
           if call_with_input?(x)
@@ -34,7 +37,7 @@ module DTRToRust
             things = matches
                      .flatten
                      .filter(&method(:not_empty_string?))
-                     .map(&method(:wild_stuff))
+                     .map { |x| wild_stuff(x, function_inputs) }
                      .join(', ')
             "#{x.split('(')[0]}(#{things})"
           else
@@ -47,8 +50,8 @@ module DTRToRust
         input != ''
       end
 
-      def self.wild_stuff(input)
-        input.split(',').map { |x| ReferenceAppender.call(x.strip) }.join(', ')
+      def self.wild_stuff(input, function_inputs)
+        input.split(',').map { |x| ReferenceAppender.call(x.strip, function_inputs:) }.join(', ')
       end
 
       def self.call_with_input?(input)

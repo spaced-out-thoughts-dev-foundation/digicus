@@ -65,6 +65,7 @@ module DTRToRust
       # TODO: unsure how to check this one
       used_imports << 'auth::Context'
       used_imports << 'IntoVal'
+      used_imports << 'unwrap::UnwrapOptimized'
 
       # TODO: don't hardcode imports
       @content = "#![no_std]\nuse soroban_sdk::{#{used_imports.join(', ')}};\n\n" + @content
@@ -105,6 +106,14 @@ module DTRToRust
 
         instruction_blocks = Aggregator::ScopeBlockAggregator.aggregate(optimized_instructions)
 
+        # HACK
+        function_inputs = {}
+        function.inputs.each do |x|
+          function_inputs[x[:name]] = {
+            input_has_ref: Common::TypeTranslator.translate_type(x[:type_name]).include?('&')
+          }
+        end
+
         return_string = "\n#{is_helper ? '' : '    '}pub fn #{function.name}(#{generate_function_args(function)}) "
         return_string += generate_function_output(function)
         return_string += " {\n"
@@ -112,7 +121,7 @@ module DTRToRust
           return_string += "        let Thing_to_return: #{Common::TypeTranslator.translate_type(function.output)};\n"
         end
         return_string += "#{generate_instructions_for_blocks(instruction_blocks, function_names,
-                                                             is_helper)}"
+                                                             is_helper, function_inputs)}"
 
         if @last_scope.positive?
           while @last_scope.positive?
@@ -145,7 +154,8 @@ module DTRToRust
       all_inputs.map { |x| "#{x[:name]}: #{Common::TypeTranslator.translate_type(x[:type_name])}" }.join(', ')
     end
 
-    def generate_instructions_for_blocks(instruction_blocks, function_names, is_helper)
+    def generate_instructions_for_blocks(instruction_blocks, function_names, is_helper, function_inputs)
+      new_assignment_name_to_scope_map = {}
       instruction_blocks.map do |block|
         spacing_scope = block[:decorated_value]
         content = ''
@@ -156,19 +166,28 @@ module DTRToRust
           end
         end
         @last_scope = spacing_scope
-        content += generate_instructions_each(block[:block], spacing_scope, function_names, is_helper)
+        content_to_add, new_assignment_name_to_scope_map =
+          generate_instructions_each(block[:block], spacing_scope, function_names, is_helper,
+                                     new_assignment_name_to_scope_map, function_inputs)
 
-        content
+        content += content_to_add
       end.join("\n")
     end
 
-    def generate_instructions_each(instructions, spacing_scope, function_names, is_helper)
-      instructions.map do |instruction|
+    def generate_instructions_each(instructions, spacing_scope, function_names, is_helper,
+                                   assignment_name_to_scope_map, function_inputs)
+      new_assignment_name_to_scope_map = assignment_name_to_scope_map.clone
+      content_to_return = instructions.map do |instruction|
         content = ''
-        content += generate_instruction(instruction, spacing_scope, function_names, is_helper)
+        content_to_add, new_assignment_name_to_scope_map =
+          generate_instruction(instruction, spacing_scope, function_names, is_helper, new_assignment_name_to_scope_map,
+                               function_inputs)
 
+        content += content_to_add
         content
       end.join("\n")
+
+      [content_to_return, new_assignment_name_to_scope_map]
     end
 
     def form_rust_string(instruction_string, scope, is_helper)
@@ -179,10 +198,21 @@ module DTRToRust
       '    ' * (is_helper ? 0 : scope + 1)
     end
 
-    def generate_instruction(instruction, spacing_scope, function_names, is_helper)
+    def generate_instruction(instruction, spacing_scope, function_names, is_helper, assignment_name_to_scope_map,
+                             function_inputs)
       handler = InstructionHandler.new(instruction, spacing_scope, function_names,
-                                       dtr_contract.user_defined_types || [], is_helper)
-      handler.generate_rust
+                                       dtr_contract.user_defined_types || [], is_helper, assignment_name_to_scope_map, function_inputs)
+
+      result = handler.generate_rust
+      if instruction.assign
+        unless assignment_name_to_scope_map[instruction.assign]
+          assignment_name_to_scope_map[instruction.assign] =
+            []
+        end
+
+        assignment_name_to_scope_map[instruction.assign] << spacing_scope
+      end
+      [result, assignment_name_to_scope_map]
     end
 
     def generate_user_defined_types

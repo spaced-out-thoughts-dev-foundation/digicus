@@ -8,7 +8,7 @@ describe DTRToRust::Instruction::Evaluate do
       it 'returns the correct Rust code' do
         instruction = DTRCore::Instruction.new('evaluate', ['env.storage', 'env', 'foo'], nil, 0)
 
-        expect(described_class.handle(instruction, 0, [], [], false))
+        expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
           .to eq('        env.storage(&env, &foo);')
       end
     end
@@ -18,7 +18,7 @@ describe DTRToRust::Instruction::Evaluate do
         it 'returns the correct Rust code' do
           instruction = DTRCore::Instruction.new('evaluate', ['storage'], 'CALL_EXPRESSION_RESULT', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut CALL_EXPRESSION_RESULT = storage();')
         end
       end
@@ -27,7 +27,7 @@ describe DTRToRust::Instruction::Evaluate do
         it 'returns the correct Rust code' do
           instruction = DTRCore::Instruction.new('evaluate', ['instance', '"foo"'], 'CALL_EXPRESSION_RESULT', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut CALL_EXPRESSION_RESULT = instance("foo");')
         end
       end
@@ -36,7 +36,7 @@ describe DTRToRust::Instruction::Evaluate do
         it 'returns the correct Rust code' do
           instruction = DTRCore::Instruction.new('evaluate', ['extend_ttl', 50, 100], 'CALL_EXPRESSION_RESULT', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut CALL_EXPRESSION_RESULT = extend_ttl(50, 100);')
         end
       end
@@ -45,7 +45,7 @@ describe DTRToRust::Instruction::Evaluate do
         it 'returns the correct Rust code' do
           instruction = DTRCore::Instruction.new('evaluate', ['storage'], nil, 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false)).to eq('        storage();')
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {})).to eq('        storage();')
         end
       end
     end
@@ -55,7 +55,7 @@ describe DTRToRust::Instruction::Evaluate do
         it 'returns the correct Rust code' do
           instruction = DTRCore::Instruction.new('evaluate', ['env.storage'], 'METHOD_CALL_EXPRESSION', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut METHOD_CALL_EXPRESSION = env.storage();')
         end
       end
@@ -65,7 +65,7 @@ describe DTRToRust::Instruction::Evaluate do
           instruction = DTRCore::Instruction.new('evaluate', ['METHOD_CALL_EXPRESSION.instance', '"foo"'],
                                                  'METHOD_CALL_EXPRESSION', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut METHOD_CALL_EXPRESSION = METHOD_CALL_EXPRESSION.instance("foo");')
         end
       end
@@ -75,7 +75,7 @@ describe DTRToRust::Instruction::Evaluate do
           instruction = DTRCore::Instruction.new('evaluate', ['METHOD_CALL_EXPRESSION.extend_ttl', 50, 100],
                                                  'METHOD_CALL_RESULT', 0)
 
-          expect(described_class.handle(instruction, 0, [], [], false))
+          expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
             .to eq('        let mut METHOD_CALL_RESULT = METHOD_CALL_EXPRESSION.extend_ttl(50, 100);')
         end
       end
@@ -86,7 +86,7 @@ describe DTRToRust::Instruction::Evaluate do
         instruction = DTRCore::Instruction.new('evaluate', ['log_to_env', 'env', '"Yes, the answer to life is 42!"'],
                                                'CALL_EXPRESSION_RESULT', 0)
 
-        expect(described_class.handle(instruction, 0, [], [], false))
+        expect(described_class.handle(instruction, 0, [], [], false, {}, {}))
           .to eq('        let mut CALL_EXPRESSION_RESULT = log_to_env(&env, "Yes, the answer to life is 42!");')
       end
     end
@@ -97,7 +97,7 @@ describe DTRToRust::Instruction::Evaluate do
           instruction = DTRCore::Instruction.new('evaluate', ['equal_to', 10, 20], 'EQUAL_TO_RESULT', 0)
 
           expect(described_class.handle(instruction, 0, [], [],
-                                        false)).to eq('        let EQUAL_TO_RESULT = 10 == 20;')
+                                        false, {}, {})).to eq('        let EQUAL_TO_RESULT = 10 == 20;')
         end
 
         context 'when unary argument' do
@@ -106,7 +106,7 @@ describe DTRToRust::Instruction::Evaluate do
                                                    'CONDITIONAL_JUMP_ASSIGNMENT', 0)
 
             expect(described_class.handle(instruction, 0, [], [],
-                                          false)).to eq('        let CONDITIONAL_JUMP_ASSIGNMENT = !(UNARY_ARGUMENT_0);')
+                                          false, {}, {})).to eq('        let CONDITIONAL_JUMP_ASSIGNMENT = !(UNARY_ARGUMENT_0);')
           end
         end
       end

@@ -81,7 +81,8 @@ module DTRToRust
         !(@instruction.inputs[0].end_with?('unwrap_or') ||
         @instruction.inputs[0].end_with?('publish') ||
         @instruction.inputs[0].end_with?('Err') ||
-        @instruction.inputs[0].end_with?('Ok')
+        @instruction.inputs[0].end_with?('Ok') ||
+        @instruction.inputs[0].end_with?('checked_mul')
          )
       end
 
@@ -94,7 +95,9 @@ module DTRToRust
       end
 
       def inputs_to_rust_string(inputs, ref_nums, ref_vars)
-        inputs.map { |input| ref_vars ? Common::ReferenceAppender.call(input, ref_nums:) : input }.join(', ')
+        inputs.map do |input|
+          ref_vars ? Common::ReferenceAppender.call(input, ref_nums:, function_inputs: @function_inputs) : input
+        end.join(', ')
       end
     end
   end

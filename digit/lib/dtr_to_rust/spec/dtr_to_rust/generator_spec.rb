@@ -19,7 +19,7 @@ RSpec.describe DTRToRust::Generator do
   let(:expected_rust_code) do
     <<~RUST
       #![no_std]
-      use soroban_sdk::{Symbol, symbol_short, contract, contractimpl, auth::Context, IntoVal};
+      use soroban_sdk::{Symbol, symbol_short, contract, contractimpl, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
       const COUNTER: Symbol = symbol_short!("COUNTER");
 
