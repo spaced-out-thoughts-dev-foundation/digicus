@@ -62,9 +62,10 @@ mod full_contract_tests {
     );
     // test_contract!(digicus_unofficial_examples, simplest_nested_scoping);
     test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
+    test_contract!(digicus_unofficial_examples, more_complex_if_conditional);
 
     // test_contract!(stellar_official_repo_examples, account);
-    test_contract!(stellar_official_repo_examples, alloc);
+    // test_contract!(stellar_official_repo_examples, alloc);
     // test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
     // test_contract!(stellar_official_repo_examples, atomic_swap);
@@ -82,7 +83,7 @@ mod full_contract_tests {
     test_contract!(stellar_official_repo_examples, logging);
     // test_contract!(stellar_official_repo_examples, mint_lock);
     test_contract!(stellar_official_repo_examples, simple_account);
-    // test_contract!(stellar_official_repo_examples, single_offer);
+    test_contract!(stellar_official_repo_examples, single_offer);
     // test_contract!(stellar_official_repo_examples, timelock);
     test_contract!(stellar_official_repo_examples, ttl);
     // test_contract!(

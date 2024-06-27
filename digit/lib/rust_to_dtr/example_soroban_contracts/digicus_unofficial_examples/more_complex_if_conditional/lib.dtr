@@ -1,0 +1,18 @@
+[Contract]: MoreComplexIfConditionalContract
+
+[Interface]:
+-() [do_a_more_complex_if_conditional]
+	* Inputs:
+	{
+		buy_price: Integer
+		sell_price: Integer
+	}
+	* Instructions:
+		$
+			{ instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT_1, scope: 0 }
+			{ instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT_2, scope: 0 }
+			{ instruction: or, input: (BINARY_EXPRESSION_LEFT_1, BINARY_EXPRESSION_RIGHT_2), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 1), scope: 0 }
+			{ instruction: exit_with_message, input: ("zero price is not allowed"), scope: 1 }
+		$
+:[Interface]

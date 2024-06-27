@@ -10,8 +10,10 @@ pub fn handle_binary_expression(
     expr_binary: &ExprBinary,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let left_hand_side_name = "BINARY_EXPRESSION_LEFT";
-    let right_hand_side_name = "BINARY_EXPRESSION_RIGHT";
+    let mut global_uuid = compilation_state.get_global_uuid();
+    let left_hand_side_name = format!("BINARY_EXPRESSION_LEFT_{}", global_uuid);
+    global_uuid = compilation_state.get_global_uuid();
+    let right_hand_side_name = format!("BINARY_EXPRESSION_RIGHT_{}", global_uuid);
 
     let mut left_hand_side: Vec<Instruction> = parse_expression(
         &expr_binary.left,
@@ -81,20 +83,20 @@ mod tests {
                 Instruction::new(
                     "assign".to_string(),
                     vec!["1".to_string()],
-                    "BINARY_EXPRESSION_LEFT".to_string(),
+                    "BINARY_EXPRESSION_LEFT_0".to_string(),
                     0,
                 ),
                 Instruction::new(
                     "assign".to_string(),
                     vec!["2".to_string()],
-                    "BINARY_EXPRESSION_RIGHT".to_string(),
+                    "BINARY_EXPRESSION_RIGHT_1".to_string(),
                     0,
                 ),
                 Instruction::new(
                     "add".to_string(),
                     vec![
-                        "BINARY_EXPRESSION_LEFT".to_string(),
-                        "BINARY_EXPRESSION_RIGHT".to_string(),
+                        "BINARY_EXPRESSION_LEFT_0".to_string(),
+                        "BINARY_EXPRESSION_RIGHT_1".to_string(),
                     ],
                     "".to_string(),
                     0
@@ -115,20 +117,20 @@ mod tests {
             Instruction::new(
                 "assign".to_string(),
                 vec!["foo".to_string()],
-                "BINARY_EXPRESSION_LEFT".to_string(),
+                "BINARY_EXPRESSION_LEFT_0".to_string(),
                 0,
             ),
             Instruction::new(
                 "assign".to_string(),
                 vec!["2".to_string()],
-                "BINARY_EXPRESSION_RIGHT".to_string(),
+                "BINARY_EXPRESSION_RIGHT_1".to_string(),
                 0,
             ),
             Instruction::new(
                 "subtract_and_assign".to_string(),
                 vec![
-                    "BINARY_EXPRESSION_LEFT".to_string(),
-                    "BINARY_EXPRESSION_RIGHT".to_string(),
+                    "BINARY_EXPRESSION_LEFT_0".to_string(),
+                    "BINARY_EXPRESSION_RIGHT_1".to_string(),
                 ],
                 "".to_string(),
                 0,

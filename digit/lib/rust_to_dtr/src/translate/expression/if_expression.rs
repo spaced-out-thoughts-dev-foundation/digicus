@@ -11,15 +11,18 @@ pub fn handle_if_expression(
     expr: &ExprIf,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
+    let mut global_uuid = compilation_state.get_global_uuid();
+    let conditional_jump_assignment_label = format!("CONDITIONAL_JUMP_ASSIGNMENT_{}", global_uuid);
+
     let mut condition_instructions: Vec<Instruction> = parse_expression(
         &expr.cond,
-        &mut compilation_state.with_assignment(Some("CONDITIONAL_JUMP_ASSIGNMENT".to_string())),
+        &mut compilation_state.with_assignment(Some(conditional_jump_assignment_label.to_string())),
     )?;
 
     let conditional_jump_instruction = Instruction::new(
         "jump".to_string(),
         vec![
-            "CONDITIONAL_JUMP_ASSIGNMENT".to_string(),
+            conditional_jump_assignment_label.to_string(),
             (compilation_state.scope + 1).to_string(),
         ],
         compilation_state

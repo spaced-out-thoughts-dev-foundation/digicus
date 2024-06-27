@@ -15,11 +15,11 @@
 			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
 			{ instruction: print, input: (env, "count: {}", count), scope: 0 }
 			{ instruction: add, input: (count, 1), assign: count, scope: 0 }
-			{ instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), assign: Thing_to_return, scope: 0 }
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_9, scope: 1 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_9.instance), assign: METHOD_CALL_EXPRESSION_8, scope: 1 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_8.set, COUNTER, count), scope: 1 }
+			{ instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT_8, scope: 0 }
+			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_8, 1), assign: Thing_to_return, scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_14, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.instance), assign: METHOD_CALL_EXPRESSION_13, scope: 1 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.set, COUNTER, count), scope: 1 }
 			{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
 			{ instruction: jump, input: (100), assign: Thing_to_return, scope: 0 }
 			{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }

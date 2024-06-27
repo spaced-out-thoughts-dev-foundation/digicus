@@ -14,9 +14,9 @@
 			{ instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1), assign: state, scope: 0 }
 			{ instruction: add, input: (state.count, incr), assign: state.count, scope: 0 }
 			{ instruction: assign, input: (incr), assign: state.last_incr, scope: 0 }
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_5, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.instance), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.set, STATE, state), scope: 0 }
+			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_7, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_7.instance), assign: METHOD_CALL_EXPRESSION_6, scope: 0 }
+			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_6.set, STATE, state), scope: 0 }
 			{ instruction: return, input: (state.count), scope: 0 }
 		$
 -() [get_state]
