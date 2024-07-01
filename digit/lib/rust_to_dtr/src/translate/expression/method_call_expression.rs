@@ -53,10 +53,6 @@ pub fn handle_method_call_expression(
         ),
     );
 
-    argument_names.clone().into_iter().for_each(|arg| {
-        println!("[DEBUG]: {}", arg);
-    });
-
     receiver.push(Instruction::new(
         compilation_state.get_global_uuid(),
         "evaluate".to_string(),
@@ -76,7 +72,6 @@ mod tests {
     use super::*;
     use crate::common::compilation_state::CompilationState;
     use crate::instruction::Instruction;
-    use crate::translate::expression::parse_expression;
     use syn::parse_quote;
 
     #[test]

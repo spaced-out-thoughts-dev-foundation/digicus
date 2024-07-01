@@ -11,7 +11,7 @@ pub fn handle_if_expression(
     expr: &ExprIf,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let mut global_uuid = compilation_state.get_global_uuid();
+    let global_uuid = compilation_state.get_global_uuid();
     let conditional_jump_assignment_label = format!("CONDITIONAL_JUMP_ASSIGNMENT_{}", global_uuid);
 
     // let mut instructions_to_return: Vec<Instruction> = vec![];
@@ -93,7 +93,6 @@ pub fn handle_if_expression(
 mod tests {
     use super::*;
     use crate::instruction::Instruction;
-    use crate::translate::expression::parse_expression;
     use syn::{self, parse_quote};
 
     #[test]
@@ -211,10 +210,6 @@ mod tests {
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
 
-        instructions.iter().for_each(|instruction| {
-            println!("{:?}", instruction);
-        });
-
         assert_eq!(
             instructions,
             vec![
@@ -266,10 +261,6 @@ mod tests {
         let expr_if: ExprIf = parse_quote!(if true { log!("if") } else { log!("else") });
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
-
-        instructions.iter().for_each(|instruction| {
-            println!("{:?}", instruction);
-        });
 
         assert_eq!(
             instructions,
@@ -332,10 +323,6 @@ mod tests {
         let expr_if: ExprIf = syn::parse_str("if 10 < 11 { log!(\"if\") } else if 10 == 11 { log!(\"else if\") } else { log!(\"else\") }").unwrap();
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
-
-        instructions.iter().for_each(|instruction| {
-            println!("{:?}", instruction);
-        });
 
         assert_eq!(
             instructions,
@@ -469,6 +456,71 @@ mod tests {
                     vec!["0".to_string()],
                     "".to_string(),
                     10,
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_if_let_expression() {
+        let expr_if: ExprIf = syn::parse_str("if let Some(x) = Some(10) { log!(x) }").unwrap();
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    4,
+                    "assign".to_string(),
+                    vec!["Some".to_string()],
+                    "CALL_EXPRESSION_FUNCTION_3".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    2,
+                    "assign".to_string(),
+                    vec!["10".to_string()],
+                    "CALL_EXPRESSION_ARG_1".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    5,
+                    "evaluate".to_string(),
+                    vec![
+                        "CALL_EXPRESSION_FUNCTION_3".to_string(),
+                        "CALL_EXPRESSION_ARG_1".to_string()
+                    ],
+                    "INPUT_VALUE_NAME_FOR_LET_1".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    6,
+                    "assign".to_string(),
+                    vec!["INPUT_VALUE_NAME_FOR_LET_1".to_string(),],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    8,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "7".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    9,
+                    "print".to_string(),
+                    vec!["x".to_string()],
+                    "".to_string(),
+                    7,
+                ),
+                Instruction::new(
+                    10,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    7,
                 ),
             ]
         );

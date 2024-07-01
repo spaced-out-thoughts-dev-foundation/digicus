@@ -6,23 +6,25 @@
 	{
 		env: Env
 		deployer: Address
-		wasm_hash: String
-		salt: String
+		wasm_hash: ByteStringSmall
+		salt: ByteStringSmall
 		init_fn: String
 		init_args: List<Val>
 	}
 	* Output: (Address, Val)
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (env.current_contract_address), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
-			{ instruction: evaluate, input: (not_equal_to, deployer, BINARY_EXPRESSION_RIGHT), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-			{ instruction: evaluate, input: (deployer.require_auth), assign: Thing_to_return, scope: 1 }
-			{ instruction: evaluate, input: (env.deployer), assign: METHOD_CALL_EXPRESSION_6, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_6.with_address, deployer, salt), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.deploy, wasm_hash), assign: deployed_address, scope: 0 }
-			{ instruction: evaluate, input: (env.invoke_contract, deployed_address, init_fn, init_args), assign: res, scope: 0 }
-			{ instruction: instantiate_object, input: (Tuple, deployed_address, res), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 6, instruction: evaluate, input: (env.current_contract_address), assign: BINARY_EXPRESSION_RIGHT_2, scope: 0 }
+			{ id: 7, instruction: evaluate, input: (not_equal_to, deployer, BINARY_EXPRESSION_RIGHT_2), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
+			{ id: 9, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 8), scope: 0 }
+			{ id: 12, instruction: evaluate, input: (deployer.require_auth), assign: Thing_to_return, scope: 8 }
+			{ id: 13, instruction: jump, input: (0), scope: 8 }
+			{ id: 24, instruction: evaluate, input: (env.deployer), assign: METHOD_CALL_EXPRESSION_21, scope: 0 }
+			{ id: 25, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_21.with_address, deployer, salt), assign: METHOD_CALL_EXPRESSION_16, scope: 0 }
+			{ id: 26, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_16.deploy, wasm_hash), assign: deployed_address, scope: 0 }
+			{ id: 35, instruction: evaluate, input: (env.invoke_contract, deployed_address, init_fn, init_args), assign: res|||Val, scope: 0 }
+			{ id: 38, instruction: instantiate_object, input: (Tuple, deployed_address, res), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
+

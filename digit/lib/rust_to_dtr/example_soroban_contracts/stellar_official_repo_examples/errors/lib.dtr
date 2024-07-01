@@ -9,21 +9,23 @@
 	* Output: Result<Integer, Error>
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
-			{ instruction: print, input: (env, "count: {}", count), scope: 0 }
-			{ instruction: add, input: (count, 1), assign: count, scope: 0 }
-			{ instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT_8, scope: 0 }
-			{ instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_8, 1), assign: Thing_to_return, scope: 0 }
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_14, scope: 1 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.instance), assign: METHOD_CALL_EXPRESSION_13, scope: 1 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.set, COUNTER, count), scope: 1 }
-			{ instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 1 }
-			{ instruction: jump, input: (100), assign: Thing_to_return, scope: 0 }
-			{ instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 100 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 9, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_6, scope: 0 }
+			{ id: 10, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_6.instance), assign: METHOD_CALL_EXPRESSION_5, scope: 0 }
+			{ id: 11, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.get, COUNTER), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ id: 12, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.unwrap_or, 0), assign: count|||Integer, scope: 0 }
+			{ id: 13, instruction: print, input: (env, "count: {}", count), scope: 0 }
+			{ id: 18, instruction: add, input: (count, 1), assign: count, scope: 0 }
+			{ id: 24, instruction: evaluate, input: (less_than_or_equal_to, count, MAX), assign: CONDITIONAL_JUMP_ASSIGNMENT_19, scope: 0 }
+			{ id: 26, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_19, 25), assign: Thing_to_return, scope: 0 }
+			{ id: 44, instruction: jump, input: (43), scope: 0 }
+			{ id: 35, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_32, scope: 25 }
+			{ id: 36, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_32.instance), assign: METHOD_CALL_EXPRESSION_31, scope: 25 }
+			{ id: 37, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_31.set, COUNTER, count), scope: 25 }
+			{ id: 41, instruction: evaluate, input: (Ok, count), assign: Thing_to_return, scope: 25 }
+			{ id: 42, instruction: jump, input: (0), scope: 25 }
+			{ id: 48, instruction: evaluate, input: (Err, Error::LimitReached), assign: Thing_to_return, scope: 43 }
+			{ id: 49, instruction: jump, input: (0), scope: 43 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
 

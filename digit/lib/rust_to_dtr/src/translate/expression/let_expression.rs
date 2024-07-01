@@ -1,5 +1,3 @@
-use core::panic;
-
 use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;

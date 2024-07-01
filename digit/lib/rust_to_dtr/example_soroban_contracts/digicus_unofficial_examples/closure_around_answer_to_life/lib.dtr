@@ -8,12 +8,10 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: assign, input: (20), assign: x, scope: 0 }
-			{ instruction: add, input: (x, a), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
-			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, b), assign: add_closure, scope: 0 }
-			{ instruction: evaluate, input: (add_closure, 1, 21), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 0, instruction: assign, input: (20), assign: x, scope: 0 }
+			{ id: 7, instruction: add, input: (x, a), assign: BINARY_EXPRESSION_LEFT_1, scope: 0 }
+			{ id: 9, instruction: add, input: (BINARY_EXPRESSION_LEFT_1, b), assign: add_closure, scope: 0 }
+			{ id: 14, instruction: evaluate, input: (add_closure, 1, 21), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
-
-

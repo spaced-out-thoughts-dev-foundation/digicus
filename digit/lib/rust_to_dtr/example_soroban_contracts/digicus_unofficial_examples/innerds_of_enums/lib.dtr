@@ -8,7 +8,7 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: return, input: (42), scope: 0 }
+			{ id: 0, instruction: return, input: (42), scope: 0 }
 		$
 :[Interface]
 

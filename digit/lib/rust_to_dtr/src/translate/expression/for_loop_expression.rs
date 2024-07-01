@@ -1,5 +1,3 @@
-use std::thread::Scope;
-
 use crate::common::compilation_state::{self, CompilationState};
 use crate::instruction::Instruction;
 use crate::translate::block::handle_block;
@@ -46,7 +44,7 @@ pub fn handle_for_loop_expression(
         compilation_state.scope(),
     ));
 
-    let mut prev_scope = compilation_state.scope();
+    let prev_scope = compilation_state.scope();
     compilation_state.enter_new_scope();
     let body_scope = compilation_state.scope();
 

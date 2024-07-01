@@ -12,7 +12,7 @@ pub fn handle_pattern(pat: syn::Pat) -> Result<String, NotTranslatableError> {
             let the_pattern: String = handle_pattern(*type_pat.pat)?;
             let type_name: String = figure_out_type(&type_pat.ty)?;
 
-            Ok(format!("[{}|||{}]", the_pattern, type_name))
+            Ok(format!("{}|||{}", the_pattern, type_name))
         }
         _ => Err(NotTranslatableError::Custom(
             "Unknown pattern in block pat".to_string(),

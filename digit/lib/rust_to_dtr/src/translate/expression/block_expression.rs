@@ -53,7 +53,6 @@ pub fn parse_block_stmt(
 mod tests {
     use super::*;
     use crate::instruction::Instruction;
-    use crate::translate::expression::parse_expression;
     use syn;
 
     #[test]

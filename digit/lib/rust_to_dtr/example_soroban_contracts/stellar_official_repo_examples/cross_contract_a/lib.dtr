@@ -10,9 +10,9 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (x.checked_add, y), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.expect, "no overflow"), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 7, instruction: evaluate, input: (x.checked_add, y), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ id: 8, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.expect, "no overflow"), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
 

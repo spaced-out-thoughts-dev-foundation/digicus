@@ -9,7 +9,7 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
+			{ id: 0, instruction: return, input: (SomeNumberedEnums::AnswerToLife), scope: 0 }
 		$
 :[Interface]
 
@@ -23,4 +23,3 @@
 }
 
 :[User Defined Types]
-

@@ -9,19 +9,19 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, COUNTER), assign: METHOD_CALL_EXPRESSION_1, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_1.unwrap_or, 0), assign: count, scope: 0 }
-			{ instruction: print, input: (env, "count: {}", count), scope: 0 }
-			{ instruction: add, input: (count, 1), assign: count, scope: 0 }
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_11, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_11.instance), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.set, COUNTER, count), scope: 0 }
-			{ instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_16, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_16.instance), assign: METHOD_CALL_EXPRESSION_15, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_15.extend_ttl, 50, 100), scope: 0 }
-			{ instruction: return, input: (count), scope: 0 }
+			{ id: 9, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_6, scope: 0 }
+			{ id: 10, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_6.instance), assign: METHOD_CALL_EXPRESSION_5, scope: 0 }
+			{ id: 11, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_5.get, COUNTER), assign: METHOD_CALL_EXPRESSION_2, scope: 0 }
+			{ id: 12, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.unwrap_or, 0), assign: count|||Integer, scope: 0 }
+			{ id: 13, instruction: print, input: (env, "count: {}", count), scope: 0 }
+			{ id: 18, instruction: add, input: (count, 1), assign: count, scope: 0 }
+			{ id: 27, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_24, scope: 0 }
+			{ id: 28, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_24.instance), assign: METHOD_CALL_EXPRESSION_23, scope: 0 }
+			{ id: 29, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_23.set, COUNTER, count), scope: 0 }
+			{ id: 38, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_35, scope: 0 }
+			{ id: 39, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_35.instance), assign: METHOD_CALL_EXPRESSION_34, scope: 0 }
+			{ id: 40, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_34.extend_ttl, 50, 100), scope: 0 }
+			{ id: 0, instruction: return, input: (count), scope: 0 }
 		$
 :[Interface]
 [State]:

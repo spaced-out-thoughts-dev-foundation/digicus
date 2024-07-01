@@ -22,6 +22,7 @@ mod reference_expression;
 mod repeat_expression;
 mod return_expression;
 mod struct_expression;
+mod try_expression;
 mod tuple_expression;
 mod unary_expression;
 
@@ -32,6 +33,7 @@ use array_expression::handle_array_expression;
 use cast_expression::handle_cast_expression;
 use index_expression::handle_index_expression;
 use repeat_expression::handle_repeat_expression;
+use try_expression::handle_try_expression;
 use unary_expression::handle_unary_expression;
 
 pub fn parse_expression(
@@ -163,13 +165,11 @@ pub fn parse_expression(
                 .push("Closure".to_string());
             closure_expression::handle_closure_expression(closure_expr, compilation_state)
         }
-        syn::Expr::Infer(infer_expr) => Err(NotTranslatableError::Custom(
+        syn::Expr::Infer(_infer_expr) => Err(NotTranslatableError::Custom(
             "Infer expression not supported".to_string(),
         )),
-        syn::Expr::Try(try_expr) => Err(NotTranslatableError::Custom(
-            "Try expression not supported".to_string(),
-        )),
-        syn::Expr::TryBlock(try_block_expr) => Err(NotTranslatableError::Custom(
+        syn::Expr::Try(try_expr) => handle_try_expression(try_expr, compilation_state),
+        syn::Expr::TryBlock(_try_block_expr) => Err(NotTranslatableError::Custom(
             "Try Block expression not supported".to_string(),
         )),
         syn::Expr::Continue(_) => Err(NotTranslatableError::Custom(

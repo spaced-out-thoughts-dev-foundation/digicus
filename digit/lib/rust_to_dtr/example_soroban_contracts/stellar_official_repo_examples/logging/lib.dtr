@@ -1,13 +1,14 @@
 [Contract]: Contract
+
 [Interface]:
 -() [hello]
-* Inputs:
-{
-env: Env
-value: String
-}
-* Instructions:
-$
-{ instruction: print, input: (env, "Hello {}", value), scope: 0 }
-$
+	* Inputs:
+	{
+		env: Env
+		value: String
+	}
+	* Instructions:
+		$
+			{ id: 0, instruction: print, input: (env, "Hello {}", value), scope: 0 }
+		$
 :[Interface]

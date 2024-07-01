@@ -2,15 +2,15 @@
 
 [Interface]:
 -() [fourty_two_and_then_some]
-* Inputs:
-{
-env: Env
-and_then_some: Integer
-}
-* Output: Integer
-* Instructions:
-$
-{ instruction: add, input: (42, and_then_some), assign: Thing_to_return, scope: 0 }
-{ instruction: return, input: (Thing_to_return), scope: 0 }
-$
+	* Inputs:
+	{
+		env: Env
+		and_then_some: Integer
+	}
+	* Output: Integer
+	* Instructions:
+		$
+			{ id: 4, instruction: add, input: (42, and_then_some), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
 :[Interface]

@@ -126,15 +126,10 @@ impl CompilationState {
     }
 
     pub fn debug_state(self) {
-        println!("\n###########################\n[DEBUG COMPILATION STATE]");
-
         let mut index = 0;
         self.expression_stack.clone().into_iter().for_each(|x| {
-            println!("[{}]: {}", index, x);
             index += 1;
         });
-
-        println!("\n###########################");
     }
 }
 

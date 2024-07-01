@@ -8,15 +8,12 @@
 	}
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (some_vec.iter), assign: some_thing_in_a_vec, scope: 0 }
-			{ instruction: label, input: (loop_0_top), scope: 0 }
-			{ instruction: end_of_iteration_check, input: (some_thing_in_a_vec), assign: CHECK_CONDITION_ASSIGNMENT, scope: 0 }
-			{ instruction: goto, input: (CHECK_CONDITION_ASSIGNMENT, loop_0_exit), scope: 0 }
-			{ instruction: print, input: ("Doing a thing"), scope: 0 }
-			{ instruction: increment, input: (some_thing_in_a_vec), scope: 0 }
-			{ instruction: goto, input: (loop_0_top), scope: 0 }
-			{ instruction: label, input: (loop_0_exit), scope: 0 }
+			{ id: 4, instruction: evaluate, input: (some_vec.iter), assign: ITERATOR_0, scope: 0 }
+			{ id: 5, instruction: evaluate, input: (start, ITERATOR_0), assign: some_thing_in_a_vec, scope: 0 }
+			{ id: 6, instruction: end_of_iteration_check, input: (some_thing_in_a_vec, ITERATOR_0), assign: CHECK_CONDITION_ASSIGNMENT_1, scope: 0 }
+			{ id: 8, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_1, 7), scope: 0 }
+			{ id: 9, instruction: print, input: ("Doing a thing"), scope: 7 }
+			{ id: 10, instruction: increment, input: (some_thing_in_a_vec), scope: 7 }
+			{ id: 11, instruction: goto, input: (6), scope: 7 }
 		$
 :[Interface]
-
-

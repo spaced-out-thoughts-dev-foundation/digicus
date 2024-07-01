@@ -12,8 +12,19 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (contract_a::Client::new, env, contract), assign: client, scope: 0 }
-			{ instruction: evaluate, input: (client.add, x, y), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 4, instruction: evaluate, input: (contract_a::Client::new, env, contract), assign: client, scope: 0 }
+			{ id: 11, instruction: evaluate, input: (client.add, x, y), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
+
+
+[NonTranslatable]:
+
+mod contract_a {
+	soroban_sdk::contractimport!(
+		file = "../contract_a/target/wasm32-unknown-unknown/release/soroban_cross_contract_a_contract.wasm"
+	);
+}
+
+:[NonTranslatable]
