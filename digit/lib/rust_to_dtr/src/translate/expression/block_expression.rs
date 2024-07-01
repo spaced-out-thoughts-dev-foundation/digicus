@@ -29,10 +29,11 @@ pub fn parse_block_stmt(
                     &mut compilation_state.with_assignment(Some(pattern_as_string)),
                 ),
                 None => Ok(vec![Instruction::new(
+                    compilation_state.get_global_uuid(),
                     "assign".to_string(),
                     vec![pattern_as_string],
                     "".to_string(),
-                    compilation_state.scope,
+                    compilation_state.scope(),
                 )]),
             }
         }
@@ -43,7 +44,49 @@ pub fn parse_block_stmt(
         syn::Stmt::Macro(stmt_mac) => handle_macro_statement(
             stmt_mac,
             compilation_state.next_assignment.clone(),
-            compilation_state.scope,
+            compilation_state.clone(),
         ),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::instruction::Instruction;
+    use crate::translate::expression::parse_expression;
+    use syn;
+
+    #[test]
+    fn test_handle_block_expression() {
+        let expr_block: ExprBlock = syn::parse_str("{ let x = 1; }").unwrap();
+        let mut compilation_state = CompilationState::new();
+        let instructions = handle_block_expression(&expr_block, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![Instruction::new(
+                0,
+                "assign".to_string(),
+                vec!["1".to_string()],
+                "x".to_string(),
+                0,
+            ),]
+        );
+    }
+
+    #[test]
+    fn test_parse_block_stmt() {
+        let stmt: syn::Stmt = syn::parse_str("let x = 1;").unwrap();
+        let mut compilation_state = CompilationState::new();
+        let instructions = parse_block_stmt(&stmt, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![Instruction::new(
+                0,
+                "assign".to_string(),
+                vec!["1".to_string()],
+                "x".to_string(),
+                0,
+            ),]
+        );
     }
 }

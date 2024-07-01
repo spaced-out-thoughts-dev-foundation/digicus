@@ -13,6 +13,7 @@ fn translate_fields_into_assigns(instructions: Vec<Instruction>) -> Vec<Instruct
     for instruction in instructions {
         if instruction.name == "field" {
             let assign_instruction = Instruction::new(
+                instruction.id,
                 "assign".to_string(),
                 vec![format!(
                     "{}.{}",

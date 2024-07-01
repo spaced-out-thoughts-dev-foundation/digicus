@@ -14,49 +14,463 @@ pub fn handle_if_expression(
     let mut global_uuid = compilation_state.get_global_uuid();
     let conditional_jump_assignment_label = format!("CONDITIONAL_JUMP_ASSIGNMENT_{}", global_uuid);
 
+    // let mut instructions_to_return: Vec<Instruction> = vec![];
+
     let mut condition_instructions: Vec<Instruction> = parse_expression(
         &expr.cond,
         &mut compilation_state.with_assignment(Some(conditional_jump_assignment_label.to_string())),
     )?;
 
+    let mut prev_scope = compilation_state.scope();
+    compilation_state.enter_new_scope();
     let conditional_jump_instruction = Instruction::new(
+        compilation_state.get_global_uuid(),
         "jump".to_string(),
         vec![
             conditional_jump_assignment_label.to_string(),
-            (compilation_state.scope + 1).to_string(),
+            (compilation_state.scope()).to_string(),
         ],
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or_default(),
-        compilation_state.scope,
+        prev_scope,
     );
+
+    // instructions_to_return.push(conditional_jump_instruction);
 
     condition_instructions.push(conditional_jump_instruction);
 
-    let then_branch = handle_block(&expr.then_branch, &mut compilation_state.with_scope_jump(1));
+    let mut then_branch = handle_block(&expr.then_branch, &mut compilation_state.clone());
 
-    condition_instructions.extend(then_branch);
+    prev_scope = compilation_state.scope();
+    compilation_state.exit_scope();
+    then_branch.push(Instruction::new(
+        compilation_state.get_global_uuid(),
+        "jump".to_string(),
+        vec![(compilation_state.scope()).to_string()],
+        "".to_string(),
+        prev_scope,
+    ));
 
     let else_branch = match &expr.else_branch {
         Some(else_branch) => {
-            condition_instructions.push(Instruction::from_compilation_state(
+            prev_scope = compilation_state.scope();
+            compilation_state.enter_new_scope();
+            condition_instructions.push(Instruction::new(
+                compilation_state.get_global_uuid(),
                 "jump".to_string(),
-                vec![format!("{}", compilation_state.scope + 100)],
-                &compilation_state,
+                vec![(compilation_state.scope()).to_string()],
+                "".to_string(),
+                prev_scope,
             ));
 
-            parse_expression(
-                &else_branch.1,
-                &mut compilation_state
-                    .with_assignment(Some("else_branch".to_string()))
-                    .with_scope_jump(100),
-            )?
+            let mut else_branch_instructions =
+                parse_expression(&else_branch.1, &mut compilation_state.clone())?;
+
+            prev_scope = compilation_state.scope();
+            compilation_state.exit_scope();
+            else_branch_instructions.push(Instruction::new(
+                compilation_state.get_global_uuid(),
+                "jump".to_string(),
+                vec![(compilation_state.scope()).to_string()],
+                "".to_string(),
+                prev_scope,
+            ));
+
+            else_branch_instructions
         }
         None => vec![],
     };
 
+    condition_instructions.extend(then_branch);
     condition_instructions.extend(else_branch);
 
     Ok(condition_instructions)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::instruction::Instruction;
+    use crate::translate::expression::parse_expression;
+    use syn::{self, parse_quote};
+
+    #[test]
+    fn test_handle_if_true_expression() {
+        let expr_if: ExprIf = syn::parse_quote!(if true {});
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    1,
+                    "assign".to_string(),
+                    vec!["true".to_string(),],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    3,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "2".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    4,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_if_true_nested_expression() {
+        let expr_if: ExprIf = syn::parse_quote!(if true {
+            if true {
+                log!("nested_if");
+            }
+
+            log!("after_nested_if");
+        });
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    1,
+                    "assign".to_string(),
+                    vec!["true".to_string(),],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    3,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "2".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    5,
+                    "assign".to_string(),
+                    vec!["true".to_string()],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_4".to_string(),
+                    2,
+                ),
+                Instruction::new(
+                    7,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_4".to_string(), "6".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+                Instruction::new(
+                    8,
+                    "print".to_string(),
+                    vec!["\"nested_if\"".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+                Instruction::new(
+                    9,
+                    "jump".to_string(),
+                    vec!["2".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+                Instruction::new(
+                    10,
+                    "print".to_string(),
+                    vec!["\"after_nested_if\"".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+                Instruction::new(
+                    11,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_if_condition_expression() {
+        let expr_if: ExprIf = syn::parse_str("if 10 < 11 { }").unwrap();
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        instructions.iter().for_each(|instruction| {
+            println!("{:?}", instruction);
+        });
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    3,
+                    "assign".to_string(),
+                    vec!["10".to_string()],
+                    "BINARY_EXPRESSION_LEFT_1".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    4,
+                    "assign".to_string(),
+                    vec!["11".to_string()],
+                    "BINARY_EXPRESSION_RIGHT_2".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    5,
+                    "evaluate".to_string(),
+                    vec![
+                        "less_than".to_string(),
+                        "BINARY_EXPRESSION_LEFT_1".to_string(),
+                        "BINARY_EXPRESSION_RIGHT_2".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    7,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "6".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    8,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_if_else_expression() {
+        let expr_if: ExprIf = parse_quote!(if true { log!("if") } else { log!("else") });
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        instructions.iter().for_each(|instruction| {
+            println!("{:?}", instruction);
+        });
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    1,
+                    "assign".to_string(),
+                    vec!["true".to_string()],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    3,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "2".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    7,
+                    "jump".to_string(),
+                    vec!["6".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    4,
+                    "print".to_string(),
+                    vec!["\"if\"".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+                Instruction::new(
+                    5,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    2,
+                ),
+                Instruction::new(
+                    8,
+                    "print".to_string(),
+                    vec!["\"else\"".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+                Instruction::new(
+                    9,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_handle_if_elseif_else_expression() {
+        let expr_if: ExprIf = syn::parse_str("if 10 < 11 { log!(\"if\") } else if 10 == 11 { log!(\"else if\") } else { log!(\"else\") }").unwrap();
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        instructions.iter().for_each(|instruction| {
+            println!("{:?}", instruction);
+        });
+
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    3,
+                    "assign".to_string(),
+                    vec!["10".to_string()],
+                    "BINARY_EXPRESSION_LEFT_1".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    4,
+                    "assign".to_string(),
+                    vec!["11".to_string()],
+                    "BINARY_EXPRESSION_RIGHT_2".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    5,
+                    "evaluate".to_string(),
+                    vec![
+                        "less_than".to_string(),
+                        "BINARY_EXPRESSION_LEFT_1".to_string(),
+                        "BINARY_EXPRESSION_RIGHT_2".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    7,
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "6".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    11,
+                    "jump".to_string(),
+                    vec!["10".to_string()],
+                    "".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    8,
+                    "print".to_string(),
+                    vec!["\"if\"".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+                Instruction::new(
+                    9,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    6,
+                ),
+                Instruction::new(
+                    15,
+                    "assign".to_string(),
+                    vec!["10".to_string()],
+                    "BINARY_EXPRESSION_LEFT_13".to_string(),
+                    10,
+                ),
+                Instruction::new(
+                    16,
+                    "assign".to_string(),
+                    vec!["11".to_string()],
+                    "BINARY_EXPRESSION_RIGHT_14".to_string(),
+                    10,
+                ),
+                Instruction::new(
+                    17,
+                    "evaluate".to_string(),
+                    vec![
+                        "equal_to".to_string(),
+                        "BINARY_EXPRESSION_LEFT_13".to_string(),
+                        "BINARY_EXPRESSION_RIGHT_14".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_ASSIGNMENT_12".to_string(),
+                    10,
+                ),
+                Instruction::new(
+                    19,
+                    "jump".to_string(),
+                    vec![
+                        "CONDITIONAL_JUMP_ASSIGNMENT_12".to_string(),
+                        "18".to_string()
+                    ],
+                    "".to_string(),
+                    10,
+                ),
+                Instruction::new(
+                    23,
+                    "jump".to_string(),
+                    vec!["22".to_string()],
+                    "".to_string(),
+                    10,
+                ),
+                Instruction::new(
+                    20,
+                    "print".to_string(),
+                    vec!["\"else if\"".to_string(),],
+                    "".to_string(),
+                    18,
+                ),
+                Instruction::new(
+                    21,
+                    "jump".to_string(),
+                    vec!["10".to_string()],
+                    "".to_string(),
+                    18,
+                ),
+                Instruction::new(
+                    24,
+                    "print".to_string(),
+                    vec!["\"else\"".to_string(),],
+                    "".to_string(),
+                    22,
+                ),
+                Instruction::new(
+                    25,
+                    "jump".to_string(),
+                    vec!["10".to_string()],
+                    "".to_string(),
+                    22,
+                ),
+                Instruction::new(
+                    26,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    10,
+                ),
+            ]
+        );
+    }
 }

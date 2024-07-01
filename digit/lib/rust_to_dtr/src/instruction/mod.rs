@@ -2,15 +2,17 @@ use crate::common::compilation_state::CompilationState;
 
 #[derive(Debug, Clone)]
 pub struct Instruction {
+    pub id: u128,
     pub name: String,
     pub input: Vec<String>,
     pub assign: String,
-    pub scope: u32,
+    pub scope: u128,
 }
 
 impl Instruction {
-    pub fn new(name: String, input: Vec<String>, assign: String, scope: u32) -> Self {
+    pub fn new(id: u128, name: String, input: Vec<String>, assign: String, scope: u128) -> Self {
         Self {
+            id,
             name,
             input,
             assign,
@@ -24,13 +26,14 @@ impl Instruction {
         compilation_state: &CompilationState,
     ) -> Self {
         Self {
+            id: compilation_state.get_global_uuid(),
             name,
             input,
             assign: compilation_state
                 .next_assignment
                 .clone()
                 .unwrap_or("".to_string()),
-            scope: compilation_state.scope,
+            scope: compilation_state.scope(),
         }
     }
 
@@ -60,6 +63,7 @@ impl PartialEq for Instruction {
             && self.input == other.input
             && self.assign == other.assign
             && self.scope == other.scope
+            && self.id == other.id
     }
 }
 

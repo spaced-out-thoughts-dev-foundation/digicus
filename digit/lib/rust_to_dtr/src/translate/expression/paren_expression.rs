@@ -32,6 +32,7 @@ mod tests {
         assert_eq!(
             instructions,
             vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["Struct".to_string()],
                 "SomeAssignment".to_string(),

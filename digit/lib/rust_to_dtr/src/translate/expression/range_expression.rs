@@ -92,24 +92,30 @@ mod test {
         let instructions = handle_create_range(&expr, &mut compilation_state).unwrap();
 
         let expected_instructions = vec![
-            Instruction::from_compilation_state(
+            Instruction::new(
+                2,
                 "assign".to_string(),
                 vec!["1".to_string()],
-                &compilation_state.with_assignment(Some("RANGE_START_0".to_string())),
+                "RANGE_START_0".to_string(),
+                0,
             ),
-            Instruction::from_compilation_state(
+            Instruction::new(
+                3,
                 "assign".to_string(),
                 vec!["10".to_string()],
-                &compilation_state.with_assignment(Some("RANGE_END_1".to_string())),
+                "RANGE_END_1".to_string(),
+                0,
             ),
-            Instruction::from_compilation_state(
+            Instruction::new(
+                4,
                 "instantiate_object".to_string(),
                 vec![
                     "Range".to_string(),
                     "RANGE_START_0".to_string(),
                     "RANGE_END_1".to_string(),
                 ],
-                &compilation_state,
+                "".to_string(),
+                0,
             ),
         ];
 

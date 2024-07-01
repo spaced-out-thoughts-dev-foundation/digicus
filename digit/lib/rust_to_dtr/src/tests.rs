@@ -68,10 +68,10 @@ mod full_contract_tests {
     // test_contract!(stellar_official_repo_examples, alloc);
     // test_contract!(stellar_official_repo_examples, atomic_multiswap);
 
-    // test_contract!(stellar_official_repo_examples, atomic_swap);
+    test_contract!(stellar_official_repo_examples, atomic_swap);
     test_contract!(stellar_official_repo_examples, auth);
-    // test_contract!(stellar_official_repo_examples, cross_contract_a);
-    // test_contract!(stellar_official_repo_examples, cross_contract_b);
+    test_contract!(stellar_official_repo_examples, cross_contract_a);
+    test_contract!(stellar_official_repo_examples, cross_contract_b);
     test_contract!(stellar_official_repo_examples, custom_types);
     // test_contract!(stellar_official_repo_examples, deployer_contract);
     // test_contract!(stellar_official_repo_examples, deployer_deployer);
@@ -86,14 +86,14 @@ mod full_contract_tests {
     test_contract!(stellar_official_repo_examples, single_offer);
     // test_contract!(stellar_official_repo_examples, timelock);
     test_contract!(stellar_official_repo_examples, ttl);
-    // test_contract!(
-    //     stellar_official_repo_examples,
-    //     upgradable_contract_new_contract
-    // );
-    // test_contract!(
-    //     stellar_official_repo_examples,
-    //     upgradable_contract_old_contract
-    // );
+    test_contract!(
+        stellar_official_repo_examples,
+        upgradable_contract_new_contract
+    );
+    test_contract!(
+        stellar_official_repo_examples,
+        upgradable_contract_old_contract
+    );
 
     // test_contract!(stellar_official_repo_examples, workspace_contract_a);
     // test_contract!(

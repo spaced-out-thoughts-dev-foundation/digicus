@@ -22,7 +22,7 @@ struct AssignHashValue {
 }
 
 pub fn remove_unused_returns(instructions: Vec<Instruction>) -> Vec<Instruction> {
-    let mut scope_stack: Vec<(u32, bool)> = vec![];
+    let mut scope_stack: Vec<(u128, bool)> = vec![];
 
     instructions
         .into_iter()

@@ -10,7 +10,6 @@ mod field_expression;
 mod for_loop_expression;
 mod if_expression;
 mod index_expression;
-mod infer_expression;
 mod let_expression;
 mod lit_expression;
 mod macro_expression;
@@ -23,8 +22,6 @@ mod reference_expression;
 mod repeat_expression;
 mod return_expression;
 mod struct_expression;
-mod try_block_expression;
-mod try_expression;
 mod tuple_expression;
 mod unary_expression;
 
@@ -44,81 +41,137 @@ pub fn parse_expression(
     match exp {
         // SUPPORTED
         syn::Expr::Binary(binary_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Binary".to_string());
             binary_expression::handle_binary_expression(binary_expr, compilation_state)
         }
         syn::Expr::Block(block_expr) => {
+            compilation_state.expression_stack.push("Block".to_string());
             block_expression::handle_block_expression(block_expr, compilation_state)
         }
         syn::Expr::Let(let_expr) => {
+            compilation_state.expression_stack.push("Let".to_string());
             let_expression::handle_let_expression(let_expr.clone(), compilation_state)
         }
         syn::Expr::Lit(lit_expr) => {
+            compilation_state.expression_stack.push("Lit".to_string());
             lit_expression::handle_lit_expression(&lit_expr.lit, compilation_state)
         }
         syn::Expr::MethodCall(method_call_expr) => {
+            compilation_state
+                .expression_stack
+                .push("MethodCall".to_string());
             method_call_expression::handle_method_call_expression(
                 method_call_expr,
                 compilation_state,
             )
         }
         syn::Expr::Paren(paren_expr) => {
+            compilation_state.expression_stack.push("Paren".to_string());
             paren_expression::handle_paren_expression(paren_expr, compilation_state)
         }
-        syn::Expr::Path(path) => path_expression::handle_path_expression(&path, compilation_state),
+        syn::Expr::Path(path) => {
+            compilation_state.expression_stack.push("Path".to_string());
+            path_expression::handle_path_expression(&path, compilation_state)
+        }
         syn::Expr::Reference(reference_expr) => {
+            compilation_state.expression_stack.push("Expr".to_string());
             reference_expression::handle_reference_expression(reference_expr, compilation_state)
         }
         syn::Expr::Return(return_expr_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Return".to_string());
             return_expression::handle_return_expression(return_expr_expr, compilation_state)
         }
         syn::Expr::Field(field_expr) => {
+            compilation_state.expression_stack.push("Field".to_string());
             field_expression::handle_field_expression(field_expr, compilation_state)
         }
         syn::Expr::Assign(assign_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Assign".to_string());
             assign_expression::handle_assign_expression(assign_expr, compilation_state)
         }
         syn::Expr::Call(call_expr) => {
+            compilation_state.expression_stack.push("Call".to_string());
             call_expression::handle_call_expression(call_expr, compilation_state)
         }
         syn::Expr::Struct(struct_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Struct".to_string());
             struct_expression::handle_struct_expression(struct_expr, compilation_state)
         }
         syn::Expr::Tuple(tuple_expr) => {
+            compilation_state.expression_stack.push("Tuple".to_string());
             tuple_expression::handle_tuple_expression(tuple_expr, compilation_state)
         }
-        syn::Expr::If(if_expr) => if_expression::handle_if_expression(if_expr, compilation_state),
-        syn::Expr::Unary(unary_expr) => handle_unary_expression(unary_expr, compilation_state),
+        syn::Expr::If(if_expr) => {
+            compilation_state.expression_stack.push("If".to_string());
+            if_expression::handle_if_expression(if_expr, compilation_state)
+        }
+        syn::Expr::Unary(unary_expr) => {
+            compilation_state.expression_stack.push("Unary".to_string());
+            handle_unary_expression(unary_expr, compilation_state)
+        }
         syn::Expr::Match(match_expression) => {
+            compilation_state.expression_stack.push("Match".to_string());
             match_expression::handle_match_expression(match_expression, compilation_state)
         }
-        syn::Expr::Cast(cast_expr) => handle_cast_expression(cast_expr, compilation_state),
+        syn::Expr::Cast(cast_expr) => {
+            compilation_state.expression_stack.push("Cast".to_string());
+            handle_cast_expression(cast_expr, compilation_state)
+        }
         syn::Expr::ForLoop(for_loop_expr) => {
+            compilation_state
+                .expression_stack
+                .push("ForLoop".to_string());
             for_loop_expression::handle_for_loop_expression(for_loop_expr, compilation_state)
         }
         syn::Expr::Macro(expr_macro) => {
+            compilation_state.expression_stack.push("Macro".to_string());
             macro_expression::handle_macro_expression(expr_macro, compilation_state)
         }
         syn::Expr::Range(range_expr) => {
+            compilation_state.expression_stack.push("Range".to_string());
             range_expression::handle_create_range(range_expr, compilation_state)
         }
         syn::Expr::Break(break_expr) => {
+            compilation_state.expression_stack.push("Break".to_string());
             break_expression::handle_break_expression(break_expr, compilation_state)
         }
-        syn::Expr::Array(break_expr) => handle_array_expression(break_expr, compilation_state),
-        syn::Expr::Repeat(repeat_expr) => handle_repeat_expression(repeat_expr, compilation_state),
-        syn::Expr::Index(index_expr) => handle_index_expression(index_expr, compilation_state),
+        syn::Expr::Array(break_expr) => {
+            compilation_state.expression_stack.push("Array".to_string());
+            handle_array_expression(break_expr, compilation_state)
+        }
+        syn::Expr::Repeat(repeat_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Repeat".to_string());
+            handle_repeat_expression(repeat_expr, compilation_state)
+        }
+        syn::Expr::Index(index_expr) => {
+            compilation_state.expression_stack.push("Index".to_string());
+            handle_index_expression(index_expr, compilation_state)
+        }
         syn::Expr::Closure(closure_expr) => {
+            compilation_state
+                .expression_stack
+                .push("Closure".to_string());
             closure_expression::handle_closure_expression(closure_expr, compilation_state)
         }
-        syn::Expr::Infer(infer_expr) => {
-            infer_expression::handle_infer_expression(infer_expr, compilation_state)
-        }
-        syn::Expr::Try(try_expr) => {
-            try_expression::handle_try_expression(try_expr, compilation_state)
-        }
-        syn::Expr::TryBlock(try_block_expr) => {
-            try_block_expression::handle_try_block_expression(try_block_expr, compilation_state)
-        }
+        syn::Expr::Infer(infer_expr) => Err(NotTranslatableError::Custom(
+            "Infer expression not supported".to_string(),
+        )),
+        syn::Expr::Try(try_expr) => Err(NotTranslatableError::Custom(
+            "Try expression not supported".to_string(),
+        )),
+        syn::Expr::TryBlock(try_block_expr) => Err(NotTranslatableError::Custom(
+            "Try Block expression not supported".to_string(),
+        )),
         syn::Expr::Continue(_) => Err(NotTranslatableError::Custom(
             "Continue expression not supported".to_string(),
         )),

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::common::compilation_state::CompilationState;
 use crate::errors;
 use crate::instruction;
@@ -14,6 +16,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     let mut user_defined_types: Vec<syn::Item> = Vec::new();
     let mut state_str: String = String::new();
     let mut outside_of_contract_functions: Vec<syn::ItemFn> = Vec::new();
+    let mut mods: HashMap<String, Vec<syn::Item>> = HashMap::new();
 
     state_str.push_str("[State]:");
 
@@ -88,6 +91,25 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     user_defined_types.push(item.clone());
                 }
             }
+            syn::Item::Mod(mod_item) => {
+                let name: String = mod_item.ident.to_string();
+
+                // We're ignoring the test module for now
+                if name == "test" {
+                    continue;
+                }
+
+                let mut content: Vec<syn::Item> = vec![];
+
+                match &mod_item.content {
+                    Some(items) => {
+                        content = items.1.clone();
+                    }
+                    None => {}
+                }
+
+                mods.insert(name, content);
+            }
             _ => {} // We're ignoring other types of items for simplicity
         }
     }
@@ -117,6 +139,37 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
         });
 
         dtr_code.push_str("\n:[Helpers]\n");
+    }
+
+    if mods.len() > 0 {
+        dtr_code.push_str("\n\n[NonTranslatable]:\n");
+        mods.into_iter().for_each(|(name, items)| {
+            dtr_code.push_str(&format!("\nmod {} {{", name));
+
+            items.iter().for_each(|item| match item {
+                syn::Item::Macro(item_macro) => {
+                    let mut macro_name: Vec<String> = vec![];
+
+                    item_macro
+                        .clone()
+                        .mac
+                        .path
+                        .segments
+                        .into_iter()
+                        .for_each(|segment| macro_name.push(segment.ident.to_string()));
+
+                    dtr_code.push_str(&format!(
+                        "\n\t{}!(\n\t\t{}\n\t);",
+                        macro_name.join("::"),
+                        item_macro.mac.tokens.to_string()
+                    ));
+                }
+                _ => dtr_code.push_str("FIXME, UNSUPPORTED NON TRANSLATABLE ITEM"),
+            });
+
+            dtr_code.push_str("\n}\n");
+        });
+        dtr_code.push_str("\n:[NonTranslatable]\n");
     }
 
     Ok(dtr_code)

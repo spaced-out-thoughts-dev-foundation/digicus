@@ -12,13 +12,14 @@ pub fn handle_lit_expression(
     let literal_value: String = parse_lit(lit)?;
 
     Ok(vec![Instruction::new(
+        compilation_state.get_global_uuid(),
         "assign".to_string(),
         vec![literal_value],
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or_default(),
-        compilation_state.scope,
+        compilation_state.scope(),
     )])
 }
 
@@ -45,6 +46,7 @@ mod tests {
                 &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["true".to_string()],
                 "".to_string(),
@@ -65,6 +67,7 @@ mod tests {
                 &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["49".to_string()],
                 "".to_string(),
@@ -85,6 +88,7 @@ mod tests {
                 &mut CompilationState::new(),
             );
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["\"hello\"".to_string()],
                 "".to_string(),
@@ -106,6 +110,7 @@ mod tests {
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["\'a\'".to_string()],
                 "".to_string(),
@@ -127,6 +132,7 @@ mod tests {
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["3.14".to_string()],
                 "".to_string(),
@@ -148,6 +154,7 @@ mod tests {
             );
 
             let expected: Vec<Instruction> = vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["42".to_string()],
                 "".to_string(),

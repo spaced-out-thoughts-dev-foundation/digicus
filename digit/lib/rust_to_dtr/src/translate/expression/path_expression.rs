@@ -8,14 +8,17 @@ pub fn handle_path_expression(
     path_expr: &syn::ExprPath,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
+    let path_string_value = parse_path(&path_expr.path.clone());
+
     let result_instruction: Vec<Instruction> = vec![Instruction::new(
+        compilation_state.get_global_uuid(),
         "assign".to_string(),
-        vec![parse_path(&path_expr.path.clone())],
+        vec![path_string_value],
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or_default(),
-        compilation_state.scope,
+        compilation_state.scope(),
     )];
 
     Ok(result_instruction)
@@ -40,6 +43,7 @@ mod tests {
         assert_eq!(
             instructions,
             vec![Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["Struct".to_string()],
                 "SomeAssignment".to_string(),

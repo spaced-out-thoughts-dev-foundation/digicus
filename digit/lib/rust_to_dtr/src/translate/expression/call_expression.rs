@@ -46,13 +46,14 @@ pub fn handle_call_expression(
 
     func.extend(expressions);
     func.push(Instruction::new(
+        compilation_state.get_global_uuid(),
         "evaluate".to_string(),
         argument_names,
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or("".to_string()),
-        compilation_state.scope,
+        compilation_state.scope(),
     ));
 
     Ok(func)
@@ -74,33 +75,38 @@ mod tests {
         );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
+                4,
                 "assign".to_string(),
                 vec!["foo".to_string()],
-                "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                "CALL_EXPRESSION_FUNCTION_3".to_string(),
                 0,
             ),
             Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["bar".to_string()],
                 "CALL_EXPRESSION_ARG_1".to_string(),
                 0,
             ),
             Instruction::new(
+                1,
                 "assign".to_string(),
                 vec!["baz".to_string()],
                 "CALL_EXPRESSION_ARG_2".to_string(),
                 0,
             ),
             Instruction::new(
+                2,
                 "assign".to_string(),
                 vec!["10".to_string()],
                 "CALL_EXPRESSION_ARG_3".to_string(),
                 0,
             ),
             Instruction::new(
+                5,
                 "evaluate".to_string(),
                 vec![
-                    "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                    "CALL_EXPRESSION_FUNCTION_3".to_string(),
                     "CALL_EXPRESSION_ARG_1".to_string(),
                     "CALL_EXPRESSION_ARG_2".to_string(),
                     "CALL_EXPRESSION_ARG_3".to_string(),
@@ -122,33 +128,38 @@ mod tests {
         );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
+                4,
                 "assign".to_string(),
                 vec!["foo".to_string()],
-                "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                "CALL_EXPRESSION_FUNCTION_3".to_string(),
                 0,
             ),
             Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["bar".to_string()],
                 "CALL_EXPRESSION_ARG_1".to_string(),
                 0,
             ),
             Instruction::new(
+                1,
                 "assign".to_string(),
                 vec!["baz".to_string()],
                 "CALL_EXPRESSION_ARG_2".to_string(),
                 0,
             ),
             Instruction::new(
+                2,
                 "assign".to_string(),
                 vec!["10".to_string()],
                 "CALL_EXPRESSION_ARG_3".to_string(),
                 0,
             ),
             Instruction::new(
+                5,
                 "evaluate".to_string(),
                 vec![
-                    "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                    "CALL_EXPRESSION_FUNCTION_3".to_string(),
                     "CALL_EXPRESSION_ARG_1".to_string(),
                     "CALL_EXPRESSION_ARG_2".to_string(),
                     "CALL_EXPRESSION_ARG_3".to_string(),
@@ -176,24 +187,28 @@ mod tests {
         );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
+                5,
                 "assign".to_string(),
                 vec!["unwrap_or".to_string()],
-                "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                "CALL_EXPRESSION_FUNCTION_4".to_string(),
                 0,
             ),
             Instruction::new(
+                0,
                 "assign".to_string(),
                 vec!["0".to_string()],
                 "count".to_string(),
                 0,
             ),
             Instruction::new(
+                1,
                 "assign".to_string(),
                 vec!["0".to_string()],
                 "last_incr".to_string(),
                 0,
             ),
             Instruction::new(
+                2,
                 "instantiate_object".to_string(),
                 vec![
                     "UDT".to_string(),
@@ -205,9 +220,10 @@ mod tests {
                 0,
             ),
             Instruction::new(
+                6,
                 "evaluate".to_string(),
                 vec![
-                    "CALL_EXPRESSION_FUNCTION_0".to_string(),
+                    "CALL_EXPRESSION_FUNCTION_4".to_string(),
                     "CALL_EXPRESSION_ARG_1".to_string(),
                 ],
                 "".to_string(),

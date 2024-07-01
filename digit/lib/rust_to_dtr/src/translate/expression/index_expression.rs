@@ -12,7 +12,7 @@ pub fn handle_index_expression(
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut global_uuid = compilation_state.get_global_uuid();
-    let thing_being_index_name = format!("thing_being_indexed_{}", global_uuid);
+    let thing_being_index_name = format!("THING_BEING_INDEXED_{}", global_uuid);
 
     let mut instructions = parse_expression(
         &expr.expr,
@@ -20,7 +20,7 @@ pub fn handle_index_expression(
     )?;
 
     global_uuid = compilation_state.get_global_uuid();
-    let index_name = format!("index_name_{}", global_uuid);
+    let index_name = format!("INDEX_NAME_{}", global_uuid);
 
     let index_instructions = parse_expression(
         &expr.index,
@@ -30,13 +30,14 @@ pub fn handle_index_expression(
     instructions.extend(index_instructions);
 
     instructions.push(Instruction::new(
+        compilation_state.get_global_uuid(),
         "evaluate".to_string(),
         vec!["index".to_string(), thing_being_index_name, index_name],
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or_default(),
-        compilation_state.scope,
+        compilation_state.scope(),
     ));
 
     Ok(instructions)
@@ -56,26 +57,29 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["a".to_string()],
-                    "thing_being_indexed_0".to_string(),
-                    compilation_state.scope
+                    "THING_BEING_INDEXED_0".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    3,
                     "assign".to_string(),
                     vec!["1".to_string()],
-                    "index_name_1".to_string(),
-                    compilation_state.scope
+                    "INDEX_NAME_2".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    4,
                     "evaluate".to_string(),
                     vec![
                         "index".to_string(),
-                        "thing_being_indexed_0".to_string(),
-                        "index_name_1".to_string()
+                        "THING_BEING_INDEXED_0".to_string(),
+                        "INDEX_NAME_2".to_string()
                     ],
                     "".to_string(),
-                    compilation_state.scope
+                    compilation_state.scope()
                 )
             ]
         );
@@ -94,42 +98,47 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["a".to_string()],
-                    "thing_being_indexed_1".to_string(),
-                    compilation_state.scope
+                    "THING_BEING_INDEXED_1".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    4,
                     "assign".to_string(),
                     vec!["1".to_string()],
-                    "index_name_2".to_string(),
-                    compilation_state.scope
+                    "INDEX_NAME_3".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    5,
                     "evaluate".to_string(),
                     vec![
                         "index".to_string(),
-                        "thing_being_indexed_1".to_string(),
-                        "index_name_2".to_string()
+                        "THING_BEING_INDEXED_1".to_string(),
+                        "INDEX_NAME_3".to_string()
                     ],
-                    "thing_being_indexed_0".to_string(),
-                    compilation_state.scope
+                    "THING_BEING_INDEXED_0".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    7,
                     "assign".to_string(),
                     vec!["2".to_string()],
-                    "index_name_3".to_string(),
-                    compilation_state.scope
+                    "INDEX_NAME_6".to_string(),
+                    compilation_state.scope()
                 ),
                 Instruction::new(
+                    8,
                     "evaluate".to_string(),
                     vec![
                         "index".to_string(),
-                        "thing_being_indexed_0".to_string(),
-                        "index_name_3".to_string()
+                        "THING_BEING_INDEXED_0".to_string(),
+                        "INDEX_NAME_6".to_string()
                     ],
                     "final_indexed_thing".to_string(),
-                    compilation_state.scope
+                    compilation_state.scope()
                 )
             ]
         );

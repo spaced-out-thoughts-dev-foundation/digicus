@@ -12,7 +12,8 @@ pub fn handle_return_expression(
 
     match return_expr_box {
         Some(return_expr) => {
-            let return_label: &str = "RETURN_VALUE_LABEL";
+            let global_uuid = compilation_state.get_global_uuid();
+            let return_label: &str = &format!("RETURN_VALUE_LABEL_{}", global_uuid);
 
             let mut precedning_instructions = parse_expression(
                 return_expr,
@@ -20,13 +21,14 @@ pub fn handle_return_expression(
             )?;
 
             let return_instruction = Instruction::new(
+                compilation_state.get_global_uuid(),
                 "return".to_string(),
                 vec![return_label.to_string()],
                 compilation_state
                     .next_assignment
                     .clone()
                     .unwrap_or_default(),
-                compilation_state.scope,
+                compilation_state.scope(),
             );
 
             precedning_instructions.push(return_instruction);
@@ -59,14 +61,16 @@ mod tests {
         );
         let expected: Vec<Instruction> = vec![
             Instruction::new(
+                1,
                 "assign".to_string(),
                 vec!["1".to_string()],
-                "RETURN_VALUE_LABEL".to_string(),
+                "RETURN_VALUE_LABEL_0".to_string(),
                 0,
             ),
             Instruction::new(
+                2,
                 "return".to_string(),
-                vec!["RETURN_VALUE_LABEL".to_string()],
+                vec!["RETURN_VALUE_LABEL_0".to_string()],
                 "".to_string(),
                 0,
             ),
@@ -85,14 +89,16 @@ mod tests {
 
         let expected: Vec<Instruction> = vec![
             Instruction::new(
+                1,
                 "assign".to_string(),
                 vec!["true".to_string()],
-                "RETURN_VALUE_LABEL".to_string(),
+                "RETURN_VALUE_LABEL_0".to_string(),
                 0,
             ),
             Instruction::new(
+                2,
                 "return".to_string(),
-                vec!["RETURN_VALUE_LABEL".to_string()],
+                vec!["RETURN_VALUE_LABEL_0".to_string()],
                 "".to_string(),
                 0,
             ),

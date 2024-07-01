@@ -34,13 +34,14 @@ pub fn handle_struct_expression(
     field_names.insert(0, "UDT".to_string());
 
     instructions.push(Instruction::new(
+        compilation_state.get_global_uuid(),
         "instantiate_object".to_string(),
         field_names,
-        compilation_state
-            .next_assignment
-            .clone()
-            .unwrap_or("STRUCT_EXPRESSION_RESULT".to_string()),
-        compilation_state.scope,
+        compilation_state.next_assignment.clone().unwrap_or(format!(
+            "STRUCT_EXPRESSION_RESULT_{}",
+            compilation_state.get_global_uuid()
+        )),
+        compilation_state.scope(),
     ));
 
     Ok(instructions)
@@ -64,18 +65,21 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    0,
                     "assign".to_string(),
                     vec!["1".to_string()],
                     "a".to_string(),
                     0
                 ),
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["2".to_string()],
                     "b".to_string(),
                     0
                 ),
                 Instruction::new(
+                    2,
                     "instantiate_object".to_string(),
                     vec![
                         "UDT".to_string(),
@@ -83,7 +87,7 @@ mod tests {
                         "a".to_string(),
                         "b".to_string()
                     ],
-                    "STRUCT_EXPRESSION_RESULT".to_string(),
+                    "STRUCT_EXPRESSION_RESULT_3".to_string(),
                     0
                 )
             ]

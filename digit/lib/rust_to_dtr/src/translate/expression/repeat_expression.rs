@@ -31,6 +31,7 @@ pub fn handle_repeat_expression(
     )?);
 
     instructions.push(Instruction::new(
+        compilation_state.get_global_uuid(),
         "evaluate".to_string(),
         vec![
             "repeat".to_string(),
@@ -65,18 +66,21 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["hello".to_string()],
                     "REPEAT_EXPRESSION_VALUE_0".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    3,
                     "assign".to_string(),
                     vec!["3".to_string()],
                     "REPEAT_EXPRESSION_LENGTH_1".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    4,
                     "evaluate".to_string(),
                     vec![
                         "repeat".to_string(),

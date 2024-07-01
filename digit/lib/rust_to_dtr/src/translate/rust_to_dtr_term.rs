@@ -84,7 +84,7 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         "bool" => Ok("Boolean".to_string()),
         "f32" | "f64" => Ok("Float".to_string()),
         // ASSUMPTION: if we aren't returning anything then don't return anything ¯\_(ツ)_/¯
-        "()" => Ok("".to_string()),
+        "()" => Ok("()".to_string()),
         "u8" | "u16" | "u32" | "u64" | "i8" | "i16" | "i32" | "i64" => Ok("Integer".to_string()),
         "u128" | "u256" | "i128" | "i256" => Ok("BigInteger".to_string()),
         "char" | "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref"

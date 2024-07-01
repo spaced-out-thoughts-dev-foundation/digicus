@@ -16,7 +16,8 @@ pub fn handle_array_expression(
     for element in expr.elems.iter() {
         let element_name = format!(
             "ARRAY_EXPRESSION_ELEMENT_{}_{}",
-            compilation_state.scope, element_index,
+            element_index,
+            compilation_state.scope(),
         );
 
         instructions.extend(crate::translate::expression::parse_expression(
@@ -29,14 +30,17 @@ pub fn handle_array_expression(
         element_index += 1;
     }
 
+    element_names.insert(0, "Array".to_string());
+
     instructions.push(Instruction::new(
-        "create_array".to_string(),
+        compilation_state.get_global_uuid(),
+        "instantiate_object".to_string(),
         element_names,
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or_default(),
-        compilation_state.scope,
+        compilation_state.scope(),
     ));
 
     Ok(instructions)
@@ -58,32 +62,38 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    0,
                     "assign".to_string(),
                     vec!["0".to_string()],
                     "ARRAY_EXPRESSION_ELEMENT_0_0".to_string(),
                     0
                 ),
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["1".to_string()],
-                    "ARRAY_EXPRESSION_ELEMENT_0_1".to_string(),
+                    "ARRAY_EXPRESSION_ELEMENT_1_0".to_string(),
                     0
                 ),
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["2".to_string()],
-                    "ARRAY_EXPRESSION_ELEMENT_0_2".to_string(),
+                    "ARRAY_EXPRESSION_ELEMENT_2_0".to_string(),
                     0
                 ),
-                Instruction::from_compilation_state(
-                    "create_array".to_string(),
+                Instruction::new(
+                    3,
+                    "instantiate_object".to_string(),
                     vec![
+                        "Array".to_string(),
                         "ARRAY_EXPRESSION_ELEMENT_0_0".to_string(),
-                        "ARRAY_EXPRESSION_ELEMENT_0_1".to_string(),
-                        "ARRAY_EXPRESSION_ELEMENT_0_2".to_string()
+                        "ARRAY_EXPRESSION_ELEMENT_1_0".to_string(),
+                        "ARRAY_EXPRESSION_ELEMENT_2_0".to_string()
                     ],
-                    &compilation_state
-                )
+                    "".to_string(),
+                    0
+                ),
             ]
         );
     }

@@ -5,6 +5,7 @@ use crate::translate::type_name::parse_path;
 use crate::{
     errors::not_translatable_error::NotTranslatableError, //, translate::expression::parse_expression,
 };
+use compilation_state::CompilationState;
 use rand::{distributions::Alphanumeric, Rng};
 use syn::Macro;
 
@@ -20,7 +21,7 @@ pub fn join_with_newline(s1: &str, s2: &str) -> String {
 pub fn handle_macro(
     mac: &Macro,
     assignment: Option<String>,
-    scope: u32,
+    compilation_state: CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let macro_path = parse_path(&mac.path);
     let instruction_operation = macro_path_to_instruction(macro_path.clone());
@@ -29,18 +30,21 @@ pub fn handle_macro(
         let mut inputs = macro_tokens_to_inputs(mac.tokens.clone());
         inputs.insert(0, "List".to_string());
         return Ok(vec![Instruction::new(
+            compilation_state.get_global_uuid(),
             "instantiate_object".to_string(),
             inputs,
             assignment.unwrap_or("".to_string()),
-            scope,
+            compilation_state.scope(),
         )]);
     }
 
     Ok(vec![Instruction::new(
+        // TODO: fix this hardcoding
+        compilation_state.get_global_uuid(),
         instruction_operation,
         macro_tokens_to_inputs(mac.tokens.clone()),
         assignment.unwrap_or("".to_string()),
-        scope,
+        compilation_state.scope(),
     )])
 }
 

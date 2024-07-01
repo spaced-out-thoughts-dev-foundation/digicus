@@ -15,7 +15,7 @@ pub fn handle_tuple_expression(
     let mut index = 1;
     let mut arguments: Vec<String> = Vec::new();
     expr.elems.iter().for_each(|arg| {
-        let arg_name = format!("TUPLE_ARG_{}", index);
+        let arg_name = format!("TUPLE_ARG_{}_{}", index, compilation_state.scope());
 
         arguments.push(arg_name.clone());
 
@@ -29,13 +29,14 @@ pub fn handle_tuple_expression(
     arguments.insert(0, "Tuple".to_string());
 
     instructions_to_return.push(Instruction::new(
+        compilation_state.get_global_uuid(),
         "instantiate_object".to_string(),
         arguments,
-        compilation_state
-            .next_assignment
-            .clone()
-            .unwrap_or("TUPLE_RESULT".to_string()),
-        compilation_state.scope,
+        compilation_state.next_assignment.clone().unwrap_or(format!(
+            "TUPLE_RESULT_{}",
+            compilation_state.get_global_uuid()
+        )),
+        compilation_state.scope(),
     ));
 
     Ok(instructions_to_return)
@@ -59,25 +60,28 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    0,
                     "assign".to_string(),
                     vec!["a".to_string()],
-                    "TUPLE_ARG_1".to_string(),
+                    "TUPLE_ARG_1_0".to_string(),
                     0
                 ),
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["b".to_string()],
-                    "TUPLE_ARG_2".to_string(),
+                    "TUPLE_ARG_2_0".to_string(),
                     0
                 ),
                 Instruction::new(
+                    2,
                     "instantiate_object".to_string(),
                     vec![
                         "Tuple".to_string(),
-                        "TUPLE_ARG_1".to_string(),
-                        "TUPLE_ARG_2".to_string()
+                        "TUPLE_ARG_1_0".to_string(),
+                        "TUPLE_ARG_2_0".to_string()
                     ],
-                    "TUPLE_RESULT".to_string(),
+                    "TUPLE_RESULT_3".to_string(),
                     0
                 )
             ]

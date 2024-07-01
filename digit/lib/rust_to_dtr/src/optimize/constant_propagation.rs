@@ -55,6 +55,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
                 new_inputs = vec![new_inputs.join(".")];
 
                 instruction = Instruction::new(
+                    instruction.id,
                     "assign".to_string(),
                     new_inputs.clone(),
                     new_assign.clone(),
@@ -79,6 +80,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
             }
 
             let optimized_instruction = Instruction::new(
+                instruction.id,
                 instruction.name.clone(),
                 new_inputs,
                 new_assign.clone(),

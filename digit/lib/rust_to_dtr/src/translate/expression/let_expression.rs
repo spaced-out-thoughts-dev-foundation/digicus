@@ -1,3 +1,5 @@
+use core::panic;
+
 use crate::common::compilation_state;
 use crate::errors::not_translatable_error::NotTranslatableError;
 use crate::instruction::Instruction;
@@ -16,13 +18,14 @@ pub fn handle_let_expression(
     )?;
     let result = handle_pattern(*(let_expr.pat.clone()));
     let result_instruction: Instruction = Instruction::new(
+        compilation_state.get_global_uuid(),
         "assign".to_string(),
         vec![input_value_name_for_let.to_string()],
         compilation_state
             .next_assignment
             .clone()
             .unwrap_or(result.unwrap_or_default()),
-        compilation_state.scope,
+        compilation_state.scope(),
     );
 
     preceding_instructions.push(result_instruction);
@@ -51,12 +54,14 @@ mod tests {
             );
             let expected: Vec<Instruction> = vec![
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["1".to_string()],
                     "INPUT_VALUE_NAME_FOR_LET_0".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["INPUT_VALUE_NAME_FOR_LET_0".to_string()],
                     "x".to_string(),
@@ -76,12 +81,14 @@ mod tests {
             );
             let expected = vec![
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["bar".to_string()],
                     "INPUT_VALUE_NAME_FOR_LET_0".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["INPUT_VALUE_NAME_FOR_LET_0".to_string()],
                     "foo".to_string(),

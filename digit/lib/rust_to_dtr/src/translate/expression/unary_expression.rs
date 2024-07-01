@@ -52,16 +52,19 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["a".to_string()],
                     "UNARY_ARGUMENT_0".to_string(),
                     0
                 ),
-                Instruction::from_compilation_state(
+                Instruction::new(
+                    2,
                     "evaluate".to_string(),
                     vec!["!".to_string(), "UNARY_ARGUMENT_0".to_string()],
-                    &compilation_state
-                )
+                    "".to_string(),
+                    0
+                ),
             ]
         );
     }
@@ -75,16 +78,19 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
+                    1,
                     "assign".to_string(),
                     vec!["a".to_string()],
                     "UNARY_ARGUMENT_0".to_string(),
                     0
                 ),
-                Instruction::from_compilation_state(
+                Instruction::new(
+                    2,
                     "evaluate".to_string(),
                     vec!["-".to_string(), "UNARY_ARGUMENT_0".to_string()],
-                    &compilation_state
-                )
+                    "".to_string(),
+                    0
+                ),
             ]
         );
     }

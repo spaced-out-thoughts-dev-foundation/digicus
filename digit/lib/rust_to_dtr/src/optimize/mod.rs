@@ -18,6 +18,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
 
 pub fn create_instruction(name: &str, input: Vec<&str>, assign: &str) -> Instruction {
     Instruction::new(
+        0,
         name.to_string(),
         input.into_iter().map(|s| s.to_string()).collect(),
         assign.to_string(),
@@ -29,9 +30,10 @@ pub fn create_instruction_with_scope(
     name: &str,
     input: Vec<&str>,
     assign: &str,
-    scope: u32,
+    scope: u128,
 ) -> Instruction {
     Instruction::new(
+        0,
         name.to_string(),
         input.into_iter().map(|s| s.to_string()).collect(),
         assign.to_string(),

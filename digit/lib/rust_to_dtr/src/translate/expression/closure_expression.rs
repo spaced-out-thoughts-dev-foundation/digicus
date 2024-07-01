@@ -24,3 +24,45 @@ pub fn handle_closure_expression(
 
     Ok(instructions)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::instruction::Instruction;
+
+    #[test]
+    fn test_handle_closure_expression() {
+        let expr: ExprClosure = syn::parse_str("|a, b| { a + b }").unwrap();
+        let mut compilation_state = compilation_state::CompilationState::new();
+        let instructions = handle_closure_expression(&expr, &mut compilation_state).unwrap();
+        assert_eq!(
+            instructions,
+            vec![
+                Instruction::new(
+                    2,
+                    "assign".to_string(),
+                    vec!["a".to_string()],
+                    "BINARY_EXPRESSION_LEFT_0".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    3,
+                    "assign".to_string(),
+                    vec!["b".to_string()],
+                    "BINARY_EXPRESSION_RIGHT_1".to_string(),
+                    0,
+                ),
+                Instruction::new(
+                    4,
+                    "add".to_string(),
+                    vec![
+                        "BINARY_EXPRESSION_LEFT_0".to_string(),
+                        "BINARY_EXPRESSION_RIGHT_1".to_string()
+                    ],
+                    "".to_string(),
+                    0,
+                ),
+            ]
+        );
+    }
+}

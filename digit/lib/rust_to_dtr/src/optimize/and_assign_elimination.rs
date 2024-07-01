@@ -19,6 +19,7 @@ pub fn transform_and_assign_to_normal_op_with_assign(instruction: &Instruction) 
     let right_hand_side = instruction.input[1].clone();
 
     Instruction::new(
+        instruction.id,
         operator.replace("_and_assign", ""),
         vec![left_hand_side.clone(), right_hand_side],
         left_hand_side,

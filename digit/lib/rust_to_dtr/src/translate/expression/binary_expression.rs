@@ -27,6 +27,7 @@ pub fn handle_binary_expression(
 
     let binary_instruction = if is_conditional_comparative_operator(&expr_binary.op) {
         Instruction::new(
+            compilation_state.get_global_uuid(),
             "evaluate".to_string(),
             vec![
                 operator,
@@ -37,10 +38,11 @@ pub fn handle_binary_expression(
                 .next_assignment
                 .clone()
                 .unwrap_or_default(),
-            compilation_state.scope,
+            compilation_state.scope(),
         )
     } else {
         Instruction::new(
+            compilation_state.get_global_uuid(),
             operator,
             vec![
                 left_hand_side_name.to_string(),
@@ -51,7 +53,7 @@ pub fn handle_binary_expression(
                 .next_assignment
                 .clone()
                 .unwrap_or_default(),
-            compilation_state.scope,
+            compilation_state.scope(),
         )
     };
 
@@ -81,18 +83,21 @@ mod tests {
             result,
             Ok(vec![
                 Instruction::new(
+                    2,
                     "assign".to_string(),
                     vec!["1".to_string()],
                     "BINARY_EXPRESSION_LEFT_0".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    3,
                     "assign".to_string(),
                     vec!["2".to_string()],
                     "BINARY_EXPRESSION_RIGHT_1".to_string(),
                     0,
                 ),
                 Instruction::new(
+                    4,
                     "add".to_string(),
                     vec![
                         "BINARY_EXPRESSION_LEFT_0".to_string(),
@@ -115,18 +120,21 @@ mod tests {
 
         let expected = Ok(vec![
             Instruction::new(
+                2,
                 "assign".to_string(),
                 vec!["foo".to_string()],
                 "BINARY_EXPRESSION_LEFT_0".to_string(),
                 0,
             ),
             Instruction::new(
+                3,
                 "assign".to_string(),
                 vec!["2".to_string()],
                 "BINARY_EXPRESSION_RIGHT_1".to_string(),
                 0,
             ),
             Instruction::new(
+                4,
                 "subtract_and_assign".to_string(),
                 vec![
                     "BINARY_EXPRESSION_LEFT_0".to_string(),
