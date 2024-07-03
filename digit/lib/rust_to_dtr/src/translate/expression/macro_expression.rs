@@ -13,6 +13,6 @@ pub fn handle_macro_expression(
     handle_macro(
         &expr.mac,
         compilation_state.next_assignment.clone(),
-        compilation_state.clone(),
+        compilation_state,
     )
 }

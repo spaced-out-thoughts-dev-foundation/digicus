@@ -40,3 +40,6 @@ impl IncrementContract {
 }
 
 mod test;
+
+// Changes required:
+// 1.  let mut ASSIGN_EXPRESSION_LEFT = state.last_incr; ---> state.last_incr = incr;

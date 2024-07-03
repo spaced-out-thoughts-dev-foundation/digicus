@@ -1,12 +1,12 @@
 PATH
   remote: ../dtr_core
   specs:
-    dtr_core (0.6.2)
+    dtr_core (0.8.1)
 
 PATH
   remote: ../dtr_to_rust
   specs:
-    dtr_to_rust (0.2.10)
+    dtr_to_rust (0.8.1)
 
 GEM
   remote: https://rubygems.org/

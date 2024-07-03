@@ -1,0 +1,31 @@
+[Helpers]:
+-() [get_count_item]
+	* Inputs:
+	{
+		s: &str
+	}
+	* Output: (Integer, &str)
+	* Instructions:
+		$
+			{ id: 4, instruction: evaluate, input: (s.split, ' '), assign: it, scope: 0 }
+			{ id: 9, instruction: evaluate, input: (it.next), assign: TUPLE_ARG_1_0, scope: 0 }
+			{ id: 12, instruction: evaluate, input: (it.next), assign: TUPLE_ARG_2_0, scope: 0 }
+			{ id: 13, instruction: instantiate_object, input: (Tuple, TUPLE_ARG_1_0, TUPLE_ARG_2_0), assign: TRY_ASSIGN_RESULT_5, scope: 0 }
+			{ id: 15, instruction: evaluate, input: (try_assign, (Some(count_str) Some(item)), TRY_ASSIGN_RESULT_5), assign: TRY_ASSIGN_RESULT_CONDITIONAL_6, scope: 0 }
+			{ id: 17, instruction: jump, input: (TRY_ASSIGN_RESULT_CONDITIONAL_6, 16), scope: 0 }
+			{ id: 19, instruction: jump, input: (18), scope: 0 }
+			{ id: 20, instruction: jump, input: (0), scope: 16 }
+			{ id: 21, instruction: exit_with_message, input: ("Can't segment count item pair: '{s}'"), scope: 18 }
+			{ id: 22, instruction: jump, input: (0), scope: 18 }
+			{ id: 28, instruction: evaluate, input: (u64::from_str, count_str), assign: TRY_ASSIGN_RESULT_23, scope: 0 }
+			{ id: 29, instruction: evaluate, input: (try_assign, Ok(count), TRY_ASSIGN_RESULT_23), assign: TRY_ASSIGN_RESULT_CONDITIONAL_24, scope: 0 }
+			{ id: 31, instruction: jump, input: (TRY_ASSIGN_RESULT_CONDITIONAL_24, 30), scope: 0 }
+			{ id: 33, instruction: jump, input: (32), scope: 0 }
+			{ id: 34, instruction: jump, input: (0), scope: 30 }
+			{ id: 35, instruction: exit_with_message, input: ("Can't parse integer: '{count_str}'"), scope: 32 }
+			{ id: 36, instruction: jump, input: (0), scope: 32 }
+			{ id: 39, instruction: instantiate_object, input: (Tuple, count, item), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+
+:[Helpers]

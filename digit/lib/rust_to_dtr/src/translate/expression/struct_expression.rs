@@ -21,10 +21,14 @@ pub fn handle_struct_expression(
         };
         let field_value = field.expr.clone();
 
+        let original_assignment = compilation_state.next_assignment.clone();
+
         let field_value_parsed = parse_expression(
             &field_value,
             &mut compilation_state.with_assignment(Some(field_name.clone())),
         );
+
+        compilation_state.with_assignment(original_assignment);
 
         instructions.extend(field_value_parsed.unwrap_or(Vec::new()));
         field_names.push(field_name.clone());

@@ -52,9 +52,7 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
     }
 
     if rust_name.contains("Option<") {
-        return Err(NotTranslatableError::Custom(
-            "Unable to translate Option type".to_string(),
-        ));
+        return Ok(replace_option(rust_name));
     }
 
     if rust_name.contains("Ref<") {
@@ -83,12 +81,13 @@ pub fn map_name(rust_name: &str) -> Result<String, NotTranslatableError> {
         "Bytes" => Ok("String".to_string()),
         "bool" => Ok("Boolean".to_string()),
         "f32" | "f64" => Ok("Float".to_string()),
+        "char" => Ok("String".to_string()),
         // ASSUMPTION: if we aren't returning anything then don't return anything ¯\_(ツ)_/¯
         "()" => Ok("()".to_string()),
         "u8" | "u16" | "u32" | "u64" | "i8" | "i16" | "i32" | "i64" => Ok("Integer".to_string()),
         "u128" | "u256" | "i128" | "i256" => Ok("BigInteger".to_string()),
-        "char" | "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref"
-        | "RefCell" | "Result" | "usize" => unable_to_translate_type_helper(rust_name),
+        "!" | "Arc" | "Box" | "Cell" | "isize" | "Mutex" | "Option" | "Ref" | "RefCell"
+        | "Result" | "usize" => unable_to_translate_type_helper(rust_name),
         // ASSUMPTION: these are custom type names
         _ => Ok(rust_name.to_string()),
     }
@@ -151,6 +150,20 @@ fn replace_result(input: &str) -> String {
         }
 
         format!("Result<{}>", types.join(", "))
+    } else {
+        input.to_string() // If the pattern doesn't match, return the input as is
+    }
+}
+
+fn replace_option(input: &str) -> String {
+    if input.starts_with("Option<") && input.ends_with('>') {
+        let inner_types = &input[7..input.len() - 1]; // Extract the types inside the angle brackets
+        let types: Vec<String> = inner_types
+            .split(",")
+            .map(|s| s.trim().to_string())
+            .collect(); // Split the types by comma and trim them
+
+        format!("Option<{}>", types.join(", "))
     } else {
         input.to_string() // If the pattern doesn't match, return the input as is
     }

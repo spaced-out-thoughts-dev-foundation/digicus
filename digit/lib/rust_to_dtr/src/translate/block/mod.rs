@@ -14,15 +14,25 @@ pub fn handle_block(
     block.stmts.iter().for_each(|stmt| {
         let assignment: Option<String> =
             if index == total_block_stmts && compilation_state.should_output {
-                Some("Thing_to_return".to_string())
+                Some(
+                    compilation_state
+                        .next_assignment
+                        .clone()
+                        .unwrap_or("Thing_to_return".to_string()),
+                )
             } else {
                 None
             };
+
+        let original_assignment = compilation_state.next_assignment.clone();
+
         match translate::expression::block_expression::parse_block_stmt(
             &stmt,
             &mut compilation_state.with_assignment(assignment),
         ) {
             Ok(block_str) => {
+                compilation_state.with_assignment(original_assignment);
+
                 block_str.iter().for_each(|instr| {
                     instructions_to_return.push(instr.clone());
                 });

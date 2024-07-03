@@ -19,6 +19,7 @@ pub fn handle_assign_expression(
         compilation_state.get_global_uuid()
     );
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut left_hand_side: Vec<Instruction> = expression::parse_expression(
         &expr.left,
         &mut compilation_state.with_assignment(Some(left_hand_side_name.to_string())),
@@ -28,6 +29,8 @@ pub fn handle_assign_expression(
         &expr.right,
         &mut compilation_state.with_assignment(Some(right_hand_side_name.to_string())),
     )?;
+
+    compilation_state.with_assignment(original_assignment);
 
     let binary_instruction = Instruction::new(
         compilation_state.get_global_uuid(),

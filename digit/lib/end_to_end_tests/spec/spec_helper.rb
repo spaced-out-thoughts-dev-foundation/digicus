@@ -137,3 +137,24 @@ def assert_translates_rust_to_dtr_and_back(dir)
 
   expect(run_cargo_test_in_dir(dir)).to be true
 end
+
+def assert_translates_rust_to_dtr_and_back_multi_contract_directory(primary_directory, sub_directories)
+  # just compile the sub directories
+  sub_directories.each do |sub_dir|
+    dtr_code = rust_to_dtr(File.read("#{sub_dir}/src/original.rs"))
+    rust_string = DTRToRust::Generator.generate_from_string(dtr_code)
+    File.write("#{sub_dir}/src/lib.rs", rust_string)
+  end
+
+  dtr_code = rust_to_dtr(File.read("#{primary_directory}/src/original.rs"))
+  puts 'dtr_code:'
+  puts dtr_code
+  rust_string = DTRToRust::Generator.generate_from_string(dtr_code)
+  rust_string += "\n\nmod test;\n"
+  File.write("#{primary_directory}/src/lib.rs", rust_string)
+
+  command = "make -C #{primary_directory} build"
+  Open3.capture3(command)
+
+  expect(run_cargo_test_in_dir(primary_directory)).to be true
+end

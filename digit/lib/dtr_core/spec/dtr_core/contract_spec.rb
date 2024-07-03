@@ -292,4 +292,20 @@ RSpec.describe DTRCore::Contract do
       )
     end
   end
+
+  context 'when non-translatable section' do
+    it 'parses each section' do
+      content = File.read('./spec/test_dtr_files/contract_and_non_translatable_section.dtr')
+      contract = described_class.from_dtr_raw(content)
+
+      expect(contract.name).to eq('CONTRACT_NAME')
+      expect(contract.non_translatables.gsub(' ', '').gsub("\n", '').gsub("\t", '')).to eq(
+        'mod contract_a {
+          soroban_sdk::contractimport!(
+            file = "../contract_a/target/wasm32-unknown-unknown/release/soroban_cross_contract_a_contract.wasm"
+          );
+        }'.gsub(' ', '').gsub("\n", '').gsub("\t", '')
+      )
+    end
+  end
 end

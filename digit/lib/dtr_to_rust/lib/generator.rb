@@ -12,6 +12,7 @@ module DTRToRust
     def generate
       @content = ''
 
+      @content += dtr_contract.non_translatables if dtr_contract.non_translatables
       generate_user_defined_types
       generate_state
       generate_contract_name
@@ -48,6 +49,7 @@ module DTRToRust
         Env
         Symbol
         Vec
+        Val
         log
         token
       ]
@@ -200,6 +202,8 @@ module DTRToRust
 
     def generate_instruction(instruction, spacing_scope, function_names, is_helper, assignment_name_to_scope_map,
                              function_inputs)
+
+      puts "#{instruction}"
       handler = InstructionHandler.new(instruction, spacing_scope, function_names,
                                        dtr_contract.user_defined_types || [], is_helper, assignment_name_to_scope_map, function_inputs)
 

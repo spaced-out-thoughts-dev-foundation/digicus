@@ -20,6 +20,7 @@ pub fn handle_repeat_expression(
         compilation_state.get_global_uuid()
     );
 
+    let original_assignment = compilation_state.next_assignment.clone();
     instructions.extend(parse_expression(
         &expr.expr,
         &mut compilation_state.with_assignment(Some(repeat_expression_name.clone())),
@@ -29,6 +30,7 @@ pub fn handle_repeat_expression(
         &expr.len,
         &mut compilation_state.with_assignment(Some(repeat_expression_length.clone())),
     )?);
+    compilation_state.with_assignment(original_assignment);
 
     instructions.push(Instruction::new(
         compilation_state.get_global_uuid(),
@@ -56,10 +58,10 @@ mod tests {
     #[test]
     fn test_handle_repeat_expression() {
         let expr: syn::ExprRepeat = parse_quote! { [hello; 3] };
-        let compilation_state = CompilationState::new();
+        let mut compilation_state = CompilationState::new();
         let instructions = handle_repeat_expression(
             &expr,
-            &mut compilation_state.with_assignment(Some("foobar".to_string())),
+            compilation_state.with_assignment(Some("foobar".to_string())),
         )
         .unwrap();
         assert_eq!(

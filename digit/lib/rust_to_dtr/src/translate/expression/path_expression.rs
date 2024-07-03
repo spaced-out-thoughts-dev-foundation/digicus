@@ -33,7 +33,7 @@ mod tests {
 
     #[test]
     fn test_handle_path_expression() {
-        let compilation_state = CompilationState::new();
+        let mut compilation_state = CompilationState::new();
         let expr: ExprPath = parse_quote! { Struct };
         let instructions = handle_path_expression(
             &expr,

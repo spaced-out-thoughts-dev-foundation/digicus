@@ -54,8 +54,8 @@ fn move_token(
     token: &Address,
     from: &Address,
     to: &Address,
-    max_spend_amount: i128,
-    transfer_amount: i128,
+    max_spend_amount: &i128,
+    transfer_amount: &i128,
 ) {
     let token = token::Client::new(env, token);
     let contract_address = env.current_contract_address();

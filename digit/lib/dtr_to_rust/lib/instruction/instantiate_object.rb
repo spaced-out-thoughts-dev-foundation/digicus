@@ -12,6 +12,8 @@ module DTRToRust
           handle_udt
         when 'Tuple'
           form_rust_string("let mut #{@instruction.assign} = (#{normalish_inputs});")
+        when 'Range'
+          form_rust_string("let mut #{@instruction.assign} = #{range_inputs};")
         else
           raise "Unknown object type: #{@instruction.inputs[0]}"
         end
@@ -21,6 +23,12 @@ module DTRToRust
 
       def handle_list
         form_rust_string("let mut #{@instruction.assign} = vec![#{normalish_inputs}];")
+      end
+
+      def range_inputs
+        @instruction.inputs[1..].map do |x|
+          foobar(x)
+        end.join('..')
       end
 
       def normalish_inputs

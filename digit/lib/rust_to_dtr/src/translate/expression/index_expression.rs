@@ -14,6 +14,7 @@ pub fn handle_index_expression(
     let mut global_uuid = compilation_state.get_global_uuid();
     let thing_being_index_name = format!("THING_BEING_INDEXED_{}", global_uuid);
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut instructions = parse_expression(
         &expr.expr,
         &mut compilation_state.with_assignment(Some(thing_being_index_name.clone())),
@@ -26,6 +27,7 @@ pub fn handle_index_expression(
         &expr.index,
         &mut compilation_state.with_assignment(Some(index_name.clone())),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     instructions.extend(index_instructions);
 
@@ -88,10 +90,10 @@ mod tests {
     #[test]
     fn test_handle_index_expression_with_nested_index() {
         let expr: ExprIndex = syn::parse_str("a[1][2]").unwrap();
-        let compilation_state = compilation_state::CompilationState::new();
+        let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_index_expression(
             &expr,
-            &mut compilation_state.with_assignment(Some("final_indexed_thing".to_string())),
+            compilation_state.with_assignment(Some("final_indexed_thing".to_string())),
         )
         .unwrap();
         assert_eq!(

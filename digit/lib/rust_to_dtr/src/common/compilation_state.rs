@@ -33,6 +33,136 @@ impl ScopeStack {
     }
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ScopeNaryTree {
+    root: Vec<(u128, u128)>,
+    uuid: char,
+}
+
+impl ScopeNaryTree {
+    pub fn new(uuid: char) -> Self {
+        ScopeNaryTree {
+            root: vec![],
+            uuid: uuid,
+        }
+    }
+
+    pub fn push(&mut self, parent: u128, child: u128) {
+        // first confirm that the parent is in the tree
+        let mut parent_found = false;
+        for (p, c) in &self.root {
+            if *p == parent || *c == parent {
+                parent_found = true;
+                break;
+            }
+        }
+
+        if !parent_found && self.root.len() > 0 {
+            panic!("Parent not found in the tree");
+        }
+
+        self.root.push((parent, child));
+    }
+
+    pub fn find_parent(&self, child: u128) -> Option<u128> {
+        for (parent, c) in &self.root {
+            if *c == child {
+                return Some(*parent);
+            }
+        }
+
+        None
+    }
+
+    fn find_direct_children(&self, parent: u128) -> Vec<u128> {
+        let mut children = vec![];
+        for (p, c) in &self.root {
+            if *p == parent {
+                children.push(*c);
+            }
+        }
+
+        children
+    }
+
+    pub fn max_depth(&self) -> usize {
+        let mut max_depth = 0;
+        let mut stack = vec![(0, 0)];
+
+        while !stack.is_empty() {
+            let (node, depth) = stack.pop().unwrap();
+            if depth > max_depth {
+                max_depth = depth;
+            }
+
+            let children = self.find_direct_children(node);
+            for child in children {
+                stack.push((child, depth + 1));
+            }
+        }
+        max_depth + 1
+    }
+
+    pub fn is_child_of(&self, potential_child: u128, potential_parent: u128) -> bool {
+        let mut parent = potential_child;
+        while parent != 0 {
+            match self.find_parent(parent) {
+                Some(p) => parent = p,
+                None => break,
+            }
+
+            if parent == potential_parent {
+                return true;
+            }
+        }
+
+        false
+    }
+}
+
+#[test]
+fn test_scope_nary_tree() {
+    let mut tree = ScopeNaryTree::new('a');
+    assert_eq!(tree.max_depth(), 1);
+
+    //               0
+    //             /   \
+    //            1     2
+    //           / \   / \
+    //          3   4 5   6
+    tree.push(0, 1);
+    tree.push(0, 2);
+    tree.push(1, 3);
+    tree.push(1, 4);
+    tree.push(2, 5);
+    tree.push(2, 6);
+
+    assert_eq!(tree.max_depth(), 3);
+    assert_eq!(tree.find_parent(1), Some(0));
+    assert_eq!(tree.find_parent(2), Some(0));
+    assert_eq!(tree.find_parent(3), Some(1));
+    assert_eq!(tree.find_parent(4), Some(1));
+
+    assert_eq!(tree.find_direct_children(0), vec![1, 2]);
+    assert_eq!(tree.find_direct_children(1), vec![3, 4]);
+    assert_eq!(tree.find_direct_children(2), vec![5, 6]);
+
+    assert_eq!(tree.is_child_of(3, 1), true);
+    assert_eq!(tree.is_child_of(4, 1), true);
+    assert_eq!(tree.is_child_of(5, 2), true);
+    assert_eq!(tree.is_child_of(6, 2), true);
+    assert_eq!(tree.is_child_of(1, 0), true);
+    assert_eq!(tree.is_child_of(2, 0), true);
+    assert_eq!(tree.is_child_of(3, 0), true);
+    assert_eq!(tree.is_child_of(4, 0), true);
+    assert_eq!(tree.is_child_of(1, 2), false);
+    assert_eq!(tree.is_child_of(2, 1), false);
+    assert_eq!(tree.is_child_of(3, 4), false);
+    assert_eq!(tree.is_child_of(4, 3), false);
+    assert_eq!(tree.is_child_of(5, 6), false);
+    assert_eq!(tree.is_child_of(6, 5), false);
+}
+
 #[derive(Debug)]
 pub struct UniqueNumberGenerator {
     pub counter: Mutex<u128>,
@@ -72,17 +202,22 @@ pub struct CompilationState {
     pub next_assignment: Option<String>,
     pub should_output: bool,
     pub expression_stack: Vec<String>,
+    pub scope_tree_root: ScopeNaryTree,
 }
 
 impl CompilationState {
     pub fn new() -> CompilationState {
+        let global_uuid = Arc::clone(&GLOBAL_UNIQUE_NUMBER_GENERATOR);
+        let scope_tree = ScopeNaryTree::new(rand::random::<char>());
+
         let mut result = CompilationState {
             instructions: vec![],
             scope_stack: ScopeStack::new(),
-            global_uuid: Arc::clone(&GLOBAL_UNIQUE_NUMBER_GENERATOR),
+            global_uuid: global_uuid,
             next_assignment: None,
             should_output: false,
             expression_stack: vec![],
+            scope_tree_root: scope_tree,
         };
 
         result.reset_global_uuid();
@@ -95,7 +230,11 @@ impl CompilationState {
     }
 
     pub fn enter_new_scope(&mut self) {
+        let parent = *self.scope_stack.peek().unwrap();
+
         self.scope_stack.push(self.get_global_uuid());
+        self.scope_tree_root
+            .push(parent, self.scope_stack.peek().unwrap().clone());
     }
 
     pub fn exit_scope(&mut self) {
@@ -114,22 +253,10 @@ impl CompilationState {
         *self.scope_stack.peek().unwrap()
     }
 
-    pub fn with_assignment(&self, assignment: Option<String>) -> CompilationState {
-        CompilationState {
-            instructions: self.instructions.clone(),
-            scope_stack: self.scope_stack.clone(),
-            global_uuid: Arc::clone(&self.global_uuid),
-            next_assignment: assignment,
-            should_output: self.should_output,
-            expression_stack: self.expression_stack.clone(),
-        }
-    }
+    pub fn with_assignment(&mut self, assignment: Option<String>) -> &mut CompilationState {
+        self.next_assignment = assignment;
 
-    pub fn debug_state(self) {
-        let mut index = 0;
-        self.expression_stack.clone().into_iter().for_each(|x| {
-            index += 1;
-        });
+        self
     }
 }
 
@@ -161,6 +288,17 @@ mod tests {
 
         compilation_state.enter_new_scope();
         assert_eq!(compilation_state.scope_stack.depth(), 2);
+
+        compilation_state.enter_new_scope();
+        assert_eq!(compilation_state.scope_stack.depth(), 3);
+        assert_eq!(compilation_state.scope_tree_root.max_depth(), 3);
+
+        compilation_state.exit_scope();
+        assert_eq!(compilation_state.scope_stack.depth(), 2);
+
+        compilation_state.exit_scope();
+        assert_eq!(compilation_state.scope_stack.depth(), 1);
+        assert_eq!(compilation_state.scope_tree_root.max_depth(), 3);
 
         compilation_state.update_next_assignment(Some("test".to_string()));
         assert_eq!(compilation_state.next_assignment, Some("test".to_string()));

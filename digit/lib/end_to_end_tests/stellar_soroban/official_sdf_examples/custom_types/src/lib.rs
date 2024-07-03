@@ -1,11 +1,11 @@
 #![no_std]
-use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Env, Symbol};
+use soroban_sdk::{contract, contracttype, Symbol, symbol_short, contractimpl, Env, auth::Context, IntoVal, unwrap::UnwrapOptimized};
 
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct State {
-    pub count: i64,
-    pub last_incr: i64,
+    pub count: i128,
+    pub last_incr: i128,
 }
 
 const STATE: Symbol = symbol_short!("STATE");
@@ -15,27 +15,24 @@ pub struct IncrementContract;
 
 #[contractimpl]
 impl IncrementContract {
-    pub fn increment(env: Env, incr: i64) -> i64 {
+    pub fn increment(env: Env, incr: i128) -> i128 {
+        let Thing_to_return: i128;
         let mut state = Self::get_state(env.clone());
         state.count = state.count + incr;
-        let mut ASSIGN_EXPRESSION_LEFT = state.last_incr;
+        state.last_incr = incr;
         env.storage().instance().set(&STATE, &state);
-        let mut Thing_to_return = state.count;
-        Thing_to_return
+        return state.count;
     }
 
+
     pub fn get_state(env: Env) -> State {
-        let mut METHOD_CALL_ARG_1_0 = State {
-            count: 0,
-            last_incr: 0,
-        };
-        let mut Thing_to_return = env
-            .storage()
-            .instance()
-            .get(&STATE)
-            .unwrap_or(METHOD_CALL_ARG_1_0);
-        Thing_to_return
+        let Thing_to_return: State;
+        let mut METHOD_CALL_ARG_1_0 = State{count: 0, last_incr: 0};
+        Thing_to_return = env.storage().instance().get(&STATE).unwrap_or(METHOD_CALL_ARG_1_0);
+        return Thing_to_return;
     }
 }
+
+
 
 mod test;

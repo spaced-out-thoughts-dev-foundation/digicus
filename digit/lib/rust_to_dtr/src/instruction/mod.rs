@@ -20,6 +20,31 @@ impl Instruction {
         }
     }
 
+    pub fn unconditional_jump(previous_scope: u128, new_scope: u128, id: u128) -> Self {
+        Self {
+            id: id,
+            name: "jump".to_string(),
+            input: vec![new_scope.to_string()],
+            assign: "".to_string(),
+            scope: previous_scope,
+        }
+    }
+
+    pub fn conditional_jump(
+        previous_scope: u128,
+        new_scope: u128,
+        id: u128,
+        condition: String,
+    ) -> Self {
+        Self {
+            id: id,
+            name: "jump".to_string(),
+            input: vec![condition, new_scope.to_string()],
+            assign: "".to_string(),
+            scope: previous_scope,
+        }
+    }
+
     pub fn from_compilation_state(
         name: String,
         input: Vec<String>,

@@ -1,6 +1,8 @@
 [Contract]: ContractA
 
-[Interface]:
+[Implementations]:
+
+-->(ContractAInterface)<--
 -() [add]
 	* Inputs:
 	{
@@ -14,4 +16,5 @@
 			{ id: 8, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_2.expect, "no overflow"), assign: Thing_to_return, scope: 0 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
-:[Interface]
+
+:[Implementations]

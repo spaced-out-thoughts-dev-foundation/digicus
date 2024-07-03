@@ -16,10 +16,12 @@ pub fn handle_if_expression(
 
     // let mut instructions_to_return: Vec<Instruction> = vec![];
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut condition_instructions: Vec<Instruction> = parse_expression(
         &expr.cond,
         &mut compilation_state.with_assignment(Some(conditional_jump_assignment_label.to_string())),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     let mut prev_scope = compilation_state.scope();
     compilation_state.enter_new_scope();
@@ -30,10 +32,7 @@ pub fn handle_if_expression(
             conditional_jump_assignment_label.to_string(),
             (compilation_state.scope()).to_string(),
         ],
-        compilation_state
-            .next_assignment
-            .clone()
-            .unwrap_or_default(),
+        "".to_string(),
         prev_scope,
     );
 
@@ -41,7 +40,7 @@ pub fn handle_if_expression(
 
     condition_instructions.push(conditional_jump_instruction);
 
-    let mut then_branch = handle_block(&expr.then_branch, &mut compilation_state.clone());
+    let mut then_branch = handle_block(&expr.then_branch, compilation_state);
 
     prev_scope = compilation_state.scope();
     compilation_state.exit_scope();

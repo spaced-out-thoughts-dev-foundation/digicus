@@ -7,25 +7,23 @@
 		e: &Env
 		input: String
 	}
-	* Output: String
+	* Output: Result<String, Error>
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (repeat, 0, 128), assign: input_buf, scope: 0 }
-			{ instruction: evaluate, input: (input.len), assign: RANGE_END_5, scope: 0 }
-			{ instruction: instantiate_object, input: (Range, 0, RANGE_END_5), assign: index_name_3, scope: 0 }
-			{ instruction: evaluate, input: (index, input_buf, index_name_3), assign: input_slice, scope: 0 }
-			{ instruction: evaluate, input: (input.copy_into_slice, input_slice), scope: 0 }
-			{ instruction: evaluate, input: (Input::abi_decode, input_slice, false), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
-			{ instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.map_err, Error::Decode), assign: input, scope: 0 }
-			{ instruction: field, input: (input, a), assign: a, scope: 0 }
-			{ instruction: field, input: (input, b), assign: BINARY_EXPRESSION_LEFT, scope: 0 }
-			{ instruction: field, input: (input, c), assign: BINARY_EXPRESSION_RIGHT, scope: 0 }
-			{ instruction: add, input: (BINARY_EXPRESSION_LEFT, BINARY_EXPRESSION_RIGHT), assign: r, scope: 0 }
-			{ instruction: instantiate_object, input: (UDT, Output, a, r), assign: output, scope: 0 }
-			{ instruction: evaluate, input: (output.abi_encode), assign: output_encoded, scope: 0 }
-			{ instruction: evaluate, input: (Bytes::from_slice, e, output_encoded), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
-			{ instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
-			{ instruction: return, input: (Thing_to_return), scope: 0 }
+			{ id: 4, instruction: evaluate, input: (repeat, 0, 128), assign: input_buf, scope: 0 }
+			{ id: 13, instruction: evaluate, input: (input.len), assign: RANGE_END_9, scope: 0 }
+			{ id: 14, instruction: instantiate_object, input: (Range, 0, RANGE_END_9), assign: INDEX_NAME_7, scope: 0 }
+			{ id: 15, instruction: evaluate, input: (index, input_buf, INDEX_NAME_7), assign: input_slice, scope: 0 }
+			{ id: 20, instruction: evaluate, input: (input.copy_into_slice, input_slice), scope: 0 }
+			{ id: 28, instruction: evaluate, input: (Input::abi_decode, input_slice, false), assign: METHOD_CALL_EXPRESSION_23, scope: 0 }
+			{ id: 29, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_23.map_err, Error::Decode), assign: input, scope: 0 }
+			{ id: 44, instruction: add, input: (input.b, input.c), assign: r, scope: 0 }
+			{ id: 45, instruction: instantiate_object, input: (UDT, Output, input.a, r), assign: output, scope: 0 }
+			{ id: 49, instruction: evaluate, input: (output.abi_encode), assign: output_encoded, scope: 0 }
+			{ id: 50, instruction: assign, input: (e), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
+			{ id: 54, instruction: evaluate, input: (Bytes::from_slice, e, output_encoded), assign: e, scope: 0 }
+			{ id: 57, instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
 

@@ -10,19 +10,20 @@ pub fn handle_let_expression(
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let global_uuid = compilation_state.get_global_uuid();
     let input_value_name_for_let = format!("INPUT_VALUE_NAME_FOR_LET_{}", global_uuid);
+
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut preceding_instructions = parse_expression(
         &let_expr.expr,
         &mut compilation_state.with_assignment(Some(input_value_name_for_let.to_string())),
     )?;
+    compilation_state.with_assignment(original_assignment);
+
     let result = handle_pattern(*(let_expr.pat.clone()));
     let result_instruction: Instruction = Instruction::new(
         compilation_state.get_global_uuid(),
         "assign".to_string(),
         vec![input_value_name_for_let.to_string()],
-        compilation_state
-            .next_assignment
-            .clone()
-            .unwrap_or(result.unwrap_or_default()),
+        result.unwrap_or(compilation_state.next_assignment.clone().unwrap()),
         compilation_state.scope(),
     );
 

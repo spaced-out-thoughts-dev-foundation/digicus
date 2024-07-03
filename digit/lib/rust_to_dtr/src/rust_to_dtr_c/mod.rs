@@ -17,6 +17,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
     let mut state_str: String = String::new();
     let mut outside_of_contract_functions: Vec<syn::ItemFn> = Vec::new();
     let mut mods: HashMap<String, Vec<syn::Item>> = HashMap::new();
+    let mut rust_implementations: HashMap<String, String> = HashMap::new();
 
     state_str.push_str("[State]:");
 
@@ -35,24 +36,50 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                 });
             }
             syn::Item::Impl(item_impl) => {
-                let mut is_a_contract_impl = false;
+                let mut is_the_contract_impl = false;
                 if item_impl.attrs.len() > 0 {
                     item_impl.attrs.iter().for_each(|attr| {
                         if parse_path(attr.meta.path()) == "contractimpl" {
-                            is_a_contract_impl = true;
+                            match item_impl.trait_.clone() {
+                                Some((_, path, _)) => {
+                                    let implementation_name = path.segments[0].ident.to_string();
+                                    let mut implementation_dtr_code = String::new();
+                                    let mut compilation_state = CompilationState::new();
+                                    item_impl.items.iter().for_each(|item_impl_item| {
+                                        if let syn::ImplItem::Fn(method) = item_impl_item {
+                                            implementation_dtr_code.push_str(
+                                                &translate::function::parse_function_block(
+                                                    method,
+                                                    &mut compilation_state,
+                                                ),
+                                            );
+                                        }
+                                    });
+
+                                    rust_implementations
+                                        .insert(implementation_name, implementation_dtr_code);
+                                }
+                                None => {
+                                    is_the_contract_impl = true;
+                                }
+                            }
                         }
                     });
                 }
 
-                if !is_a_contract_impl {
+                if !is_the_contract_impl {
                     continue;
                 }
 
                 dtr_code.push_str("[Interface]:\n");
 
+                let mut compilation_state = CompilationState::new();
                 item_impl.items.iter().for_each(|item_impl_item| {
                     if let syn::ImplItem::Fn(method) = item_impl_item {
-                        dtr_code.push_str(&translate::impl_block::parse_function_block(method));
+                        dtr_code.push_str(&translate::function::parse_function_block(
+                            method,
+                            &mut compilation_state,
+                        ));
                     }
                 });
                 dtr_code.push_str(":[Interface]\n");
@@ -74,6 +101,7 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
                     "\n\t* Type: {}",
                     map_name(&figure_out_type(&const_item.ty.clone())?).unwrap()
                 ));
+
                 state_str.push_str(&format!(
                     "\n\t* Initial Value: {}",
                     extract_value_from_instruction(&parse_expression(
@@ -135,10 +163,26 @@ pub fn parse_to_dtr(rust_code: &str) -> Result<String, errors::NotTranslatableEr
         dtr_code.push_str("\n\n[Helpers]:\n");
 
         outside_of_contract_functions.iter().for_each(|fn_item| {
-            dtr_code.push_str(&function::parse_function_block(fn_item));
+            dtr_code.push_str(&function::parse_function_block(
+                fn_item,
+                &mut CompilationState::new(),
+            ));
         });
 
         dtr_code.push_str("\n:[Helpers]\n");
+    }
+
+    if rust_implementations.len() > 0 {
+        dtr_code.push_str("\n\n[Implementations]:\n");
+
+        rust_implementations
+            .iter()
+            .for_each(|(name, implementation)| {
+                dtr_code.push_str(&format!("\n-->({})<--\n", name));
+                dtr_code.push_str(&implementation);
+            });
+
+        dtr_code.push_str("\n:[Implementations]\n");
     }
 
     if mods.len() > 0 {

@@ -24,10 +24,84 @@ pub fn parse_block_stmt(
         syn::Stmt::Local(local) => {
             let pattern_as_string = handle_pattern(local.pat.clone()).unwrap();
             match &local.init {
-                Some(local_init) => parse_expression(
-                    &local_init.expr,
-                    &mut compilation_state.with_assignment(Some(pattern_as_string)),
-                ),
+                Some(local_init) => match local_init.diverge.clone() {
+                    None => parse_expression(
+                        &local_init.expr,
+                        &mut compilation_state.with_assignment(Some(pattern_as_string)),
+                    ),
+                    Some(diverged_expr) => {
+                        let try_assign_result =
+                            format!("TRY_ASSIGN_RESULT_{}", compilation_state.get_global_uuid());
+                        let try_assign_result_conditional = format!(
+                            "TRY_ASSIGN_RESULT_CONDITIONAL_{}",
+                            compilation_state.get_global_uuid()
+                        );
+
+                        let mut return_instructions: Vec<Instruction> = parse_expression(
+                            &local_init.expr,
+                            &mut compilation_state.with_assignment(Some(try_assign_result.clone())),
+                        )?;
+
+                        return_instructions.push(Instruction::new(
+                            compilation_state.get_global_uuid(),
+                            "evaluate".to_string(),
+                            vec![
+                                "try_assign".to_string(),
+                                pattern_as_string.clone(),
+                                try_assign_result.clone(),
+                            ],
+                            try_assign_result_conditional.clone(),
+                            compilation_state.scope(),
+                        ));
+
+                        let mut prev_scope = compilation_state.scope();
+                        let original_scope = prev_scope;
+                        compilation_state.enter_new_scope();
+                        let conditional_jump_scope = compilation_state.scope();
+
+                        return_instructions.push(Instruction::conditional_jump(
+                            prev_scope,
+                            conditional_jump_scope,
+                            compilation_state.get_global_uuid(),
+                            try_assign_result_conditional.clone(),
+                        ));
+
+                        compilation_state.exit_scope();
+
+                        prev_scope = compilation_state.scope();
+                        compilation_state.enter_new_scope();
+                        return_instructions.push(Instruction::new(
+                            compilation_state.get_global_uuid(),
+                            "jump".to_string(),
+                            vec![compilation_state.scope().to_string()],
+                            "".to_string(),
+                            prev_scope,
+                        ));
+
+                        return_instructions.push(Instruction::unconditional_jump(
+                            conditional_jump_scope,
+                            original_scope,
+                            compilation_state.get_global_uuid(),
+                        ));
+
+                        return_instructions.extend(parse_expression(
+                            &diverged_expr.1,
+                            &mut compilation_state.with_assignment(Some(pattern_as_string.clone())),
+                        )?);
+
+                        prev_scope = compilation_state.scope();
+                        compilation_state.exit_scope();
+                        return_instructions.push(Instruction::new(
+                            compilation_state.get_global_uuid(),
+                            "jump".to_string(),
+                            vec![compilation_state.scope().to_string()],
+                            "".to_string(),
+                            prev_scope,
+                        ));
+
+                        Ok(return_instructions)
+                    }
+                },
                 None => Ok(vec![Instruction::new(
                     compilation_state.get_global_uuid(),
                     "assign".to_string(),
@@ -44,7 +118,7 @@ pub fn parse_block_stmt(
         syn::Stmt::Macro(stmt_mac) => handle_macro_statement(
             stmt_mac,
             compilation_state.next_assignment.clone(),
-            compilation_state.clone(),
+            compilation_state,
         ),
     }
 }

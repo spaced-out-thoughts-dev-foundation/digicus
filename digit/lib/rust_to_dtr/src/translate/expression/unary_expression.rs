@@ -14,10 +14,12 @@ pub fn handle_unary_expression(
 
     let unary_arg_name = format!("UNARY_ARGUMENT_{}", global_uuid);
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut preceding_instructions = parse_expression(
         &expr.expr,
         &mut compilation_state.with_assignment(Some(unary_arg_name.to_string())),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     preceding_instructions.push(Instruction::from_compilation_state(
         "evaluate".to_string(),

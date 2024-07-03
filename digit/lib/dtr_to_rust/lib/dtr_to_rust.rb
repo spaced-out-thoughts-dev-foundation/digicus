@@ -50,5 +50,6 @@ module DTRToRust
   # This module contains all the classes that handle the aggregation of instructions.
   module Aggregator
     autoload :ScopeBlockAggregator, 'aggregator/scope_block_aggregator'
+    autoload :LoopAggregator, 'aggregator/loop_aggregator'
   end
 end

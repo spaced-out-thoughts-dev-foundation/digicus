@@ -20,10 +20,13 @@ pub fn handle_array_expression(
             compilation_state.scope(),
         );
 
+        let original_assignment = compilation_state.next_assignment.clone();
         instructions.extend(crate::translate::expression::parse_expression(
             element,
             &mut compilation_state.with_assignment(Some(element_name.clone())),
         )?);
+
+        compilation_state.with_assignment(original_assignment);
 
         element_names.push(element_name.clone());
 

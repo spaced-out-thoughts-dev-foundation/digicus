@@ -97,7 +97,7 @@ module DTRCore
       instruction = DTRCore::Instruction.new(
         instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
         parse_function_instruction_input(instruction),
-        instruction[/\s*assign:\s*(?<all>[^\s\,]+)/, 1],
+        instruction[/\s*assign:\s*\[?(?<all>[^\s\,\]]+)\]?/, 1],
         instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0
       )
 

@@ -7,12 +7,15 @@ pub fn handle_break_expression(
     _expr: &ExprBreak,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
+    let prev_scope = compilation_state.scope();
     compilation_state.exit_scope();
 
-    Ok(vec![Instruction::from_compilation_state(
-        "goto".to_string(),
+    Ok(vec![Instruction::new(
+        1,
+        "jump".to_string(),
         vec![compilation_state.scope().to_string()],
-        compilation_state,
+        "".to_string(),
+        prev_scope,
     )])
 }
 #[cfg(test)]
@@ -32,8 +35,8 @@ mod tests {
             instructions,
             vec![Instruction::new(
                 1,
-                "goto".to_string(),
-                vec!["0".to_string()],
+                "jump".to_string(),
+                vec![compilation_state.scope().to_string()],
                 "".to_string(),
                 0,
             ),]

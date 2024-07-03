@@ -82,7 +82,11 @@ module DTRToRust
         @instruction.inputs[0].end_with?('publish') ||
         @instruction.inputs[0].end_with?('Err') ||
         @instruction.inputs[0].end_with?('Ok') ||
-        @instruction.inputs[0].end_with?('checked_mul')
+        @instruction.inputs[0].end_with?('checked_mul') ||
+        @instruction.inputs[0].end_with?('checked_add') ||
+        @instruction.inputs[0].end_with?('update_current_contract_wasm') ||
+        @instruction.inputs[0].end_with?('with_address') ||
+        @instruction.inputs[0].end_with?('deploy')
          )
       end
 

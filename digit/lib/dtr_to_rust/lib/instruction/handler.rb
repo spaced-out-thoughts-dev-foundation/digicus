@@ -13,6 +13,23 @@ module DTRToRust
         @is_helper = is_helper
         @assignment_name_to_scope_map = assignment_name_to_scope_map
         @function_inputs = function_inputs
+
+        format_assign
+      end
+
+      def format_assign
+        unless @instruction.assign && @instruction.assign.include?('|||') && @instruction.assign.split('|||').size == 2
+          return
+        end
+
+        var_name, type_name = @instruction.assign.split('|||')
+
+        @instruction = DTRCore::Instruction.new(
+          @instruction.instruction,
+          @instruction.inputs,
+          "#{var_name}:#{Common::TypeTranslator.translate_type(type_name)}",
+          @instruction.scope
+        )
       end
 
       def self.handle(instruction, spacing_scope, function_names, user_defined_types, is_helper, assignment_name_to_scope_map, function_inputs)

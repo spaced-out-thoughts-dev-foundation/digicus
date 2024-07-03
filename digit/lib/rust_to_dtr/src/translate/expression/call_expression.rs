@@ -8,14 +8,17 @@ use syn::ExprCall;
 
 pub fn handle_call_expression(
     expr: &ExprCall,
-    compilation_state: &mut compilation_state::CompilationState,
+    mut compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
     let mut argument_names: Vec<String> = Vec::new();
     let mut index = 1;
 
     let mut expressions: Vec<Instruction> = Vec::new();
+    let original_assignment = compilation_state.next_assignment.clone();
+
     expr.args.iter().for_each(|arg| {
         let arg_name = format!("CALL_EXPRESSION_ARG_{}", index);
+
         let expressions_parsed: Vec<Instruction> = match parse_expression(
             &arg,
             &mut compilation_state.with_assignment(Some(arg_name.clone())),
@@ -30,6 +33,7 @@ pub fn handle_call_expression(
 
         index += 1;
     });
+    compilation_state = compilation_state.with_assignment(original_assignment.clone());
 
     let unique_uuid = compilation_state.get_global_uuid();
     let mut func: Vec<Instruction> = parse_expression(
@@ -38,6 +42,8 @@ pub fn handle_call_expression(
             format!("CALL_EXPRESSION_FUNCTION_{}", unique_uuid).to_string(),
         )),
     )?;
+
+    compilation_state = compilation_state.with_assignment(original_assignment.clone());
 
     argument_names.insert(
         0,

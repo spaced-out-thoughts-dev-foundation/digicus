@@ -28,6 +28,7 @@ pub fn handle_create_range(
     let range_start: String = format!("RANGE_START_{}", compilation_state.get_global_uuid());
     let range_end: String = format!("RANGE_END_{}", compilation_state.get_global_uuid());
 
+    let original_assignment = compilation_state.next_assignment.clone();
     inputs.push(range_start.clone());
     let start = match expr.start.clone() {
         Some(start) => {
@@ -61,6 +62,7 @@ pub fn handle_create_range(
             "Undefined end of range is not supported".to_string(),
         ))?,
     };
+    compilation_state.with_assignment(original_assignment);
 
     instructions.extend(start);
     instructions.extend(end);

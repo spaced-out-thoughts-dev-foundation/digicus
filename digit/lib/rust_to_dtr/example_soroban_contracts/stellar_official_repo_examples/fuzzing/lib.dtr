@@ -127,15 +127,15 @@
 		$
 			{ id: 3, instruction: evaluate, input: (env.ledger), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
 			{ id: 4, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.timestamp), assign: ledger_timestamp, scope: 0 }
-			{ id: 7, instruction: assign, input: (time_bound.kind), assign: Thing_to_compare_against, scope: 0 }
-			{ id: 10, instruction: evaluate, input: (equal_to, time_bound.kind, TimeBoundKind::Before), assign: CONDITIONAL_JUMP_CHECK_9, scope: 0 }
-			{ id: 12, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_9, 11), scope: 0 }
-			{ id: 23, instruction: evaluate, input: (equal_to, Thing_to_compare_against, TimeBoundKind::After), assign: CONDITIONAL_JUMP_CHECK_22, scope: 0 }
-			{ id: 25, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_22, 24), scope: 0 }
-			{ id: 20, instruction: evaluate, input: (less_than_or_equal_to, ledger_timestamp, time_bound.timestamp), assign: Thing_to_return, scope: 11 }
-			{ id: 21, instruction: jump, input: (0), scope: 11 }
-			{ id: 33, instruction: evaluate, input: (greater_than_or_equal_to, ledger_timestamp, time_bound.timestamp), assign: Thing_to_return, scope: 24 }
-			{ id: 34, instruction: jump, input: (0), scope: 24 }
+			{ id: 8, instruction: assign, input: (time_bound.kind), assign: THING_TO_COMPARE_AGAINST_5, scope: 0 }
+			{ id: 11, instruction: evaluate, input: (equal_to, time_bound.kind, TimeBoundKind::Before), assign: CONDITIONAL_JUMP_CHECK_10, scope: 0 }
+			{ id: 13, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_10, 12), scope: 0 }
+			{ id: 24, instruction: evaluate, input: (equal_to, THING_TO_COMPARE_AGAINST_5, TimeBoundKind::After), assign: CONDITIONAL_JUMP_CHECK_23, scope: 0 }
+			{ id: 26, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_23, 25), scope: 0 }
+			{ id: 21, instruction: evaluate, input: (less_than_or_equal_to, ledger_timestamp, time_bound.timestamp), assign: Thing_to_return, scope: 12 }
+			{ id: 22, instruction: jump, input: (0), scope: 12 }
+			{ id: 34, instruction: evaluate, input: (greater_than_or_equal_to, ledger_timestamp, time_bound.timestamp), assign: Thing_to_return, scope: 25 }
+			{ id: 35, instruction: jump, input: (0), scope: 25 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 -() [is_initialized]
@@ -161,4 +161,3 @@ mod proptest {
 }
 
 :[NonTranslatable]
-

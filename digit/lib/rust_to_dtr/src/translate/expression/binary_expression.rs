@@ -15,6 +15,7 @@ pub fn handle_binary_expression(
     global_uuid = compilation_state.get_global_uuid();
     let right_hand_side_name = format!("BINARY_EXPRESSION_RIGHT_{}", global_uuid);
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut left_hand_side: Vec<Instruction> = parse_expression(
         &expr_binary.left,
         &mut compilation_state.with_assignment(Some(left_hand_side_name.to_string())),
@@ -23,6 +24,8 @@ pub fn handle_binary_expression(
         &expr_binary.right,
         &mut compilation_state.with_assignment(Some(right_hand_side_name.to_string())),
     )?;
+    compilation_state.with_assignment(original_assignment);
+
     let operator: String = parse_binary_op(&expr_binary.op)?;
 
     let binary_instruction = if is_conditional_comparative_operator(&expr_binary.op) {

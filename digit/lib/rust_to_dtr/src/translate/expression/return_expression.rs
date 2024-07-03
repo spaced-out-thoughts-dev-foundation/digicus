@@ -15,19 +15,20 @@ pub fn handle_return_expression(
             let global_uuid = compilation_state.get_global_uuid();
             let return_label: &str = &format!("RETURN_VALUE_LABEL_{}", global_uuid);
 
+            let original_assignment = compilation_state.next_assignment.clone();
+
             let mut precedning_instructions = parse_expression(
                 return_expr,
                 &mut compilation_state.with_assignment(Some(return_label.to_string())),
             )?;
 
+            compilation_state.with_assignment(original_assignment);
+
             let return_instruction = Instruction::new(
                 compilation_state.get_global_uuid(),
                 "return".to_string(),
                 vec![return_label.to_string()],
-                compilation_state
-                    .next_assignment
-                    .clone()
-                    .unwrap_or_default(),
+                "".to_string(),
                 compilation_state.scope(),
             );
 

@@ -10,8 +10,6 @@ pub fn handle_method_call_expression(
     expr: &ExprMethodCall,
     compilation_state: &mut compilation_state::CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    compilation_state.clone().debug_state();
-
     let mut argument_names: Vec<String> = Vec::new();
     let mut index = 1;
 
@@ -19,6 +17,7 @@ pub fn handle_method_call_expression(
     expr.args.iter().for_each(|arg| {
         let unique_uuid = compilation_state.get_global_uuid();
         let arg_name = format!("METHOD_CALL_ARG_{}_{}", index, unique_uuid);
+        let original_assignment = compilation_state.next_assignment.clone();
         let expressions_parsed: Vec<Instruction> = match parse_expression(
             &arg,
             &mut compilation_state.with_assignment(Some(arg_name.clone())),
@@ -26,6 +25,7 @@ pub fn handle_method_call_expression(
             Ok(expressions) => expressions,
             Err(e) => panic!("Error parsing expression: {:?}", e),
         };
+        compilation_state.with_assignment(original_assignment);
 
         expressions.extend(expressions_parsed);
 
@@ -35,12 +35,14 @@ pub fn handle_method_call_expression(
     });
 
     let unique_uuid = compilation_state.get_global_uuid();
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut receiver: Vec<Instruction> = parse_expression(
         &expr.receiver,
         &mut compilation_state.with_assignment(Some(
             format!("METHOD_CALL_EXPRESSION_{}", unique_uuid).to_string(),
         )),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     receiver.extend(expressions);
 

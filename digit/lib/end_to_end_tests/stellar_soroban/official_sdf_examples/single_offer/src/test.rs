@@ -24,8 +24,8 @@ fn create_single_offer_contract<'a>(
     seller: &Address,
     sell_token: &Address,
     buy_token: &Address,
-    sell_price: u32,
-    buy_price: u32,
+    sell_price: i128,
+    buy_price: i128,
 ) -> SingleOfferClient<'a> {
     let offer = SingleOfferClient::new(e, &e.register_contract(None, crate::SingleOffer {}));
     offer.create(seller, sell_token, buy_token, &sell_price, &buy_price);
@@ -155,7 +155,7 @@ fn test() {
                 function: AuthorizedFunction::Contract((
                     offer.address.clone(),
                     Symbol::new(&e, "updt_price"),
-                    (1_u32, 1_u32).into_val(&e)
+                    (1_i128, 1_i128).into_val(&e)
                 )),
                 sub_invocations: std::vec![]
             }

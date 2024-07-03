@@ -38,7 +38,7 @@ fn test() {
                     // Name of the called function
                     symbol_short!("increment"),
                     // Arguments used to call `increment` (converted to the env-managed vector via `into_val`)
-                    (user_1.clone(), 5_u32).into_val(&env),
+                    (user_1.clone(), 5_i128).into_val(&env),
                 )),
                 // The contract doesn't call any other contracts that require
                 // authorization,

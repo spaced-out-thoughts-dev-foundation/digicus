@@ -10,11 +10,17 @@ pub fn handle_match_expression(
     expr: &ExprMatch,
     compilation_state: &mut CompilationState,
 ) -> Result<Vec<Instruction>, NotTranslatableError> {
-    let thing_to_compare_against: String = "Thing_to_compare_against".to_string();
+    let thing_to_compare_against: String = format!(
+        "THING_TO_COMPARE_AGAINST_{}",
+        compilation_state.get_global_uuid()
+    );
+
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut thing_to_compare_against_instructions = parse_expression(
         &*expr.expr,
         &mut compilation_state.with_assignment(Some(thing_to_compare_against.clone())),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     let mut match_conditional_evaluation_instructions: Vec<Instruction> = vec![];
     let mut match_body_instructions: Vec<Instruction> = vec![];
@@ -96,75 +102,75 @@ mod tests {
             instructions,
             vec![
                 Instruction::new(
-                    0,
+                    1,
                     "assign".to_string(),
                     vec!["instance_of_struct".to_string()],
-                    "Thing_to_compare_against".to_string(),
+                    "THING_TO_COMPARE_AGAINST_0".to_string(),
                     0
                 ),
                 Instruction::new(
-                    2,
+                    3,
                     "evaluate".to_string(),
                     vec![
                         "equal_to".to_string(),
-                        "Thing_to_compare_against".to_string(),
+                        "THING_TO_COMPARE_AGAINST_0".to_string(),
                         "Struct::Variant1".to_string()
                     ],
-                    "CONDITIONAL_JUMP_CHECK_1".to_string(),
-                    0
-                ),
-                Instruction::new(
-                    4,
-                    "jump".to_string(),
-                    vec!["CONDITIONAL_JUMP_CHECK_1".to_string(), "3".to_string()],
-                    "".to_string(),
-                    0
-                ),
-                Instruction::new(
-                    8,
-                    "evaluate".to_string(),
-                    vec![
-                        "equal_to".to_string(),
-                        "Thing_to_compare_against".to_string(),
-                        "Struct::Variant2".to_string()
-                    ],
-                    "CONDITIONAL_JUMP_CHECK_7".to_string(),
-                    0
-                ),
-                Instruction::new(
-                    10,
-                    "jump".to_string(),
-                    vec!["CONDITIONAL_JUMP_CHECK_7".to_string(), "9".to_string()],
-                    "".to_string(),
+                    "CONDITIONAL_JUMP_CHECK_2".to_string(),
                     0
                 ),
                 Instruction::new(
                     5,
-                    "print".to_string(),
-                    vec!["\"Variant1\"".to_string()],
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_CHECK_2".to_string(), "4".to_string()],
                     "".to_string(),
-                    3
+                    0
                 ),
                 Instruction::new(
-                    6,
-                    "jump".to_string(),
-                    vec!["0".to_string()],
-                    "".to_string(),
-                    3
+                    9,
+                    "evaluate".to_string(),
+                    vec![
+                        "equal_to".to_string(),
+                        "THING_TO_COMPARE_AGAINST_0".to_string(),
+                        "Struct::Variant2".to_string()
+                    ],
+                    "CONDITIONAL_JUMP_CHECK_8".to_string(),
+                    0
                 ),
                 Instruction::new(
                     11,
-                    "print".to_string(),
-                    vec!["\"Variant2\"".to_string()],
+                    "jump".to_string(),
+                    vec!["CONDITIONAL_JUMP_CHECK_8".to_string(), "10".to_string()],
                     "".to_string(),
-                    9
+                    0
                 ),
                 Instruction::new(
-                    12,
+                    6,
+                    "print".to_string(),
+                    vec!["\"Variant1\"".to_string()],
+                    "".to_string(),
+                    4
+                ),
+                Instruction::new(
+                    7,
                     "jump".to_string(),
                     vec!["0".to_string()],
                     "".to_string(),
-                    9
+                    4
+                ),
+                Instruction::new(
+                    12,
+                    "print".to_string(),
+                    vec!["\"Variant2\"".to_string()],
+                    "".to_string(),
+                    10
+                ),
+                Instruction::new(
+                    13,
+                    "jump".to_string(),
+                    vec!["0".to_string()],
+                    "".to_string(),
+                    10
                 ),
             ]
         );

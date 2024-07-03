@@ -22,7 +22,7 @@ mod tests {
 
     #[test]
     fn test_handle_paren_expression() {
-        let compilation_state = CompilationState::new();
+        let mut compilation_state = CompilationState::new();
         let expr: ExprParen = parse_quote! { (Struct) };
         let instructions = handle_paren_expression(
             &expr,

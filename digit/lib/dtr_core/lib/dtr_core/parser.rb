@@ -77,7 +77,7 @@ module DTRCore
     end
 
     def helpers_section
-      return @function_definitions if @function_definitions
+      return @helpers_section if @helpers_section
 
       helpers_section = capture_section(/\[Helpers\]:(?<all>.*)\s*:\[Helpers\]/m)
 
@@ -90,6 +90,16 @@ module DTRCore
       function_definitions.reject! { |x| x.name.nil? }
 
       @helpers_section ||= function_definitions
+    end
+
+    def non_translatable_section
+      return @non_translatable_section if @non_translatable_section
+
+      non_translatable_section = capture_section(/\[NonTranslatable\]:(?<all>.*)\s*:\[NonTranslatable\]/m)
+
+      return nil if non_translatable_section.nil?
+
+      @non_translatable_section = non_translatable_section
     end
   end
 end

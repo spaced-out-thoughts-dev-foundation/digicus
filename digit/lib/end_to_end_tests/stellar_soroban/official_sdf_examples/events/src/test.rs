@@ -20,17 +20,17 @@ fn test() {
             (
                 contract_id.clone(),
                 (symbol_short!("COUNTER"), symbol_short!("increment")).into_val(&env),
-                1u32.into_val(&env)
+                1i128.into_val(&env)
             ),
             (
                 contract_id.clone(),
                 (symbol_short!("COUNTER"), symbol_short!("increment")).into_val(&env),
-                2u32.into_val(&env)
+                2i128.into_val(&env)
             ),
             (
                 contract_id,
                 (symbol_short!("COUNTER"), symbol_short!("increment")).into_val(&env),
-                3u32.into_val(&env)
+                3i128.into_val(&env)
             ),
         ]
     );

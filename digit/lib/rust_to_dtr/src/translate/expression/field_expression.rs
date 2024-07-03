@@ -17,10 +17,12 @@ pub fn handle_field_expression(
 
     let field_base_name: String = format!("FIELD_BASE_{}", compilation_state.get_global_uuid());
 
+    let original_assignment = compilation_state.next_assignment.clone();
     let mut base = expression::parse_expression(
         &*expr.base,
         &mut compilation_state.with_assignment(Some(field_base_name.clone())),
     )?;
+    compilation_state.with_assignment(original_assignment);
 
     base.push(Instruction::new(
         compilation_state.get_global_uuid(),

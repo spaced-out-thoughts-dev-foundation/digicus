@@ -2,29 +2,52 @@
 
 We aim for 100% compilation coverage of _atleast_ the Stellar official repo of Soroban contract examples.
 
-Deliverable 1 Progress [ 21/25 | 84% ]:
-* [x] Account
-* [x] Alloc
-* [x] Atomic Multiswap
-* [x] Atomic Swap
-* [x] Auth
-* [x] Cross Contract (2x contracts here: Contract A & Contract B)
-* [x] Custom Types
-* [ ] Deep Contract Auth
-* [x] Deployer (2x contracts here: Deployer Contract & Deployer Deployer)
-* [x] Errors
-* [x] Eth ABI
-* [x] Events
-* [ ] Fuzzing
-* [x] Hello World
-* [x] Increment
-* [ ] Liquidity Pool
+Ones left DOABLE:
+* Deep Contract Auth
+  * Multi-contract via mods
+
+Ones left HARD:
+* Account
+  * Non contract impl
+  * Lots broken
+* Liquidity Pool
+  * Non-contract impl
+  * Traits
+  * At its core this defines contract in a really weird way
+  * Requires importing stuff
+* Token
+  * Lots going on
+* Mint Lock
+  * let-else block
+
+Contracts Complete:
+1. Alloc
+2. Atomic Multiswap
+3. Atomic Swap
+4. Auth
+5. Cross Contract
+6. Custom Types
+7. Deployer
+8. Errors
+9. Eth ABI
+10. Events
+11. Fuzzing
+12. Hello World
+13. Increment
+14. Logging
+15. Simple Account
+16. Single Offer
+17. Timelock
+18. TTL
+19. Upgradable Contract
+20. Workspace
+
+
+Deliverable 1 Progress [ 18/25 | 72% ]:
 * [x] Logging
-* [x] Mint Lock
 * [x] Simple Account
 * [x] Single Offer
 * [x] Timelock
-* [ ] Token
 * [x] TTL
 * [x] Upgradeable Contract (2x contracts here: Upgradable New & Upgradable Old)
 * [x] Workspace (3x contracts here: Contract A & Contract A Interface & Contract B)

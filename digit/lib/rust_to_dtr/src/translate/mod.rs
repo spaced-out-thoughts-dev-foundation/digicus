@@ -5,7 +5,6 @@ extern crate syn;
 pub mod block;
 pub mod expression;
 pub mod function;
-pub mod impl_block;
 pub mod pattern;
 pub mod rust_to_dtr_term;
 pub mod statement;

@@ -1,0 +1,11 @@
+[Contract]: CONTRACT_NAME
+
+[NonTranslatable]:
+
+mod contract_a {
+	soroban_sdk::contractimport!(
+		file = "../contract_a/target/wasm32-unknown-unknown/release/soroban_cross_contract_a_contract.wasm"
+	);
+}
+
+:[NonTranslatable]

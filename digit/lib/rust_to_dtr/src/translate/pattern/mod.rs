@@ -14,6 +14,45 @@ pub fn handle_pattern(pat: syn::Pat) -> Result<String, NotTranslatableError> {
 
             Ok(format!("{}|||{}", the_pattern, type_name))
         }
+        syn::Pat::TupleStruct(tuple_struct) => {
+            let main_path = parse_path(&tuple_struct.path);
+
+            let mut tuple_strs: Vec<String> = vec![];
+            for elem in tuple_struct.elems.iter() {
+                tuple_strs.push(handle_pattern(elem.clone())?);
+            }
+            Ok(format!("{}({})", main_path, tuple_strs.join("  ")))
+        }
+        syn::Pat::Tuple(tuple) => {
+            let mut tuple_strs: Vec<String> = vec![];
+            for elem in tuple.elems.iter() {
+                tuple_strs.push(handle_pattern(elem.clone())?);
+            }
+            Ok(format!("({})", tuple_strs.join(" ")))
+        }
+        syn::Pat::Struct(struct_pat) => {
+            let main_path = parse_path(&struct_pat.path);
+
+            let struct_str = String::new();
+            // for field in struct_pat.fields.iter() {
+            //     struct_str.push_str(&handle_pattern(field.pat.clone())?);
+            //     struct_str.push_str(" ");
+            // }
+            Ok(format!("{}{{ {} }}", main_path, struct_str))
+        }
+
+        syn::Pat::Slice(slice) => {
+            let mut slice_str = String::new();
+            for elem in slice.elems.iter() {
+                slice_str.push_str(&handle_pattern(elem.clone())?);
+                slice_str.push_str(" ");
+            }
+            Ok(format!("[{}]", slice_str))
+        }
+        syn::Pat::Verbatim(_) => Ok("Verbatim".to_string()),
+        syn::Pat::Wild(_) => Ok("_".to_string()),
+        syn::Pat::Rest(_) => Ok("...".to_string()),
+
         _ => Err(NotTranslatableError::Custom(
             "Unknown pattern in block pat".to_string(),
         )),

@@ -176,6 +176,7 @@ fn parse_path_segment(segment: &syn::PathSegment) -> String {
             path_str.push_str("<");
             path_str.push_str(&parse_angle_bracketed_generic_arguments(args));
             path_str.push_str(">");
+
             return path_str;
         }
         _ => {}
@@ -209,12 +210,7 @@ mod tests {
     #[test]
     fn test_figure_out_type_primitive_char() {
         let ty = syn::parse_str("char").unwrap();
-        assert_eq!(
-            super::figure_out_type(&ty),
-            Err(NotTranslatableError::Custom(
-                "Unable to translate char".to_string()
-            ))
-        );
+        assert_eq!(super::figure_out_type(&ty), Ok("String".to_string()));
     }
 
     #[test]
@@ -253,9 +249,7 @@ mod tests {
         let ty = syn::parse_str("Option<Integer>").unwrap();
         assert_eq!(
             super::figure_out_type(&ty),
-            Err(NotTranslatableError::Custom(
-                "Unable to translate Option type".to_string()
-            ))
+            Ok("Option<Integer>".to_string())
         );
     }
 

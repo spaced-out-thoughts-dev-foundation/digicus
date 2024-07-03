@@ -19,9 +19,11 @@ pub fn handle_tuple_expression(
 
         arguments.push(arg_name.clone());
 
+        let original_assignment = compilation_state.next_assignment.clone();
         let instructions: Vec<Instruction> =
             parse_expression(arg, &mut compilation_state.with_assignment(Some(arg_name))).unwrap();
         instructions_to_return.extend(instructions);
+        compilation_state.with_assignment(original_assignment);
 
         index += 1;
     });

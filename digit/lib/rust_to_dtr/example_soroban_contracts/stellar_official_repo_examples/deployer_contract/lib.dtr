@@ -21,10 +21,10 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ id: 7, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_4, scope: 0 }
-			{ id: 8, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_4.instance), assign: METHOD_CALL_EXPRESSION_3, scope: 0 }
-			{ id: 9, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.get, KEY), assign: METHOD_CALL_EXPRESSION_0, scope: 0 }
-			{ id: 10, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_0.unwrap), assign: Thing_to_return, scope: 0 }
+			{ id: 18, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_15, scope: 0 }
+			{ id: 19, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_15.instance), assign: METHOD_CALL_EXPRESSION_14, scope: 0 }
+			{ id: 20, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.get, KEY), assign: METHOD_CALL_EXPRESSION_11, scope: 0 }
+			{ id: 21, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_11.unwrap), assign: Thing_to_return, scope: 0 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
@@ -33,3 +33,4 @@
 	* Type: String
 	* Initial Value: "value"
 :[State]
+

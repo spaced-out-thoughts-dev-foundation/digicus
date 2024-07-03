@@ -23,7 +23,7 @@ pub fn handle_for_loop_expression(
 
     instructions.extend(get_initial_value(
         expr.clone(),
-        compilation_state.clone(),
+        compilation_state,
         iterator_variable.clone(),
     ));
 
@@ -66,22 +66,30 @@ pub fn handle_for_loop_expression(
 
     instructions.extend(get_back_to_top(
         check_condition_instruction_id,
-        compilation_state.clone(),
+        compilation_state,
     ));
+
+    compilation_state.exit_scope();
 
     Ok(instructions)
 }
 
 fn get_initial_value(
     for_loop_expr: ExprForLoop,
-    compilation_state: CompilationState,
+    compilation_state: &mut CompilationState,
     iterator_variable: String,
 ) -> Vec<Instruction> {
-    parse_expression(
+    let original_assignment = compilation_state.next_assignment.clone();
+
+    let result = parse_expression(
         &*for_loop_expr.expr.clone(),
-        &mut compilation_state.with_assignment(Some(iterator_variable.clone())),
+        compilation_state.with_assignment(Some(iterator_variable.clone())),
     )
-    .unwrap()
+    .unwrap();
+
+    compilation_state.update_next_assignment(original_assignment);
+
+    result
 }
 
 fn get_check_condition(
@@ -114,17 +122,19 @@ fn get_execute_block(
     for_loop_expr: ExprForLoop,
     compilation_state: &mut CompilationState,
 ) -> Vec<Instruction> {
-    handle_block(&for_loop_expr.body.clone(), &mut compilation_state.clone())
+    handle_block(&for_loop_expr.body.clone(), compilation_state)
 }
 
 fn get_back_to_top(
     return_to_condition_id: u128,
-    compilation_state: CompilationState,
+    compilation_state: &mut CompilationState,
 ) -> Vec<Instruction> {
-    vec![Instruction::from_compilation_state(
+    vec![Instruction::new(
+        compilation_state.get_global_uuid(),
         "goto".to_string(),
         vec![return_to_condition_id.to_string()],
-        &mut compilation_state.clone(),
+        "".to_string(),
+        compilation_state.scope(),
     )]
 }
 
