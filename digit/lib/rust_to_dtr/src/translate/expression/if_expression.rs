@@ -24,7 +24,9 @@ pub fn handle_if_expression(
     compilation_state.with_assignment(original_assignment);
 
     let mut prev_scope = compilation_state.scope();
-    compilation_state.enter_new_scope();
+    compilation_state.enter_new_scope(false);
+    let mut scope_snapshot = compilation_state.copy_out_current_scope_stack();
+
     let conditional_jump_instruction = Instruction::new(
         compilation_state.get_global_uuid(),
         "jump".to_string(),
@@ -36,26 +38,31 @@ pub fn handle_if_expression(
         prev_scope,
     );
 
-    // instructions_to_return.push(conditional_jump_instruction);
-
     condition_instructions.push(conditional_jump_instruction);
 
     let mut then_branch = handle_block(&expr.then_branch, compilation_state);
 
-    prev_scope = compilation_state.scope();
-    compilation_state.exit_scope();
-    then_branch.push(Instruction::new(
-        compilation_state.get_global_uuid(),
-        "jump".to_string(),
-        vec![(compilation_state.scope()).to_string()],
-        "".to_string(),
-        prev_scope,
-    ));
+    compilation_state.set_scope_stack(scope_snapshot);
+
+    println!("\n[DEBUG] setting back the if scope to {:?}", prev_scope);
+
+    while compilation_state.scope() != prev_scope {
+        println!("\n[DEBUG] exiting scope {:?}", compilation_state.scope());
+        let temp_prev_scope = compilation_state.scope();
+        compilation_state.exit_scope();
+        then_branch.push(Instruction::new(
+            compilation_state.get_global_uuid(),
+            "jump".to_string(),
+            vec![(compilation_state.scope()).to_string()],
+            "".to_string(),
+            temp_prev_scope,
+        ));
+    }
 
     let else_branch = match &expr.else_branch {
         Some(else_branch) => {
             prev_scope = compilation_state.scope();
-            compilation_state.enter_new_scope();
+            compilation_state.enter_new_scope(false);
             condition_instructions.push(Instruction::new(
                 compilation_state.get_global_uuid(),
                 "jump".to_string(),
@@ -64,18 +71,22 @@ pub fn handle_if_expression(
                 prev_scope,
             ));
 
+            scope_snapshot = compilation_state.copy_out_current_scope_stack();
+
             let mut else_branch_instructions =
                 parse_expression(&else_branch.1, &mut compilation_state.clone())?;
 
-            prev_scope = compilation_state.scope();
-            compilation_state.exit_scope();
-            else_branch_instructions.push(Instruction::new(
-                compilation_state.get_global_uuid(),
-                "jump".to_string(),
-                vec![(compilation_state.scope()).to_string()],
-                "".to_string(),
-                prev_scope,
-            ));
+            while compilation_state.scope() != prev_scope {
+                let temp_prev_scope = compilation_state.scope();
+                compilation_state.exit_scope();
+                else_branch_instructions.push(Instruction::new(
+                    compilation_state.get_global_uuid(),
+                    "jump".to_string(),
+                    vec![(compilation_state.scope()).to_string()],
+                    "".to_string(),
+                    temp_prev_scope,
+                ));
+            }
 
             else_branch_instructions
         }
@@ -260,6 +271,10 @@ mod tests {
         let expr_if: ExprIf = parse_quote!(if true { log!("if") } else { log!("else") });
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
+
+        instructions.iter().for_each(|instruction| {
+            println!("{:?}", instruction);
+        });
 
         assert_eq!(
             instructions,
@@ -466,6 +481,10 @@ mod tests {
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
 
+        instructions.clone().iter().for_each(|instruction| {
+            println!("{:?}", instruction);
+        });
+
         assert_eq!(
             instructions,
             vec![
@@ -495,8 +514,11 @@ mod tests {
                 ),
                 Instruction::new(
                     6,
-                    "assign".to_string(),
-                    vec!["INPUT_VALUE_NAME_FOR_LET_1".to_string(),],
+                    "try_assign".to_string(),
+                    vec![
+                        "INPUT_VALUE_NAME_FOR_LET_1".to_string(),
+                        "Some(x)".to_string()
+                    ],
                     "CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(),
                     0,
                 ),

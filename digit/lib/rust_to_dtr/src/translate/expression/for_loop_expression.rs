@@ -45,7 +45,7 @@ pub fn handle_for_loop_expression(
     ));
 
     let prev_scope = compilation_state.scope();
-    compilation_state.enter_new_scope();
+    compilation_state.enter_new_scope(true);
     let body_scope = compilation_state.scope();
 
     instructions.push(Instruction::new(

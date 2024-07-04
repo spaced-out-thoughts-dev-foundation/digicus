@@ -1,0 +1,22 @@
+[Helpers]:
+-() [simple_break_statement]
+	* Inputs:
+	{
+	}
+	* Instructions:
+		$
+			{ id: 6, instruction: instantiate_object, input: (Range, 0, 10), assign: ITERATOR_0, scope: 0 }
+			{ id: 7, instruction: evaluate, input: (start, ITERATOR_0), assign: i, scope: 0 }
+			{ id: 8, instruction: end_of_iteration_check, input: (i, ITERATOR_0), assign: CHECK_CONDITION_ASSIGNMENT_1, scope: 0 }
+			{ id: 10, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_1, 9), scope: 0 }
+			{ id: 16, instruction: evaluate, input: (equal_to, i, 5), assign: CONDITIONAL_JUMP_ASSIGNMENT_11, scope: 9 }
+			{ id: 18, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_11, 17), scope: 9 }
+			{ id: 19, instruction: print, input: ("We got a five!"), scope: 17 }
+			{ id: 20, instruction: jump, input: (0), scope: 17 }
+			{ id: 22, instruction: print, input: ("i: {}", i), scope: 9 }
+			{ id: 23, instruction: increment, input: (i), scope: 9 }
+			{ id: 24, instruction: goto, input: (8), scope: 9 }
+			{ id: 25, instruction: print, input: ("Done!"), scope: 0 }
+		$
+
+:[Helpers]

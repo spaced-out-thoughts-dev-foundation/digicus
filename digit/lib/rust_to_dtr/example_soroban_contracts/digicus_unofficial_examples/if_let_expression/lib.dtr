@@ -1,0 +1,22 @@
+[Helpers]:
+-() [if_let_example]
+	* Inputs:
+	{
+		letter: Option<String>
+	}
+	* Instructions:
+		$
+			{ id: 3, instruction: try_assign, input: (letter, Some(i)), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
+			{ id: 5, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 4), scope: 0 }
+			{ id: 9, instruction: jump, input: (8), scope: 0 }
+			{ id: 6, instruction: print, input: ("Matched {:?}!", i), scope: 4 }
+			{ id: 7, instruction: jump, input: (0), scope: 4 }
+			{ id: 10, instruction: print, input: ("Didn't match a number. Let's go with a letter!"), scope: 8 }
+			{ id: 11, instruction: jump, input: (0), scope: 8 }
+			{ id: 15, instruction: try_assign, input: (ok_foobar, Ok(foobar)), assign: CONDITIONAL_JUMP_ASSIGNMENT_12, scope: 0 }
+			{ id: 17, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_12, 16), scope: 0 }
+			{ id: 20, instruction: return, input: (foobar), scope: 16 }
+			{ id: 22, instruction: exit_with_message, input: ("This is a panic!"), scope: 0 }
+		$
+
+:[Helpers]

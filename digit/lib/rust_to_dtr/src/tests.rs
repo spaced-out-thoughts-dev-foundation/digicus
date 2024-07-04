@@ -47,6 +47,11 @@ mod full_contract_tests {
     }
 
     test_contract!(digicus_unofficial_examples, answer_to_life);
+    test_contract!(
+        digicus_unofficial_examples,
+        break_statement_not_too_many_scope_jumps
+    );
+
     test_contract!(digicus_unofficial_examples, closure_around_answer_to_life);
     test_contract!(digicus_unofficial_examples, count_zero_to_answer_to_life);
     test_contract!(digicus_unofficial_examples, get_force_type_answer_to_life);

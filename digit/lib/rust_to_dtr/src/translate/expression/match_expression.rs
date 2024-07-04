@@ -45,7 +45,7 @@ pub fn handle_match_expression(
         ));
 
         let mut prev_scope = compilation_state.scope();
-        compilation_state.enter_new_scope();
+        compilation_state.enter_new_scope(false);
 
         match_conditional_evaluation_instructions.push(Instruction::new(
             compilation_state.get_global_uuid(),

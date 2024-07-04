@@ -4,24 +4,53 @@ use std::sync::{Arc, Mutex};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ScopeStack {
-    contents: Vec<u128>,
+    // Vec<(u128, bool)> where the u128 is the scope and the bool is a flag to indicate if the scope is a loop
+    contents: Vec<(u128, bool)>,
 }
 
 impl ScopeStack {
     pub fn new() -> Self {
-        ScopeStack { contents: vec![0] }
+        ScopeStack {
+            contents: vec![(0, false)],
+        }
     }
 
-    pub fn push(&mut self, item: u128) {
-        self.contents.push(item);
+    pub fn push(&mut self, item: u128, is_loop: bool) {
+        self.contents.push((item, is_loop));
     }
 
-    pub fn pop(&mut self) -> Option<u128> {
+    pub fn pop(&mut self) -> Option<(u128, bool)> {
         self.contents.pop()
     }
 
-    pub fn peek(&self) -> Option<&u128> {
+    pub fn just_before_last_loop_scope(&self) -> u128 {
+        let mut index = self.contents.len() - 1;
+
+        while index > 0 {
+            let (_, is_loop) = self.contents[index];
+            if is_loop {
+                return self.contents[index - 1].0;
+            }
+
+            index -= 1;
+        }
+
+        // defaults to 0
+        0
+    }
+
+    pub fn peek(&self) -> Option<&(u128, bool)> {
         self.contents.last()
+    }
+
+    pub fn peek_scope(&self) -> u128 {
+        let proposed = self.contents.last().map(|(scope, _)| scope);
+
+        match proposed {
+            Some(scope) => *scope,
+            // defaults to 0
+            None => 0,
+        }
     }
 
     pub fn is_empty(&self) -> bool {
@@ -229,12 +258,12 @@ impl CompilationState {
         self.global_uuid.reset();
     }
 
-    pub fn enter_new_scope(&mut self) {
-        let parent = *self.scope_stack.peek().unwrap();
+    pub fn enter_new_scope(&mut self, is_loop: bool) {
+        let parent = self.scope_stack.peek_scope();
 
-        self.scope_stack.push(self.get_global_uuid());
+        self.scope_stack.push(self.get_global_uuid(), is_loop);
         self.scope_tree_root
-            .push(parent, self.scope_stack.peek().unwrap().clone());
+            .push(parent, self.scope_stack.peek_scope().clone());
     }
 
     pub fn exit_scope(&mut self) {
@@ -245,12 +274,24 @@ impl CompilationState {
         self.next_assignment = next_assignment;
     }
 
+    pub fn copy_out_current_scope_stack(&self) -> ScopeStack {
+        self.scope_stack.clone()
+    }
+
+    pub fn set_scope_stack(&mut self, stack: ScopeStack) {
+        self.scope_stack = stack;
+    }
+
     pub fn get_global_uuid(&self) -> u128 {
         self.global_uuid.next()
     }
 
     pub fn scope(&self) -> u128 {
-        *self.scope_stack.peek().unwrap()
+        self.scope_stack.peek_scope()
+    }
+
+    pub fn outside_last_loop_scope(&self) -> u128 {
+        self.scope_stack.just_before_last_loop_scope()
     }
 
     pub fn with_assignment(&mut self, assignment: Option<String>) -> &mut CompilationState {
@@ -286,10 +327,10 @@ mod tests {
         assert_eq!(compilation_state.get_global_uuid(), 1);
         assert_eq!(compilation_state.get_global_uuid(), 2);
 
-        compilation_state.enter_new_scope();
+        compilation_state.enter_new_scope(false);
         assert_eq!(compilation_state.scope_stack.depth(), 2);
 
-        compilation_state.enter_new_scope();
+        compilation_state.enter_new_scope(false);
         assert_eq!(compilation_state.scope_stack.depth(), 3);
         assert_eq!(compilation_state.scope_tree_root.max_depth(), 3);
 
@@ -311,14 +352,15 @@ mod tests {
     fn test_stack() {
         let mut stack = ScopeStack::new();
         assert_eq!(stack.is_empty(), false);
-        stack.push(1);
-        stack.push(2);
+        stack.push(1, true);
+        stack.push(2, false);
         assert_eq!(stack.depth(), 3);
+        assert_eq!(stack.just_before_last_loop_scope(), 0);
         assert_eq!(stack.is_empty(), false);
-        assert_eq!(stack.peek(), Some(&2));
-        assert_eq!(stack.pop(), Some(2));
-        assert_eq!(stack.pop(), Some(1));
-        assert_eq!(stack.pop(), Some(0));
+        assert_eq!(stack.peek(), Some(&(2, false)));
+        assert_eq!(stack.pop(), Some((2, false)));
+        assert_eq!(stack.pop(), Some((1, true)));
+        assert_eq!(stack.pop(), Some((0, false)));
         assert!(stack.pop().is_none());
         assert_eq!(stack.is_empty(), true);
     }

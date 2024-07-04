@@ -19,13 +19,47 @@ pub fn handle_let_expression(
     compilation_state.with_assignment(original_assignment);
 
     let result = handle_pattern(*(let_expr.pat.clone()));
-    let result_instruction: Instruction = Instruction::new(
-        compilation_state.get_global_uuid(),
-        "assign".to_string(),
-        vec![input_value_name_for_let.to_string()],
-        result.unwrap_or(compilation_state.next_assignment.clone().unwrap()),
-        compilation_state.scope(),
-    );
+    let result_instruction: Instruction = if compilation_state.next_assignment.is_none() {
+        Instruction::new(
+            compilation_state.get_global_uuid(),
+            "assign".to_string(),
+            vec![input_value_name_for_let.to_string()],
+            result.unwrap_or(
+                compilation_state
+                    .next_assignment
+                    .clone()
+                    .unwrap_or_default(),
+            ),
+            compilation_state.scope(),
+        )
+    } else {
+        if result.is_err() {
+            Instruction::new(
+                compilation_state.get_global_uuid(),
+                "try_assign".to_string(),
+                vec![input_value_name_for_let.to_string()],
+                compilation_state
+                    .next_assignment
+                    .clone()
+                    .unwrap_or_default(),
+                compilation_state.scope(),
+            )
+        } else {
+            Instruction::new(
+                compilation_state.get_global_uuid(),
+                "try_assign".to_string(),
+                vec![
+                    input_value_name_for_let.to_string(),
+                    result.unwrap_or("".to_string()),
+                ],
+                compilation_state
+                    .next_assignment
+                    .clone()
+                    .unwrap_or_default(),
+                compilation_state.scope(),
+            )
+        }
+    };
 
     preceding_instructions.push(result_instruction);
 

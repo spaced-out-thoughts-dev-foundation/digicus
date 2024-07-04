@@ -56,7 +56,7 @@ pub fn parse_block_stmt(
 
                         let mut prev_scope = compilation_state.scope();
                         let original_scope = prev_scope;
-                        compilation_state.enter_new_scope();
+                        compilation_state.enter_new_scope(false);
                         let conditional_jump_scope = compilation_state.scope();
 
                         return_instructions.push(Instruction::conditional_jump(
@@ -69,7 +69,7 @@ pub fn parse_block_stmt(
                         compilation_state.exit_scope();
 
                         prev_scope = compilation_state.scope();
-                        compilation_state.enter_new_scope();
+                        compilation_state.enter_new_scope(false);
                         return_instructions.push(Instruction::new(
                             compilation_state.get_global_uuid(),
                             "jump".to_string(),
