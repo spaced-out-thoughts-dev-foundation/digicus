@@ -62,7 +62,7 @@ pub fn parse_function_block(
 
     dtr_code.push_str(&format!("-() [{}]\n", method_name));
 
-    dtr_code.push_str(&parse_inputs(method.clone()));
+    dtr_code.push_str(&parse_inputs(method));
 
     let mut has_output = false;
 
@@ -71,11 +71,7 @@ pub fn parse_function_block(
         dtr_code.push_str(translate::parse_return_type(ty).as_str());
     }
 
-    dtr_code.push_str(&&parse_instructions(
-        method.clone(),
-        has_output,
-        compilation_state,
-    ));
+    dtr_code.push_str(&&parse_instructions(method, has_output, compilation_state));
 
     dtr_code
 }

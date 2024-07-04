@@ -56,7 +56,6 @@ pub fn handle_for_loop_expression(
         prev_scope,
     ));
 
-    compilation_state.should_output = false;
     instructions.extend(get_execute_block(expr.clone(), compilation_state));
     instructions.extend(get_increment_value(
         compilation_state.get_global_uuid(),

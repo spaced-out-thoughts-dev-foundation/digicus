@@ -25,7 +25,7 @@ pub fn handle_if_expression(
 
     let mut prev_scope = compilation_state.scope();
     compilation_state.enter_new_scope(false);
-    let mut scope_snapshot = compilation_state.copy_out_current_scope_stack();
+    let scope_snapshot = compilation_state.copy_out_current_scope_stack();
 
     let conditional_jump_instruction = Instruction::new(
         compilation_state.get_global_uuid(),
@@ -44,10 +44,7 @@ pub fn handle_if_expression(
 
     compilation_state.set_scope_stack(scope_snapshot);
 
-    println!("\n[DEBUG] setting back the if scope to {:?}", prev_scope);
-
     while compilation_state.scope() != prev_scope {
-        println!("\n[DEBUG] exiting scope {:?}", compilation_state.scope());
         let temp_prev_scope = compilation_state.scope();
         compilation_state.exit_scope();
         then_branch.push(Instruction::new(
@@ -70,8 +67,6 @@ pub fn handle_if_expression(
                 "".to_string(),
                 prev_scope,
             ));
-
-            scope_snapshot = compilation_state.copy_out_current_scope_stack();
 
             let mut else_branch_instructions =
                 parse_expression(&else_branch.1, &mut compilation_state.clone())?;
@@ -271,10 +266,6 @@ mod tests {
         let expr_if: ExprIf = parse_quote!(if true { log!("if") } else { log!("else") });
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
-
-        instructions.iter().for_each(|instruction| {
-            println!("{:?}", instruction);
-        });
 
         assert_eq!(
             instructions,
@@ -481,39 +472,35 @@ mod tests {
         let mut compilation_state = compilation_state::CompilationState::new();
         let instructions = handle_if_expression(&expr_if, &mut compilation_state).unwrap();
 
-        instructions.clone().iter().for_each(|instruction| {
-            println!("{:?}", instruction);
-        });
-
         assert_eq!(
             instructions,
             vec![
                 Instruction::new(
-                    4,
+                    5,
                     "assign".to_string(),
                     vec!["Some".to_string()],
-                    "CALL_EXPRESSION_FUNCTION_3".to_string(),
+                    "CALL_EXPRESSION_FUNCTION_4".to_string(),
                     0,
                 ),
                 Instruction::new(
-                    2,
+                    3,
                     "assign".to_string(),
                     vec!["10".to_string()],
-                    "CALL_EXPRESSION_ARG_1".to_string(),
+                    "CALL_EXPRESSION_ARG_1_2".to_string(),
                     0,
                 ),
                 Instruction::new(
-                    5,
+                    6,
                     "evaluate".to_string(),
                     vec![
-                        "CALL_EXPRESSION_FUNCTION_3".to_string(),
-                        "CALL_EXPRESSION_ARG_1".to_string()
+                        "CALL_EXPRESSION_FUNCTION_4".to_string(),
+                        "CALL_EXPRESSION_ARG_1_2".to_string()
                     ],
                     "INPUT_VALUE_NAME_FOR_LET_1".to_string(),
                     0,
                 ),
                 Instruction::new(
-                    6,
+                    7,
                     "try_assign".to_string(),
                     vec![
                         "INPUT_VALUE_NAME_FOR_LET_1".to_string(),
@@ -523,25 +510,25 @@ mod tests {
                     0,
                 ),
                 Instruction::new(
-                    8,
+                    9,
                     "jump".to_string(),
-                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "7".to_string()],
+                    vec!["CONDITIONAL_JUMP_ASSIGNMENT_0".to_string(), "8".to_string()],
                     "".to_string(),
                     0,
                 ),
                 Instruction::new(
-                    9,
+                    10,
                     "print".to_string(),
                     vec!["x".to_string()],
                     "".to_string(),
-                    7,
+                    8,
                 ),
                 Instruction::new(
-                    10,
+                    11,
                     "jump".to_string(),
                     vec!["0".to_string()],
                     "".to_string(),
-                    7,
+                    8,
                 ),
             ]
         );

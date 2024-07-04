@@ -1,4 +1,7 @@
-[fourty_two_and_then_some]
+[Contract]: NestedScoping
+
+[Interface]:
+-() [fourty_two_and_then_some]
 	* Inputs:
 	{
 		some_input: Integer
@@ -9,22 +12,21 @@
 			{ id: 5, instruction: evaluate, input: (greater_than, some_input, 10), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
 			{ id: 7, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 6), scope: 0 }
 			{ id: 13, instruction: evaluate, input: (greater_than, some_input, 15), assign: CONDITIONAL_JUMP_ASSIGNMENT_8, scope: 6 }
-			{ id: 15, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_8, 14), assign: Thing_to_return, scope: 6 }
+			{ id: 15, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_8, 14), scope: 6 }
 			{ id: 16, instruction: assign, input: (5), assign: x, scope: 14 }
 			{ id: 21, instruction: add, input: (x, 10), assign: x, scope: 14 }
 			{ id: 27, instruction: evaluate, input: (greater_than, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT_22, scope: 14 }
 			{ id: 29, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_22, 28), scope: 14 }
-			{ id: 30, instruction: print, input: ("Some input is greater than 15"), assign: Thing_to_return, scope: 28 }
+			{ id: 30, instruction: print, input: ("Some input is greater than 15"), scope: 28 }
 			{ id: 31, instruction: jump, input: (14), scope: 28 }
 			{ id: 38, instruction: evaluate, input: (equal_to, x, some_input), assign: CONDITIONAL_JUMP_ASSIGNMENT_33, scope: 14 }
-			{ id: 40, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_33, 39), assign: RETURN_VALUE_LABEL_32, scope: 14 }
+			{ id: 40, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_33, 39), scope: 14 }
 			{ id: 44, instruction: jump, input: (43), scope: 14 }
 			{ id: 41, instruction: assign, input: (x), assign: RETURN_VALUE_LABEL_32, scope: 39 }
 			{ id: 42, instruction: jump, input: (14), scope: 39 }
 			{ id: 45, instruction: assign, input: (some_input), assign: RETURN_VALUE_LABEL_32, scope: 43 }
 			{ id: 46, instruction: jump, input: (14), scope: 43 }
-			{ id: 47, instruction: return, input: (RETURN_VALUE_LABEL_32), assign: Thing_to_return, scope: 14 }
-			{ id: 48, instruction: jump, input: (6), scope: 14 }
+			{ id: 47, instruction: return, input: (RETURN_VALUE_LABEL_32), scope: 14 }
 			{ id: 49, instruction: jump, input: (0), scope: 6 }
 			{ id: 54, instruction: add, input: (some_input, 1), assign: some_input, scope: 0 }
 			{ id: 0, instruction: return, input: (some_input), scope: 0 }

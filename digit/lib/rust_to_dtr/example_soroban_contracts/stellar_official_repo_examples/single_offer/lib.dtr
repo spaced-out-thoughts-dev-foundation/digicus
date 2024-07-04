@@ -18,16 +18,14 @@
 			{ id: 9, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_3.has, DataKey::Offer), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
 			{ id: 11, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 10), scope: 0 }
 			{ id: 12, instruction: exit_with_message, input: ("offer is already created"), scope: 10 }
-			{ id: 13, instruction: jump, input: (0), scope: 10 }
 			{ id: 21, instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT_15, scope: 0 }
 			{ id: 26, instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT_16, scope: 0 }
 			{ id: 27, instruction: or, input: (BINARY_EXPRESSION_LEFT_15, BINARY_EXPRESSION_RIGHT_16), assign: CONDITIONAL_JUMP_ASSIGNMENT_14, scope: 0 }
 			{ id: 29, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_14, 28), scope: 0 }
 			{ id: 30, instruction: exit_with_message, input: ("zero price is not allowed"), scope: 28 }
-			{ id: 31, instruction: jump, input: (0), scope: 28 }
 			{ id: 34, instruction: evaluate, input: (seller.require_auth), scope: 0 }
-			{ id: 41, instruction: instantiate_object, input: (UDT, Offer, seller, sell_token, buy_token, sell_price, buy_price), assign: CALL_EXPRESSION_ARG_2, scope: 0 }
-			{ id: 45, instruction: evaluate, input: (write_offer, e, CALL_EXPRESSION_ARG_2), scope: 0 }
+			{ id: 43, instruction: instantiate_object, input: (UDT, Offer, seller, sell_token, buy_token, sell_price, buy_price), assign: CALL_EXPRESSION_ARG_2_37, scope: 0 }
+			{ id: 47, instruction: evaluate, input: (write_offer, e, CALL_EXPRESSION_ARG_2_37), scope: 0 }
 		$
 -() [trade]
 	* Inputs:
@@ -39,21 +37,20 @@
 	}
 	* Instructions:
 		$
-			{ id: 2, instruction: evaluate, input: (buyer.require_auth), scope: 0 }
-			{ id: 6, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
-			{ id: 14, instruction: evaluate, input: (token::Client::new, e, offer.sell_token), assign: sell_token_client, scope: 0 }
-			{ id: 22, instruction: evaluate, input: (token::Client::new, e, offer.buy_token), assign: buy_token_client, scope: 0 }
-			{ id: 33, instruction: evaluate, input: (buy_token_amount.checked_mul, offer.sell_price), assign: METHOD_CALL_EXPRESSION_25, scope: 0 }
-			{ id: 34, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_25.unwrap_optimized), assign: BINARY_EXPRESSION_LEFT_23, scope: 0 }
-			{ id: 39, instruction: divide, input: (BINARY_EXPRESSION_LEFT_23, offer.buy_price), assign: sell_token_amount, scope: 0 }
-			{ id: 45, instruction: evaluate, input: (less_than, sell_token_amount, min_sell_token_amount), assign: CONDITIONAL_JUMP_ASSIGNMENT_40, scope: 0 }
-			{ id: 47, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_40, 46), scope: 0 }
-			{ id: 48, instruction: exit_with_message, input: ("price is too low"), scope: 46 }
-			{ id: 49, instruction: jump, input: (0), scope: 46 }
-			{ id: 52, instruction: evaluate, input: (e.current_contract_address), assign: contract, scope: 0 }
-			{ id: 61, instruction: evaluate, input: (buy_token_client.transfer, buyer, contract, buy_token_amount), scope: 0 }
-			{ id: 70, instruction: evaluate, input: (sell_token_client.transfer, contract, buyer, sell_token_amount), scope: 0 }
-			{ id: 82, instruction: evaluate, input: (buy_token_client.transfer, contract, offer.seller, buy_token_amount), scope: 0 }
+			{ id: 50, instruction: evaluate, input: (buyer.require_auth), scope: 0 }
+			{ id: 55, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+			{ id: 65, instruction: evaluate, input: (token::Client::new, e, offer.sell_token), assign: sell_token_client, scope: 0 }
+			{ id: 75, instruction: evaluate, input: (token::Client::new, e, offer.buy_token), assign: buy_token_client, scope: 0 }
+			{ id: 86, instruction: evaluate, input: (buy_token_amount.checked_mul, offer.sell_price), assign: METHOD_CALL_EXPRESSION_78, scope: 0 }
+			{ id: 87, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_78.unwrap_optimized), assign: BINARY_EXPRESSION_LEFT_76, scope: 0 }
+			{ id: 92, instruction: divide, input: (BINARY_EXPRESSION_LEFT_76, offer.buy_price), assign: sell_token_amount, scope: 0 }
+			{ id: 98, instruction: evaluate, input: (less_than, sell_token_amount, min_sell_token_amount), assign: CONDITIONAL_JUMP_ASSIGNMENT_93, scope: 0 }
+			{ id: 100, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_93, 99), scope: 0 }
+			{ id: 101, instruction: exit_with_message, input: ("price is too low"), scope: 99 }
+			{ id: 105, instruction: evaluate, input: (e.current_contract_address), assign: contract, scope: 0 }
+			{ id: 114, instruction: evaluate, input: (buy_token_client.transfer, buyer, contract, buy_token_amount), scope: 0 }
+			{ id: 123, instruction: evaluate, input: (sell_token_client.transfer, contract, buyer, sell_token_amount), scope: 0 }
+			{ id: 135, instruction: evaluate, input: (buy_token_client.transfer, contract, offer.seller, buy_token_amount), scope: 0 }
 		$
 -() [withdraw]
 	* Inputs:
@@ -64,11 +61,11 @@
 	}
 	* Instructions:
 		$
-			{ id: 3, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
-			{ id: 9, instruction: evaluate, input: (offer.seller.require_auth), scope: 0 }
-			{ id: 26, instruction: evaluate, input: (token::Client::new, e, token), assign: METHOD_CALL_EXPRESSION_21, scope: 0 }
-			{ id: 13, instruction: evaluate, input: (e.current_contract_address), assign: METHOD_CALL_ARG_1_10, scope: 0 }
-			{ id: 27, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_21.transfer, METHOD_CALL_ARG_1_10, offer.seller, amount), scope: 0 }
+			{ id: 140, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+			{ id: 146, instruction: evaluate, input: (offer.seller.require_auth), scope: 0 }
+			{ id: 165, instruction: evaluate, input: (token::Client::new, e, token), assign: METHOD_CALL_EXPRESSION_158, scope: 0 }
+			{ id: 150, instruction: evaluate, input: (e.current_contract_address), assign: METHOD_CALL_ARG_1_147, scope: 0 }
+			{ id: 166, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_158.transfer, METHOD_CALL_ARG_1_147, offer.seller, amount), scope: 0 }
 		$
 -() [updt_price]
 	* Inputs:
@@ -79,17 +76,16 @@
 	}
 	* Instructions:
 		$
-			{ id: 7, instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT_1, scope: 0 }
-			{ id: 12, instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT_2, scope: 0 }
-			{ id: 13, instruction: or, input: (BINARY_EXPRESSION_LEFT_1, BINARY_EXPRESSION_RIGHT_2), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
-			{ id: 15, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 14), scope: 0 }
-			{ id: 16, instruction: exit_with_message, input: ("zero price is not allowed"), scope: 14 }
-			{ id: 17, instruction: jump, input: (0), scope: 14 }
-			{ id: 21, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
-			{ id: 27, instruction: evaluate, input: (offer.seller.require_auth), scope: 0 }
-			{ id: 35, instruction: assign, input: (sell_price), assign: offer.sell_price, scope: 0 }
-			{ id: 43, instruction: assign, input: (buy_price), assign: offer.buy_price, scope: 0 }
-			{ id: 48, instruction: evaluate, input: (write_offer, e, offer), scope: 0 }
+			{ id: 174, instruction: evaluate, input: (equal_to, buy_price, 0), assign: BINARY_EXPRESSION_LEFT_168, scope: 0 }
+			{ id: 179, instruction: evaluate, input: (equal_to, sell_price, 0), assign: BINARY_EXPRESSION_RIGHT_169, scope: 0 }
+			{ id: 180, instruction: or, input: (BINARY_EXPRESSION_LEFT_168, BINARY_EXPRESSION_RIGHT_169), assign: CONDITIONAL_JUMP_ASSIGNMENT_167, scope: 0 }
+			{ id: 182, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_167, 181), scope: 0 }
+			{ id: 183, instruction: exit_with_message, input: ("zero price is not allowed"), scope: 181 }
+			{ id: 189, instruction: evaluate, input: (load_offer, e), assign: offer, scope: 0 }
+			{ id: 195, instruction: evaluate, input: (offer.seller.require_auth), scope: 0 }
+			{ id: 203, instruction: assign, input: (sell_price), assign: offer.sell_price, scope: 0 }
+			{ id: 211, instruction: assign, input: (buy_price), assign: offer.buy_price, scope: 0 }
+			{ id: 218, instruction: evaluate, input: (write_offer, e, offer), scope: 0 }
 		$
 -() [get_offer]
 	* Inputs:
@@ -99,7 +95,7 @@
 	* Output: Offer
 	* Instructions:
 		$
-			{ id: 3, instruction: evaluate, input: (load_offer, e), assign: Thing_to_return, scope: 0 }
+			{ id: 223, instruction: evaluate, input: (load_offer, e), assign: Thing_to_return, scope: 0 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]

@@ -1,0 +1,241 @@
+[Contract]: AccountContract
+
+[Interface]:
+-() [init]
+	* Inputs:
+	{
+		env: Env
+		signers: List<ByteStringSmall>
+	}
+	* Instructions:
+		$
+			{ id: 5, instruction: evaluate, input: (signers.iter), assign: ITERATOR_1, scope: 0 }
+			{ id: 6, instruction: evaluate, input: (start, ITERATOR_1), assign: signer, scope: 0 }
+			{ id: 7, instruction: end_of_iteration_check, input: (signer, ITERATOR_1), assign: CHECK_CONDITION_ASSIGNMENT_2, scope: 0 }
+			{ id: 9, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_2, 8), scope: 0 }
+			{ id: 23, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_20, scope: 8 }
+			{ id: 24, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_20.instance), assign: METHOD_CALL_EXPRESSION_19, scope: 8 }
+			{ id: 15, instruction: evaluate, input: (DataKey::Signer, signer), assign: METHOD_CALL_ARG_1_10, scope: 8 }
+			{ id: 17, instruction: instantiate_object, input: (Tuple), assign: METHOD_CALL_ARG_2_16, scope: 8 }
+			{ id: 25, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_19.set, METHOD_CALL_ARG_1_10, METHOD_CALL_ARG_2_16), scope: 8 }
+			{ id: 26, instruction: increment, input: (signer), scope: 8 }
+			{ id: 27, instruction: goto, input: (7), scope: 8 }
+			{ id: 38, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_35, scope: 0 }
+			{ id: 39, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_35.instance), assign: METHOD_CALL_EXPRESSION_34, scope: 0 }
+			{ id: 33, instruction: evaluate, input: (signers.len), assign: METHOD_CALL_ARG_2_30, scope: 0 }
+			{ id: 40, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_34.set, DataKey::SignerCnt, METHOD_CALL_ARG_2_30), scope: 0 }
+		$
+-() [add_limit]
+	* Inputs:
+	{
+		env: Env
+		token: Address
+		limit: BigInteger
+	}
+	* Instructions:
+		$
+			{ id: 44, instruction: evaluate, input: (env.current_contract_address), assign: METHOD_CALL_EXPRESSION_41, scope: 0 }
+			{ id: 45, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_41.require_auth), scope: 0 }
+			{ id: 58, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_55, scope: 0 }
+			{ id: 59, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_55.instance), assign: METHOD_CALL_EXPRESSION_54, scope: 0 }
+			{ id: 51, instruction: evaluate, input: (DataKey::SpendLimit, token), assign: METHOD_CALL_ARG_1_46, scope: 0 }
+			{ id: 60, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_54.set, METHOD_CALL_ARG_1_46, limit), scope: 0 }
+		$
+:[Interface]
+
+
+[User Defined Types]:* (AccSignature_STRUCT)
+{
+	public_key: ByteStringSmall
+	signature: ByteStringLarge
+}
+
+* (DataKey_ENUM)
+{
+	SignerCnt: ()
+	Signer: (ByteStringSmall)
+	SpendLimit: (Address)
+}
+
+* (AccError_ENUM)
+{
+	NotEnoughSigners = 1
+	NegativeAmount = 2
+	BadSignatureOrder = 3
+	UnknownSigner = 4
+	InvalidContext = 5
+}
+
+:[User Defined Types]
+[State]:
+* [TRANSFER_FN]
+	* Type: String
+	* Initial Value: "transfer"
+:[State]
+
+
+[Helpers]:
+-() [authenticate]
+	* Inputs:
+	{
+		env: &Env
+		signature_payload: &ByteStringSmall
+		signatures: &List<AccSignature>
+	}
+	* Output: Result<(), AccError>
+	* Instructions:
+		$
+			{ id: 8, instruction: evaluate, input: (signatures.len), assign: RANGE_END_4, scope: 0 }
+			{ id: 9, instruction: instantiate_object, input: (Range, 0, RANGE_END_4), assign: ITERATOR_1, scope: 0 }
+			{ id: 10, instruction: evaluate, input: (start, ITERATOR_1), assign: i, scope: 0 }
+			{ id: 11, instruction: end_of_iteration_check, input: (i, ITERATOR_1), assign: CHECK_CONDITION_ASSIGNMENT_2, scope: 0 }
+			{ id: 13, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_2, 12), scope: 0 }
+			{ id: 18, instruction: evaluate, input: (signatures.get_unchecked, i), assign: signature, scope: 12 }
+			{ id: 24, instruction: evaluate, input: (greater_than, i, 0), assign: CONDITIONAL_JUMP_ASSIGNMENT_19, scope: 12 }
+			{ id: 26, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_19, 25), scope: 12 }
+			{ id: 32, instruction: subtract, input: (i, 1), assign: METHOD_CALL_ARG_1_27, scope: 25 }
+			{ id: 35, instruction: evaluate, input: (signatures.get_unchecked, METHOD_CALL_ARG_1_27), assign: prev_signature, scope: 25 }
+			{ id: 47, instruction: evaluate, input: (greater_than_or_equal_to, prev_signature.public_key, signature.public_key), assign: CONDITIONAL_JUMP_ASSIGNMENT_36, scope: 25 }
+			{ id: 49, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_36, 48), scope: 25 }
+			{ id: 55, instruction: evaluate, input: (Err, AccError::BadSignatureOrder), assign: RETURN_VALUE_LABEL_50, scope: 48 }
+			{ id: 56, instruction: return, input: (RETURN_VALUE_LABEL_50), scope: 48 }
+			{ id: 58, instruction: jump, input: (12), scope: 25 }
+			{ id: 76, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_73, scope: 12 }
+			{ id: 77, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_73.instance), assign: METHOD_CALL_EXPRESSION_72, scope: 12 }
+			{ id: 68, instruction: evaluate, input: (signature.public_key.clone), assign: CALL_EXPRESSION_ARG_1_62, scope: 12 }
+			{ id: 71, instruction: evaluate, input: (DataKey::Signer, CALL_EXPRESSION_ARG_1_62), assign: METHOD_CALL_ARG_1_61, scope: 12 }
+			{ id: 78, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_72.has, METHOD_CALL_ARG_1_61), assign: UNARY_ARGUMENT_60, scope: 12 }
+			{ id: 79, instruction: evaluate, input: (!, UNARY_ARGUMENT_60), assign: CONDITIONAL_JUMP_ASSIGNMENT_59, scope: 12 }
+			{ id: 81, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_59, 80), scope: 12 }
+			{ id: 87, instruction: evaluate, input: (Err, AccError::UnknownSigner), assign: RETURN_VALUE_LABEL_82, scope: 80 }
+			{ id: 88, instruction: return, input: (RETURN_VALUE_LABEL_82), scope: 80 }
+			{ id: 109, instruction: evaluate, input: (env.crypto), assign: METHOD_CALL_EXPRESSION_106, scope: 12 }
+			{ id: 99, instruction: evaluate, input: (signature_payload.clone), assign: METHOD_CALL_EXPRESSION_96, scope: 12 }
+			{ id: 100, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_96.into), assign: METHOD_CALL_ARG_2_95, scope: 12 }
+			{ id: 110, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_106.ed25519_verify, signature.public_key, METHOD_CALL_ARG_2_95, signature.signature), assign: Thing_to_return, scope: 12 }
+			{ id: 111, instruction: increment, input: (i), scope: 12 }
+			{ id: 112, instruction: goto, input: (11), scope: 12 }
+			{ id: 114, instruction: instantiate_object, input: (Tuple), assign: CALL_EXPRESSION_ARG_1_113, scope: 0 }
+			{ id: 118, instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1_113), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+-() [verify_authorization_policy]
+	* Inputs:
+	{
+		env: &Env
+		context: &Context
+		curr_contract: &Address
+		all_signed: Boolean
+		spend_left_per_token: &Dictionary<Address, BigInteger>
+	}
+	* Output: Result<(), AccError>
+	* Instructions:
+		$
+			{ id: 1, instruction: assign, input: (context), assign: THING_TO_COMPARE_AGAINST_0, scope: 0 }
+			{ id: 3, instruction: evaluate, input: (equal_to, context, Context::Contract(c)), assign: CONDITIONAL_JUMP_CHECK_2, scope: 0 }
+			{ id: 5, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_2, 4), scope: 0 }
+			{ id: 35, instruction: evaluate, input: (equal_to, THING_TO_COMPARE_AGAINST_0, Context::CreateContractHostFn(_)), assign: CONDITIONAL_JUMP_CHECK_34, scope: 0 }
+			{ id: 37, instruction: jump, input: (CONDITIONAL_JUMP_CHECK_34, 36), scope: 0 }
+			{ id: 14, instruction: evaluate, input: (equal_to, c.contract, curr_contract), assign: CONDITIONAL_JUMP_ASSIGNMENT_6, scope: 4 }
+			{ id: 16, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_6, 15), scope: 4 }
+			{ id: 20, instruction: evaluate, input: (!, all_signed), assign: CONDITIONAL_JUMP_ASSIGNMENT_17, scope: 15 }
+			{ id: 22, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_17, 21), scope: 15 }
+			{ id: 28, instruction: evaluate, input: (Err, AccError::NotEnoughSigners), assign: RETURN_VALUE_LABEL_23, scope: 21 }
+			{ id: 29, instruction: return, input: (RETURN_VALUE_LABEL_23), scope: 21 }
+			{ id: 31, instruction: jump, input: (4), scope: 15 }
+			{ id: 33, instruction: jump, input: (0), scope: 4 }
+			{ id: 43, instruction: evaluate, input: (Err, AccError::InvalidContext), assign: RETURN_VALUE_LABEL_38, scope: 36 }
+			{ id: 44, instruction: return, input: (RETURN_VALUE_LABEL_38), scope: 36 }
+			{ id: 56, instruction: evaluate, input: (not_equal_to, contract_context.fn_name, TRANSFER_FN), assign: BINARY_EXPRESSION_LEFT_47, scope: 0 }
+			{ id: 69, instruction: evaluate, input: (Symbol::new, env, "approve"), assign: BINARY_EXPRESSION_RIGHT_58, scope: 0 }
+			{ id: 70, instruction: evaluate, input: (not_equal_to, contract_context.fn_name, BINARY_EXPRESSION_RIGHT_58), assign: BINARY_EXPRESSION_RIGHT_48, scope: 0 }
+			{ id: 71, instruction: and, input: (BINARY_EXPRESSION_LEFT_47, BINARY_EXPRESSION_RIGHT_48), assign: CONDITIONAL_JUMP_ASSIGNMENT_46, scope: 0 }
+			{ id: 73, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_46, 72), scope: 0 }
+			{ id: 76, instruction: instantiate_object, input: (Tuple), assign: CALL_EXPRESSION_ARG_1_75, scope: 72 }
+			{ id: 80, instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1_75), assign: RETURN_VALUE_LABEL_74, scope: 72 }
+			{ id: 81, instruction: return, input: (RETURN_VALUE_LABEL_74), scope: 72 }
+			{ id: 91, instruction: evaluate, input: (contract_context.contract.clone), assign: METHOD_CALL_ARG_1_85, scope: 0 }
+			{ id: 94, instruction: evaluate, input: (spend_left_per_token.get, METHOD_CALL_ARG_1_85), assign: INPUT_VALUE_NAME_FOR_LET_84, scope: 0 }
+			{ id: 95, instruction: try_assign, input: (INPUT_VALUE_NAME_FOR_LET_84, Some(spend_left)), assign: CONDITIONAL_JUMP_ASSIGNMENT_83, scope: 0 }
+			{ id: 97, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_83, 96), scope: 0 }
+			{ id: 105, instruction: jump, input: (104), scope: 0 }
+			{ id: 102, instruction: evaluate, input: (Some, spend_left), assign: spend_left|||Option<BigInteger>, scope: 96 }
+			{ id: 103, instruction: jump, input: (0), scope: 96 }
+			{ id: 123, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_120, scope: 104 }
+			{ id: 124, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_120.instance), assign: METHOD_CALL_EXPRESSION_119, scope: 104 }
+			{ id: 115, instruction: evaluate, input: (contract_context.contract.clone), assign: CALL_EXPRESSION_ARG_1_109, scope: 104 }
+			{ id: 118, instruction: evaluate, input: (DataKey::SpendLimit, CALL_EXPRESSION_ARG_1_109), assign: METHOD_CALL_ARG_1_108, scope: 104 }
+			{ id: 125, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_119.get, METHOD_CALL_ARG_1_108), assign: INPUT_VALUE_NAME_FOR_LET_107, scope: 104 }
+			{ id: 126, instruction: try_assign, input: (INPUT_VALUE_NAME_FOR_LET_107, Some(limit_left)), assign: CONDITIONAL_JUMP_ASSIGNMENT_106, scope: 104 }
+			{ id: 128, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_106, 127), scope: 104 }
+			{ id: 136, instruction: jump, input: (135), scope: 104 }
+			{ id: 133, instruction: evaluate, input: (Some, limit_left), assign: spend_left|||Option<BigInteger>, scope: 127 }
+			{ id: 134, instruction: jump, input: (104), scope: 127 }
+			{ id: 137, instruction: assign, input: (None), assign: spend_left|||Option<BigInteger>, scope: 135 }
+			{ id: 138, instruction: jump, input: (104), scope: 135 }
+			{ id: 139, instruction: jump, input: (0), scope: 104 }
+			{ id: 143, instruction: try_assign, input: (spend_left, Some(spend_left)), assign: CONDITIONAL_JUMP_ASSIGNMENT_140, scope: 0 }
+			{ id: 145, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_140, 144), scope: 0 }
+			{ id: 158, instruction: evaluate, input: (contract_context.args.get, 2), assign: METHOD_CALL_EXPRESSION_150, scope: 144 }
+			{ id: 159, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_150.unwrap), assign: METHOD_CALL_EXPRESSION_149, scope: 144 }
+			{ id: 160, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_149.try_into_val, env), assign: METHOD_CALL_EXPRESSION_146, scope: 144 }
+			{ id: 161, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_146.unwrap), assign: spent|||BigInteger, scope: 144 }
+			{ id: 167, instruction: evaluate, input: (less_than, spent, 0), assign: CONDITIONAL_JUMP_ASSIGNMENT_162, scope: 144 }
+			{ id: 169, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_162, 168), scope: 144 }
+			{ id: 175, instruction: evaluate, input: (Err, AccError::NegativeAmount), assign: RETURN_VALUE_LABEL_170, scope: 168 }
+			{ id: 176, instruction: return, input: (RETURN_VALUE_LABEL_170), scope: 168 }
+			{ id: 183, instruction: evaluate, input: (!, all_signed), assign: BINARY_EXPRESSION_LEFT_179, scope: 144 }
+			{ id: 188, instruction: evaluate, input: (greater_than, spent, spend_left), assign: BINARY_EXPRESSION_RIGHT_180, scope: 144 }
+			{ id: 189, instruction: and, input: (BINARY_EXPRESSION_LEFT_179, BINARY_EXPRESSION_RIGHT_180), assign: CONDITIONAL_JUMP_ASSIGNMENT_178, scope: 144 }
+			{ id: 191, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_178, 190), scope: 144 }
+			{ id: 197, instruction: evaluate, input: (Err, AccError::NotEnoughSigners), assign: RETURN_VALUE_LABEL_192, scope: 190 }
+			{ id: 198, instruction: return, input: (RETURN_VALUE_LABEL_192), scope: 190 }
+			{ id: 206, instruction: evaluate, input: (contract_context.contract.clone), assign: METHOD_CALL_ARG_1_200, scope: 144 }
+			{ id: 212, instruction: subtract, input: (spend_left, spent), assign: METHOD_CALL_ARG_2_207, scope: 144 }
+			{ id: 215, instruction: evaluate, input: (spend_left_per_token.set, METHOD_CALL_ARG_1_200, METHOD_CALL_ARG_2_207), assign: Thing_to_return, scope: 144 }
+			{ id: 216, instruction: jump, input: (0), scope: 144 }
+			{ id: 218, instruction: instantiate_object, input: (Tuple), assign: CALL_EXPRESSION_ARG_1_217, scope: 0 }
+			{ id: 222, instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1_217), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+
+:[Helpers]
+
+
+[Implementations]:
+
+-->(CustomAccountInterface)<--
+-() [__check_auth]
+	* Inputs:
+	{
+		env: Env
+		signature_payload: ByteStringSmall
+		signatures: List<AccSignature>
+		auth_context: List<Context>
+	}
+	* Output: Result<(), AccError>
+	* Instructions:
+		$
+			{ id: 9, instruction: evaluate, input: (authenticate, env, signature_payload, signatures), scope: 0 }
+			{ id: 17, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_14, scope: 0 }
+			{ id: 18, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.instance), assign: METHOD_CALL_EXPRESSION_13, scope: 0 }
+			{ id: 19, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.get, DataKey::SignerCnt), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
+			{ id: 20, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.unwrap), assign: tot_signers|||Integer, scope: 0 }
+			{ id: 26, instruction: evaluate, input: (signatures.len), assign: BINARY_EXPRESSION_RIGHT_22, scope: 0 }
+			{ id: 27, instruction: evaluate, input: (equal_to, tot_signers, BINARY_EXPRESSION_RIGHT_22), assign: all_signed, scope: 0 }
+			{ id: 30, instruction: evaluate, input: (env.current_contract_address), assign: curr_contract, scope: 0 }
+			{ id: 35, instruction: evaluate, input: (Map::new, env), assign: spend_left_per_token, scope: 0 }
+			{ id: 40, instruction: evaluate, input: (auth_context.iter), assign: ITERATOR_36, scope: 0 }
+			{ id: 41, instruction: evaluate, input: (start, ITERATOR_36), assign: context, scope: 0 }
+			{ id: 42, instruction: end_of_iteration_check, input: (context, ITERATOR_36), assign: CHECK_CONDITION_ASSIGNMENT_37, scope: 0 }
+			{ id: 44, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_37, 43), scope: 0 }
+			{ id: 57, instruction: evaluate, input: (verify_authorization_policy, env, context, curr_contract, all_signed, spend_left_per_token), assign: Thing_to_return, scope: 43 }
+			{ id: 58, instruction: increment, input: (context), scope: 43 }
+			{ id: 59, instruction: goto, input: (42), scope: 43 }
+			{ id: 61, instruction: instantiate_object, input: (Tuple), assign: CALL_EXPRESSION_ARG_1_60, scope: 0 }
+			{ id: 65, instruction: evaluate, input: (Ok, CALL_EXPRESSION_ARG_1_60), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+
+:[Implementations]
+

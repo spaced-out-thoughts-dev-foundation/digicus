@@ -14,6 +14,5 @@
 			{ id: 13, instruction: or, input: (BINARY_EXPRESSION_LEFT_1, BINARY_EXPRESSION_RIGHT_2), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
 			{ id: 15, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 14), scope: 0 }
 			{ id: 16, instruction: exit_with_message, input: ("zero price is not allowed"), scope: 14 }
-			{ id: 17, instruction: jump, input: (0), scope: 14 }
 		$
 :[Interface]

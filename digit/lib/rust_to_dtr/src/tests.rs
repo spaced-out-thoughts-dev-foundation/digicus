@@ -70,7 +70,9 @@ mod full_contract_tests {
     test_contract!(digicus_unofficial_examples, simplest_nested_scoping);
     test_contract!(digicus_unofficial_examples, various_result_handling_tactics);
     test_contract!(digicus_unofficial_examples, more_complex_if_conditional);
-
+    test_contract!(digicus_unofficial_examples, if_else_let_return_some_or_none);
+    test_contract!(digicus_unofficial_examples, simple_sum_in_for_loop);
+    test_contract!(digicus_unofficial_examples, return_error);
     // Stellar Official Repo Examples
     test_contract!(stellar_official_repo_examples, account);
     test_contract!(stellar_official_repo_examples, alloc);

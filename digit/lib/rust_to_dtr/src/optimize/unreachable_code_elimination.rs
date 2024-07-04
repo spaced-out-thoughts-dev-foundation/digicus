@@ -1,10 +1,9 @@
 use std::collections::HashMap;
 
-use crate::instruction::{self, Instruction};
+use crate::instruction::Instruction;
 
 struct UnreachableCodeElimination {
     instructions: Vec<Instruction>,
-    index: usize,
     // <scope, visited>
     visited: HashMap<u128, bool>,
 }
@@ -13,7 +12,6 @@ impl UnreachableCodeElimination {
     fn new(instructions: Vec<Instruction>) -> Self {
         Self {
             instructions,
-            index: 0,
             visited: HashMap::new(),
         }
     }
@@ -93,6 +91,9 @@ impl UnreachableCodeElimination {
                 "return" => {
                     // we are at the end of the function, no need to continue
                 }
+                "exit_with_message" => {
+                    // we are at the end of the function, no need to continue
+                }
                 _ => {
                     if next_index < self.instructions.len() {
                         stack.push((next_index, current_scope));
@@ -109,7 +110,7 @@ impl UnreachableCodeElimination {
 mod visited_tests {
     use std::collections::HashMap;
 
-    use crate::instruction::{self, Instruction};
+    use crate::instruction::Instruction;
     use crate::optimize::unreachable_code_elimination::UnreachableCodeElimination;
 
     #[test]
@@ -140,8 +141,6 @@ mod visited_tests {
 
         let mut unreachable_code_elimination = UnreachableCodeElimination::new(instructions);
         unreachable_code_elimination.visit();
-
-        println!("{:?}", unreachable_code_elimination.visited);
 
         assert_eq!(unreachable_code_elimination.visited.len(), 3);
     }
@@ -575,7 +574,7 @@ pub fn apply(instructions: Vec<Instruction>) -> Vec<Instruction> {
 mod apply_tests {
     use super::*;
     use crate::instruction::Instruction;
-    use crate::optimize::{create_instruction, create_instruction_with_scope_and_id};
+    use crate::optimize::create_instruction_with_scope_and_id;
 
     #[test]
     fn test_unreachable_jump_elimination() {
@@ -600,10 +599,6 @@ mod apply_tests {
             Instruction::unconditional_jump(3, 1, 5),
             Instruction::unconditional_jump(1, 0, 6),
         ];
-
-        apply(instructions.clone())
-            .into_iter()
-            .for_each(|x| println!("{:?}", x));
 
         assert_eq!(apply(instructions), expected);
     }
@@ -759,6 +754,28 @@ mod apply_tests {
         let expected_optimized_instructions = vec![create_instruction_with_scope_and_id(
             "jump",
             vec!["1"],
+            "",
+            0,
+            1,
+        )];
+
+        assert_eq!(
+            apply(unoptimized_instructions),
+            expected_optimized_instructions
+        );
+    }
+
+    #[test]
+    fn single_scope_exit_with_message() {
+        let unoptimized_instructions = vec![
+            create_instruction_with_scope_and_id("exit_with_message", vec!["\"foo\""], "", 0, 1),
+            create_instruction_with_scope_and_id("exit_with_message", vec!["\"bar\""], "", 0, 2),
+            create_instruction_with_scope_and_id("exit_with_message", vec!["\"baz\""], "", 0, 3),
+        ];
+
+        let expected_optimized_instructions = vec![create_instruction_with_scope_and_id(
+            "exit_with_message",
+            vec!["\"foo\""],
             "",
             0,
             1,

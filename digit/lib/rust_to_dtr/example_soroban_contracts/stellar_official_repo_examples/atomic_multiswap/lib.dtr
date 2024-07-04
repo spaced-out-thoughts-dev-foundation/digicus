@@ -1,0 +1,64 @@
+[Contract]: AtomicMultiSwapContract
+
+[Interface]:
+-() [multi_swap]
+	* Inputs:
+	{
+		env: Env
+		swap_contract: Address
+		token_a: Address
+		token_b: Address
+		swaps_a: List<SwapSpec>
+		swaps_b: List<SwapSpec>
+	}
+	* Instructions:
+		$
+			{ id: 7, instruction: evaluate, input: (atomic_swap::Client::new, env, swap_contract), assign: swap_client, scope: 0 }
+			{ id: 12, instruction: evaluate, input: (swaps_a.iter), assign: ITERATOR_8, scope: 0 }
+			{ id: 13, instruction: evaluate, input: (start, ITERATOR_8), assign: acc_a, scope: 0 }
+			{ id: 14, instruction: end_of_iteration_check, input: (acc_a, ITERATOR_8), assign: CHECK_CONDITION_ASSIGNMENT_9, scope: 0 }
+			{ id: 16, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_9, 15), scope: 0 }
+			{ id: 24, instruction: evaluate, input: (swaps_b.len), assign: RANGE_END_20, scope: 15 }
+			{ id: 25, instruction: instantiate_object, input: (Range, 0, RANGE_END_20), assign: ITERATOR_17, scope: 15 }
+			{ id: 26, instruction: evaluate, input: (start, ITERATOR_17), assign: i, scope: 15 }
+			{ id: 27, instruction: end_of_iteration_check, input: (i, ITERATOR_17), assign: CHECK_CONDITION_ASSIGNMENT_18, scope: 15 }
+			{ id: 29, instruction: jump, input: (CHECK_CONDITION_ASSIGNMENT_18, 28), scope: 15 }
+			{ id: 35, instruction: evaluate, input: (swaps_b.get, i), assign: METHOD_CALL_EXPRESSION_30, scope: 28 }
+			{ id: 36, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_30.unwrap), assign: acc_b, scope: 28 }
+			{ id: 50, instruction: evaluate, input: (greater_than_or_equal_to, acc_a.amount, acc_b.min_recv), assign: BINARY_EXPRESSION_LEFT_38, scope: 28 }
+			{ id: 61, instruction: evaluate, input: (less_than_or_equal_to, acc_a.min_recv, acc_b.amount), assign: BINARY_EXPRESSION_RIGHT_39, scope: 28 }
+			{ id: 62, instruction: and, input: (BINARY_EXPRESSION_LEFT_38, BINARY_EXPRESSION_RIGHT_39), assign: CONDITIONAL_JUMP_ASSIGNMENT_37, scope: 28 }
+			{ id: 64, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_37, 63), scope: 28 }
+			{ id: 103, instruction: evaluate, input: (swap_client.try_swap, acc_a.address, acc_b.address, token_a, token_b, acc_a.amount, acc_a.min_recv, acc_b.amount, acc_b.min_recv), assign: METHOD_CALL_EXPRESSION_66, scope: 63 }
+			{ id: 104, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_66.is_ok), assign: CONDITIONAL_JUMP_ASSIGNMENT_65, scope: 63 }
+			{ id: 106, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_65, 105), scope: 63 }
+			{ id: 111, instruction: evaluate, input: (swaps_b.remove, i), scope: 105 }
+			{ id: 112, instruction: jump, input: (0), scope: 105 }
+			{ id: 114, instruction: jump, input: (28), scope: 63 }
+			{ id: 115, instruction: increment, input: (i), scope: 28 }
+			{ id: 116, instruction: goto, input: (27), scope: 28 }
+			{ id: 117, instruction: increment, input: (acc_a), scope: 15 }
+			{ id: 118, instruction: goto, input: (14), scope: 15 }
+		$
+:[Interface]
+
+
+[User Defined Types]:* (SwapSpec_STRUCT)
+{
+	address: Address
+	amount: BigInteger
+	min_recv: BigInteger
+}
+
+:[User Defined Types]
+
+
+[NonTranslatable]:
+
+mod atomic_swap {
+	soroban_sdk::contractimport!(
+		file = "../atomic_swap/target/wasm32-unknown-unknown/release/soroban_atomic_swap_contract.wasm"
+	);
+}
+
+:[NonTranslatable]

@@ -20,7 +20,11 @@ pub fn create_contract(
         .deploy(token_wasm_hash)
 }
 
+
+#![no_std]
+
 mod test;
+mod token;
 
 use num_integer::Roots;
 use soroban_sdk::{

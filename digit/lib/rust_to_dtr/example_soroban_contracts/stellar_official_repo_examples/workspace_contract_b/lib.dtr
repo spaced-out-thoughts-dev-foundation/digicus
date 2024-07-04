@@ -12,8 +12,9 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ id: 4, instruction: evaluate, input: (ContractAClient::new, env, contract), assign: client, scope: 0 }
-			{ id: 11, instruction: evaluate, input: (client.add, x, y), assign: Thing_to_return, scope: 0 }
+			{ id: 6, instruction: evaluate, input: (ContractAClient::new, env, contract), assign: client, scope: 0 }
+			{ id: 13, instruction: evaluate, input: (client.add, x, y), assign: Thing_to_return, scope: 0 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
+

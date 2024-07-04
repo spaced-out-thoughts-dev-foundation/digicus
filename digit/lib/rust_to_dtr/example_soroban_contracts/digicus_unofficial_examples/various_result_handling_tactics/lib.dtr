@@ -8,10 +8,11 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ instruction: evaluate, input: (Some, 42), assign: some_thing, scope: 0 }
-			{ instruction: assign, input: (some_thing), assign: INPUT_VALUE_NAME_FOR_LET_2, scope: 0 }
-			{ instruction: jump, input: (INPUT_VALUE_NAME_FOR_LET_2, 1), scope: 0 }
-			{ instruction: print, input: ("Doing a thing"), assign: Thing_to_return, scope: 1 }
-			{ instruction: return, input: (some_thing), scope: 0 }
+			{ id: 4, instruction: evaluate, input: (Some, 42), assign: some_thing|||Option<Integer>, scope: 0 }
+			{ id: 8, instruction: try_assign, input: (some_thing, Some(some_thing)), assign: CONDITIONAL_JUMP_ASSIGNMENT_5, scope: 0 }
+			{ id: 10, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_5, 9), scope: 0 }
+			{ id: 11, instruction: print, input: ("Doing a thing"), scope: 9 }
+			{ id: 12, instruction: jump, input: (0), scope: 9 }
+			{ id: 0, instruction: return, input: (some_thing), scope: 0 }
 		$
 :[Interface]

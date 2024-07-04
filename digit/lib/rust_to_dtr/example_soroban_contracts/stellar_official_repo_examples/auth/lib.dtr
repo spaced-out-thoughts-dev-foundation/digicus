@@ -12,16 +12,16 @@
 	* Instructions:
 		$
 			{ id: 2, instruction: evaluate, input: (user.require_auth), scope: 0 }
-			{ id: 5, instruction: evaluate, input: (user.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
-			{ id: 8, instruction: evaluate, input: (DataKey::Counter, CALL_EXPRESSION_ARG_1), assign: key, scope: 0 }
-			{ id: 16, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_13, scope: 0 }
-			{ id: 17, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.persistent), assign: METHOD_CALL_EXPRESSION_12, scope: 0 }
-			{ id: 18, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_12.get, key), assign: METHOD_CALL_EXPRESSION_9, scope: 0 }
-			{ id: 19, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_9.unwrap_or_default), assign: count|||Integer, scope: 0 }
-			{ id: 24, instruction: add, input: (count, value), assign: count, scope: 0 }
-			{ id: 33, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_30, scope: 0 }
-			{ id: 34, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_30.persistent), assign: METHOD_CALL_EXPRESSION_29, scope: 0 }
-			{ id: 35, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_29.set, key, count), scope: 0 }
+			{ id: 6, instruction: evaluate, input: (user.clone), assign: CALL_EXPRESSION_ARG_1_3, scope: 0 }
+			{ id: 9, instruction: evaluate, input: (DataKey::Counter, CALL_EXPRESSION_ARG_1_3), assign: key, scope: 0 }
+			{ id: 17, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_14, scope: 0 }
+			{ id: 18, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_14.persistent), assign: METHOD_CALL_EXPRESSION_13, scope: 0 }
+			{ id: 19, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_13.get, key), assign: METHOD_CALL_EXPRESSION_10, scope: 0 }
+			{ id: 20, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_10.unwrap_or_default), assign: count|||Integer, scope: 0 }
+			{ id: 25, instruction: add, input: (count, value), assign: count, scope: 0 }
+			{ id: 34, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_31, scope: 0 }
+			{ id: 35, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_31.persistent), assign: METHOD_CALL_EXPRESSION_30, scope: 0 }
+			{ id: 36, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_30.set, key, count), scope: 0 }
 			{ id: 0, instruction: return, input: (count), scope: 0 }
 		$
 :[Interface]

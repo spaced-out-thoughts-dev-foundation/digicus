@@ -1,0 +1,19 @@
+[Helpers]:
+-() [answer_to_life]
+	* Inputs:
+	{
+		some_number: Integer
+	}
+	* Output: Result<Integer, String>
+	* Instructions:
+		$
+			{ id: 5, instruction: evaluate, input: (not_equal_to, some_number, 42), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
+			{ id: 7, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 6), scope: 0 }
+			{ id: 13, instruction: evaluate, input: (Err, SomeErrorTypes::NotTheAnswerToLife), assign: RETURN_VALUE_LABEL_8, scope: 6 }
+			{ id: 14, instruction: return, input: (RETURN_VALUE_LABEL_8), scope: 6 }
+			{ id: 20, instruction: evaluate, input: (Ok, some_number), assign: Thing_to_return, scope: 0 }
+			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
+		$
+
+:[Helpers]
+

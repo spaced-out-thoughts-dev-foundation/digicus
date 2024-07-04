@@ -9,10 +9,6 @@ pub fn apply(
     instructions: Vec<Instruction>,
     compilation_state: CompilationState,
 ) -> Vec<Instruction> {
-    instructions.clone().into_iter().for_each(|instruction| {
-        println!("instruction: {:?}", instruction);
-    });
-
     let phase_1_optimized =
         constant_propagation::apply(instructions, compilation_state.scope_tree_root.clone());
     let phase_2_optimized =

@@ -36,8 +36,7 @@ pub fn remove_unused_assigns(
             if instruction.name == "assign"
                 && instruction.assign != ""
                 && !instruction.assign.contains(".")
-            // if instruction.name == "assign" && instruction.assign != ""
-            // && instruction.assign.to_uppercase() == instruction.assign
+                && !instruction.assign.contains("|||")
             {
                 if assign_hash.contains_key(assigned_value) {
                     let the_value: &AssignHashValue = assign_hash.get(assigned_value).unwrap();

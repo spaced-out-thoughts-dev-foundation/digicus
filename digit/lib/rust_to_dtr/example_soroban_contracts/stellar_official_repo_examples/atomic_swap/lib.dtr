@@ -19,11 +19,9 @@
 			{ id: 5, instruction: evaluate, input: (less_than, amount_b, min_b_for_a), assign: CONDITIONAL_JUMP_ASSIGNMENT_0, scope: 0 }
 			{ id: 7, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_0, 6), scope: 0 }
 			{ id: 8, instruction: exit_with_message, input: ("not enough token B for token A"), scope: 6 }
-			{ id: 9, instruction: jump, input: (0), scope: 6 }
 			{ id: 15, instruction: evaluate, input: (less_than, amount_a, min_a_for_b), assign: CONDITIONAL_JUMP_ASSIGNMENT_10, scope: 0 }
 			{ id: 17, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT_10, 16), scope: 0 }
 			{ id: 18, instruction: exit_with_message, input: ("not enough token A for token B"), scope: 16 }
-			{ id: 19, instruction: jump, input: (0), scope: 16 }
 			{ id: 26, instruction: evaluate, input: (token_a.clone), assign: TUPLE_ARG_1_0, scope: 0 }
 			{ id: 29, instruction: evaluate, input: (token_b.clone), assign: TUPLE_ARG_2_0, scope: 0 }
 			{ id: 32, instruction: instantiate_object, input: (Tuple, TUPLE_ARG_1_0, TUPLE_ARG_2_0, amount_a, min_b_for_a), assign: METHOD_CALL_EXPRESSION_23, scope: 0 }
@@ -34,8 +32,8 @@
 			{ id: 50, instruction: instantiate_object, input: (Tuple, TUPLE_ARG_1_0, TUPLE_ARG_2_0, amount_b, min_a_for_b), assign: METHOD_CALL_EXPRESSION_41, scope: 0 }
 			{ id: 52, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_41.into_val, env), assign: METHOD_CALL_ARG_1_38, scope: 0 }
 			{ id: 55, instruction: evaluate, input: (b.require_auth_for_args, METHOD_CALL_ARG_1_38), scope: 0 }
-			{ id: 64, instruction: evaluate, input: (move_token, env, token_a, a, b, amount_a, min_a_for_b), scope: 0 }
-			{ id: 73, instruction: evaluate, input: (move_token, env, token_b, b, a, amount_b, min_b_for_a), scope: 0 }
+			{ id: 70, instruction: evaluate, input: (move_token, env, token_a, a, b, amount_a, min_a_for_b), scope: 0 }
+			{ id: 85, instruction: evaluate, input: (move_token, env, token_b, b, a, amount_b, min_b_for_a), scope: 0 }
 		$
 :[Interface]
 
@@ -53,12 +51,12 @@
 	}
 	* Instructions:
 		$
-			{ id: 4, instruction: evaluate, input: (token::Client::new, env, token), assign: token, scope: 0 }
-			{ id: 7, instruction: evaluate, input: (env.current_contract_address), assign: contract_address, scope: 0 }
-			{ id: 16, instruction: evaluate, input: (token.transfer, from, contract_address, max_spend_amount), scope: 0 }
-			{ id: 25, instruction: evaluate, input: (token.transfer, contract_address, to, transfer_amount), scope: 0 }
-			{ id: 35, instruction: subtract, input: (max_spend_amount, transfer_amount), assign: METHOD_CALL_ARG_3_30, scope: 0 }
-			{ id: 38, instruction: evaluate, input: (token.transfer, contract_address, from, METHOD_CALL_ARG_3_30), scope: 0 }
+			{ id: 6, instruction: evaluate, input: (token::Client::new, env, token), assign: token, scope: 0 }
+			{ id: 9, instruction: evaluate, input: (env.current_contract_address), assign: contract_address, scope: 0 }
+			{ id: 18, instruction: evaluate, input: (token.transfer, from, contract_address, max_spend_amount), scope: 0 }
+			{ id: 27, instruction: evaluate, input: (token.transfer, contract_address, to, transfer_amount), scope: 0 }
+			{ id: 37, instruction: subtract, input: (max_spend_amount, transfer_amount), assign: METHOD_CALL_ARG_3_32, scope: 0 }
+			{ id: 40, instruction: evaluate, input: (token.transfer, contract_address, from, METHOD_CALL_ARG_3_32), scope: 0 }
 		$
 
 :[Helpers]

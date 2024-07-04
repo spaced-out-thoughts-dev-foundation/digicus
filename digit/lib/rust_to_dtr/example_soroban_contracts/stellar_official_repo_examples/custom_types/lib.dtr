@@ -10,13 +10,13 @@
 	* Output: Integer
 	* Instructions:
 		$
-			{ id: 2, instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1, scope: 0 }
-			{ id: 5, instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1), assign: state, scope: 0 }
-			{ id: 13, instruction: add, input: (state.count, incr), assign: state.count, scope: 0 }
-			{ id: 21, instruction: assign, input: (incr), assign: state.last_incr, scope: 0 }
-			{ id: 30, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_27, scope: 0 }
-			{ id: 31, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_27.instance), assign: METHOD_CALL_EXPRESSION_26, scope: 0 }
-			{ id: 32, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_26.set, STATE, state), scope: 0 }
+			{ id: 3, instruction: evaluate, input: (env.clone), assign: CALL_EXPRESSION_ARG_1_0, scope: 0 }
+			{ id: 6, instruction: evaluate, input: (get_state, CALL_EXPRESSION_ARG_1_0), assign: state, scope: 0 }
+			{ id: 14, instruction: add, input: (state.count, incr), assign: state.count, scope: 0 }
+			{ id: 22, instruction: assign, input: (incr), assign: state.last_incr, scope: 0 }
+			{ id: 31, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_28, scope: 0 }
+			{ id: 32, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_28.instance), assign: METHOD_CALL_EXPRESSION_27, scope: 0 }
+			{ id: 33, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_27.set, STATE, state), scope: 0 }
 			{ id: 0, instruction: return, input: (state.count), scope: 0 }
 		$
 -() [get_state]
@@ -27,11 +27,11 @@
 	* Output: State
 	* Instructions:
 		$
-			{ id: 49, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_46, scope: 0 }
-			{ id: 50, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_46.instance), assign: METHOD_CALL_EXPRESSION_45, scope: 0 }
-			{ id: 51, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_45.get, STATE), assign: METHOD_CALL_EXPRESSION_42, scope: 0 }
-			{ id: 40, instruction: instantiate_object, input: (UDT, State, 0, 0), assign: METHOD_CALL_ARG_1_37, scope: 0 }
-			{ id: 52, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_42.unwrap_or, METHOD_CALL_ARG_1_37), assign: Thing_to_return, scope: 0 }
+			{ id: 50, instruction: evaluate, input: (env.storage), assign: METHOD_CALL_EXPRESSION_47, scope: 0 }
+			{ id: 51, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_47.instance), assign: METHOD_CALL_EXPRESSION_46, scope: 0 }
+			{ id: 52, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_46.get, STATE), assign: METHOD_CALL_EXPRESSION_43, scope: 0 }
+			{ id: 41, instruction: instantiate_object, input: (UDT, State, 0, 0), assign: METHOD_CALL_ARG_1_38, scope: 0 }
+			{ id: 53, instruction: evaluate, input: (METHOD_CALL_EXPRESSION_43.unwrap_or, METHOD_CALL_ARG_1_38), assign: Thing_to_return, scope: 0 }
 			{ id: 0, instruction: return, input: (Thing_to_return), scope: 0 }
 		$
 :[Interface]
@@ -49,3 +49,4 @@
 	* Type: String
 	* Initial Value: "STATE"
 :[State]
+
