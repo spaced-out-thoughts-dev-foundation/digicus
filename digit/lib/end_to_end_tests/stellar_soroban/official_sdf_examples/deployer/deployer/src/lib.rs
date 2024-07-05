@@ -8,8 +8,8 @@ pub struct Deployer;
 impl Deployer {
     pub fn deploy(env: Env, deployer: Address, wasm_hash: BytesN<32>, salt: BytesN<32>, init_fn: Symbol, init_args: Vec<Val>) -> (Address, Val) {
         let Thing_to_return: (Address, Val);
-        let CONDITIONAL_JUMP_ASSIGNMENT_0 = deployer != env.current_contract_address();
-        if CONDITIONAL_JUMP_ASSIGNMENT_0 {
+        let CONDITIONAL_JUMP_ASSIGNMENT_1 = deployer != env.current_contract_address();
+        if CONDITIONAL_JUMP_ASSIGNMENT_1 {
             Thing_to_return = deployer.require_auth();
             else {
         }

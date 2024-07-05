@@ -26,8 +26,8 @@ impl UpgradeableContract {
             return RETURN_VALUE_LABEL_12;
         }
         e.storage().instance().set(&DataKey::Admin, &admin);
-        let mut CALL_EXPRESSION_ARG_1 = ();
-        Thing_to_return = Ok(CALL_EXPRESSION_ARG_1);
+        let mut CALL_EXPRESSION_ARG_1_31 = ();
+        Thing_to_return = Ok(CALL_EXPRESSION_ARG_1_31);
         return Thing_to_return;
     }
 

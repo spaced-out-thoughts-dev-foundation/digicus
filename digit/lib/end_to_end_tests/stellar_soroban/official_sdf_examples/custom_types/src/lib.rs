@@ -27,8 +27,8 @@ impl IncrementContract {
 
     pub fn get_state(env: Env) -> State {
         let Thing_to_return: State;
-        let mut METHOD_CALL_ARG_1_0 = State{count: 0, last_incr: 0};
-        Thing_to_return = env.storage().instance().get(&STATE).unwrap_or(METHOD_CALL_ARG_1_0);
+        let mut METHOD_CALL_ARG_1_38 = State{count: 0, last_incr: 0};
+        Thing_to_return = env.storage().instance().get(&STATE).unwrap_or(METHOD_CALL_ARG_1_38);
         return Thing_to_return;
     }
 }

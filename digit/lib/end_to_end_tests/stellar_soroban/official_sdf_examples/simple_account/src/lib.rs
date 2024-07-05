@@ -13,10 +13,9 @@ pub struct SimpleAccount;
 #[contractimpl]
 impl SimpleAccount {
     pub fn init(env: Env, public_key: BytesN<32>)  {
-        let mut CONDITIONAL_JUMP_ASSIGNMENT_0 = env.storage().instance().has(&DataKey::Owner);
-        if CONDITIONAL_JUMP_ASSIGNMENT_0 {
+        let mut CONDITIONAL_JUMP_ASSIGNMENT_1 = env.storage().instance().has(&DataKey::Owner);
+        if CONDITIONAL_JUMP_ASSIGNMENT_1 {
             panic!("owner is already set");
-            else {
         }
         env.storage().instance().set(&DataKey::Owner, &public_key);
     }

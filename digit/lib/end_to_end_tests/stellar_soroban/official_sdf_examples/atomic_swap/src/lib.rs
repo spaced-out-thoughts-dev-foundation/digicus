@@ -10,12 +10,10 @@ impl AtomicSwapContract {
         let CONDITIONAL_JUMP_ASSIGNMENT_0 = amount_b < min_b_for_a;
         if CONDITIONAL_JUMP_ASSIGNMENT_0 {
             panic!("not enough token B for token A");
-            else {
         }
         let CONDITIONAL_JUMP_ASSIGNMENT_10 = amount_a < min_a_for_b;
         if CONDITIONAL_JUMP_ASSIGNMENT_10 {
             panic!("not enough token A for token B");
-            else {
         }
         let mut TUPLE_ARG_1_0 = token_a.clone();
         let mut TUPLE_ARG_2_0 = token_b.clone();
@@ -35,8 +33,8 @@ pub fn move_token(env: &Env, token: &Address, from: &Address, to: &Address, max_
     let mut contract_address = env.current_contract_address();
     token.transfer(from, &contract_address, max_spend_amount);
     token.transfer(&contract_address, to, transfer_amount);
-    let mut METHOD_CALL_ARG_3_30 = max_spend_amount - transfer_amount;
-    token.transfer(&contract_address, from, &METHOD_CALL_ARG_3_30);
+    let mut METHOD_CALL_ARG_3_32 = max_spend_amount - transfer_amount;
+    token.transfer(&contract_address, from, &METHOD_CALL_ARG_3_32);
 }
 
 

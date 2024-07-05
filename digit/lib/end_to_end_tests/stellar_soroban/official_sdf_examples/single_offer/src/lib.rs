@@ -26,18 +26,16 @@ impl SingleOffer {
         let mut CONDITIONAL_JUMP_ASSIGNMENT_0 = e.storage().instance().has(&DataKey::Offer);
         if CONDITIONAL_JUMP_ASSIGNMENT_0 {
             panic!("offer is already created");
-            else {
         }
         let BINARY_EXPRESSION_LEFT_15 = buy_price == 0;
         let BINARY_EXPRESSION_RIGHT_16 = sell_price == 0;
         let CONDITIONAL_JUMP_ASSIGNMENT_14 = BINARY_EXPRESSION_LEFT_15 || BINARY_EXPRESSION_RIGHT_16;
         if CONDITIONAL_JUMP_ASSIGNMENT_14 {
             panic!("zero price is not allowed");
-            else {
         }
         seller.require_auth();
-        let mut CALL_EXPRESSION_ARG_2 = Offer{seller: seller, sell_token: sell_token, buy_token: buy_token, sell_price: sell_price, buy_price: buy_price};
-        write_offer(&e, &CALL_EXPRESSION_ARG_2);
+        let mut CALL_EXPRESSION_ARG_2_37 = Offer{seller: seller, sell_token: sell_token, buy_token: buy_token, sell_price: sell_price, buy_price: buy_price};
+        write_offer(&e, &CALL_EXPRESSION_ARG_2_37);
     }
 
 
@@ -46,12 +44,11 @@ impl SingleOffer {
         let mut offer = load_offer(&e);
         let mut sell_token_client = token::Client::new(&e, &offer.sell_token);
         let mut buy_token_client = token::Client::new(&e, &offer.buy_token);
-        let mut BINARY_EXPRESSION_LEFT_23 = buy_token_amount.checked_mul(offer.sell_price).unwrap_optimized();
-        let mut sell_token_amount = BINARY_EXPRESSION_LEFT_23 / offer.buy_price;
-        let CONDITIONAL_JUMP_ASSIGNMENT_40 = sell_token_amount < min_sell_token_amount;
-        if CONDITIONAL_JUMP_ASSIGNMENT_40 {
+        let mut BINARY_EXPRESSION_LEFT_76 = buy_token_amount.checked_mul(offer.sell_price).unwrap_optimized();
+        let mut sell_token_amount = BINARY_EXPRESSION_LEFT_76 / offer.buy_price;
+        let CONDITIONAL_JUMP_ASSIGNMENT_93 = sell_token_amount < min_sell_token_amount;
+        if CONDITIONAL_JUMP_ASSIGNMENT_93 {
             panic!("price is too low");
-            else {
         }
         let mut contract = e.current_contract_address();
         buy_token_client.transfer(&buyer, &contract, &buy_token_amount);
@@ -63,18 +60,17 @@ impl SingleOffer {
     pub fn withdraw(e: Env, token: Address, amount: i128)  {
         let mut offer = load_offer(&e);
         offer.seller.require_auth();
-        let mut METHOD_CALL_EXPRESSION_21 = token::Client::new(&e, &token);
-        METHOD_CALL_EXPRESSION_21.transfer(&e.current_contract_address(), &offer.seller, &amount);
+        let mut METHOD_CALL_EXPRESSION_158 = token::Client::new(&e, &token);
+        METHOD_CALL_EXPRESSION_158.transfer(&e.current_contract_address(), &offer.seller, &amount);
     }
 
 
     pub fn updt_price(e: Env, sell_price: i128, buy_price: i128)  {
-        let BINARY_EXPRESSION_LEFT_1 = buy_price == 0;
-        let BINARY_EXPRESSION_RIGHT_2 = sell_price == 0;
-        let CONDITIONAL_JUMP_ASSIGNMENT_0 = BINARY_EXPRESSION_LEFT_1 || BINARY_EXPRESSION_RIGHT_2;
-        if CONDITIONAL_JUMP_ASSIGNMENT_0 {
+        let BINARY_EXPRESSION_LEFT_168 = buy_price == 0;
+        let BINARY_EXPRESSION_RIGHT_169 = sell_price == 0;
+        let CONDITIONAL_JUMP_ASSIGNMENT_167 = BINARY_EXPRESSION_LEFT_168 || BINARY_EXPRESSION_RIGHT_169;
+        if CONDITIONAL_JUMP_ASSIGNMENT_167 {
             panic!("zero price is not allowed");
-            else {
         }
         let mut offer = load_offer(&e);
         offer.seller.require_auth();
