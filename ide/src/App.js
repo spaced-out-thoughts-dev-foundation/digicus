@@ -20,10 +20,8 @@ const App = () => {
   const [showCodeContainer, setShowCodeContainer] = useState(true);
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
-  console.log("BASE_URL: ", process.env.BASE_URL);
-
   useEffect(() => {
-    fetch(`${process.env.BASE_URL}/api/supported_types_and_instructions`)
+    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -140,7 +138,7 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`${process.env.BASE_URL}/api/compile`,
+    fetch(`https://api.digicus.dev/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
@@ -155,7 +153,7 @@ const App = () => {
       .then(response => {
         let dtr_code = response.output;
 
-        fetch(`${process.env.BASE_URL}/api/compile`,
+        fetch(`https://api.digicus.dev/api/compile`,
           {
             headers: {
               'Accept': 'application/json',
@@ -175,8 +173,6 @@ const App = () => {
       })
       .catch(error => console.error(error));
   };
-
-  console.log("Contract Name:", contract?.contract?.contract_name)
 
   return (
     <div className='top-level-div-container'>
