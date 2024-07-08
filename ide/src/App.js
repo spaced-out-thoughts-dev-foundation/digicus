@@ -11,16 +11,17 @@ import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 import { saveAs } from 'file-saver';
 import EmailForm from './components/EmailForm';
+import { localContractFetch } from './common/LocalContractFetcher';
 
 const App = () => {
   const [contract, setContract] = useState({ contract: '', originalText: ``, generatedText: `` });
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState('hello_world.rs');
   const [supportedInstructions, setSupportedInstructions] = useState([]);
   const [showCodeContainer, setShowCodeContainer] = useState(true);
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
   useEffect(() => {
-    fetch('https://block-render-engine.vercel.app/api/supported_types_and_instructions')
+    fetch(`${process.env.BASE_URL}/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -34,95 +35,95 @@ const App = () => {
   };
 
   const onUpdateFunctionName = (newTitle, oldTitle) => {
-    if (contract?.contract?.contract_functions == null) {
-      return;
-    }
-    contract.contract.contract_functions = contract.contract?.contract_functions.map((functionData) => {
-      let jsonifiedFunctionData = JSON.parse(functionData);
+    // if (contract?.contract?.contract_functions == null) {
+    //   return;
+    // }
+    // contract.contract.contract_functions = contract.contract?.contract_functions.map((functionData) => {
+    //   let jsonifiedFunctionData = JSON.parse(functionData);
 
-      if (jsonifiedFunctionData['name'] === oldTitle) {
-        jsonifiedFunctionData['name'] = newTitle;
-      }
-      return JSON.stringify(jsonifiedFunctionData);
-    });
+    //   if (jsonifiedFunctionData['name'] === oldTitle) {
+    //     jsonifiedFunctionData['name'] = newTitle;
+    //   }
+    //   return JSON.stringify(jsonifiedFunctionData);
+    // });
 
-    fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-      {
-        headers: {
-          'Accept': 'text/text',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-          contract_name: contract.contract.contract_name,
-          contract_state: contract.contract.contract_state,
-          contract_functions: contract.contract.contract_functions,
-          contract_user_defined_types: contract.contract.contract_user_defined_types
-        })
-      })
-      .then(response => {
-        return response.json()
-      })
-      .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-      .catch(error => console.error(error));
+    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
+    //   {
+    //     headers: {
+    //       'Accept': 'text/text',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       contract_name: contract.contract.contract_name,
+    //       contract_state: contract.contract.contract_state,
+    //       contract_functions: contract.contract.contract_functions,
+    //       contract_user_defined_types: contract.contract.contract_user_defined_types
+    //     })
+    //   })
+    //   .then(response => {
+    //     return response.json()
+    //   })
+    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
+    //   .catch(error => console.error(error));
   }
 
   const onUpdateContractName = (newTitle, _) => {
-    if (contract?.contract?.contract_name == null) {
-      return;
-    }
+    // if (contract?.contract?.contract_name == null) {
+    //   return;
+    // }
 
-    contract.contract.contract_name = newTitle;
+    // contract.contract.contract_name = newTitle;
 
-    fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-      {
-        headers: {
-          'Accept': 'text/text',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-          contract_name: contract.contract.contract_name,
-          contract_state: contract.contract.contract_state,
-          contract_functions: contract.contract.contract_functions,
-          contract_user_defined_types: contract.contract.contract_user_defined_types
-        })
-      })
-      .then(response => {
-        return response.json()
-      })
-      .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-      .catch(error => console.error(error));
+    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
+    //   {
+    //     headers: {
+    //       'Accept': 'text/text',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       contract_name: contract.contract.contract_name,
+    //       contract_state: contract.contract.contract_state,
+    //       contract_functions: contract.contract.contract_functions,
+    //       contract_user_defined_types: contract.contract.contract_user_defined_types
+    //     })
+    //   })
+    //   .then(response => {
+    //     return response.json()
+    //   })
+    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
+    //   .catch(error => console.error(error));
   }
 
   const onUpdateInputName = (newTitle, oldTitle, instruction, input_index, function_number, instruction_index) => {
-    let jsonifiedFunctionData = JSON.parse(contract.contract.contract_functions[function_number]);
-    let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
+    // let jsonifiedFunctionData = JSON.parse(contract.contract.contract_functions[function_number]);
+    // let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
 
-    jsonifiedInstructionData.inputs[input_index] = newTitle;
-    jsonifiedFunctionData.instructions[instruction_index - 1] = JSON.stringify(jsonifiedInstructionData);
+    // jsonifiedInstructionData.inputs[input_index] = newTitle;
+    // jsonifiedFunctionData.instructions[instruction_index - 1] = JSON.stringify(jsonifiedInstructionData);
 
-    contract.contract.contract_functions[function_number] = JSON.stringify(jsonifiedFunctionData);
+    // contract.contract.contract_functions[function_number] = JSON.stringify(jsonifiedFunctionData);
 
-    fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-      {
-        headers: {
-          'Accept': 'text/text',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-          contract_name: contract.contract.contract_name,
-          contract_state: contract.contract.contract_state,
-          contract_functions: contract.contract.contract_functions,
-          contract_user_defined_types: contract.contract.contract_user_defined_types
-        })
-      })
-      .then(response => {
-        return response.json()
-      })
-      .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-      .catch(error => console.error(error));
+    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
+    //   {
+    //     headers: {
+    //       'Accept': 'text/text',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       contract_name: contract.contract.contract_name,
+    //       contract_state: contract.contract.contract_state,
+    //       contract_functions: contract.contract.contract_functions,
+    //       contract_user_defined_types: contract.contract.contract_user_defined_types
+    //     })
+    //   })
+    //   .then(response => {
+    //     return response.json()
+    //   })
+    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
+    //   .catch(error => console.error(error));
   };
 
   const handleShowCodeContainer = () => {
@@ -135,58 +136,45 @@ const App = () => {
     setShowUserDefinedTypes(!showUserDefinedTypes);
   }
 
-  const determineFileFormat = (file) => {
-    if (file == null) {
-      return "";
-    }
+  const handleUpload = (contract) => {
+    let contractText = localContractFetch(contract);
+    fetch(`${process.env.BASE_URL}/api/compile`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({ name: "soroban_rust_frontend", type: "frontend", content: contractText }),
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(response => {
+        let dtr_code = response.output;
 
-    if (file.name.endsWith(".rs")) {
-      return "rust";
-    }
-
-    if (file.name.endsWith(".dtr")) {
-      return "dtr";
-    }
-
-    return "unknown";
-  };
-
-  const handleUpload = () => {
-    const reader = new FileReader();
-
-    reader.addEventListener(
-      "load",
-      () => {
-        // this will then display a text file
-        fetch('https://block-render-engine.vercel.app/api/compile_from_dtr',
+        fetch(`${process.env.BASE_URL}/api/compile`,
           {
             headers: {
-              'Accept': 'text/text',
+              'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify({ format: determineFileFormat(file), content: reader.result })
+            body: JSON.stringify({ name: "digicus_web_backend", type: "backend", content: dtr_code }),
           })
           .then(response => {
             return response.json()
           })
-          .then(json => setContract({ contract: json, originalText: reader.result, generatedText: json.generated_code }))
+          .then(json => {
+            console.log("JSON: ", json);
+            setContract({ contract: JSON.parse(json.output), originalText: contractText, generatedText: dtr_code })
+          })
           .catch(error => console.error(error));
-      },
-      false,
-    );
-
-    if (file) {
-      reader.readAsText(file);
-    };
+      })
+      .catch(error => console.error(error));
   };
 
-  const handleFileChange = (event) => {
-    // const selectedFile = event.target.files[0];
-    // setFile(selectedFile);
-
-    console.log("Selected file: ", event.target.value);
-  };
+  console.log("Contract Name:", contract?.contract?.contract_name)
 
   return (
     <div className='top-level-div-container'>
@@ -198,7 +186,7 @@ const App = () => {
             <div className='top-level-third-level-container-secondary-header-bar'>
               <ContractHeader name={contract?.contract?.contract_name} onUpdateContractName={onUpdateContractName} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <FileUpload style={{ flex: 10 }} handleFileChange={handleFileChange} handleUpload={handleUpload} />
+                <FileUpload style={{ flex: 10 }} handleUpload={handleUpload} />
                 <div style={{ border: '1px solid black', borderRadius: '10px', margin: '10px' }}>
                   <label>
                     <input
@@ -215,7 +203,7 @@ const App = () => {
                       checked={showUserDefinedTypes}
                       onChange={handleShowUserDefinedTypes}
                     />
-                    Generated Source Code
+                    Generated Intermediate Code
                   </label>
                 </div>
               </div>
@@ -233,8 +221,8 @@ const App = () => {
             </div> */}
 
             <ContractContainer
-              functions={contract?.contract?.contract_functions}
-              filename={file?.name}
+              functions={contract?.contract?.contract_interface}
+              filename={file}
               originalText={contract?.originalText}
               generatedText={contract?.generatedText}
               supportedInstructions={supportedInstructions}

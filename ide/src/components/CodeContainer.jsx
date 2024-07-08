@@ -19,7 +19,7 @@ const codeContainerBody = (originalText, filename,) => {
 function CodeContainer({ originalText, filename, originalSource }) {
   return (
     <Box className="code-container">
-      <h2>{originalSource ? 'Original' : 'Generated'} Source Code</h2>
+      <h2>{originalSource ? 'Original Source' : 'Generated Intermediate'} Code</h2>
       {codeContainerBody(originalText, filename)}
     </Box>
   )
