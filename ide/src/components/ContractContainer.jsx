@@ -104,7 +104,6 @@ function ContractContainer({
   functions, supportedInstructions, supportedInstructionToColor, originalText, filename,
   showCodeContainer, showUserDefinedTypes, userDefinedTypes, generatedText, onUpdateFunctionName, onUpdateInputName
 }) {
-
   return (
     <div className='contract-container-container'>
       <Box className='contract-container-box'>

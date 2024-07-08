@@ -20,6 +20,8 @@ const App = () => {
   const [showCodeContainer, setShowCodeContainer] = useState(true);
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
+  console.log("BASE_URL: ", process.env.BASE_URL);
+
   useEffect(() => {
     fetch(`${process.env.BASE_URL}/api/supported_types_and_instructions`)
       .then(response => {
