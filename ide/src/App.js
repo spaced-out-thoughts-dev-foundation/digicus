@@ -20,10 +20,10 @@ const App = () => {
   const [showCodeContainer, setShowCodeContainer] = useState(true);
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
-  const BASE_URL = "http://localhost:4567";
+  const BASE_URL = "https://api.digicus.dev";
 
   useEffect(() => {
-    fetch(`http://localhost:4567/api/supported_types_and_instructions`)
+    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -182,7 +182,7 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`http://localhost:4567/api/compile`,
+    fetch(`https://api.digicus.dev/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
