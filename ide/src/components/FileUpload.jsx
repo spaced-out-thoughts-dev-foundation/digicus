@@ -28,6 +28,11 @@ function FileUpload({ handleFileChange, handleUpload }) {
         >
           <MenuItem value={"hello_world"}>Hello World</MenuItem>
           <MenuItem value={"increment"}>Increment</MenuItem>
+          {/* <MenuItem value={"custom_types"}>Custom Types</MenuItem> */}
+          <MenuItem value={"logging"}>Logging</MenuItem>
+          {/* <MenuItem value={"errors"}>Errors</MenuItem> */}
+          {/* <MenuItem value={"events"}>Events</MenuItem> */}
+
         </Select>
       </FormControl>
       <button style={{ flex: 1, fontSize: '1.25em' }} onClick={() => handleUpload(contract)}>Upload</button>

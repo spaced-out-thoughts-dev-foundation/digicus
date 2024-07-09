@@ -20,8 +20,10 @@ const App = () => {
   const [showCodeContainer, setShowCodeContainer] = useState(true);
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
 
+  const BASE_URL = "http://localhost:4567";
+
   useEffect(() => {
-    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
+    fetch(`http://localhost:4567/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -35,95 +37,137 @@ const App = () => {
   };
 
   const onUpdateFunctionName = (newTitle, oldTitle) => {
-    // if (contract?.contract?.contract_functions == null) {
-    //   return;
-    // }
-    // contract.contract.contract_functions = contract.contract?.contract_functions.map((functionData) => {
-    //   let jsonifiedFunctionData = JSON.parse(functionData);
+    if (contract?.contract?.contract_interface == null) {
+      return;
+    }
+    contract.contract.contract_interface = contract.contract?.contract_interface.map((functionData) => {
+      let jsonifiedFunctionData = JSON.parse(functionData);
 
-    //   if (jsonifiedFunctionData['name'] === oldTitle) {
-    //     jsonifiedFunctionData['name'] = newTitle;
-    //   }
-    //   return JSON.stringify(jsonifiedFunctionData);
-    // });
+      if (jsonifiedFunctionData['name'] === oldTitle) {
+        jsonifiedFunctionData['name'] = newTitle;
+      }
+      return JSON.stringify(jsonifiedFunctionData);
+    });
 
-    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-    //   {
-    //     headers: {
-    //       'Accept': 'text/text',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       contract_name: contract.contract.contract_name,
-    //       contract_state: contract.contract.contract_state,
-    //       contract_functions: contract.contract.contract_functions,
-    //       contract_user_defined_types: contract.contract.contract_user_defined_types
-    //     })
-    //   })
-    //   .then(response => {
-    //     return response.json()
-    //   })
-    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-    //   .catch(error => console.error(error));
+    let content = JSON.stringify({
+      contract_name: contract.contract.contract_name,
+      contract_state: contract.contract.contract_state,
+      contract_interface: contract.contract.contract_interface,
+      contract_user_defined_types: contract.contract.contract_user_defined_types,
+      contract_helpers: contract.contract.contract_helpers
+    });
+
+    fetch(`${BASE_URL}/api/compile`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          name_types: [
+            { name: "digicus_web_frontend", type: "frontend" },
+            { name: "soroban_rust_backend", type: "backend" },
+          ],
+          content: content
+        }),
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(json => {
+        console.log("JSON: ", json)
+        const generated_code = JSON.parse(json.results[1]).output;
+
+        setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
+      })
+      .catch(error => console.error(error));
   }
 
   const onUpdateContractName = (newTitle, _) => {
-    // if (contract?.contract?.contract_name == null) {
-    //   return;
-    // }
+    if (contract?.contract?.contract_name == null) {
+      return;
+    }
 
-    // contract.contract.contract_name = newTitle;
+    contract.contract.contract_name = newTitle;
 
-    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-    //   {
-    //     headers: {
-    //       'Accept': 'text/text',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       contract_name: contract.contract.contract_name,
-    //       contract_state: contract.contract.contract_state,
-    //       contract_functions: contract.contract.contract_functions,
-    //       contract_user_defined_types: contract.contract.contract_user_defined_types
-    //     })
-    //   })
-    //   .then(response => {
-    //     return response.json()
-    //   })
-    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-    //   .catch(error => console.error(error));
+    let content = JSON.stringify({
+      contract_name: contract.contract.contract_name,
+      contract_state: contract.contract.contract_state,
+      contract_interface: contract.contract.contract_interface,
+      contract_user_defined_types: contract.contract.contract_user_defined_types,
+      contract_helpers: contract.contract.contract_helpers
+    });
+
+    fetch(`${BASE_URL}/api/compile`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          name_types: [
+            { name: "digicus_web_frontend", type: "frontend" },
+            { name: "soroban_rust_backend", type: "backend" },
+          ],
+          content: content
+        }),
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(json => {
+        console.log("JSON: ", json)
+        const generated_code = JSON.parse(json.results[1]).output;
+
+        setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
+      })
+      .catch(error => console.error(error));
   }
 
   const onUpdateInputName = (newTitle, oldTitle, instruction, input_index, function_number, instruction_index) => {
-    // let jsonifiedFunctionData = JSON.parse(contract.contract.contract_functions[function_number]);
-    // let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
+    let jsonifiedFunctionData = JSON.parse(contract.contract.contract_interface[function_number]);
+    let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
 
-    // jsonifiedInstructionData.inputs[input_index] = newTitle;
-    // jsonifiedFunctionData.instructions[instruction_index - 1] = JSON.stringify(jsonifiedInstructionData);
+    jsonifiedInstructionData.inputs[input_index] = newTitle;
+    jsonifiedFunctionData.instructions[instruction_index - 1] = JSON.stringify(jsonifiedInstructionData);
 
-    // contract.contract.contract_functions[function_number] = JSON.stringify(jsonifiedFunctionData);
+    contract.contract.contract_interface[function_number] = JSON.stringify(jsonifiedFunctionData);
 
-    // fetch('https://block-render-engine.vercel.app/api/generate_from_dtr',
-    //   {
-    //     headers: {
-    //       'Accept': 'text/text',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       contract_name: contract.contract.contract_name,
-    //       contract_state: contract.contract.contract_state,
-    //       contract_functions: contract.contract.contract_functions,
-    //       contract_user_defined_types: contract.contract.contract_user_defined_types
-    //     })
-    //   })
-    //   .then(response => {
-    //     return response.json()
-    //   })
-    //   .then(json => setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: json.rust_code }))
-    //   .catch(error => console.error(error));
+    let content = JSON.stringify({
+      contract_name: contract.contract.contract_name,
+      contract_state: contract.contract.contract_state,
+      contract_interface: contract.contract.contract_interface,
+      contract_user_defined_types: contract.contract.contract_user_defined_types,
+      contract_helpers: contract.contract.contract_helpers
+    });
+
+    fetch(`${BASE_URL}/api/compile`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({
+          name_types: [
+            { name: "digicus_web_frontend", type: "frontend" },
+            { name: "soroban_rust_backend", type: "backend" },
+          ],
+          content: content
+        }),
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(json => {
+        console.log("JSON: ", json)
+        const generated_code = JSON.parse(json.results[1]).output;
+
+        setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
+      })
+      .catch(error => console.error(error));
   };
 
   const handleShowCodeContainer = () => {
@@ -138,38 +182,34 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`https://api.digicus.dev/api/compile`,
+    fetch(`http://localhost:4567/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify({ name: "soroban_rust_frontend", type: "frontend", content: contractText }),
+        body: JSON.stringify({
+          name_types: [
+            { name: "soroban_rust_frontend", type: "frontend" },
+            { name: "digicus_web_backend", type: "backend" },
+            { name: "digicus_web_frontend", type: "frontend" },
+            { name: "soroban_rust_backend", type: "backend" },
+          ],
+          content: contractText
+        }),
       })
       .then(response => {
         return response.json()
       })
-      .then(response => {
-        let dtr_code = response.output;
+      .then(json => {
+        console.log("JSON: ", json)
+        const generated_code = JSON.parse(json.results[3]).output;
+        const dtr_json = JSON.parse(JSON.parse(json.results[1]).output);
 
-        fetch(`https://api.digicus.dev/api/compile`,
-          {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({ name: "digicus_web_backend", type: "backend", content: dtr_code }),
-          })
-          .then(response => {
-            return response.json()
-          })
-          .then(json => {
-            console.log("JSON: ", json);
-            setContract({ contract: JSON.parse(json.output), originalText: contractText, generatedText: dtr_code })
-          })
-          .catch(error => console.error(error));
+        console.log("DTR JSON: ", dtr_json);
+
+        setContract({ contract: dtr_json, originalText: contractText, generatedText: generated_code })
       })
       .catch(error => console.error(error));
   };

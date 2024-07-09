@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const EditableTitle = ({ initial_title, handleChangeTitle }) => {
   const [title, setTitle] = useState(initial_title);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    setTitle(initial_title);
+  }, [initial_title]);
 
   const handleTitleClick = () => {
     setIsEditing(true);

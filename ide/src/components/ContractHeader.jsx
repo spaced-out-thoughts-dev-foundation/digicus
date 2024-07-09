@@ -7,12 +7,11 @@ class ContractHeader extends Component {
   render() {
     return (
       <div className='contract-header'>
-        {/* {
+        {
           this.props?.name ?
             <EditableTitle initial_title={this.props?.name} handleChangeTitle={this.props.onUpdateContractName} />
             : <h1>"Upload a Contract ➡️"</h1>
-        } */}
-        <h1>{this.props?.name ? "[Name]: " + this.props?.name : "Upload a Contract ➡️"}</h1>
+        }
       </div>
     )
   }
