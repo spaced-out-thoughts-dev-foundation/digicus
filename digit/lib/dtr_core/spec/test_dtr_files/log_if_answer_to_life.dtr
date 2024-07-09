@@ -9,10 +9,10 @@
   }
   * Instructions:
   $
-    { instruction: evaluate, input: (equal_to, possibly_the_answer_to_life, ANSWER_TO_LIFE), assign: UNARY_ARGUMENT_0, scope: 0 }
-    { instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
-    { instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
-    { instruction: evaluate, input: (log_to_env, env, "Yes, the answer to life is 42!"), scope: 1 }
+    { id: 0, instruction: evaluate, input: (equal_to, possibly_the_answer_to_life, ANSWER_TO_LIFE), assign: UNARY_ARGUMENT_0, scope: 0 }
+    { id: 0, instruction: evaluate, input: (!, UNARY_ARGUMENT_0), assign: CONDITIONAL_JUMP_ASSIGNMENT, scope: 0 }
+    { id: 0, instruction: jump, input: (CONDITIONAL_JUMP_ASSIGNMENT, 1), scope: 0 }
+    { id: 0, instruction: evaluate, input: (log_to_env, env, "Yes, the answer to life is 42!"), scope: 1 }
   $
 :[Interface]
 
@@ -31,6 +31,6 @@
   }
   * Instructions:
   $
-    { instruction: print, input: (env, message), scope: 0 }
+    { id: 0, instruction: print, input: (env, message), scope: 0 }
   $
 :[Helpers]

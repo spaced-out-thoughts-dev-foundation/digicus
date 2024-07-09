@@ -9,7 +9,7 @@
       * Output: String
       * Instructions:
         $
-          { instruction: add, input: ("Hello", to), assign: HelloToResult }
-          { instruction: return, input: (HelloToResult) }
+          { id: 0, instruction: add, input: ("Hello", to), assign: HelloToResult }
+          { id: 0, instruction: return, input: (HelloToResult) }
         $
 :[Interface]

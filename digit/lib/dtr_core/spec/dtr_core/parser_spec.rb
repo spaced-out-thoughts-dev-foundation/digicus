@@ -84,8 +84,8 @@ RSpec.describe DTRCore::Parser do
         DTRCore::Function.new('hello', [
                                 { name: 'to', type_name: 'String' }
                               ], 'String', [
-                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
-                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0, 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0, 0)
                               ])
       end
 
@@ -107,14 +107,14 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'to', type_name: 'String' },
                                 { name: 'from', type_name: 'Integer' }
                               ], 'String', [
-                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
-                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0, 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0, 0)
                               ])
       end
 
       let(:world_function) do
         DTRCore::Function.new('world', [], 'String', [
-                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
+                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0, 0)
                               ])
       end
 
@@ -166,14 +166,14 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'to', type_name: 'String' },
                                 { name: 'from', type_name: 'State' }
                               ], 'State_Two', [
-                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
-                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
+                                DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0, 0),
+                                DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0, 0)
                               ])
       end
 
       let(:world_function) do
         DTRCore::Function.new('world', [], 'String', [
-                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
+                                DTRCore::Instruction.new('return', nil, 'ReturnValue', 0, 0)
                               ])
       end
 
@@ -215,10 +215,10 @@ RSpec.describe DTRCore::Parser do
                                 { name: 'numerical_question', type_name: 'Integer' }
                               ], 'String', [
                                 DTRCore::Instruction.new('jump', %w[equal_to 42 numerical_question 1], nil,
-                                                         0),
-                                DTRCore::Instruction.new('jump', %w[2], nil, 0),
-                                DTRCore::Instruction.new('return', ['"yes"'], nil, 1),
-                                DTRCore::Instruction.new('return', ['"no"'], nil, 2)
+                                                         0, 0),
+                                DTRCore::Instruction.new('jump', %w[2], nil, 0, 0),
+                                DTRCore::Instruction.new('return', ['"yes"'], nil, 1, 0),
+                                DTRCore::Instruction.new('return', ['"no"'], nil, 2, 0)
                               ])
       end
 

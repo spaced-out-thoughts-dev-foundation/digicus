@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'dtr_core'
-  spec.version       = '0.9.0'
+  spec.version       = '0.10.0'
   spec.authors = ['Rob Durst']
   spec.email         = ['me@robdurst.com']
   spec.summary       = 'Core smart contract intermediate language (Digicus Textual Representation) parser.'

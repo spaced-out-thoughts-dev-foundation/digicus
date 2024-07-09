@@ -55,31 +55,31 @@ module DTRCore
     end
 
     def state_to_s
-      return '' if @state.nil?
+      return '' if @state.nil? || @state.empty?
 
       "[State]:\n#{@state&.map(&:to_s)&.join("\n")}\n:[State]\n"
     end
 
     def interface_to_s
-      return '' if @state.nil?
+      return '' if @interface.nil? || @interface.empty?
 
       "[Interface]:\n#{@interface&.map(&:to_s)&.join("\n")}\n:[Interface]\n"
     end
 
     def user_defined_types_to_s
-      return '' if @user_defined_types.nil?
+      return '' if @user_defined_types.nil? || @user_defined_types.empty?
 
       "[User Defined Types]:\n#{@user_defined_types&.map(&:to_s)&.join("\n")}\n:[User Defined Types]\n"
     end
 
     def helpers_to_s
-      return '' if @helpers.nil?
+      return '' if @helpers.nil? || @helpers.empty?
 
       "[Helpers]:\n#{@helpers&.map(&:to_s)&.join("\n")}\n:[Helpers]\n"
     end
 
     def non_translatables_to_s
-      return '' if @non_translatables.nil?
+      return '' if @non_translatables.nil? || @non_translatables.empty?
 
       "[NonTranslatable]:\n#{@non_translatables}\n:[NonTranslatable]"
     end

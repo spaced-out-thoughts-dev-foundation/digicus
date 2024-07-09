@@ -9,9 +9,9 @@
 	* Output: String
 	* Instructions:
 		$
-			{ instruction: jump, input: (equal_to, 42, numerical_question, 1)}
-			{ instruction: jump, input: (2)}
-			{ instruction: return, input: ("yes"), scope: 1}
-			{ instruction: return, input: ("no"), scope: 2}
+			{ id: 0, instruction: jump, input: (equal_to, 42, numerical_question, 1)}
+			{ id: 0, instruction: jump, input: (2)}
+			{ id: 0, instruction: return, input: ("yes"), scope: 1}
+			{ id: 0, instruction: return, input: ("no"), scope: 2}
 		$
 :[Interface]

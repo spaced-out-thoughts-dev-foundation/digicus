@@ -9,14 +9,14 @@ RSpec.describe DTRCore::Contract do
                               { name: 'to', type_name: 'String' },
                               { name: 'from', type_name: 'Integer' }
                             ], 'String', [
-                              DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
-                              DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
+                              DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0, 0),
+                              DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0, 0)
                             ])
     end
 
     let(:world_function) do
       DTRCore::Function.new('world', [], 'String', [
-                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
+                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0, 0)
                             ])
     end
 
@@ -30,7 +30,7 @@ RSpec.describe DTRCore::Contract do
 
     let(:bar_helper_function) do
       DTRCore::Function.new('bar_helper', [], 'String', [
-                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
+                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0, 0)
                             ])
     end
 
@@ -122,14 +122,14 @@ RSpec.describe DTRCore::Contract do
                               { name: 'to', type_name: 'String' },
                               { name: 'from', type_name: 'Integer' }
                             ], 'String', [
-                              DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0),
-                              DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0)
+                              DTRCore::Instruction.new('add', ['"Hello"', 'to'], 'HelloToResult', 0, 0),
+                              DTRCore::Instruction.new('return', ['HelloToResult'], nil, 0, 0)
                             ])
     end
 
     let(:world_function) do
       DTRCore::Function.new('world', [], 'String', [
-                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0)
+                              DTRCore::Instruction.new('return', nil, 'ReturnValue', 0, 0)
                             ])
     end
 
@@ -180,10 +180,11 @@ RSpec.describe DTRCore::Contract do
           [{ name: 'and_then_some', type_name: 'Integer' }],
           'Integer',
           [
-            DTRCore::Instruction.new('assign', ['42'], 'BINARY_EXPRESSION_LEFT', 0),
-            DTRCore::Instruction.new('assign', ['and_then_some'], 'BINARY_EXPRESSION_RIGHT', 0),
-            DTRCore::Instruction.new('add', %w[BINARY_EXPRESSION_LEFT BINARY_EXPRESSION_RIGHT], 'Thing_to_return', 0),
-            DTRCore::Instruction.new('return', ['Thing_to_return'], nil, 0)
+            DTRCore::Instruction.new('assign', ['42'], 'BINARY_EXPRESSION_LEFT', 0, 0),
+            DTRCore::Instruction.new('assign', ['and_then_some'], 'BINARY_EXPRESSION_RIGHT', 0, 0),
+            DTRCore::Instruction.new('add', %w[BINARY_EXPRESSION_LEFT BINARY_EXPRESSION_RIGHT], 'Thing_to_return', 0,
+                                     0),
+            DTRCore::Instruction.new('return', ['Thing_to_return'], nil, 0, 0)
           ]
         )
       )
@@ -197,8 +198,8 @@ RSpec.describe DTRCore::Contract do
         [{ name: 'to', type_name: 'Symbol' }],
         'Symbol',
         [
-          DTRCore::Instruction.new('add', ['"Hello, world, how are you?,"', 'to'], 'Thing_to_return', 0),
-          DTRCore::Instruction.new('return', ['Thing_to_return'], nil, 0)
+          DTRCore::Instruction.new('add', ['"Hello, world, how are you?,"', 'to'], 'Thing_to_return', 0, 0),
+          DTRCore::Instruction.new('return', ['Thing_to_return'], nil, 0, 0)
         ]
       )
       content = File.read('./spec/test_dtr_files/hello_world_simple_with_commas_in_string.dtr')
@@ -221,10 +222,10 @@ RSpec.describe DTRCore::Contract do
           nil,
           [
             DTRCore::Instruction.new('evaluate', %w[equal_to possibly_the_answer_to_life ANSWER_TO_LIFE],
-                                     'UNARY_ARGUMENT_0', 0),
-            DTRCore::Instruction.new('evaluate', ['!', 'UNARY_ARGUMENT_0'], 'CONDITIONAL_JUMP_ASSIGNMENT', 0),
-            DTRCore::Instruction.new('jump', %w[CONDITIONAL_JUMP_ASSIGNMENT 1], nil, 0),
-            DTRCore::Instruction.new('evaluate', ['log_to_env', 'env', '"Yes, the answer to life is 42!"'], nil, 1)
+                                     'UNARY_ARGUMENT_0', 0, 0),
+            DTRCore::Instruction.new('evaluate', ['!', 'UNARY_ARGUMENT_0'], 'CONDITIONAL_JUMP_ASSIGNMENT', 0, 0),
+            DTRCore::Instruction.new('jump', %w[CONDITIONAL_JUMP_ASSIGNMENT 1], nil, 0, 0),
+            DTRCore::Instruction.new('evaluate', ['log_to_env', 'env', '"Yes, the answer to life is 42!"'], nil, 1, 0)
           ]
         )
       ]
@@ -242,7 +243,7 @@ RSpec.describe DTRCore::Contract do
            { name: 'message', type_name: 'String' }],
           nil,
           [
-            DTRCore::Instruction.new('print', %w[env message], nil, 0)
+            DTRCore::Instruction.new('print', %w[env message], nil, 0, 0)
           ]
         )
       ]

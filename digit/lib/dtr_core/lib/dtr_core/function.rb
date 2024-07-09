@@ -98,7 +98,8 @@ module DTRCore
         instruction[/instruction:\s*(?<all>[^\s,]+)/, 1],
         parse_function_instruction_input(instruction),
         instruction[/\s*assign:\s*\[?(?<all>[^\s\,\]]+)\]?/, 1],
-        instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0
+        instruction[/\s*scope:\s*(?<all>[^\s\,]+)/, 1].to_i || 0,
+        instruction[/\sid:\s*(?<all>[^\s,]+)/, 1].to_i || 0
       )
 
       raise "Invalid instruction: #{instruction}" unless instruction.valid?

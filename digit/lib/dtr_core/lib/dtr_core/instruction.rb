@@ -3,26 +3,29 @@
 module DTRCore
   # Instruction class
   class Instruction
-    attr_reader :instruction, :inputs, :assign, :scope
+    attr_reader :instruction, :inputs, :assign, :scope, :id
 
-    def initialize(instruction, inputs, assign, scope)
+    def initialize(instruction, inputs, assign, scope, id)
       @instruction = instruction
       @inputs = inputs
       @assign = assign
       @scope = scope
+      @id = id
     end
 
     def ==(other)
       instruction == other.instruction &&
         inputs == other.inputs &&
         assign == other.assign &&
-        scope == other.scope
+        scope == other.scope &&
+        id == other.id
     end
 
     def to_s
-      "{ instruction: #{instruction}, " \
+      assignment = @assign.nil? ? '' : "assign: #{@assign}, "
+      "{ id: #{id}, instruction: #{instruction}, " \
         "input: (#{inputs&.join(', ')}), " \
-        "assign: #{assign}, scope: #{scope} }"
+        "#{assignment}scope: #{scope} }"
     end
 
     def to_json(*_args)
@@ -30,7 +33,8 @@ module DTRCore
         instruction:,
         inputs:,
         assign:,
-        scope:
+        scope:,
+        id:
       }.to_json
     end
 

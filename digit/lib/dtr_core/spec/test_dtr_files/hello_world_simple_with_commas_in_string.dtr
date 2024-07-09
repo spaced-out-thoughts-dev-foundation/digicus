@@ -9,7 +9,7 @@
       * Output: Symbol
       * Instructions:
         $
-          { instruction: add, input: ("Hello, world, how are you?,", to), assign: Thing_to_return }
-          { instruction: return, input: (Thing_to_return) }
+          { id: 0, instruction: add, input: ("Hello, world, how are you?,", to), assign: Thing_to_return }
+          { id: 0, instruction: return, input: (Thing_to_return) }
         $
 :[Interface]

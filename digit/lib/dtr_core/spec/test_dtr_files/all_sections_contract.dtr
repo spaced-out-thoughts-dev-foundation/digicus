@@ -22,14 +22,14 @@
       * Output: String
       * Instructions:
         $
-          { instruction: add, input: ("Hello", to), assign: HelloToResult }
-          { instruction: return, input: (HelloToResult) }
+          { id: 0, instruction: add, input: ("Hello", to), assign: HelloToResult }
+          { id: 0, instruction: return, input: (HelloToResult) }
         $
 -() [world]
       * Output: String
       * Instructions:
         $
-          { instruction: return, assign: ReturnValue }
+          { id: 0, instruction: return, assign: ReturnValue }
         $
 :[Interface]
 
@@ -38,7 +38,7 @@
       * Output: String
       * Instructions:
         $
-          { instruction: return, assign: ReturnValue }
+          { id: 0, instruction: return, assign: ReturnValue }
         $
 :[Helpers]
 
