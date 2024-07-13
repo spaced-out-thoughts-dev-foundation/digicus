@@ -1,9 +1,0 @@
-require: rubocop-rspec
-AllCops:
-  NewCops: enable
-RSpec/ExampleLength:
-  Max: 20
-RSpec/MultipleExpectations:
-  Max: 6
-RSpec/NestedGroups:
-  Max: 4

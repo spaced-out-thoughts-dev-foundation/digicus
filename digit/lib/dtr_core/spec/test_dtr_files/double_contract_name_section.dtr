@@ -1,9 +1,0 @@
-[Contract]: CONTRACT_NAME
-
-[State]:
-  * [STATE_DEFINITION_1]
-    * Type: Integer
-    * Initial Value: 22
-:[State]
-
-[Contract]: CONTRACT_NAME_2
