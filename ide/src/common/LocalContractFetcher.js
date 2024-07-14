@@ -7,8 +7,8 @@ pub struct Contract;
 
 #[contractimpl]
 impl Contract {
-    pub fn hello(env: Env, answer_to_life: number, value: Symbol) {
-        if value == "fizz" {
+    pub fn hello(env: Env, answer_to_life: i32, value: Symbol) {
+        if answer_to_life == 42 {
             panic!("Not the answer to life!");
         }
 
