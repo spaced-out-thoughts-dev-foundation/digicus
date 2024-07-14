@@ -10,7 +10,6 @@ function FileUpload({ handleFileChange, handleUpload }) {
     setContract(event.target.value);
   }
 
-  console.log(contract);
   return (
     <div className='file-upload-container'>
       {/* <input style={{fontSize: '1.25em', backgroundColor: 'white', margin: '2%', color: 'black'}} type="file" onChange={handleFileChange} /> */}

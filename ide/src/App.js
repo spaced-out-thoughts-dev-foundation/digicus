@@ -76,7 +76,6 @@ const App = () => {
         return response.json()
       })
       .then(json => {
-        console.log("JSON: ", json)
         const generated_code = JSON.parse(json.results[1]).output;
 
         setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
@@ -118,7 +117,6 @@ const App = () => {
         return response.json()
       })
       .then(json => {
-        console.log("JSON: ", json)
         const generated_code = JSON.parse(json.results[1]).output;
 
         setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
@@ -162,7 +160,6 @@ const App = () => {
         return response.json()
       })
       .then(json => {
-        console.log("JSON: ", json)
         const generated_code = JSON.parse(json.results[1]).output;
 
         setContract({ contract: contract.contract, originalText: contract.originalText, generatedText: generated_code })
@@ -203,11 +200,8 @@ const App = () => {
         return response.json()
       })
       .then(json => {
-        console.log("JSON: ", json)
         const generated_code = JSON.parse(json.results[3]).output;
         const dtr_json = JSON.parse(JSON.parse(json.results[1]).output);
-
-        console.log("DTR JSON: ", dtr_json);
 
         setContract({ contract: dtr_json, originalText: contractText, generatedText: generated_code })
       })

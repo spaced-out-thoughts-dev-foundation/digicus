@@ -1,5 +1,5 @@
 const contractDictionary = {
-  "hello_world": `
+    "hello_world": `
 #![no_std]
 use soroban_sdk::{contract, contractimpl, vec, Env, String, Vec};
 
@@ -9,13 +9,19 @@ pub struct HelloContract;
 #[contractimpl]
 impl HelloContract {
     pub fn hello(env: Env, to: String) -> Vec<String> {
-        vec![&env, String::from_str(&env, "Hello"), to]
+        if x == 8 || x == 9 && x == 10 {
+            for x in 0..10 {
+                log!(&env, "Hello, {}!", to);
+            }      
+
+            panic!("This is a panic");
+        }  
     }
 }
 
 mod test;
 `,
-  "increment": `
+    "increment": `
 #![no_std]
 use soroban_sdk::{contract, contractimpl, log, symbol_short, Env, Symbol};
 
@@ -27,16 +33,31 @@ pub struct IncrementContract;
 #[contractimpl]
 impl IncrementContract {
     /// Increment increments an internal counter, and returns the value.
-    pub fn increment(env: Env) -> u32 {
+    pub fn increment(env: Env, foo: i32, bar: i32, baz: i32, faz: i32) -> u32 {
         // Get the current count.
         let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0); // If no value set, assume 0.
         log!(&env, "count: {}", count);
 
         // Increment the count.
         count += 1;
+        count -= 2;
+        count /= 3;
+        count *= 4;
+
+        if x > 0 {
+            log!("before nested");
+            if x > 10 {
+                log!("x is greater than 10");
+            } else {
+                log!("x is less than or equal to 10");
+            }
+            log!("after nested");
+        } else {
+            log!("x is less than or equal to 0"); 
+        }
 
         // Save the count.
-        env.storage().instance().set(&COUNTER, &count);
+        env.storage().instance().set(&COUNTER, &count, foo, bar, baz, foof);
 
         // The contract instance will be bumped to have a lifetime of at least 100 ledgers if the current expiration lifetime at most 50.
         // If the lifetime is already more than 100 ledgers, this is a no-op. Otherwise,
@@ -47,10 +68,35 @@ impl IncrementContract {
         // Return the count to the caller.
         count
     }
+
+    // pub fn decrement(env: Env) -> u32 {
+    //     // Get the current count.
+    //     let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0); // If no value set, assume 0.
+    //     log!(&env, "count: {}", count);
+
+    //     // Decrement the count.
+    //     count -= 1;
+
+    //     if x > 0 {
+    //         if x > 10 {
+    //             log("x is greater than 10");
+    //         }
+    //     }
+
+    //     // Save the count.
+    //     env.storage().instance().set(&COUNTER, &count);
+
+    //     // Return the count to the caller.
+    //     count
+    // }
+
+    // pub fn hello_world(env: Env) {
+    //     log!(&env, "Hello, world!");
+    // }
 }
 
 mod test;`,
-  "custom_types": `
+    "custom_types": `
 #![no_std]
 use soroban_sdk::{contract, contractimpl, contracttype, symbol_short, Env, Symbol};
 
@@ -94,7 +140,7 @@ impl IncrementContract {
 
 mod test;
 `,
-  "logging": `
+    "logging": `
 #![no_std]
 use soroban_sdk::{contract, contractimpl, log, Env, Symbol};
 
@@ -109,7 +155,7 @@ impl Contract {
 }
 
 mod test;`,
-  "errors": `
+    "errors": `
 #![no_std]
 use soroban_sdk::{contract, contracterror, contractimpl, log, symbol_short, Env, Symbol};
 
@@ -193,5 +239,5 @@ mod test;
 }
 
 export function localContractFetch(contractName) {
-  return contractDictionary[contractName];
+    return contractDictionary[contractName];
 };
