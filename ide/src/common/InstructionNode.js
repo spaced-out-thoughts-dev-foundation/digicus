@@ -54,5 +54,5 @@ export function determineInstructionHeight(instructionNodeType, numInputs, hasAs
     return 120;
   }
 
-  return 65 + (20 * numInputs + bonus_instructions) + (hasAssign ? 50 : 0);
+  return 65 + (25 * numInputs + bonus_instructions) + (hasAssign ? 50 : 0);
 }

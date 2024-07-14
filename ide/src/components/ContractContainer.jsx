@@ -105,6 +105,8 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
   let all_function_nodes = function_json_data.instructions
     .map((instruction) => JSON.parse(instruction))
     .filter((instruction) => !!tryGetSupportedInstruction(instruction.instruction, supportedInstructions))
+    // don't show gotos
+    .filter((instruction) => instruction.instruction !== 'goto')
     .map((instruction, index) => {
       let instructionHeight = determineInstructionHeight(determineInstructionNodeType(instruction.instruction), instruction.inputs.length, instruction.assign != null, instruction.instruction, instruction.inputs);
       let currentHeight = height + 100;
@@ -218,9 +220,11 @@ function constructEdge(index, function_number) {
 function edges(function_data, function_number) {
   let scopes = {};
   let ids = {};
+  let indexs = {};
 
   let edges = [];
 
+  console.log("BEFORE THIS");
   JSON.parse(function_data)
     .instructions
     .forEach((x, index) => {
@@ -233,7 +237,10 @@ function edges(function_data, function_number) {
       }
 
       ids[json_x.id] = { instruction: json_x, index: index };
+      indexs[index] = { instruction: json_x, index: index };
     });
+
+  console.log("AFTER THIS");
 
   console.log(scopes);
   console.log(ids);
@@ -242,6 +249,7 @@ function edges(function_data, function_number) {
     .instructions
     .forEach((x, index) => {
       let json_x = JSON.parse(x);
+      console.log(json_x, "json_x");
       if (json_x.instruction === 'jump') {
         if (scopes[json_x.scope]) {
           console.log("\njump to this thing: ", json_x.inputs.length);
@@ -262,24 +270,26 @@ function edges(function_data, function_number) {
                 break;
               }
             }
-            console.log(point_to.index);
+            // console.log(point_to.index);
 
-            edges.push({
-              id: `e-${index + 1}|${function_number}-true`,
-              source: `${index + 1}|${function_number}`,
-              target: `${point_to.index + 1}|${function_number}`,
-              markerEnd: {
-                type: MarkerType.ArrowClosed,
-                width: 20,
-                height: 20,
-                color: json_x.inputs.length == 1 ? 'gray' : 'green'
-              },
-              label: json_x.inputs.length == 1 ? 'unconditional jump' : 'true',
-              style: {
-                strokeWidth: '2px',
-                stroke: json_x.inputs.length == 1 ? 'gray' : 'green'
-              }
-            });
+            if (point_to != null) {
+              edges.push({
+                id: `e-${index + 1}|${function_number}-true`,
+                source: `${index + 1}|${function_number}`,
+                target: `${point_to.index + 1}|${function_number}`,
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                  width: 20,
+                  height: 20,
+                  color: json_x.inputs.length == 1 ? 'gray' : 'green'
+                },
+                label: json_x.inputs.length == 1 ? 'unconditional jump' : 'true',
+                style: {
+                  strokeWidth: '2px',
+                  stroke: json_x.inputs.length == 1 ? 'gray' : 'green'
+                }
+              });
+            }
           }
 
           console.log(scope_of_interest_2, "scope_of_interest_2");
@@ -319,22 +329,24 @@ function edges(function_data, function_number) {
 
       } else if (json_x.instruction === 'goto') {
         edges.push({
-          id: `e-${index + 1}|${function_number}-goto`,
-          source: `${index + 1}|${function_number}`,
+          id: `e-${index}|${function_number}-goto`,
+          source: `${index}|${function_number}`,
           target: `${ids[json_x.inputs[0]].index + 1}|${function_number}`,
           markerEnd: {
             type: MarkerType.ArrowClosed,
             width: 20,
             height: 20,
-            // color: 'red'
           },
           style: {
             strokeWidth: '2px',
-            // stroke: 'red'
           }
         });
       } else if (json_x.instruction !== 'exit_with_message' && json_x.instruction !== 'return') {
-        edges.push(constructEdge(index, function_number));
+        console.log("index: ", index, "indexs: ", indexs);
+        // don't connect to next if next is goto since we bump back that connection
+        if (indexs[index].instruction.instruction !== 'goto') {
+          edges.push(constructEdge(index, function_number));
+        }
       }
 
       ids[index] = json_x;

@@ -4,7 +4,7 @@ import ".././styles/FileUpload.css";
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 function FileUpload({ handleFileChange, handleUpload }) {
-  const [contract, setContract] = useState("hello_world");
+  const [contract, setContract] = useState("hello_world_logging");
 
   const handleChange = (event) => {
     setContract(event.target.value);
@@ -25,12 +25,12 @@ function FileUpload({ handleFileChange, handleUpload }) {
           onChange={handleChange}
           style={{ fontSize: '1m', backgroundColor: 'white', margin: '2%', color: 'black' }}
         >
-          <MenuItem value={"hello_world"}>Hello World</MenuItem>
-          <MenuItem value={"increment"}>Increment</MenuItem>
+          {/* <MenuItem value={"hello_world"}>Hello World</MenuItem> */}
+          {/* <MenuItem value={"increment"}>Increment</MenuItem> */}
           {/* <MenuItem value={"custom_types"}>Custom Types</MenuItem> */}
-          <MenuItem value={"logging"}>Logging</MenuItem>
+          {/* <MenuItem value={"logging"}>Logging</MenuItem> */}
           {/* <MenuItem value={"errors"}>Errors</MenuItem> */}
-          {/* <MenuItem value={"events"}>Events</MenuItem> */}
+          <MenuItem value={"hello_world_logging"}>Hello World Logging</MenuItem>
 
         </Select>
       </FormControl>
