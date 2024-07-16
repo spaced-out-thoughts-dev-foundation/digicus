@@ -390,6 +390,9 @@ function ContractContainer({
             // panOnScroll={false}
             // zoomOnScroll={false}
             // zoomOnPinch={true}
+            // nodesDraggable={false}
+            // nodesConnectable={false}
+            // elementsSelectable={false}
             >
               <Controls />
               <MiniMap

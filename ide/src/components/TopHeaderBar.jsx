@@ -10,28 +10,29 @@ import ".././styles/App.css";
 
 function TopHeaderBar() {
   return (
-    <Toolbar style={{ 
-      display: 'flex', 
+    <Toolbar style={{
+      display: 'flex',
       backgroundColor: 'black',
     }}>
-    <div style={{flex: 1}}>
-      <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
-    </div>
-    <div style={{
-        flex: 1, 
-        display: 'flex', 
+      <div style={{ flex: 1 }}>
+        <Avatar alt="Logo" src="DevelopmentFoundation_copy_512x575.png" />
+      </div>
+      <div style={{
+        flex: 1,
+        display: 'flex',
         justifyContent: 'center',
         color: 'rgb(39 207 230)'
       }}>
-      <Typography style={{fontSize: '3em'}}>
-        Digicus IDE
-      </Typography>
-      {packageJson.version}
-    </div>
-    <div style={{flex: 1, justifyContent: 'right', display: 'flex'}}>
-      <InfoHeader />
-    </div>
-  
+        <em>(Demo Version)</em>
+        <Typography style={{ fontSize: '3em' }}>
+          Digicus IDE
+        </Typography>
+        {packageJson.version}
+      </div>
+      <div style={{ flex: 1, justifyContent: 'right', display: 'flex' }}>
+        <InfoHeader />
+      </div>
+
     </Toolbar>
   )
 }
