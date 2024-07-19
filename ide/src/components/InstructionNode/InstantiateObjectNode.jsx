@@ -6,6 +6,17 @@ import BaseInstructionNode from './BaseInstructionNode';
 function EvaluateNodeComponent({ data }) {
   let methodName = data.instruction.inputs[0];
   let instructions = data.instruction.inputs.slice(1);
+  let hadToBumpNameIndex = false;
+
+  if (methodName === '&') {
+    hadToBumpNameIndex = true;
+    methodName = data.instruction.inputs[1];
+    instructions = data.instruction.inputs.slice(2);
+  }
+
+  if (methodName === 'UDT') {
+    methodName = 'User Defined Type';
+  }
 
   return (
     <div>
@@ -17,7 +28,7 @@ function EvaluateNodeComponent({ data }) {
         <div style={{ flex: 4, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: '1em', justifyContent: 'center' }}>
           {
             instructions.map((x, input_index) => x == '&' ? <div></div> : <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
-              <EditableTitle initial_title={x} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, input_index + 1)} />}<br /></div>)
+              <EditableTitle initial_title={x} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, hadToBumpNameIndex ? input_index + 2 : input_index + 1)} />}<br /></div>)
           }
         </div>
       </div>

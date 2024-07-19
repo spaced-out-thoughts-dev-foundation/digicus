@@ -21,24 +21,6 @@ import Typography from '@mui/material/Typography';
 import packageJson from '../package.json';
 import { datadogRum } from '@datadog/browser-rum';
 
-datadogRum.init({
-  applicationId: 'b2fafb9d-88bd-4a39-8a65-9c5a09238b31',
-  clientToken: 'pubf338b26f195838c202f865b849c1bb76',
-  // `site` refers to the Datadog site parameter of your organization
-  // see https://docs.datadoghq.com/getting_started/site/
-  site: 'datadoghq.com',
-  service: 'digicus',
-  env: 'prod',
-  // Specify a version number to identify the deployed version of your application in Datadog
-  version: packageJson.version,
-  sessionSampleRate: 100,
-  sessionReplaySampleRate: 10,
-  trackUserInteractions: true,
-  trackResources: true,
-  trackLongTasks: true,
-  defaultPrivacyLevel: 'mask-user-input',
-});
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -56,9 +38,24 @@ const App = () => {
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
   const [open, setOpen] = React.useState(true);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  datadogRum.init({
+    applicationId: 'b2fafb9d-88bd-4a39-8a65-9c5a09238b31',
+    clientToken: 'pubf338b26f195838c202f865b849c1bb76',
+    // `site` refers to the Datadog site parameter of your organization
+    // see https://docs.datadoghq.com/getting_started/site/
+    site: 'datadoghq.com',
+    service: 'digicus',
+    env: 'prod',
+    // Specify a version number to identify the deployed version of your application in Datadog
+    // version: packageJson.version,
+    sessionSampleRate: 100,
+    sessionReplaySampleRate: 10,
+    trackUserInteractions: true,
+    trackResources: true,
+    trackLongTasks: true,
+    defaultPrivacyLevel: 'mask-user-input',
+  });
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -356,6 +353,7 @@ const App = () => {
             />
           </div>
         </div>
+        <div style={{ padding: '4px', backgroundColor: 'rgb(39 207 230)', color: '#641972' }}>Developed with ❤️ by the Spaced Out Thoughts Development Foundation</div>
       </AppBar>
 
       <SpeedInsights />
