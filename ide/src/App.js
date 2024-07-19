@@ -353,7 +353,6 @@ const App = () => {
             />
           </div>
         </div>
-        <div style={{ padding: '4px', backgroundColor: 'rgb(39 207 230)', color: '#641972' }}>Developed with ❤️ by the Spaced Out Thoughts Development Foundation</div>
       </AppBar>
 
       <SpeedInsights />
