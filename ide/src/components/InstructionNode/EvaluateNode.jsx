@@ -2,11 +2,13 @@ import React, { memo } from 'react';
 import '../../styles/InstructionNode.css';
 import EditableTitle from '../EditableTitle';
 import BaseInstructionNode from './BaseInstructionNode';
+import _ from 'lodash';
 
 function EvaluateNodeComponent({ data }) {
-  const splittedInstructionZero = data.instruction.inputs[0].split('.');
-  let instructions = data.instruction.inputs.slice(1);
-  let methodName = data.instruction.inputs[0];
+  const moddedInstruction = _.cloneDeep(data.instruction);
+  const splittedInstructionZero = moddedInstruction.inputs[0].split('.');
+  let instructions = moddedInstruction.inputs.slice(1);
+  let methodName = moddedInstruction.inputs[0];
   let isCallOnThing = splittedInstructionZero.length > 1;
   if (isCallOnThing) {
     methodName = splittedInstructionZero[1];
@@ -22,8 +24,10 @@ function EvaluateNodeComponent({ data }) {
       <div style={{ display: 'Flex', justifyContent: 'center', flex: 4 }}>
         <div style={{ flex: 4, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: '1em', justifyContent: 'center' }}>
           {
-            instructions.map((x, input_index) => <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
-              <EditableTitle initial_title={x} isCallOnThing={isCallOnThing && input_index === 0} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, input_index)} />}<br /></div>)
+            instructions.map((x, input_index) =>
+              x == '&' ? <div></div> : <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
+                <EditableTitle initial_title={x} isCallOnThing={isCallOnThing && input_index === 0} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, isCallOnThing ? input_index : input_index + 1)} />}<br />
+              </div>)
           }
         </div>
       </div>

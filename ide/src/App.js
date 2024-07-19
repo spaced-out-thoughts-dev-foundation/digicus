@@ -10,7 +10,6 @@ import FileUpload from './components/FileUpload';
 import TopHeaderBar from './components/TopHeaderBar';
 import InstructionsAndActionsSideBar from './components/InstructionsAndActionsSideBar';
 import { saveAs } from 'file-saver';
-import EmailForm from './components/EmailForm';
 import { localContractFetch } from './common/LocalContractFetcher';
 
 const App = () => {
@@ -125,6 +124,9 @@ const App = () => {
   }
 
   const onUpdateInputName = (newTitle, oldTitle, instruction, input_index, function_number, instruction_index) => {
+    console.log("\n\n[DEBUG] onUpdateInputName");
+    console.log(newTitle, oldTitle, instruction, input_index, function_number, instruction_index);
+
     let jsonifiedFunctionData = JSON.parse(contract.contract.contract_interface[function_number]);
     let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
 

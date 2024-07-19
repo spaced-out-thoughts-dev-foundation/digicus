@@ -9,7 +9,7 @@ function UnaryNodeComponent({ data }) {
       <h2 style={{ flex: 1, justifyContent: 'center', display: 'Flex', alignContent: 'center', alignItems: 'center' }}>{data.instruction.instruction}</h2>
       <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: '1em', justifyContent: 'center' }}>
         {
-          data.instruction.inputs.map((x, input_index) => <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
+          data.instruction.inputs.map((x, input_index) => x == '&' ? <div></div> : <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
             <EditableTitle initial_title={x} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, input_index)} />}<br /></div>)
         }
       </div>

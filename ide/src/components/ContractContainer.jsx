@@ -22,6 +22,8 @@ import ReturnNode from './InstructionNode/ReturnNode';
 import TryAssignNode from './InstructionNode/TryAssignNode';
 import UnaryNode from './InstructionNode/UnaryNode';
 
+import _ from 'lodash';
+
 import ".././styles/ContractContainer.css";
 import { determineInstructionHeight, determineInstructionNodeType } from '../common/InstructionNode';
 import EndOfIterationCheckNode from './InstructionNode/EndOfIterationCheckNode';
@@ -70,6 +72,8 @@ function tryGetSupportedInstruction(instructionName, supportedInstructions) {
 const NODE_WIDTH = 450;
 
 function constructNode(instruction, index, function_number, supportedInstructionInfo, onUpdateInputName, numInstructions, positionY, height, positionX) {
+  const modded_instruction = _.cloneDeep(instruction);
+  modded_instruction.inputs = modded_instruction.inputs.filter((x) => x !== '&');
   return {
     id: `${index}|${function_number}`,
     data: {
@@ -85,7 +89,7 @@ function constructNode(instruction, index, function_number, supportedInstruction
       label: `${instruction.instruction.toUpperCase()} ${instruction.inputs ? `(${instruction.inputs.join(',')})` : ''}`,
       onUpdateInputName: (oldTitle, newTitle, instruction_index) => onUpdateInputName(oldTitle, newTitle, instruction, instruction_index, function_number, index)
     },
-    position: { x: positionX, y: positionY },
+    position: { x: positionX + (function_number), y: positionY },
     style: {
       width: NODE_WIDTH,
     },
@@ -128,7 +132,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         function_json_data.instructions.length,
         currentHeight,
         instructionHeight,
-        scopeMap[instruction.scope]
+        scopeMap[instruction.scope] + positionXForFunction
       );
     })
 
@@ -159,7 +163,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         // fontSize: '1em',
         borderRadius: 10,
         width: scopeWidth - 5 - 5,
-        height: height + 25 - (75 + (15 * function_json_data.inputs.length)) - 5,
+        height: height + 50 - (75 + (15 * function_json_data.inputs.length)) - 5,
         marginLeft: '-50px',
         backgroundColor: color,
         // backgroundColor: `rgba(255, 255, 0, 0)`,
@@ -190,7 +194,7 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
       fontSize: '1em',
       borderRadius: 10,
       width: scopeWidth * scopes,
-      height: height + 25,
+      height: height + 50,
       marginLeft: '-50px',
       backgroundColor: `rgba(255, 255, 0, 0.15)`,
       textShadow: '0.5px 0.5px 0.5px black',
