@@ -60,10 +60,10 @@ const App = () => {
     setOpen(false);
   };
 
-  const BASE_URL = "https://api.digicus.dev";
+  const BASE_URL = "http://localhost:4567";
 
   useEffect(() => {
-    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
+    fetch(`http://localhost:4567/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -165,9 +165,6 @@ const App = () => {
   }
 
   const onUpdateInputName = (newTitle, oldTitle, instruction, input_index, function_number, instruction_index) => {
-    console.log("\n\n[DEBUG] onUpdateInputName");
-    console.log(newTitle, oldTitle, instruction, input_index, function_number, instruction_index);
-
     let jsonifiedFunctionData = JSON.parse(contract.contract.contract_interface[function_number]);
     let jsonifiedInstructionData = JSON.parse(jsonifiedFunctionData.instructions[instruction_index - 1]);
 
@@ -222,7 +219,7 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`https://api.digicus.dev/api/compile`,
+    fetch(`http://localhost:4567/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
@@ -258,7 +255,7 @@ const App = () => {
       "load",
       () => {
         let contractText = reader.result;
-        fetch(`https://api.digicus.dev/api/compile`,
+        fetch(`http://localhost:4567/api/compile`,
           {
             headers: {
               'Accept': 'application/json',

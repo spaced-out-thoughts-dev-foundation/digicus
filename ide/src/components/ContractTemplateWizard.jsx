@@ -74,19 +74,18 @@ export default function ContractTemplateWizard({ handleFileChange, handleUpload 
           style={{ fontSize: '1m', backgroundColor: 'white', margin: '2%', color: 'black' }}
         >
           <MenuItem value={"account"}>Account</MenuItem>
-          {/* <MenuItem value={"alloc"}>Alloc</MenuItem> */}
-          {/* <MenuItem value={"atomic_multiswap"}>Atomic Multiswap</MenuItem> */}
+          <MenuItem value={"alloc"}>Alloc</MenuItem>
+          <MenuItem value={"atomic_multiswap"}>Atomic Multiswap</MenuItem>
           <MenuItem value={"atomic_swap"}>Atomic Swap</MenuItem>
           <MenuItem value={"auth"}>Auth</MenuItem>
           <MenuItem value={"custom_types"}>Custom Types</MenuItem>
           <MenuItem value={"errors"}>Errors</MenuItem>
-          {/* <MenuItem value={"eth_abi"}>ETH ABI</MenuItem> */}
           <MenuItem value={"events"}>Events</MenuItem>
           <MenuItem value={"fuzzing"}>Fuzzing</MenuItem>
           <MenuItem value={"hello_world_logging"}>Hello World Logging</MenuItem>
           <MenuItem value={"increment"}>Increment</MenuItem>
           <MenuItem value={"logging"}>Logging</MenuItem>
-          {/* <MenuItem value={"mint_lock"}>Mint Lock</MenuItem> */}
+          <MenuItem value={"mint_lock"}>Mint Lock</MenuItem>
           <MenuItem value={"simple_account"}>Simple Account</MenuItem>
           <MenuItem value={"single_offer"}>Single Offer</MenuItem>
           <MenuItem value={"timelock"}>Timelock</MenuItem>

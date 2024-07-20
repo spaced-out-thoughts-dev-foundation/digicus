@@ -109,9 +109,13 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
   let all_function_nodes = function_json_data.instructions
     .map((instruction) => JSON.parse(instruction))
     .filter((instruction) => !!tryGetSupportedInstruction(instruction.instruction, supportedInstructions))
-    // don't show gotos
-    .filter((instruction) => instruction.instruction !== 'goto')
     .map((instruction, index) => {
+      // don't show gotos, however, we need in order to maintain index for edge calculation
+      if (instruction.instruction === 'goto') {
+        return {
+          node: null, instruction: instruction.instruction
+        }
+      }
       if (instruction.inputs == null) {
         instruction.inputs = [];
       }
@@ -126,18 +130,22 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
         }
       }
 
-      return constructNode(
-        instruction,
-        index + 1,
-        function_number,
-        determineInstructionInfo(instruction.instruction, supportedInstructions, supportedInstructionToColor),
-        onUpdateInputName,
-        function_json_data.instructions.length,
-        currentHeight,
-        instructionHeight,
-        scopeMap[instruction.scope] + positionXForFunction
-      );
+      return {
+        node: constructNode(
+          instruction,
+          index + 1,
+          function_number,
+          determineInstructionInfo(instruction.instruction, supportedInstructions, supportedInstructionToColor),
+          onUpdateInputName,
+          function_json_data.instructions.length,
+          currentHeight,
+          instructionHeight,
+          scopeMap[instruction.scope] + positionXForFunction
+        ), instruction: instruction.instruction
+      }
     })
+    .filter((x) => x.node != null)
+    .map((x) => x.node);
 
   let indexForScope = 0;
   for (const [key, value] of Object.entries(scopeMap)) {
@@ -231,7 +239,6 @@ function edges(function_data, function_number) {
 
   let edges = [];
 
-  console.log("BEFORE THIS");
   JSON.parse(function_data)
     .instructions
     .forEach((x, index) => {
@@ -247,19 +254,12 @@ function edges(function_data, function_number) {
       indexs[index] = { instruction: json_x, index: index };
     });
 
-  console.log("AFTER THIS");
-
-  console.log(scopes);
-  console.log(ids);
-
   JSON.parse(function_data)
     .instructions
     .forEach((x, index) => {
       let json_x = JSON.parse(x);
-      console.log(json_x, "json_x");
       if (json_x.instruction === 'jump') {
         if (scopes[json_x.scope]) {
-          console.log("\njump to this thing: ", json_x.inputs.length);
           let scope_of_interest = -1;
           let scope_of_interest_2 = -1;
           if (json_x.inputs.length == 1) {
@@ -277,7 +277,6 @@ function edges(function_data, function_number) {
                 break;
               }
             }
-            // console.log(point_to.index);
 
             if (point_to != null) {
               edges.push({
@@ -299,8 +298,6 @@ function edges(function_data, function_number) {
             }
           }
 
-          console.log(scope_of_interest_2, "scope_of_interest_2");
-
           if (scope_of_interest_2 != -1) {
             let point_to = null;
             for (let i = 0; i < scope_of_interest_2.length; i++) {
@@ -309,11 +306,7 @@ function edges(function_data, function_number) {
                 break;
               }
             }
-
-            console.log(point_to, "point_to");
             if (point_to != null) {
-              console.log(point_to.index);
-
               edges.push({
                 id: `e-${index + 1}|${function_number}-false`,
                 source: `${index + 1}|${function_number}`,
@@ -349,22 +342,14 @@ function edges(function_data, function_number) {
           }
         });
       } else if (json_x.instruction !== 'exit_with_message' && json_x.instruction !== 'return') {
-        console.log("index: ", index, "indexs: ", indexs);
         // don't connect to next if next is goto since we bump back that connection
         if (indexs[index].instruction.instruction !== 'goto') {
           edges.push(constructEdge(index, function_number));
         }
       }
-
-      ids[index] = json_x;
     });
 
   return edges;
-  // return JSON.parse(function_data)
-  //   .instructions
-  //   .slice(1)
-  //   .map((_, index) => constructEdge(index, function_number));
-
 };
 
 function foobar(functions, supportedInstructions, supportedInstructionToColor, onUpdateFunctionName, onUpdateInputName) {
