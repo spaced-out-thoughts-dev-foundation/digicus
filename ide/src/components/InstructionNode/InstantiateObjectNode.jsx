@@ -28,7 +28,7 @@ function EvaluateNodeComponent({ data }) {
         <div style={{ flex: 4, overflow: 'auto', display: 'flex', flexDirection: 'column', padding: '1em', justifyContent: 'center' }}>
           {
             instructions.map((x, input_index) => x == '&' ? <div></div> : <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
-              <EditableTitle initial_title={x} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, hadToBumpNameIndex ? input_index + 2 : input_index + 1)} />}<br /></div>)
+              <EditableTitle initial_title={x} isCallOnThing={methodName === 'User Defined Type' && input_index === 0} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, hadToBumpNameIndex ? input_index + 2 : input_index + 1)} />}<br /></div>)
           }
         </div>
       </div>

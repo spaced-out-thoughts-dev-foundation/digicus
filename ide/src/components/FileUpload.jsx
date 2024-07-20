@@ -5,8 +5,6 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import ContractTemplateWizard from './ContractTemplateWizard';
 
 function FileUpload({ handleFileChange, handleUpload, handleUploadFile }) {
-
-
   return (
     <div>
       <div className='file-upload-container'>
