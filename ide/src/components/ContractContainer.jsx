@@ -112,6 +112,9 @@ function nodes(function_data, supportedInstructions, supportedInstructionToColor
     // don't show gotos
     .filter((instruction) => instruction.instruction !== 'goto')
     .map((instruction, index) => {
+      if (instruction.inputs == null) {
+        instruction.inputs = [];
+      }
       let instructionHeight = determineInstructionHeight(determineInstructionNodeType(instruction.instruction), instruction.inputs.length, instruction.assign != null, instruction.instruction, instruction.inputs);
       let currentHeight = height + 100;
       height += instructionHeight + 100;

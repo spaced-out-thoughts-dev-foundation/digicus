@@ -32,7 +32,7 @@ function InstructionsAndActionsSideBar({ handleDeploy, supportedInstructions }) 
 
       </div>
       <div className='deploy-button-container'>
-        <button style={{ width: '100%' }} onClick={handleDeploy}>Save</button>
+        <button style={{ width: '100%' }} onClick={handleDeploy}>Download</button>
       </div>
 
     </div >

@@ -25,7 +25,7 @@ export default memo(({ data, isConnectable, specificNodeComponent }) => {
 
               {specificNodeComponent({ data, isConnectable })}
               {data.isBottom ? null : (data.displayHandle ? <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} /> : null)}
-              {data.instruction.assign ? <div className='instruction-node-assign'>{"[Assign To]: " + data.instruction.assign}</div> : null}
+              {data.instruction.assign ? <div className='instruction-node-assign'>{"[Assign To]: " + (data.instruction.assign.includes("|||") ? data.instruction.assign.split("|||")[0] : data.instruction.assign)}</div> : null}
             </Paper>
           </Tooltip>
         </div>

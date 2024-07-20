@@ -16,10 +16,10 @@ const codeContainerBody = (originalText, filename,) => {
   );
 }
 
-function CodeContainer({ originalText, filename, originalSource }) {
+function CodeContainer({ originalText, filename, originalSource, isWizard }) {
   return (
     <Box className="code-container">
-      <h2>{originalSource ? 'Original Source' : 'Generated Intermediate'} Code</h2>
+      <h2>{isWizard ? filename : (originalSource ? 'Original Source Code' : 'Generated Intermediate Code')}</h2>
       {codeContainerBody(originalText, filename)}
     </Box>
   )

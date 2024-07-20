@@ -21,6 +21,24 @@ import Typography from '@mui/material/Typography';
 import packageJson from '../package.json';
 import { datadogRum } from '@datadog/browser-rum';
 
+datadogRum.init({
+  applicationId: 'b2fafb9d-88bd-4a39-8a65-9c5a09238b31',
+  clientToken: 'pubf338b26f195838c202f865b849c1bb76',
+  // `site` refers to the Datadog site parameter of your organization
+  // see https://docs.datadoghq.com/getting_started/site/
+  site: 'datadoghq.com',
+  service: 'digicus',
+  env: 'prod',
+  // Specify a version number to identify the deployed version of your application in Datadog
+  // version: packageJson.version,
+  sessionSampleRate: 100,
+  sessionReplaySampleRate: 10,
+  trackUserInteractions: true,
+  trackResources: true,
+  trackLongTasks: true,
+  defaultPrivacyLevel: 'mask-user-input',
+});
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -38,32 +56,14 @@ const App = () => {
   const [showUserDefinedTypes, setShowUserDefinedTypes] = useState(false);
   const [open, setOpen] = React.useState(true);
 
-  datadogRum.init({
-    applicationId: 'b2fafb9d-88bd-4a39-8a65-9c5a09238b31',
-    clientToken: 'pubf338b26f195838c202f865b849c1bb76',
-    // `site` refers to the Datadog site parameter of your organization
-    // see https://docs.datadoghq.com/getting_started/site/
-    site: 'datadoghq.com',
-    service: 'digicus',
-    env: 'prod',
-    // Specify a version number to identify the deployed version of your application in Datadog
-    // version: packageJson.version,
-    sessionSampleRate: 100,
-    sessionReplaySampleRate: 10,
-    trackUserInteractions: true,
-    trackResources: true,
-    trackLongTasks: true,
-    defaultPrivacyLevel: 'mask-user-input',
-  });
-
   const handleClose = () => {
     setOpen(false);
   };
 
-  const BASE_URL = "https://api.digicus.dev";
+  const BASE_URL = "http://localhost:4567";
 
   useEffect(() => {
-    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
+    fetch(`http://localhost:4567/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -222,7 +222,7 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`https://api.digicus.dev/api/compile`,
+    fetch(`http://localhost:4567/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
@@ -251,6 +251,54 @@ const App = () => {
       .catch(error => console.error(error));
   };
 
+  const handleUploadFile = () => {
+    const reader = new FileReader();
+
+    reader.addEventListener(
+      "load",
+      () => {
+        let contractText = reader.result;
+        fetch(`http://localhost:4567/api/compile`,
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+              name_types: [
+                { name: "soroban_rust_frontend", type: "frontend" },
+                { name: "digicus_web_backend", type: "backend" },
+                { name: "digicus_web_frontend", type: "frontend" },
+                { name: "soroban_rust_backend", type: "backend" },
+              ],
+              content: contractText
+            }),
+          })
+          .then(response => {
+            return response.json()
+          })
+          .then(json => {
+            const generated_code = JSON.parse(json.results[3]).output;
+            const dtr_json = JSON.parse(JSON.parse(json.results[1]).output);
+
+            setContract({ contract: dtr_json, originalText: contractText, generatedText: generated_code })
+          })
+          .catch(error => console.error(error));
+      },
+      false,
+    );
+
+    if (file) {
+      reader.readAsText(file);
+    };
+  };
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
   return (
     <div className='top-level-div-container'>
 
@@ -274,11 +322,11 @@ const App = () => {
               <br></br>
               <strong>How to use:</strong>
               <ol>
-                <li>Upload a contract file in the top right. In <i>demo mode</i> contracts are limited to a subset of SDF's official examples.</li>
+                <li>Upload a contract file in the top right. You can either select a template from the 🧙‍♂️ Contract Wizard 🧙‍♂️ or upload your own.</li>
                 <li>Once uploaded, explore the contract by dragging and pinching within the view window. It is in <i>edit mode</i> by default. To exit edit mode, click the small lock icon in the bottom right of the viewer.</li>
                 <li>On the right side below the upload, switch between the original code and <i>Digit's</i> generated code. At this time the generated code is <i>not as clean as the original</i>, yet it is functionally the same.</li>
                 <li>Within the contract viewer, input boxes are editable. Watch your changes mirrored in the generated code (in <i>almost</i> real time).</li>
-                <li>When ready, click <i>Save</i> to download the generated code.</li>
+                <li>When ready, click <i>Download</i> to download the generated code.</li>
               </ol>
             </Typography>
             <br></br>
@@ -303,7 +351,7 @@ const App = () => {
             <div className='top-level-third-level-container-secondary-header-bar'>
               <ContractHeader name={contract?.contract?.contract_name} onUpdateContractName={onUpdateContractName} />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <FileUpload style={{ flex: 10 }} handleUpload={handleUpload} />
+                <FileUpload style={{ flex: 10 }} handleUpload={handleUpload} handleUploadFile={handleUploadFile} handleFileChange={handleFileChange} />
                 <div style={{ border: '1px solid black', borderRadius: '10px', margin: '10px' }}>
                   <label>
                     <input

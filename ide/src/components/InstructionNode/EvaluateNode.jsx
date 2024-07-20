@@ -6,14 +6,26 @@ import _ from 'lodash';
 
 function EvaluateNodeComponent({ data }) {
   const moddedInstruction = _.cloneDeep(data.instruction);
-  const splittedInstructionZero = moddedInstruction.inputs[0].split('.');
-  let instructions = moddedInstruction.inputs.slice(1);
-  let methodName = moddedInstruction.inputs[0];
+
+  let startsWithReference = moddedInstruction.inputs[0] === '&';
+  let instructions = moddedInstruction.inputs;
+  if (startsWithReference) {
+    instructions = instructions.slice(1);
+  }
+
+  const splittedInstructionZero = instructions[0].split('.');
+  let methodName = instructions[0];
+  instructions = instructions.slice(1);
+
   let isCallOnThing = splittedInstructionZero.length > 1;
   if (isCallOnThing) {
+
     methodName = splittedInstructionZero[1];
     instructions.unshift(splittedInstructionZero[0]);
   }
+
+  const additionalIndex = (isCallOnThing ? 1 : 0) + (startsWithReference ? 1 : 0);
+
 
   return (
     <div>
@@ -26,7 +38,7 @@ function EvaluateNodeComponent({ data }) {
           {
             instructions.map((x, input_index) =>
               x == '&' ? <div></div> : <div style={{ margin: '0.1em' }} className='instruction-node-input-to-instruction'>{
-                <EditableTitle initial_title={x} isCallOnThing={isCallOnThing && input_index === 0} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, isCallOnThing ? input_index : input_index + 1)} />}<br />
+                <EditableTitle initial_title={x} isCallOnThing={isCallOnThing && input_index === 0} handleChangeTitle={(oldTitle, new_title) => data.onUpdateInputName(oldTitle, new_title, input_index + additionalIndex)} />}<br />
               </div>)
           }
         </div>
