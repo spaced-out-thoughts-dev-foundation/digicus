@@ -320,12 +320,16 @@ const App = () => {
               <strong>How to use:</strong>
               <ol>
                 <li>Upload a contract file in the top right. You can either select a template from the 🧙‍♂️ Contract Wizard 🧙‍♂️ or upload your own.</li>
-                <li>Once uploaded, explore the contract by dragging and pinching within the view window. It is in <i>edit mode</i> by default. To exit edit mode, click the small lock icon in the bottom right of the viewer.</li>
-                <li>On the right side below the upload, switch between the original code and <i>Digit's</i> generated code. At this time the generated code is <i>not as clean as the original</i>, yet it is functionally the same.</li>
+                <li>Once uploaded, explore the contract by dragging and pinching within the view window. It is in <i>edit mode</i> by default. To exit <i>edit mode</i>, click the small lock (🔒) icon in the bottom left of the viewer.</li>
+                <li>On the right side below the upload, switch between the original code and <i>Digit's</i> generated code.</li>
                 <li>Within the contract viewer, input boxes are editable. Watch your changes mirrored in the generated code (in <i>almost</i> real time).</li>
                 <li>When ready, click <i>Download</i> to download the generated code.</li>
               </ol>
             </Typography>
+            <br></br>
+            <strong><i>Note:</i></strong> this is an alpha release. We don't yet support all Rust features, and the generated code is not as clean as the original (albeit functionally the same). We are working hard to improve this. If you have any feedback, please open a <a href="https://github.com/spaced-out-thoughts-dev-foundation/digicus">GitHub issue.</a>
+            <br></br>
+
             <br></br>
             <div style={{ fontFamily: "'Playwrite IT Moderna', cursive" }}>
               <strong><a href="https://spaced-out-thoughts-dev-foundation.github.io/">We are the Spaced Out Thoughts Development Foundation</a></strong>,
