@@ -14,10 +14,10 @@ function FileUpload({ handleFileChange, handleUpload, handleUploadFile }) {
         />
 
       </div >
-      {/* <div className='file-upload-container' style={{ display: 'flex', flexDirection: 'row' }}>
+      <div className='file-upload-container' style={{ display: 'flex', flexDirection: 'row' }}>
         <input style={{ fontSize: '1.25em', backgroundColor: 'white', margin: '2%', color: 'black' }} type="file" onChange={handleFileChange} />
         <button style={{ flex: 1, fontSize: '1.25em' }} onClick={handleUploadFile}>Upload</button>
-      </div> */}
+      </div>
     </div>
   )
 }
