@@ -60,10 +60,10 @@ const App = () => {
     setOpen(false);
   };
 
-  const BASE_URL = "https://api.digicus.dev";
+  const BASE_URL = "http://spaced-out-thoughts-development-foundation.org/digit";
 
   useEffect(() => {
-    fetch(`https://api.digicus.dev/api/supported_types_and_instructions`)
+    fetch(`${BASE_URL}/api/supported_types_and_instructions`)
       .then(response => {
         return response.json()
       })
@@ -219,7 +219,7 @@ const App = () => {
 
   const handleUpload = (contract) => {
     let contractText = localContractFetch(contract);
-    fetch(`https://api.digicus.dev/api/compile`,
+    fetch(`${BASE_URL}/api/compile`,
       {
         headers: {
           'Accept': 'application/json',
@@ -255,7 +255,7 @@ const App = () => {
       "load",
       () => {
         let contractText = reader.result;
-        fetch(`https://api.digicus.dev/api/compile`,
+        fetch(`${BASE_URL}/api/compile`,
           {
             headers: {
               'Accept': 'application/json',
