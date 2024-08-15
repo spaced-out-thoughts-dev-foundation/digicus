@@ -60,7 +60,7 @@ const App = () => {
     setOpen(false);
   };
 
-  const BASE_URL = "http://spaced-out-thoughts-development-foundation.org/digit";
+  const BASE_URL = "https://api.digicus.dev";
 
   useEffect(() => {
     fetch(`${BASE_URL}/api/supported_types_and_instructions`)
