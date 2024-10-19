@@ -306,7 +306,7 @@ const App = () => {
           open={open}
         >
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-            <center> <h1>Welcome to Digicus</h1><i><strong>[The Demo Version]</strong>: {packageJson.version}</i></center>
+            <center> <h1>Welcome to Digicus</h1><i><strong>Version</strong>: {packageJson.version}</i></center>
           </DialogTitle>
           <DialogContent dividers>
 
