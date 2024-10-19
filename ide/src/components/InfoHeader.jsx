@@ -2,10 +2,6 @@ import React from 'react';
 
 import '.././styles/InfoHeader.css';
 
-function handleDeploy() {
-  console.log('Deploying...');
-}
-
 function InfoHeader() {
   return (
     <div className='info-header' style={{ textAlign: 'right' }}>
